@@ -15,3 +15,18 @@ submitParams = [
         ]
 
 print urllib.unquote()
+
+
+
+
+class a:
+    def __init__(self, factory):
+        pass
+    def b(self):
+        pass
+
+class c:
+    def __init__(self):
+        pass
+    def d(self):
+        return a().b()

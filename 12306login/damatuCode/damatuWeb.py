@@ -71,7 +71,7 @@ class DamatuApi():
         jres = json.loads(res)
         if jres['ret'] == 0:
             # 注意这个json里面有ret，id，result，cookie，根据自己的需要获取
-            return (jres['result'])
+            return jres['result']
         else:
             return jres['ret']
 
@@ -108,12 +108,11 @@ class DamatuApi():
 
     def main(self):
         balance = self.getBalance()
-        if balance > 40:
+        if int(balance) > 40:
             img_code = self.decode(287).replace('|', ',')
-            print img_code
             return img_code
         else:
-            raise balanceException(u'余额不足，当前余额为: {}'.format(balance))
+            raise balanceException('余额不足，当前余额为: {}'.format(balance))
 
 # # 调用类型实例：
 # # 1.实例化类型 参数是打码兔用户账号和密码

@@ -3,6 +3,8 @@
 import random
 import json
 import re
+from time import sleep
+
 from damatuCode.damatuWeb import DamatuApi
 from myUrllib import myurllib2
 
@@ -30,13 +32,13 @@ def cookietp():
 def readImg():
     global randCode
     stoidinput("下载验证码...")
-    img_path = '/tmp/tkcode'
+    img_path = 'd:/tkcode'
     result = myurllib2.get(codeimg)
     try:
         open(img_path, 'wb').write(result)
         randCode = DamatuApi('wenxianping', 'wen1995', img_path).main()
     except OSError as e:
-        print e
+        print (e)
         pass
 
 
@@ -126,12 +128,14 @@ def login(user, passwd):
         errorinput("验证码有误,第%s次尝试重试" )
     else:
         stoidinput("验证码通过,开始登录..")
+        sleep(1)
         try:
             tresult = json.loads(myurllib2.Post(logurl, logdata), encoding='utf8')
-            if tresult['data'].__len__() == 0:
+            if 'data' not in tresult:
                 errorinput("登录失败: %s" % tresult['messages'][0])
+            elif 'messages' in tresult and tresult['messages']:
+                errorinput("登录失败: %s" % tresult['messages'])
             else:
-
                 stoidinput("登录成功")
                 myurllib2.Post(surl, ldata)
                 getUserinfo()

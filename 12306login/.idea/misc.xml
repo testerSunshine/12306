@@ -26,9 +26,6 @@
     </entry>
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.11 (C:\Python27\python.exe)" project-jdk-type="Python SDK" />
-  <component name="SvnConfiguration">
-    <configuration>$USER_HOME$/.subversion</configuration>
-  </component>
   <component name="VagrantProjectSettings">
     <option name="instanceFolder" value="$USER_HOME$/dev/mduia" />
     <option name="provider" value="" />

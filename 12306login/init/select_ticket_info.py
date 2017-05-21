@@ -1,14 +1,13 @@
 # -*- coding=utf-8 -*-
 import json
-import time
-
 import datetime
-
 import re
 import urllib
-
+import sys
+import time
 from myUrllib import myurllib2
-
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 class select:
     def __init__(self, from_station, to_station):
@@ -205,29 +204,16 @@ class select:
         oldPassengersStr: 乘客名,证件类型,证件号,乘客类型
         :return: 
         """
-        passengerTicketStr = []
-        oldPassengerStr = []
-        passengerTicketStr.append(user_info[0]['passenger_id_type_code'])
-        passengerTicketStr.append(user_info[0]['passenger_name'])
-        passengerTicketStr.append(user_info[0]['passenger_type'])
-        passengerTicketStr.append(user_info[0]['passenger_id_no'])
-        passengerTicketStr.append(user_info[0]['mobile_no'])
-        oldPassengerStr.append(user_info[0]['passenger_name'])
-        oldPassengerStr.append(user_info[0]['passenger_type'])
-        oldPassengerStr.append(user_info[0]['passenger_id_no'])
-        oldPassengerStr.append(user_info[0]['passenger_type'])
-
         checkOrderInfoUrl = 'https://kyfw.12306.cn/otn/confirmPassenger/checkOrderInfo'
         data = {
             'cancel_flag': 2,
-            'bed_level_order_num': 000000000000000000000000000000,
-            'passengerTicketStr': self.set_type+',0,'+str(passengerTicketStr)+',N',
-            'oldPassengerStr': str(oldPassengerStr)+'_',
+            'bed_level_order_num': "000000000000000000000000000000",
+            'passengerTicketStr': self.set_type+',0,'+user_info[0]['passenger_id_type_code']+","+user_info[0]["passenger_name"]+","+user_info[0]['passenger_type']+","+user_info[0]['passenger_id_no']+","+user_info[0]['mobile_no']+',N',
+            'oldPassengerStr': user_info[0]['passenger_name']+","+user_info[0]['passenger_type']+","+user_info[0]['passenger_id_no']+","+user_info[0]['passenger_type']+'_',
             'tour_flag': 'dc',
             'REPEAT_SUBMIT_TOKEN': self.token,
         }
-        checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data))
-        print (checkOrderInfo)
+        checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data, ))
         if 'data' in checkOrderInfo and checkOrderInfo['data']['submitStatus'] is True:
             print ('车票提交通过，正在尝试排队')
         elif 'messages' in checkOrderInfo and checkOrderInfo['messages']:
@@ -240,23 +226,37 @@ class select:
         :param token:
         :return:
         """
+        old_train_date = self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['train_date']+"00:00:00"  # 模仿12306格式 Sun May 21 2017 00:00:00 GMT+0800 (中国标准时间)
+        m_time = time.mktime(time.strptime(old_train_date, "%Y%m%d%H:%M:%S"))
+        l_time = time.localtime(m_time)
+        new_train_date = time.strftime("%a %b %d %Y %H:%M:%S", l_time)
         getQueueCountUrl = 'https://kyfw.12306.cn/otn/confirmPassenger/getQueueCount'
         data = {
-            # 'train_date': 'Sun May 07 2017 00:00:00 GMT+0800',
-            'train_date': self.ticketInfoForPassengerForm['queryLeftTicketRequestDTO']['train_date'],
-            'train_no': self.ticketInfoForPassengerForm['queryLeftTicketRequestDTO']['train_no'],
-            'stationTrainCode':	self.ticketInfoForPassengerForm['queryLeftTicketRequestDTO']['station_train_code'],
+            'train_date': new_train_date,
+            'train_no': self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['train_no'],
+            'stationTrainCode':	self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['station_train_code'],
             'seatType':	self.set_type,
-            'fromStationTelecode': self.ticketInfoForPassengerForm['queryLeftTicketRequestDTO']['from_station'],
-            'toStationTelecode': self.ticketInfoForPassengerForm['queryLeftTicketRequestDTO']['to_station'],
-            'leftTicket': self.ticketInfoForPassengerForm['leftTicketStr'],
-            'purpose_codes': self.ticketInfoForPassengerForm['purpose_codes'],
-            'train_location': self.ticketInfoForPassengerForm['train_location'],
+            'fromStationTelecode': self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['from_station'],
+            'toStationTelecode': self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['to_station'],
+            'leftTicket': self.get_ticketInfoForPassengerForm()['leftTicketStr'],
+            'purpose_codes': self.get_ticketInfoForPassengerForm()['purpose_codes'],
+            'train_location': self.get_ticketInfoForPassengerForm()['train_location'],
             'REPEAT_SUBMIT_TOKEN': self.token,
         }
-        print(data)
         getQueueCountResult = json.loads(myurllib2.Post(getQueueCountUrl, data))
-        print(getQueueCountResult)
+        if "status" in getQueueCountResult and getQueueCountResult["status"] is True:
+            if "countT" in getQueueCountResult["data"]:
+                countT = getQueueCountResult["data"]["countT"]
+                if int(countT) is 0:
+                    print("排队成功, 当前余票还剩余 " + getQueueCountResult["data"]["ticket"]+ "张")
+                else:
+                    print("正在排队，当前排队人数 " + str(countT) + "当前余票还剩余 " + getQueueCountResult["data"]["ticket"]+ "张")
+            else:
+                print("排队发现未知错误")
+        elif "messages" in getQueueCountResult and getQueueCountResult["messages"]:
+            print("排队异常，错误信息："+getQueueCountResult)
+        else:
+            print(getQueueCountResult["validateMessages"])
 
     def main(self):
         set_type = self.submitOrderRequest()

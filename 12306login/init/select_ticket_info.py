@@ -1,6 +1,7 @@
 # -*- coding=utf-8 -*-
 import json
 import datetime
+import random
 import re
 import urllib
 import sys
@@ -15,8 +16,9 @@ class select:
         self.order_request_params = {}  # 订单提交时的参数
         self.ticketInfoForPassengerForm = {}  # 初始化当前页面参数
         self.current_seats = {}  # 席别信息
-        self.token = ''
-        self.set_type = ''
+        self.token = ""
+        self.set_type = ""
+        self.user_info = ""
 
     def get_order_request_params(self):
         return self.order_request_params
@@ -139,12 +141,13 @@ class select:
                 for j in range(20, 33):
                     if ticket_info[j] != '' and ticket_info[j] != '无':    # 过滤有效目标车次
                         print ('车次: ' + ticket_info[3] + ' 始发车站: ' + value['map']['AOH'] + ' 终点站: ' + \
-                               value['map']['CSQ'] + ' ' + self.station_seat(j) + ': ' + ticket_info[j])
+                               value['map']['CSQ'] + ' ' + self.station_seat(j) + ':' + ticket_info[j])
                         print ('正在尝试提交订票...')
                         data = dict(_json_att=None)
                         check_user = json.loads(myurllib2.Post(check_user_url, data), encoding='utf-8')
                         check_user_flag = check_user['data']['flag']
                         if check_user_flag is True:
+                            print ('订票成功!')
                             print ('尝试提交订单...')
                             # 预定的请求参数，注意参数顺序
                             # 注意这里为了防止secretStr被urllib.parse过度编码，在这里进行一次解码
@@ -197,7 +200,7 @@ class select:
         ticket_type = {'adult': "1", 'child': "2", 'student': "3", 'disability': "4"}
         return ticket_type
 
-    def checkOrderInfo(self, user_info):
+    def checkOrderInfo(self):
         """
         检查支付订单，需要提交REPEAT_SUBMIT_TOKEN
         passengerTicketStr : 座位编号,0,票类型,乘客名,证件类型,证件号,手机号码,保存常用联系人(Y或N)
@@ -208,8 +211,8 @@ class select:
         data = {
             'cancel_flag': 2,
             'bed_level_order_num': "000000000000000000000000000000",
-            'passengerTicketStr': self.set_type+',0,'+user_info[0]['passenger_id_type_code']+","+user_info[0]["passenger_name"]+","+user_info[0]['passenger_type']+","+user_info[0]['passenger_id_no']+","+user_info[0]['mobile_no']+',N',
-            'oldPassengerStr': user_info[0]['passenger_name']+","+user_info[0]['passenger_type']+","+user_info[0]['passenger_id_no']+","+user_info[0]['passenger_type']+'_',
+            'passengerTicketStr': self.set_type+',0,'+self.user_info[0]['passenger_id_type_code']+","+self.user_info[0]["passenger_name"]+","+self.user_info[0]['passenger_type']+","+self.user_info[0]['passenger_id_no']+","+self.user_info[0]['mobile_no']+',N',
+            'oldPassengerStr': self.user_info[0]['passenger_name']+","+self.user_info[0]['passenger_type']+","+self.user_info[0]['passenger_id_no']+","+self.user_info[0]['passenger_type']+'_',
             'tour_flag': 'dc',
             'REPEAT_SUBMIT_TOKEN': self.token,
         }
@@ -241,16 +244,18 @@ class select:
             'leftTicket': self.get_ticketInfoForPassengerForm()['leftTicketStr'],
             'purpose_codes': self.get_ticketInfoForPassengerForm()['purpose_codes'],
             'train_location': self.get_ticketInfoForPassengerForm()['train_location'],
-            'REPEAT_SUBMIT_TOKEN': self.token,
+            'REPEAT_SUBMIT_TOKEN': self.get_token(),
         }
         getQueueCountResult = json.loads(myurllib2.Post(getQueueCountUrl, data))
         if "status" in getQueueCountResult and getQueueCountResult["status"] is True:
             if "countT" in getQueueCountResult["data"]:
                 countT = getQueueCountResult["data"]["countT"]
                 if int(countT) is 0:
-                    print("排队成功, 当前余票还剩余 " + getQueueCountResult["data"]["ticket"]+ "张")
+                    print("排队成功, 当前余票还剩余:" + getQueueCountResult["data"]["ticket"]+ "张")
+                    print("提交订单中")
+                    self.checkQueueOrder()
                 else:
-                    print("正在排队，当前排队人数 " + str(countT) + "当前余票还剩余 " + getQueueCountResult["data"]["ticket"]+ "张")
+                    print("正在排队，当前排队人数:" + str(countT) + "当前余票还剩余:" + getQueueCountResult["data"]["ticket"]+ "张")
             else:
                 print("排队发现未知错误")
         elif "messages" in getQueueCountResult and getQueueCountResult["messages"]:
@@ -258,13 +263,72 @@ class select:
         else:
             print(getQueueCountResult["validateMessages"])
 
+    def checkQueueOrder(self):
+        """
+        模拟提交订单是确认按钮，参数获取方法还是get_ticketInfoForPassengerForm 中获取
+        :return: 
+        """
+        checkQueueOrderUrl = "https://kyfw.12306.cn/otn/confirmPassenger/confirmSingleForQueue"
+        data = {
+            "passengerTicketStr": self.set_type+',0,'+self.user_info[0]['passenger_id_type_code']+","+self.user_info[0]["passenger_name"]+","+self.user_info[0]['passenger_type']+","+self.user_info[0]['passenger_id_no']+","+self.user_info[0]['mobile_no']+',N',
+            "oldPassengerStr": self.user_info[0]['passenger_name']+","+self.user_info[0]['passenger_type']+","+self.user_info[0]['passenger_id_no']+","+self.user_info[0]['passenger_type']+'_',
+            "purpose_codes": self.get_ticketInfoForPassengerForm()["purpose_codes"],
+            "key_check_isChange": self.get_ticketInfoForPassengerForm()["key_check_isChange"],
+            "leftTicketStr": self.get_ticketInfoForPassengerForm()["leftTicketStr"],
+            "train_location": self.get_ticketInfoForPassengerForm()["train_location"],
+            "seatDetailType": "000",   # 开始需要选择座位，但是目前12306不支持自动选择作为，那这个参数为默认
+            "roomType": "00",  # 好像是根据一个id来判断选中的，两种 第一种是00，第二种是10，但是我在12306的页面没找到该id，目前写死是00，不知道会出什么错
+            "dwAll": "N",
+            "REPEAT_SUBMIT_TOKEN": self.get_token(),
+        }
+        checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
+        if "status" is checkQueueOrderResult and checkQueueOrderResult["status"]:
+            c_data = checkQueueOrderResult["data"] if checkQueueOrderResult["data"] in checkQueueOrderResult else {}
+            if 'submitStatus' in c_data and c_data['submitStatus']:
+                print("出票成功!")
+            else:
+                if 'errMsg' in c_data and c_data['errMsg']:
+                    print("出票失败，" + c_data['errMsg'] + "请重新选择。")
+                else:
+                    print(c_data)
+                    print('订票失败!很抱歉,请重试提交预订功能!')
+        elif "messages" in checkQueueOrderResult and checkQueueOrderResult["messages"]:
+            print("提交订单失败,错误信息: "+ checkQueueOrderResult["messages"])
+        else:
+            print("未知错误：" + checkQueueOrderResult["validateMessages"])
+
+    def queryOrderWaitTime(self):
+        """
+        排队获取订单等待信息,每隔1秒请求一次，最高请求次数为20次！
+        :return: 
+        """
+        queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime"
+        data = {
+            "random": "149545481029" + str(random.randint(1, 9)),
+            "tourFlag": "dc",
+            "REPEAT_SUBMIT_TOKEN": self.get_token(),
+        }
+        num = 1
+        while True:
+            num += 1
+            if num > 20:
+                print("订票失败！")
+                break
+            queryOrderWaitTimeResult = json.loads(myurllib2.Post(queryOrderWaitTimeUrl, data))
+            if "orderId" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["data"]["orderId"] != "null":
+                print ("恭喜您订票成功，订单号为：" + queryOrderWaitTimeResult["data"]["orderId"] + ", 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！")
+                break
+            print("订单提交中,请耐心等待")
+            time.sleep(1000)
+
     def main(self):
         set_type = self.submitOrderRequest()
         self.getPassengerTicketStr(set_type)
         self.getRepeatSubmitToken()
-        user_info = self.getPassengerDTOs()
-        self.checkOrderInfo(user_info)
+        self.user_info = self.getPassengerDTOs()
+        self.checkOrderInfo()
         self.getQueueCount()
+        self.queryOrderWaitTime()
 
 if __name__ == '__main__':
     a = select('上海', '北京')

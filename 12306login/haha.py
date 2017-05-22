@@ -29,14 +29,19 @@
 #     def __init__(self):
 #         pass
 #     def d(self):
-#         return a().b()
+# #         return a().b()
 import time
-
-import datetime
-
-str = "2017052100:00:00"
-m_time = time.mktime(time.strptime(str, "%Y%m%d%H:%M:%S"))
-a_time = time.localtime(m_time)
-print time.strftime("%a %b %d %Y %H:%M:%S", a_time)
-# time_b = time.asctime("%a %b %d %H:%M:%S %Y", str)
-# print time_b
+#
+# import datetime
+#
+# str = "2017052100:00:00"
+# m_time = time.mktime(time.strptime(str, "%Y%m%d%H:%M:%S"))
+# a_time = time.localtime(m_time)
+# print time.strftime("%a %b %d %Y %H:%M:%S", a_time)
+# # time_b = time.asctime("%a %b %d %H:%M:%S %Y", str)
+# # print time_b
+import random
+# 1495457315834
+# 428889054675
+# 318250603668
+print random.randint(1, 9)

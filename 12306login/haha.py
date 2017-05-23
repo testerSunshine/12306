@@ -44,4 +44,6 @@ import random
 # 1495457315834
 # 428889054675
 # 318250603668
-print random.randint(1, 9)
+# print random.randint(1, 9)
+a = "密码输入错误"
+print a.find("121")

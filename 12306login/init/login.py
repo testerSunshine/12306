@@ -9,16 +9,6 @@ from damatuCode.damatuWeb import DamatuApi
 from myUrllib import myurllib2
 
 codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand&%s' % random.random()
-# 931128603@qq.com
-baner = """
-##################################
-    12306登录脚本,作者Mr RJL
-    python版本:2.7,适用于linux
-    验证码输入方式:
-    输入问题对应的图片序号,1-8;
-    多个以','分隔.如:1,2,3
-##################################
-"""
 
 
 def cookietp():
@@ -106,41 +96,62 @@ def errorinput(text):
 
 
 def login(user, passwd):
-    randurl = 'https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn'
-    logurl = 'https://kyfw.12306.cn/otn/login/loginAysnSuggest'
-    surl = 'https://kyfw.12306.cn/otn/login/userLogin'
-    geturl = 'https://kyfw.12306.cn/otn/index/initMy12306'
-    randdata = {
-        "randCode": randCode,
-        "rand": "sjrand"
-    }
-    logdata = {
-        "loginUserDTO.user_name": user,
-        "userDTO.password": passwd,
-        "randCode": randCode
-    }
-    ldata = {
-        "_json_att": None
-    }
-    fresult = json.loads(myurllib2.Post(randurl, randdata), encoding='utf8')
-    checkcode = fresult['data']['msg']
-    if checkcode == 'FALSE':
-        errorinput("验证码有误,第%s次尝试重试" )
-    else:
-        stoidinput("验证码通过,开始登录..")
+    """
+    登陆
+    :param user: 账户名
+    :param passwd: 密码
+    :return: 
+    """
+    login_num = 0
+    while True:
+        cookietp()
+        readImg()
+        login_num += 1
+        randurl = 'https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn'
+        logurl = 'https://kyfw.12306.cn/otn/login/loginAysnSuggest'
+        surl = 'https://kyfw.12306.cn/otn/login/userLogin'
+        randdata = {
+            "randCode": randCode,
+            "rand": "sjrand"
+        }
+        logdata = {
+            "loginUserDTO.user_name": user,
+            "userDTO.password": passwd,
+            "randCode": randCode
+        }
+        ldata = {
+            "_json_att": None
+        }
+        fresult = json.loads(myurllib2.Post(randurl, randdata), encoding='utf8')
+        checkcode = fresult['data']['msg']
+        if checkcode == 'FALSE':
+            errorinput("验证码有误,第%s次尝试重试".format(login_num))
+        else:
+            stoidinput("验证码通过,开始登录..")
+            sleep(1)
+            try:
+                tresult = json.loads(myurllib2.Post(logurl, logdata), encoding='utf8')
+                if 'data' not in tresult:
+                    errorinput("登录失败: %s" % tresult['messages'][0])
+                # elif "messages" in tresult and tresult["messages"][0].find("密码输入错误") is not -1:
+                #     errorinput("登陆失败：{}".format(tresult["messages"][0]))
+                #     break
+                elif 'messages' in tresult and tresult['messages']:
+                    messages = tresult['messages'][0]
+                    if messages.find("密码输入错误") is not -1:
+                        errorinput("登陆失败：{}".format(tresult["messages"][0]))
+                        break
+                    else:
+                        errorinput("登录失败: %s" % tresult['messages'][0])
+                        stoidinput("尝试重新登陆")
+                else:
+                    stoidinput("登录成功")
+                    myurllib2.Post(surl, ldata)
+                    getUserinfo()
+                    break
+            except ValueError as e:
+                errorinput(e)
         sleep(1)
-        try:
-            tresult = json.loads(myurllib2.Post(logurl, logdata), encoding='utf8')
-            if 'data' not in tresult:
-                errorinput("登录失败: %s" % tresult['messages'][0])
-            elif 'messages' in tresult and tresult['messages']:
-                errorinput("登录失败: %s" % tresult['messages'])
-            else:
-                stoidinput("登录成功")
-                myurllib2.Post(surl, ldata)
-                getUserinfo()
-        except ValueError as e:
-            errorinput(e)
 
 
 def getUserinfo():
@@ -160,8 +171,6 @@ def getUserinfo():
 
 
 def main():
-    cookietp()
-    readImg()
     login('931128603@qq.com', 'QWERTY')
 
 
@@ -175,6 +184,5 @@ def logout():
 
 
 if __name__ == "__main__":
-    print baner
     main()
     # logout()

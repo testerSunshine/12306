@@ -116,7 +116,7 @@ class select:
             if 'data' in jsonData and 'exMsg' in jsonData['data'] and jsonData['data']['exMsg']:
                 print(jsonData['data']['exMsg'])
             elif 'messages' in jsonData and jsonData['messages']:
-                print(jsonData['messages'])
+                print(jsonData['messages'][0])
             else:
                 print("未查找到常用联系人")
 
@@ -168,10 +168,11 @@ class select:
                                 else:
                                     print ('出票失败')
                             elif 'messages' in submitResult and submitResult['messages']:
-                                print(submitResult['messages'])
+                                print(submitResult['messages'][0])
+                                break
                         else:
                             if check_user['messages']:
-                                print ('用户检查失败：%s' % check_user['messages'])
+                                print ('用户检查失败：%s' % check_user['messages'][0])
                             else:
                                 print ('用户检查失败： %s' % check_user)
                     else:
@@ -282,10 +283,11 @@ class select:
             "REPEAT_SUBMIT_TOKEN": self.get_token(),
         }
         checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
-        if "status" is checkQueueOrderResult and checkQueueOrderResult["status"]:
-            c_data = checkQueueOrderResult["data"] if checkQueueOrderResult["data"] in checkQueueOrderResult else {}
+        if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
+            c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
             if 'submitStatus' in c_data and c_data['submitStatus']:
                 print("出票成功!")
+                self.queryOrderWaitTime()
             else:
                 if 'errMsg' in c_data and c_data['errMsg']:
                     print("出票失败，" + c_data['errMsg'] + "请重新选择。")
@@ -295,11 +297,11 @@ class select:
         elif "messages" in checkQueueOrderResult and checkQueueOrderResult["messages"]:
             print("提交订单失败,错误信息: "+ checkQueueOrderResult["messages"])
         else:
-            print("未知错误：" + checkQueueOrderResult["validateMessages"])
+            print("未知错误：" + str(checkQueueOrderResult["validateMessages"]))
 
     def queryOrderWaitTime(self):
         """
-        排队获取订单等待信息,每隔1秒请求一次，最高请求次数为20次！
+        排队获取订单等待信息,每隔5秒请求一次，最高请求次数为20次！
         :return: 
         """
         queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime"
@@ -315,11 +317,18 @@ class select:
                 print("订票失败！")
                 break
             queryOrderWaitTimeResult = json.loads(myurllib2.Post(queryOrderWaitTimeUrl, data))
-            if "orderId" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["data"]["orderId"] != "null":
-                print ("恭喜您订票成功，订单号为：" + queryOrderWaitTimeResult["data"]["orderId"] + ", 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！")
+            if "status" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["status"]:
+                if "orderId" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["orderId"] != "null":
+                    print ("恭喜您订票成功，订单号为：" + queryOrderWaitTimeResult["data"]["orderId"] + ", 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！")
+                    break
+                elif "msg" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["msg"]:
+                    print("订单提交失败：" + queryOrderWaitTimeResult["data"]["msg"])
+                    break
+            elif "messages" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["messages"]:
+                print("订单提交失败： " + queryOrderWaitTimeResult["messages"])
                 break
             print("订单提交中,请耐心等待")
-            time.sleep(1000)
+            time.sleep(5)
 
     def main(self):
         set_type = self.submitOrderRequest()
@@ -328,7 +337,6 @@ class select:
         self.user_info = self.getPassengerDTOs()
         self.checkOrderInfo()
         self.getQueueCount()
-        self.queryOrderWaitTime()
 
 if __name__ == '__main__':
     a = select('上海', '北京')

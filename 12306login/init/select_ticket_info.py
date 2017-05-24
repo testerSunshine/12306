@@ -260,9 +260,9 @@ class select:
             else:
                 print("排队发现未知错误")
         elif "messages" in getQueueCountResult and getQueueCountResult["messages"]:
-            print("排队异常，错误信息："+getQueueCountResult)
+            print("排队异常，错误信息："+getQueueCountResult["messages"][0])
         else:
-            print(getQueueCountResult["validateMessages"])
+            print(str(getQueueCountResult["validateMessages"]))
 
     def checkQueueOrder(self):
         """

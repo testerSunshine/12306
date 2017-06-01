@@ -4,6 +4,7 @@ import urllib
 import urllib2
 import sys
 from _LWPCookieJar import LWPCookieJar
+import PyQt5
 
 reload(sys)
 sys.setdefaultencoding('UTF8')
@@ -33,7 +34,6 @@ def get(url):
         print e
         pass
     except urllib2.HTTPBasicAuthHandler, urllib2.HTTPError:
-        print 'error'
         pass
 
 
@@ -56,4 +56,4 @@ def Post(url, data):
     except urllib2.URLError as e:
         return e
     except urllib2.HTTPBasicAuthHandler, urllib2.HTTPError:
-        return 'error'
+        return ('error')

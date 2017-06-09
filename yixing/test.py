@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'test.ui'
 #
-# Created: Sun May 28 19:22:49 2017
+# Created: Thu Jun 01 18:13:51 2017
 #      by: PyQt5 UI code generator 5.3.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -33,16 +33,14 @@ class Ui_MainWindow(object):
         self.pushButton_4.setGeometry(QtCore.QRect(710, 150, 75, 23))
         self.pushButton_4.setObjectName("pushButton_4")
         self.plainTextEdit = QtWidgets.QPlainTextEdit(self.tab_4)
-        self.plainTextEdit.setGeometry(QtCore.QRect(280, 270, 431, 71))
+        self.plainTextEdit.setGeometry(QtCore.QRect(240, 290, 541, 181))
         self.plainTextEdit.setObjectName("plainTextEdit")
-        self.textEdit = QtWidgets.QTextEdit(self.tab_4)
-        self.textEdit.setGeometry(QtCore.QRect(280, 370, 431, 71))
-        self.textEdit.setObjectName("textEdit")
-        self.frame = QtWidgets.QFrame(self.tab_4)
-        self.frame.setGeometry(QtCore.QRect(180, 260, 601, 191))
-        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
+        self.checkBox = QtWidgets.QCheckBox(self.tab_4)
+        self.checkBox.setGeometry(QtCore.QRect(240, 270, 91, 16))
+        self.checkBox.setObjectName("checkBox")
+        self.checkBox_2 = QtWidgets.QCheckBox(self.tab_4)
+        self.checkBox_2.setGeometry(QtCore.QRect(350, 270, 91, 16))
+        self.checkBox_2.setObjectName("checkBox_2")
         self.tabWidget.addTab(self.tab_4, "")
         self.tab_5 = QtWidgets.QWidget()
         self.tab_5.setObjectName("tab_5")
@@ -91,6 +89,8 @@ class Ui_MainWindow(object):
         self.pushButton_2.setText(_translate("MainWindow", "创建任务"))
         self.pushButton_3.setText(_translate("MainWindow", "编辑任务"))
         self.pushButton_4.setText(_translate("MainWindow", "删除任务"))
+        self.checkBox.setText(_translate("MainWindow", "显示全部日志"))
+        self.checkBox_2.setText(_translate("MainWindow", "显示主要日志"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("MainWindow", "Tab 2"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("MainWindow", "Page"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "Tab 1"))

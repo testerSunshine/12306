@@ -176,14 +176,14 @@
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
-     <x>770</x>
-     <y>69</y>
+     <x>410</x>
+     <y>65</y>
      <width>75</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
-    <string>自动查询</string>
+    <string>查询</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="lineEdit">
@@ -200,7 +200,7 @@
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>130</y>
+     <y>110</y>
      <width>791</width>
      <height>251</height>
     </rect>
@@ -270,26 +270,95 @@
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>390</y>
+     <y>370</y>
      <width>81</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
-    <string>全部选中提交</string>
+    <string>全部选中</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="onlySelect">
+  <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>390</y>
+     <x>60</x>
+     <y>400</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>*所选车次:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>400</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>*选择乘客:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>400</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>*选择坐席:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>430</x>
+     <y>470</y>
      <width>75</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
-    <string>仅选中提交</string>
+    <string>完成设置</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="selectTicketInfo">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>420</y>
+     <width>91</width>
+     <height>121</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="peopleInfo">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>420</y>
+     <width>91</width>
+     <height>121</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="setInfo">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>420</y>
+     <width>91</width>
+     <height>121</height>
+    </rect>
    </property>
   </widget>
  </widget>

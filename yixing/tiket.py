@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'tiket.ui'
 #
-# Created: Sun May 28 21:53:19 2017
+# Created: Fri Jun 02 14:32:06 2017
 #      by: PyQt5 UI code generator 5.3.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -53,13 +53,13 @@ class Ui_Form(object):
         self.checkBox.setGeometry(QtCore.QRect(682, 33, 121, 16))
         self.checkBox.setObjectName("checkBox")
         self.pushButton_2 = QtWidgets.QPushButton(Form)
-        self.pushButton_2.setGeometry(QtCore.QRect(770, 69, 75, 23))
+        self.pushButton_2.setGeometry(QtCore.QRect(410, 65, 75, 23))
         self.pushButton_2.setObjectName("pushButton_2")
         self.lineEdit = QtWidgets.QLineEdit(Form)
         self.lineEdit.setGeometry(QtCore.QRect(100, 30, 71, 20))
         self.lineEdit.setObjectName("lineEdit")
         self.tableWidget = QtWidgets.QTableWidget(Form)
-        self.tableWidget.setGeometry(QtCore.QRect(50, 130, 791, 251))
+        self.tableWidget.setGeometry(QtCore.QRect(50, 110, 791, 251))
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(12)
         self.tableWidget.setRowCount(0)
@@ -88,11 +88,30 @@ class Ui_Form(object):
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(11, item)
         self.allSelect = QtWidgets.QPushButton(Form)
-        self.allSelect.setGeometry(QtCore.QRect(50, 390, 81, 23))
+        self.allSelect.setGeometry(QtCore.QRect(50, 370, 81, 23))
         self.allSelect.setObjectName("allSelect")
-        self.onlySelect = QtWidgets.QPushButton(Form)
-        self.onlySelect.setGeometry(QtCore.QRect(150, 390, 75, 23))
-        self.onlySelect.setObjectName("onlySelect")
+        self.label_2 = QtWidgets.QLabel(Form)
+        self.label_2.setGeometry(QtCore.QRect(60, 400, 61, 16))
+        self.label_2.setObjectName("label_2")
+        self.label_3 = QtWidgets.QLabel(Form)
+        self.label_3.setGeometry(QtCore.QRect(170, 400, 61, 16))
+        self.label_3.setObjectName("label_3")
+        self.label_4 = QtWidgets.QLabel(Form)
+        self.label_4.setGeometry(QtCore.QRect(290, 400, 61, 16))
+        self.label_4.setObjectName("label_4")
+        self.pushButton = QtWidgets.QPushButton(Form)
+        self.pushButton.setGeometry(QtCore.QRect(430, 470, 75, 23))
+        self.pushButton.setObjectName("pushButton")
+        self.selectTicketInfo = QtWidgets.QTableWidget(Form)
+        self.selectTicketInfo.setGeometry(QtCore.QRect(50, 420, 91, 121))
+        self.selectTicketInfo.setObjectName("selectTicketInfo")
+
+        self.peopleInfo = QtWidgets.QTableWidget(Form)
+        self.peopleInfo.setGeometry(QtCore.QRect(170, 420, 91, 121))
+        self.peopleInfo.setObjectName("peopleInfo")
+        self.setInfo = QtWidgets.QTableWidget(Form)
+        self.setInfo.setGeometry(QtCore.QRect(290, 420, 91, 121))
+        self.setInfo.setObjectName("setInfo")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -110,7 +129,7 @@ class Ui_Form(object):
         self.label_7.setText(_translate("Form", "出发时间："))
         self.checkBox_4.setText(_translate("Form", "T-特快"))
         self.checkBox.setText(_translate("Form", "仅显示可预订车次"))
-        self.pushButton_2.setText(_translate("Form", "自动查询"))
+        self.pushButton_2.setText(_translate("Form", "查询"))
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("Form", "车次"))
         item = self.tableWidget.horizontalHeaderItem(1)
@@ -135,6 +154,9 @@ class Ui_Form(object):
         item.setText(_translate("Form", "软座"))
         item = self.tableWidget.horizontalHeaderItem(11)
         item.setText(_translate("Form", "无座"))
-        self.allSelect.setText(_translate("Form", "全部选中提交"))
-        self.onlySelect.setText(_translate("Form", "仅选中提交"))
+        self.allSelect.setText(_translate("Form", "全部选中"))
+        self.label_2.setText(_translate("Form", "*所选车次:"))
+        self.label_3.setText(_translate("Form", "*选择乘客:"))
+        self.label_4.setText(_translate("Form", "*选择坐席:"))
+        self.pushButton.setText(_translate("Form", "完成设置"))
 

@@ -4,9 +4,11 @@ import random
 import json
 import re
 from time import sleep
+from yixing.config.ticketConf import _get_yaml
 
-from damatuCode.damatuWeb import DamatuApi
-from myUrllib import myurllib2
+
+from yixing.damatuCode.damatuWeb import DamatuApi
+from yixing.myUrllib import myurllib2
 
 codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand&%s' % random.random()
 
@@ -22,11 +24,11 @@ def cookietp():
 def readImg():
     global randCode
     stoidinput("下载验证码...")
-    img_path = 'd:/tkcode'
+    img_path = './tkcode'
     result = myurllib2.get(codeimg)
     try:
         open(img_path, 'wb').write(result)
-        randCode = DamatuApi('wenxianping', 'wen1995', img_path).main()
+        randCode = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"], img_path).main()
     except OSError as e:
         print (e)
         pass
@@ -125,7 +127,7 @@ def login(user, passwd):
         fresult = json.loads(myurllib2.Post(randurl, randdata), encoding='utf8')
         checkcode = fresult['data']['msg']
         if checkcode == 'FALSE':
-            errorinput("验证码有误,第%s次尝试重试".format(login_num))
+            errorinput("验证码有误,第{}次尝试重试".format(login_num))
         else:
             stoidinput("验证码通过,开始登录..")
             sleep(1)
@@ -171,7 +173,7 @@ def getUserinfo():
 
 
 def main():
-    login('931128603@qq.com', 'QWERTY')
+    login(_get_yaml()["12306count"]["uesr"], _get_yaml()["12306count"]["pwd"])
 
 
 def logout():

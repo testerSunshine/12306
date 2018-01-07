@@ -1,0 +1,2 @@
+class PassengerUserException(Exception):
+    pass

@@ -1,0 +1,31 @@
+---
+#station_date:出发日期，格式ex：2018-01-06
+#from_station: 始发站
+#to_station: 到达站
+#set_type: 坐席(商务座,二等座,特等座,软卧,硬卧,硬座,无座)
+#is_more_ticket:余票不足是否自动提交
+#select_refresh_interval:刷新间隔时间，1为一秒，0.1为100毫秒，以此类推
+#ticke_peoples: 乘客
+#damatu：打码图账号，用于自动登录
+
+set:
+  station_date: "2018-02-03"
+  from_station: "上海"
+  to_station: "长沙"
+  set_type:
+    - "二等座"
+#    - "一等座"
+  is_more_ticket: Ture
+  select_refresh_interval: 0.1
+
+ticke_peoples:
+  - "文贤平"
+
+damatu:
+  uesr: ""
+  pwd: ""
+
+12306count:
+  uesr: "931128603@qq.com"
+  pwd: ""
+

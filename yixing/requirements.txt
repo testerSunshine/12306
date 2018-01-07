@@ -1,0 +1,4 @@
+beautifulsoup4==4.5.3
+bs4==0.0.1
+PyYAML==3.12
+six==1.10.0

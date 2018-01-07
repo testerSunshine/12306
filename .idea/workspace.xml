@@ -2,29 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="79a86edc-721f-4aad-920d-b595d0348b7f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/yixing/config/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/yixing/config/ticketConf.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/yixing/config/ticket_config.yaml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/yixing/myException/PassengerUserException.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/yixing/myException/ticketConfigException.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/yixing/myException/ticketIsExitsException.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/yixing/requirements.txt" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/yixing/12306.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/yixing/haha.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/yixing/myUrllib/12306test.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/yixing/test.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/yixing/test.ui" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/yixing/tiket.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/yixing/tiket.ui" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/12306.iml" afterPath="$PROJECT_DIR$/.idea/12306.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/yixing/damatuCode/damatuWeb.py" afterPath="$PROJECT_DIR$/yixing/damatuCode/damatuWeb.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/yixing/init/login.py" afterPath="$PROJECT_DIR$/yixing/init/login.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/yixing/init/select_ticket_info.py" afterPath="$PROJECT_DIR$/yixing/init/select_ticket_info.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/yixing/myUrllib/myurllib2.py" afterPath="$PROJECT_DIR$/yixing/myUrllib/myurllib2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/yixing/run.py" afterPath="$PROJECT_DIR$/yixing/run.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -75,7 +53,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="126">
@@ -105,10 +83,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="select_ticket_info.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="select_ticket_info.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/yixing/init/select_ticket_info.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="356">
+            <state relative-caret-position="436">
               <caret line="489" column="0" lean-forward="true" selection-start-line="489" selection-start-column="0" selection-end-line="489" selection-end-column="0" />
               <folding>
                 <element signature="e#23#34#0" expanded="true" />
@@ -265,6 +243,12 @@
               <item name="12306" type="b2602c69:ProjectViewProjectNode" />
               <item name="12306" type="462c0819:PsiDirectoryNode" />
               <item name="yixing" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="12306" type="b2602c69:ProjectViewProjectNode" />
+              <item name="12306" type="462c0819:PsiDirectoryNode" />
+              <item name="yixing" type="462c0819:PsiDirectoryNode" />
+              <item name="init" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -656,6 +640,14 @@
       <option name="presentableId" value="Default" />
       <updated>1495609226162</updated>
     </task>
+    <task id="LOCAL-00001" summary="常规更新">
+      <created>1515290076322</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1515290076322</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -689,6 +681,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="常规更新" />
+    <option name="LAST_COMMIT_MESSAGE" value="常规更新" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -907,16 +903,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/yixing/init/select_ticket_info.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="489" column="0" lean-forward="true" selection-start-line="489" selection-start-column="0" selection-end-line="489" selection-end-column="0" />
-          <folding>
-            <element signature="e#23#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/yixing/init/login.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-175">
@@ -956,6 +942,16 @@
         <state relative-caret-position="126">
           <caret line="9" column="38" lean-forward="false" selection-start-line="9" selection-start-column="38" selection-end-line="9" selection-end-column="38" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/yixing/init/select_ticket_info.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="436">
+          <caret line="489" column="0" lean-forward="true" selection-start-line="489" selection-start-column="0" selection-end-line="489" selection-end-column="0" />
+          <folding>
+            <element signature="e#23#34#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

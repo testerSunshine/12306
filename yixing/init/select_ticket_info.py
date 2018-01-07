@@ -194,8 +194,9 @@ class select:
                 if value['result']:
                     for i in value['result']:
                         ticket_info = i.split('|')
-                        if ticket_info[11] == "N" and ticket_info[1] == "预订":  # 筛选未在开始时间内的车次
+                        if ticket_info[11] == "Y" and ticket_info[1] == "预订":  # 筛选未在开始时间内的车次
                             for j in range(len(self._station_seat)):
+                                print ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))]
                                 if ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))] != '' \
                                         and ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))] != '无' \
                                         and ticket_info[3] in self.station_trains\
@@ -208,7 +209,9 @@ class select:
                                     return self._station_seat[j].encode("utf8")
                                 else:
                                     pass
-                            print "当前车次查询无符合条件坐席，正在重新查询"
+                            print "当前车次{0} 查询无符合条件坐席，正在重新查询".format(ticket_info[3])
+                        elif ticket_info[11] == "N":
+                            print("当前车次{0} 无票".format(ticket_info[3]))
                         else:
                             print("当前这次还处于待售状态，请耐心等待")
                             time.sleep(self.expect_refresh_interval)
@@ -497,9 +500,9 @@ class select:
             except ticketIsExitsException as e:
                 print e.message
                 break
-            except Exception as e:
-                print e.message
-                pass
+            # except Exception as e:
+            #     print e.message
+            #     pass
 
 
 if __name__ == '__main__':

@@ -15,12 +15,13 @@
 #to_station: 到达站
 #set_type: 坐席(商务座,二等座,特等座,软卧,硬卧,硬座,无座)
 #is_more_ticket:余票不足是否自动提交
-#select_refresh_interval:刷新间隔时间，1为一秒，0.1为100毫秒，以此类推
+#select_refresh_interval:抢票刷新间隔时间，1为一秒，0.1为100毫秒，以此类推
+#expect_refresh_interval:售票未开始，等待刷新间隔时间，1为一秒，0.1为100毫秒，以此类推
 #ticke_peoples: 乘客
-#damatu：打码图账号，用于自动登录
+#damatu：打码兔账号，用于自动登录
 
 set:
-  station_date: "2018-02-03"
+  station_date: "2018-02-04"
   station_trains:
     - "G1353"
     - "G1329"
@@ -39,6 +40,7 @@ set:
 #    - "一等座"
   is_more_ticket: Ture
   select_refresh_interval: 0.1
+  expect_refresh_interval: 0.1
 
 ticke_peoples:
   - "文贤平"

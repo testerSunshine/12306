@@ -19,7 +19,7 @@ sys.setdefaultencoding('utf-8')
 
 class select:
     def __init__(self):
-        self.from_station, self.to_station, self.station_date, self._station_seat, self.is_more_ticket, self.ticke_peoples, self.select_refresh_interval, self.station_trains = self.get_ticket_info()
+        self.from_station, self.to_station, self.station_date, self._station_seat, self.is_more_ticket, self.ticke_peoples, self.select_refresh_interval, self.station_trains, self.expect_refresh_interval = self.get_ticket_info()
         self.order_request_params = {}  # 订单提交时的参数
         self.ticketInfoForPassengerForm = {}  # 初始化当前页面参数
         self.current_seats = {}  # 席别信息
@@ -42,8 +42,9 @@ class select:
         ticke_peoples = ticket_info_config["ticke_peoples"]
         select_refresh_interval = ticket_info_config["set"]["select_refresh_interval"]
         station_trains = ticket_info_config["set"]["station_trains"]
+        expect_refresh_interval = ticket_info_config["set"]["expect_refresh_interval"]
         print "*"*20
-        print "当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}\n候选购买车次：{7}".format\
+        print "当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}\n候选购买车次：{7}\n未开始刷票间隔时间：{8}".format\
                                                                                       (
                                                                                       from_station,
                                                                                       to_station,
@@ -52,9 +53,11 @@ class select:
                                                                                       is_more_ticket,
                                                                                       ",".join(ticke_peoples),
                                                                                       select_refresh_interval,
-                                                                                      ",".join(station_trains),)
+                                                                                      ",".join(station_trains),
+                                                                                      expect_refresh_interval,
+            )
         print "*"*20
-        return from_station, to_station, station_date, set_type, is_more_ticket, ticke_peoples, select_refresh_interval, station_trains
+        return from_station, to_station, station_date, set_type, is_more_ticket, ticke_peoples, select_refresh_interval, station_trains, expect_refresh_interval
 
     def get_order_request_params(self):
         return self.order_request_params
@@ -191,7 +194,7 @@ class select:
                 if value['result']:
                     for i in value['result']:
                         ticket_info = i.split('|')
-                        if ticket_info[11] == "N" and ticket_info[1].encode("utf8") == "预订":
+                        if ticket_info[11] == "N" and ticket_info[1] == "预订":  # 筛选未在开始时间内的车次
                             for j in range(len(self._station_seat)):
                                 if ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))] != '' \
                                         and ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))] != '无' \
@@ -208,7 +211,7 @@ class select:
                             print "当前车次查询无符合条件坐席，正在重新查询"
                         else:
                             print("当前这次还处于待售状态，请耐心等待")
-                            time.sleep(1)
+                            time.sleep(self.expect_refresh_interval)
                 else:
                     raise ticketConfigException("车次配置信息有误，请检查")
         else:
@@ -232,9 +235,9 @@ class select:
             return True
         else:
             if check_user['messages']:
-                print ('用户检查失败：%s' % check_user['messages'][0])
+                print ('用户检查失败：%s，可能未登录，可能session已经失效' % check_user['messages'][0])
             else:
-                print ('用户检查失败： %s' % check_user)
+                print ('用户检查失败： %s，可能未登录，可能session已经失效' % check_user)
 
     def submit_station(self):
         """

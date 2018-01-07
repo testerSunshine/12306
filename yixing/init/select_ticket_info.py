@@ -19,7 +19,7 @@ sys.setdefaultencoding('utf-8')
 
 class select:
     def __init__(self):
-        self.from_station, self.to_station, self.station_date, self._station_seat, self.is_more_ticket, self.ticke_peoples, self.select_refresh_interval = self.get_ticket_info()
+        self.from_station, self.to_station, self.station_date, self._station_seat, self.is_more_ticket, self.ticke_peoples, self.select_refresh_interval, self.station_trains = self.get_ticket_info()
         self.order_request_params = {}  # 订单提交时的参数
         self.ticketInfoForPassengerForm = {}  # 初始化当前页面参数
         self.current_seats = {}  # 席别信息
@@ -41,15 +41,20 @@ class select:
         is_more_ticket = ticket_info_config["set"]["is_more_ticket"].encode("utf8")
         ticke_peoples = ticket_info_config["ticke_peoples"]
         select_refresh_interval = ticket_info_config["set"]["select_refresh_interval"]
+        station_trains = ticket_info_config["set"]["station_trains"]
         print "*"*20
-        print "当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}".format(from_station,
+        print "当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}\n 候选购买车次：{7}".format\
+                                                                                      (
+                                                                                      from_station,
                                                                                       to_station,
                                                                                       station_date,
                                                                                       ",".join(set_type),
                                                                                       is_more_ticket,
-                                                                                      ",".join(ticke_peoples),)
+                                                                                      ",".join(ticke_peoples),
+                                                                                      select_refresh_interval,
+                                                                                      ",".join(station_trains),)
         print "*"*20
-        return from_station, to_station, station_date, set_type, is_more_ticket, ticke_peoples, select_refresh_interval
+        return from_station, to_station, station_date, set_type, is_more_ticket, ticke_peoples, select_refresh_interval, station_trains
 
     def get_order_request_params(self):
         return self.order_request_params
@@ -177,7 +182,6 @@ class select:
         select_url = 'https://kyfw.12306.cn/otn/leftTicket/queryZ?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT'.format(self.station_date, from_station, to_station)
         leftTicketLogUrl = 'https://kyfw.12306.cn/otn/leftTicket/log?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT'.format(self.station_date, from_station, to_station)
         leftTicketLog = json.loads(myurllib2.get(leftTicketLogUrl), encoding='utf-8')
-        print leftTicketLog
         if "status" in leftTicketLog and leftTicketLog["status"] is True:
             station_ticket = json.loads(myurllib2.get(select_url), encoding='utf-8')
             value = station_ticket['data']
@@ -188,7 +192,7 @@ class select:
                     for i in value['result']:
                         ticket_info = i.split('|')
                         for j in range(len(self._station_seat)):
-                            if ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))] != '' and ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))] != '无':    # 过滤有效目标车次
+                            if ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))] != '' and ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))] != '无' and ticket_info[3] in self.station_trains:  # 过滤有效目标车次
                                 # tiket_values = [k for k in value['map'].values()]
                                 self.secretStr = ticket_info[0]
                                 print ('车次: ' + ticket_info[3] + ' 始发车站: ' + self.to_station + ' 终点站: ' +

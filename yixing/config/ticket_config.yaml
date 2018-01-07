@@ -1,5 +1,16 @@
 ---
 #station_date:出发日期，格式ex：2018-01-06
+#station_trains:过滤车次，格式ex：
+                #    - "G1353"
+                #    - "G1329"
+                #    - "G1355"
+                #    - "G1303"
+                #    - "G1357"
+                #    - "G1305"
+                #    - "G1359"
+                #    - "G1361"
+                #    - "G1373"
+                #    - "G1363"
 #from_station: 始发站
 #to_station: 到达站
 #set_type: 坐席(商务座,二等座,特等座,软卧,硬卧,硬座,无座)
@@ -10,6 +21,17 @@
 
 set:
   station_date: "2018-02-03"
+  station_trains:
+    - "G1353"
+    - "G1329"
+    - "G1355"
+    - "G1303"
+    - "G1357"
+    - "G1305"
+    - "G1359"
+    - "G1361"
+    - "G1373"
+    - "G1363"
   from_station: "上海"
   to_station: "长沙"
   set_type:
@@ -26,6 +48,6 @@ damatu:
   pwd: ""
 
 12306count:
-  uesr: "931128603@qq.com"
+  uesr: ""
   pwd: ""
 

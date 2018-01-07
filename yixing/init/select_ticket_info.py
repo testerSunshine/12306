@@ -476,6 +476,7 @@ class select:
         while 1:
             try:
                 print "正在执行第{0}次查询".format(num)
+                num += 1
                 time.sleep(self.select_refresh_interval)
                 if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
                     print "12306休息时间，本程序自动停止,明天早上七点运行"
@@ -490,7 +491,6 @@ class select:
                         if self.checkOrderInfo():
                             if self.getQueueCount():
                                 break
-                num += 1
             except PassengerUserException as e:
                 print e.message
                 break
@@ -500,9 +500,9 @@ class select:
             except ticketIsExitsException as e:
                 print e.message
                 break
-            # except Exception as e:
-            #     print e.message
-            #     pass
+            except Exception as e:
+                print e.message
+                pass
 
 
 if __name__ == '__main__':

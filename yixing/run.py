@@ -3,7 +3,7 @@ from init import login, select_ticket_info
 
 
 def run():
-    # login.main()
+    login.main()
     select_ticket_info.select().main()
 
 run()

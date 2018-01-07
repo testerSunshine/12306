@@ -43,7 +43,7 @@ class select:
         select_refresh_interval = ticket_info_config["set"]["select_refresh_interval"]
         station_trains = ticket_info_config["set"]["station_trains"]
         print "*"*20
-        print "当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}\n 候选购买车次：{7}".format\
+        print "当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}\n候选购买车次：{7}".format\
                                                                                       (
                                                                                       from_station,
                                                                                       to_station,
@@ -191,17 +191,24 @@ class select:
                 if value['result']:
                     for i in value['result']:
                         ticket_info = i.split('|')
-                        for j in range(len(self._station_seat)):
-                            if ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))] != '' and ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))] != '无' and ticket_info[3] in self.station_trains:  # 过滤有效目标车次
-                                # tiket_values = [k for k in value['map'].values()]
-                                self.secretStr = ticket_info[0]
-                                print ('车次: ' + ticket_info[3] + ' 始发车站: ' + self.to_station + ' 终点站: ' +
-                                       self.to_station + ' ' + self._station_seat[j].encode("utf8") + ':' + ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))])
-                                print ('正在尝试提交订票...')
-                                return self._station_seat[j].encode("utf8")
-                            else:
-                                pass
-                        print "当前车次查询无符合条件坐席，正在重新查询"
+                        if ticket_info[11] == "N" and ticket_info[1].encode("utf8") == "预订":
+                            for j in range(len(self._station_seat)):
+                                if ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))] != '' \
+                                        and ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))] != '无' \
+                                        and ticket_info[3] in self.station_trains\
+                                        and ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))] != '*':  # 过滤有效目标车次
+                                    # tiket_values = [k for k in value['map'].values()]
+                                    self.secretStr = ticket_info[0]
+                                    print ('车次: ' + ticket_info[3] + ' 始发车站: ' + self.to_station + ' 终点站: ' +
+                                           self.to_station + ' ' + self._station_seat[j].encode("utf8") + ':' + ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))])
+                                    print ('正在尝试提交订票...')
+                                    return self._station_seat[j].encode("utf8")
+                                else:
+                                    pass
+                            print "当前车次查询无符合条件坐席，正在重新查询"
+                        else:
+                            print("当前这次还处于待售状态，请耐心等待")
+                            time.sleep(1)
                 else:
                     raise ticketConfigException("车次配置信息有误，请检查")
         else:

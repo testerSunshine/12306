@@ -21,7 +21,7 @@
 #damatu：打码兔账号，用于自动登录
 
 set:
-  station_date: "2018-02-04"
+  station_date: "2018-02-05"
   station_trains:
     - "G1353"
     - "G1329"
@@ -39,17 +39,18 @@ set:
     - "二等座"
 #    - "一等座"
   is_more_ticket: Ture
-  select_refresh_interval: 0.1
-  expect_refresh_interval: 0.1
+  select_refresh_interval: 1
+  expect_refresh_interval: 1
 
 ticke_peoples:
   - "文贤平"
+  - "梁敏"
 
 damatu:
-  uesr: ""
-  pwd: ""
+  uesr: "wenxianping"
+  pwd: "wen1995"
 
 12306count:
-  uesr: ""
-  pwd: ""
+  uesr: "931128603@qq.com"
+  pwd: "QWERTY"
 

@@ -6,6 +6,7 @@ import re
 import urllib
 import sys
 import time
+from collections import OrderedDict
 
 from yixing.config.ticketConf import _get_yaml
 from yixing.myException.PassengerUserException import PassengerUserException
@@ -155,7 +156,7 @@ class select:
             'normal_passengers']:
             # return jsonData['data']['normal_passengers']
             normal_passengers = jsonData['data']['normal_passengers']
-            _normal_passenger = [normal_passenger for normal_passenger in normal_passengers if normal_passengers[0]["passenger_name"] in self.ticke_peoples]
+            _normal_passenger = [normal_passengers[i] for i in range(len(normal_passengers))if normal_passengers[i]["passenger_name"] in self.ticke_peoples]
             return _normal_passenger if _normal_passenger else normal_passengers[0]  # 如果配置乘车人没有在账号，则默认返回第一个用户
         else:
             if 'data' in jsonData and 'exMsg' in jsonData['data'] and jsonData['data']['exMsg']:
@@ -295,6 +296,35 @@ class select:
         ticket_type = {'adult': "1", 'child': "2", 'student': "3", 'disability': "4"}
         return ticket_type
 
+    def getPassengerTicketStrListAndOldPassengerStr(self):
+        """
+        获取提交车次人内容格式
+        passengerTicketStr	O,0,1,文贤平,1,43052419950223XXXX,15618715583,N_O,0,1,梁敏,1,43052719920118XXXX,,N
+        oldPassengerStr	文贤平,1,43052719920118XXXX,1_梁敏,1,43052719920118XXXX,1_
+        :return:
+        """
+        passengerTicketStrList = []
+        oldPassengerStr = []
+        if len(self.user_info) is 1:
+            passengerTicketStrList.append(
+                self.set_type + ',0,' + self.user_info[0]['passenger_id_type_code'] + "," + self.user_info[0][
+                    "passenger_name"] + "," +
+                self.user_info[0]['passenger_type'] + "," + self.user_info[0]['passenger_id_no'] + "," +
+                self.user_info[0]['mobile_no'] + ',N')
+            oldPassengerStr.append(
+                self.user_info[0]['passenger_name'] + "," + self.user_info[0]['passenger_type'] + "," +
+                self.user_info[0]['passenger_id_no'] + "," + self.user_info[0]['passenger_type'] + '_')
+        else:
+            for i in range(len(self.user_info)):
+                passengerTicketStrList.append(
+                    '0,' + self.user_info[i]['passenger_id_type_code'] + "," + self.user_info[i][
+                        "passenger_name"] + "," + self.user_info[i]['passenger_type'] + "," + self.user_info[i][
+                        'passenger_id_no'] + "," + self.user_info[i]['mobile_no'] + ',N_' + self.set_type)
+                oldPassengerStr.append(
+                    self.user_info[i]['passenger_name'] + "," + self.user_info[i]['passenger_type'] + "," +
+                    self.user_info[i]['passenger_id_no'] + "," + self.user_info[i]['passenger_type'] + '_')
+        return passengerTicketStrList, oldPassengerStr
+
     def checkOrderInfo(self):
         """
         检查支付订单，需要提交REPEAT_SUBMIT_TOKEN
@@ -302,21 +332,30 @@ class select:
         oldPassengersStr: 乘客名,证件类型,证件号,乘客类型
         :return: 
         """
+        passengerTicketStrList, oldPassengerStr = self.getPassengerTicketStrListAndOldPassengerStr()
         checkOrderInfoUrl = 'https://kyfw.12306.cn/otn/confirmPassenger/checkOrderInfo'
-        data = {
-            'cancel_flag': 2,
-            'bed_level_order_num': "000000000000000000000000000000",
-            'passengerTicketStr': self.set_type+',0,'+self.user_info[0]['passenger_id_type_code']+","+self.user_info[0]["passenger_name"]+","+self.user_info[0]['passenger_type']+","+self.user_info[0]['passenger_id_no']+","+self.user_info[0]['mobile_no']+',N',
-            'oldPassengerStr': self.user_info[0]['passenger_name']+","+self.user_info[0]['passenger_type']+","+self.user_info[0]['passenger_id_no']+","+self.user_info[0]['passenger_type']+'_',
-            'tour_flag': 'dc',
-            'REPEAT_SUBMIT_TOKEN': self.token,
-        }
+        data = OrderedDict()
+        data['cancel_flag'] = 2
+        data['bed_level_order_num'] = "000000000000000000000000000000"
+        # 'passengerTicketStr': self.set_type+',0,'+self.user_info[0]['passenger_id_type_code']+","+self.user_info[0]["passenger_name"]+","+self.user_info[0]['passenger_type']+","+self.user_info[0]['passenger_id_no']+","+self.user_info[0]['mobile_no']+',N',
+        # 'oldPassengerStr': self.user_info[0]['passenger_name']+","+self.user_info[0]['passenger_type']+","+self.user_info[0]['passenger_id_no']+","+self.user_info[0]['passenger_type']+'_',
+        data['passengerTicketStr'] = self.set_type + "," + ",".join(passengerTicketStrList).rstrip("_{0}".format(self.set_type))
+        data['oldPassengerStr'] = "".join(oldPassengerStr)
+        data['tour_flag'] = 'dc'
+        data['whatsSelect'] = 1
+        data['REPEAT_SUBMIT_TOKEN'] = self.token
         checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data, ))
-        if 'data' in checkOrderInfo and checkOrderInfo['data']['submitStatus'] is True:
-            print ('车票提交通过，正在尝试排队')
-            return True
+        if 'data' in checkOrderInfo:
+            if checkOrderInfo['data']['submitStatus'] is True:
+                    print ('车票提交通过，正在尝试排队')
+                    return True
+            else:
+                if "errMsg" in checkOrderInfo['data'] and checkOrderInfo['data']["errMsg"]:
+                    print checkOrderInfo['data']["errMsg"]
+                else:
+                    print checkOrderInfo
         elif 'messages' in checkOrderInfo and checkOrderInfo['messages']:
-            print (checkOrderInfo['messages'])
+            print (checkOrderInfo['messages'][0])
             print ("排队失败，重新刷票中")
 
     def getQueueCount(self):
@@ -346,12 +385,15 @@ class select:
         getQueueCountResult = json.loads(myurllib2.Post(getQueueCountUrl, data))
         if "status" in getQueueCountResult and getQueueCountResult["status"] is True:
             if "countT" in getQueueCountResult["data"]:
+                ticket = getQueueCountResult["data"]["ticket"]
                 countT = getQueueCountResult["data"]["countT"]
                 if int(countT) is 0:
-                    print("排队成功, 当前余票还剩余:" + getQueueCountResult["data"]["ticket"]+ "张")
-                    print("提交订单中")
-                    self.checkQueueOrder()
-                    return True
+                    print("排队成功, 当前余票还剩余:" + ticket + "张")
+                    if int(ticket) < len(self.user_info):
+                        print("当前余票数小于乘车人数，放弃订票")
+                    else:
+                        self.checkQueueOrder()
+                        return True
                 else:
                     print("正在排队，当前排队人数:" + str(countT) + "当前余票还剩余:" + getQueueCountResult["data"]["ticket"]+ "张")
             else:
@@ -366,10 +408,11 @@ class select:
         模拟提交订单是确认按钮，参数获取方法还是get_ticketInfoForPassengerForm 中获取
         :return: 
         """
+        passengerTicketStrList, oldPassengerStr = self.getPassengerTicketStrListAndOldPassengerStr()
         checkQueueOrderUrl = "https://kyfw.12306.cn/otn/confirmPassenger/confirmSingleForQueue"
         data = {
-            "passengerTicketStr": self.set_type+',0,'+self.user_info[0]['passenger_id_type_code']+","+self.user_info[0]["passenger_name"]+","+self.user_info[0]['passenger_type']+","+self.user_info[0]['passenger_id_no']+","+self.user_info[0]['mobile_no']+',N',
-            "oldPassengerStr": self.user_info[0]['passenger_name']+","+self.user_info[0]['passenger_type']+","+self.user_info[0]['passenger_id_no']+","+self.user_info[0]['passenger_type']+'_',
+            "passengerTicketStr": self.set_type + "," + ",".join(passengerTicketStrList).rstrip("_{0}".format(self.set_type)),
+            "oldPassengerStr": "".join(oldPassengerStr),
             "purpose_codes": self.get_ticketInfoForPassengerForm()["purpose_codes"],
             "key_check_isChange": self.get_ticketInfoForPassengerForm()["key_check_isChange"],
             "leftTicketStr": self.get_ticketInfoForPassengerForm()["leftTicketStr"],
@@ -411,7 +454,7 @@ class select:
         while True:
             num += 1
             if num > 20:
-                print("超出排队时间，订票失败")
+                print("超出排队时间，自动放弃，正在重新刷票")
                 break
             queryOrderWaitTimeResult = json.loads(myurllib2.Post(queryOrderWaitTimeUrl, data))
             if "status" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["status"]:

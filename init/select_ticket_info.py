@@ -168,7 +168,7 @@ class select:
                 print("未查找到常用联系人")
                 raise PassengerUserException("未查找到常用联系人,请先添加联系人在试试")
 
-    def submitOrderRequest(self):
+    def submitOrderRequest(self, from_station, to_station):
         """
         提交车次信息
         车次对应字典
@@ -183,7 +183,6 @@ class select:
         } 参照station_seat()方法
         :return:
         """
-        from_station, to_station = self.station_table(self.from_station, self.to_station)
         select_url = 'https://kyfw.12306.cn/otn/leftTicket/queryZ?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT'.format(self.station_date, from_station, to_station)
         leftTicketLogUrl = 'https://kyfw.12306.cn/otn/leftTicket/log?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT'.format(self.station_date, from_station, to_station)
         leftTicketLog = json.loads(myurllib2.get(leftTicketLogUrl), encoding='utf-8')
@@ -526,6 +525,7 @@ class select:
     #         self.submitOrderRequest()
 
     def main(self):
+        from_station, to_station = self.station_table(self.from_station, self.to_station)
         num = 1
         while 1:
             try:
@@ -535,7 +535,7 @@ class select:
                 if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
                     print "12306休息时间，本程序自动停止,明天早上七点运行"
                     break
-                self.submitOrderRequest()
+                self.submitOrderRequest(from_station, to_station)
             except PassengerUserException as e:
                 print e.message
                 break

@@ -207,7 +207,14 @@ class select:
                                     print ('车次: ' + ticket_info[3] + ' 始发车站: ' + self.to_station + ' 终点站: ' +
                                            self.to_station + ' ' + self._station_seat[j].encode("utf8") + ':' + ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))])
                                     print ('正在尝试提交订票...')
-                                    return self._station_seat[j].encode("utf8")
+                                    if self.check_user():
+                                        self.submit_station()
+                                        self.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
+                                        self.getRepeatSubmitToken()
+                                        self.user_info = self.getPassengerDTOs()
+                                        if self.checkOrderInfo():
+                                            if self.getQueueCount():
+                                                break
                                 else:
                                     pass
                             print "当前车次{0} 查询无符合条件坐席，正在重新查询".format(ticket_info[3])
@@ -525,15 +532,15 @@ class select:
                     print "12306休息时间，本程序自动停止,明天早上七点运行"
                     break
                 set_type = self.submitOrderRequest()
-                if set_type:
-                    if self.check_user():
-                        self.submit_station()
-                        self.getPassengerTicketStr(set_type)
-                        self.getRepeatSubmitToken()
-                        self.user_info = self.getPassengerDTOs()
-                        if self.checkOrderInfo():
-                            if self.getQueueCount():
-                                break
+                # if set_type:
+                #     if self.check_user():
+                #         self.submit_station()
+                #         self.getPassengerTicketStr(set_type)
+                #         self.getRepeatSubmitToken()
+                #         self.user_info = self.getPassengerDTOs()
+                #         if self.checkOrderInfo():
+                #             if self.getQueueCount():
+                #                 break
             except PassengerUserException as e:
                 print e.message
                 break

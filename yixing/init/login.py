@@ -17,8 +17,8 @@ def cookietp():
     stoidinput("获取Cookie")
     Url = "https://kyfw.12306.cn/otn/login/init"
     myurllib2.get(Url)
-    for index, c in enumerate(myurllib2.cookiejar):
-        stoidinput(c)
+    # for index, c in enumerate(myurllib2.cookiejar):
+    #     stoidinput(c)
 
 
 def readImg():

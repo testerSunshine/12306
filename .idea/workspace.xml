@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="79a86edc-721f-4aad-920d-b595d0348b7f" name="Default" comment="增加配置">
+    <list default="true" id="79a86edc-721f-4aad-920d-b595d0348b7f" name="Default" comment="1、fix">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/yixing/config/ticket_config.yaml" afterPath="$PROJECT_DIR$/yixing/config/ticket_config.yaml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/yixing/init/login.py" afterPath="$PROJECT_DIR$/yixing/init/login.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/yixing/init/select_ticket_info.py" afterPath="$PROJECT_DIR$/yixing/init/select_ticket_info.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -49,8 +49,8 @@
       <file leaf-file-name="select_ticket_info.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/yixing/init/select_ticket_info.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="496" column="11" lean-forward="true" selection-start-line="496" selection-start-column="11" selection-end-line="496" selection-end-column="11" />
+            <state relative-caret-position="173">
+              <caret line="205" column="67" lean-forward="true" selection-start-line="205" selection-start-column="67" selection-end-line="205" selection-end-column="67" />
               <folding>
                 <element signature="e#23#34#0" expanded="true" />
               </folding>
@@ -71,8 +71,18 @@
       <file leaf-file-name="ticket_config.yaml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/yixing/config/ticket_config.yaml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="644">
-              <caret line="46" column="7" lean-forward="false" selection-start-line="46" selection-start-column="7" selection-end-line="46" selection-end-column="7" />
+            <state relative-caret-position="382">
+              <caret line="53" column="9" lean-forward="false" selection-start-line="53" selection-start-column="9" selection-end-line="53" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="login.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/yixing/init/login.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1906">
+              <caret line="20" column="23" lean-forward="true" selection-start-line="19" selection-start-column="3" selection-end-line="20" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -175,10 +185,10 @@
         <option value="$PROJECT_DIR$/yixing/myException/ticketIsExitsException.py" />
         <option value="$PROJECT_DIR$/yixing/requirements.txt" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/yixing/init/login.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/yixing/run.py" />
         <option value="$PROJECT_DIR$/yixing/config/ticket_config.yaml" />
+        <option value="$PROJECT_DIR$/yixing/init/login.py" />
         <option value="$PROJECT_DIR$/yixing/init/select_ticket_info.py" />
       </list>
     </option>
@@ -208,6 +218,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -220,12 +232,16 @@
               <item name="12306" type="462c0819:PsiDirectoryNode" />
               <item name="yixing" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="12306" type="b2602c69:ProjectViewProjectNode" />
+              <item name="12306" type="462c0819:PsiDirectoryNode" />
+              <item name="yixing" type="462c0819:PsiDirectoryNode" />
+              <item name="init" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -666,20 +682,34 @@
       <option name="project" value="LOCAL" />
       <updated>1515305972202</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="1、增加多人订票规则，目前无问题">
+      <created>1515378140868</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1515378140868</updated>
+    </task>
+    <task id="LOCAL-00010" summary="1、fix">
+      <created>1515378364014</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1515378364015</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16380544" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16595136" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5465538" sideWeight="0.50429183" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.48004836" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3446191" sideWeight="0.49570817" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3446191" sideWeight="0.49570817" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297568" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -720,6 +750,32 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
@@ -731,7 +787,9 @@
     <MESSAGE value="增加预售车次订票休眠时间配置" />
     <MESSAGE value="修改不能提交订票的bug" />
     <MESSAGE value="打开登录开关" />
-    <option name="LAST_COMMIT_MESSAGE" value="打开登录开关" />
+    <MESSAGE value="1、增加多人订票规则，目前无问题" />
+    <MESSAGE value="1、fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="1、fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -834,7 +892,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="445">
           <caret line="383" column="0" lean-forward="false" selection-start-line="383" selection-start-column="0" selection-end-line="383" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -909,16 +966,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/yixing/init/login.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="173" column="0" lean-forward="true" selection-start-line="173" selection-start-column="0" selection-end-line="173" selection-end-column="0" />
-          <folding>
-            <element signature="e#41#54#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="14">
@@ -945,8 +992,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/yixing/config/ticket_config.yaml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="644">
-          <caret line="46" column="7" lean-forward="false" selection-start-line="46" selection-start-column="7" selection-end-line="46" selection-end-column="7" />
+        <state relative-caret-position="382">
+          <caret line="53" column="9" lean-forward="false" selection-start-line="53" selection-start-column="9" selection-end-line="53" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/yixing/init/login.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1906">
+          <caret line="20" column="23" lean-forward="true" selection-start-line="19" selection-start-column="3" selection-end-line="20" selection-end-column="23" />
           <folding />
         </state>
       </provider>
@@ -961,8 +1016,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/yixing/init/select_ticket_info.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="496" column="11" lean-forward="true" selection-start-line="496" selection-start-column="11" selection-end-line="496" selection-end-column="11" />
+        <state relative-caret-position="173">
+          <caret line="205" column="67" lean-forward="true" selection-start-line="205" selection-start-column="67" selection-end-line="205" selection-end-column="67" />
           <folding>
             <element signature="e#23#34#0" expanded="true" />
           </folding>

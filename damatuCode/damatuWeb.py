@@ -110,7 +110,8 @@ class DamatuApi():
     def main(self):
         balance = self.getBalance()
         if int(balance) > 40:
-            img_code = self.decode(287).replace('|', ',')
+            result = self.decode(287)
+            img_code = result.replace('|', ',') if not isinstance(result, int) else ""
             return img_code
         else:
             raise balanceException('余额不足，当前余额为: {}'.format(balance))

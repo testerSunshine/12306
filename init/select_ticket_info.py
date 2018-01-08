@@ -198,11 +198,8 @@ class select:
                         ticket_info = i.split('|')
                         if ticket_info[11] == "Y" and ticket_info[1] == "预订":  # 筛选未在开始时间内的车次
                             for j in range(len(self._station_seat)):
-                                print ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))]
-                                if ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))] != '' \
-                                        and ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))] != '无' \
-                                        and ticket_info[3] in self.station_trains\
-                                        and ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))] != '*':  # 过滤有效目标车次
+                                is_ticket_pass = ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))]
+                                if is_ticket_pass != '' and is_ticket_pass != '无' and ticket_info[3] in self.station_trains and is_ticket_pass != '*':  # 过滤有效目标车次
                                     # tiket_values = [k for k in value['map'].values()]
                                     self.secretStr = ticket_info[0]
                                     print ('车次: ' + ticket_info[3] + ' 始发车站: ' + self.to_station + ' 终点站: ' +

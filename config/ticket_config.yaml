@@ -43,7 +43,7 @@ set:
   is_more_ticket: Ture
   select_refresh_interval: 1
   expect_refresh_interval: 1
-  ticket_black_list: 3
+  ticket_black_list_time: 3
 
 ticke_peoples:
   - "文贤平"

@@ -46,7 +46,7 @@ class select:
         select_refresh_interval = ticket_info_config["set"]["select_refresh_interval"]
         station_trains = ticket_info_config["set"]["station_trains"]
         expect_refresh_interval = ticket_info_config["set"]["expect_refresh_interval"]
-        ticket_black_list_time = ticket_info_config["set"]["ticket_black_list"]
+        ticket_black_list_time = ticket_info_config["set"]["ticket_black_list_time"]
         print "*"*20
         print "当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}\n候选购买车次：{7}\n未开始刷票间隔时间：{8}\n僵尸票关小黑屋时长：{9}\n".format\
                                                                                       (
@@ -208,7 +208,7 @@ class select:
                                     train_no = ticket_info[3]
                                     print ('车次: ' + train_no + ' 始发车站: ' + self.to_station + ' 终点站: ' +
                                            self.to_station + ' ' + self._station_seat[j].encode("utf8") + ':' + ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))])
-                                    if self.ticket_black_list.has_key(train_no) and (self.ticket_black_list["train_no"] - datetime.datetime.now()).seconds/60 < 3:
+                                    if self.ticket_black_list.has_key(train_no) and (self.ticket_black_list["train_no"] - datetime.datetime.now()).seconds/60 < self.ticket_black_list_time:
                                         print("该车次{} 正在被关小黑屋，跳过此车次".format(train_no))
                                     else:
                                         print ('正在尝试提交订票...')

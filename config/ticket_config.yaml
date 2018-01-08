@@ -21,7 +21,7 @@
 #damatu：打码兔账号，用于自动登录
 
 set:
-  station_date: "2018-02-05"
+  station_date: "2018-02-06"
   station_trains:
     - "G1353"
     - "G1329"
@@ -47,10 +47,10 @@ ticke_peoples:
   - "梁敏"
 
 damatu:
-  uesr: ""
-  pwd: ""
+  uesr: "wenxianping"
+  pwd: "wen1995"
 
 12306count:
-  uesr: "@qq.com"
+  uesr: "931128603@qq.com"
   pwd: "QWERTY"
 

@@ -4,11 +4,10 @@ import random
 import json
 import re
 from time import sleep
-from yixing.config.ticketConf import _get_yaml
 
-
-from yixing.damatuCode.damatuWeb import DamatuApi
-from yixing.myUrllib import myurllib2
+from config.ticketConf import _get_yaml
+from damatuCode.damatuWeb import DamatuApi
+from myUrllib import myurllib2
 
 codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand&%s' % random.random()
 

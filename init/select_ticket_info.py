@@ -8,11 +8,12 @@ import sys
 import time
 from collections import OrderedDict
 
-from yixing.config.ticketConf import _get_yaml
-from yixing.myException.PassengerUserException import PassengerUserException
-from yixing.myException.ticketConfigException import ticketConfigException
-from yixing.myException.ticketIsExitsException import ticketIsExitsException
-from yixing.myUrllib import myurllib2
+from config.ticketConf import _get_yaml
+from myException.PassengerUserException import PassengerUserException
+from myException.ticketConfigException import ticketConfigException
+from myException.ticketIsExitsException import ticketIsExitsException
+from myException.ticketNumOutException import ticketNumOutException
+from myUrllib import myurllib2
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -399,8 +400,8 @@ class select:
                     if int(ticket) < len(self.user_info):
                         print("当前余票数小于乘车人数，放弃订票")
                     else:
-                        self.checkQueueOrder()
-                        return True
+                        if self.checkQueueOrder():
+                            return True
                 else:
                     print("正在排队，当前排队人数:" + str(countT) + "当前余票还剩余:" + getQueueCountResult["data"]["ticket"]+ "张")
             else:
@@ -434,7 +435,8 @@ class select:
             c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
             if 'submitStatus' in c_data and c_data['submitStatus']:
                 print("出票成功!")
-                self.queryOrderWaitTime()
+                if self.queryOrderWaitTime():
+                    return True
             else:
                 if 'errMsg' in c_data and c_data['errMsg']:
                     print("出票失败，" + c_data['errMsg'] + "请重新选择。")
@@ -470,7 +472,7 @@ class select:
                     orderId = self.queryMyOrderNoComplete()
                     if orderId:
                         print ("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(orderId))
-                        break
+                        return True
                     else:
                         print("正在排队中，请耐心等待...")
                 elif "msg" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["msg"]:
@@ -491,9 +493,13 @@ class select:
         queryMyOrderNoCompleteUrl = "https://kyfw.12306.cn/otn/queryOrder/queryMyOrderNoComplete"
         data = {"_json_att": None}
         queryMyOrderNoCompleteResult = json.loads(myurllib2.Post(queryMyOrderNoCompleteUrl, data))
-        if "data" in queryMyOrderNoCompleteResult and queryMyOrderNoCompleteResult["data"]:
+        if "data" in queryMyOrderNoCompleteResult and queryMyOrderNoCompleteResult["data"] and "orderDBList" in queryMyOrderNoCompleteResult["data"] and queryMyOrderNoCompleteResult["data"]["orderDBList"]:
             orderId = queryMyOrderNoCompleteResult["data"]["orderDBList"][0]["sequence_no"]
             return orderId
+        elif "orderCacheDTO" in queryMyOrderNoCompleteResult["data"] and queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]:
+            if "message" in queryMyOrderNoCompleteResult["data"]["orderCacheDTO"] and queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]:
+                print(queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]["message"])
+                raise ticketNumOutException(queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]["message"])
         else:
             if "message" in queryMyOrderNoCompleteResult and queryMyOrderNoCompleteResult["message"]:
                 print queryMyOrderNoCompleteResult["message"]
@@ -532,16 +538,7 @@ class select:
                 if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
                     print "12306休息时间，本程序自动停止,明天早上七点运行"
                     break
-                set_type = self.submitOrderRequest()
-                # if set_type:
-                #     if self.check_user():
-                #         self.submit_station()
-                #         self.getPassengerTicketStr(set_type)
-                #         self.getRepeatSubmitToken()
-                #         self.user_info = self.getPassengerDTOs()
-                #         if self.checkOrderInfo():
-                #             if self.getQueueCount():
-                #                 break
+                self.submitOrderRequest()
             except PassengerUserException as e:
                 print e.message
                 break
@@ -549,6 +546,9 @@ class select:
                 print e.message
                 break
             except ticketIsExitsException as e:
+                print e.message
+                break
+            except ticketNumOutException as e:
                 print e.message
                 break
             except ValueError as e:

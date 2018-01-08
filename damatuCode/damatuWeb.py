@@ -4,7 +4,8 @@ import hashlib
 import json
 import base64
 import requests
-from yixing.myException.balanceException import balanceException
+
+from myException.balanceException import balanceException
 
 
 def md5str(str):  # md5加密字符串

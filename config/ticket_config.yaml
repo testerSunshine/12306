@@ -17,6 +17,7 @@
 #is_more_ticket:余票不足是否自动提交
 #select_refresh_interval:抢票刷新间隔时间，1为一秒，0.1为100毫秒，以此类推
 #expect_refresh_interval:售票未开始，等待刷新间隔时间，1为一秒，0.1为100毫秒，以此类推
+#ticket_black_list:加入小黑屋的等待时间，默认3 min
 #ticke_peoples: 乘客
 #damatu：打码兔账号，用于自动登录
 
@@ -37,10 +38,12 @@ set:
   to_station: "长沙"
   set_type:
     - "二等座"
+    - "一等座"
 #    - "一等座"
   is_more_ticket: Ture
   select_refresh_interval: 1
   expect_refresh_interval: 1
+  ticket_black_list: 3
 
 ticke_peoples:
   - "文贤平"
@@ -52,5 +55,5 @@ damatu:
 
 12306count:
   uesr: "@qq.com"
-  pwd: ""
+  pwd: "QWERTY"
 

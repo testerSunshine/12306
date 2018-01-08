@@ -3,8 +3,16 @@
 - python版本支持
   - 2.7
 - 依赖库
-  - 项目 requirements.txt
+  - 依赖打码兔 需要去打码兔注册账号，打码兔账号地址：http://www.dama2.com，一般充值1元就够用了
+  - 项目依赖包 requirements.txt
   - 安装方法 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+
+- 项目开始
+  - 修改config/ticket_config.yaml文件，按照提示更改自己想要的信息
+  - 运行根目录run.py，即可开始
+
+- 项目思路
+
 
 - 项目声明：
   - 本软件只供学习交流使用，务作为商业用途，作者qq 931128603
@@ -31,3 +39,8 @@
 2. 优化订票流程
 3. 支持自动刷票，自动订票
 
+- 2018.1.8 号更新
+1. 增加小黑屋功能
+2. 修复bug若干
+3. 增加多账号同时订票功能
+4. 增加按照选定车次筛选购买车次

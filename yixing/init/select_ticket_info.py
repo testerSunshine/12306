@@ -479,8 +479,9 @@ class select:
             elif "messages" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["messages"]:
                 print("订单提交失败： " + queryOrderWaitTimeResult["messages"])
                 break
-            print("订单提交中,请耐心等待")
-            time.sleep(3)
+            else:
+                print("订单提交中,请耐心等待")
+                time.sleep(3)
 
     def queryMyOrderNoComplete(self):
         """
@@ -550,9 +551,13 @@ class select:
             except ticketIsExitsException as e:
                 print e.message
                 break
+            except ValueError as e:
+                if e.message == "No JSON object could be decoded":
+                    print("12306接口无响应，正在重试")
+                else:
+                    print(e.message)
             except Exception as e:
                 print e.message
-                pass
 
 
 if __name__ == '__main__':

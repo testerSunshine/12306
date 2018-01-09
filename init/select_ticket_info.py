@@ -9,6 +9,7 @@ import time
 from collections import OrderedDict
 
 from config.ticketConf import _get_yaml
+from damatuCode.damatuWeb import DamatuApi
 from myException.PassengerUserException import PassengerUserException
 from myException.ticketConfigException import ticketConfigException
 from myException.ticketIsExitsException import ticketIsExitsException
@@ -232,8 +233,7 @@ class select:
                                         self.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
                                         self.getRepeatSubmitToken()
                                         self.user_info = self.getPassengerDTOs()
-                                        if self.checkOrderInfo():
-                                            if self.getQueueCount(train_no, self._station_seat[j].encode("utf8")):
+                                        if self.checkOrderInfo(train_no, self._station_seat[j].encode("utf8")):
                                                 break
                             else:
                                 pass
@@ -245,7 +245,6 @@ class select:
                         time.sleep(self.expect_refresh_interval)
             else:
                 raise ticketConfigException("车次配置信息有误，请检查")
-
 
     def check_user(self):
         """
@@ -348,7 +347,7 @@ class select:
                     self.user_info[i]['passenger_id_no'] + "," + self.user_info[i]['passenger_type'] + '_')
         return passengerTicketStrList, oldPassengerStr
 
-    def checkOrderInfo(self):
+    def checkOrderInfo(self, train_no, set_type):
         """
         检查支付订单，需要提交REPEAT_SUBMIT_TOKEN
         passengerTicketStr : 座位编号,0,票类型,乘客名,证件类型,证件号,手机号码,保存常用联系人(Y或N)
@@ -360,8 +359,6 @@ class select:
         data = OrderedDict()
         data['cancel_flag'] = 2
         data['bed_level_order_num'] = "000000000000000000000000000000"
-        # 'passengerTicketStr': self.set_type+',0,'+self.user_info[0]['passenger_id_type_code']+","+self.user_info[0]["passenger_name"]+","+self.user_info[0]['passenger_type']+","+self.user_info[0]['passenger_id_no']+","+self.user_info[0]['mobile_no']+',N',
-        # 'oldPassengerStr': self.user_info[0]['passenger_name']+","+self.user_info[0]['passenger_type']+","+self.user_info[0]['passenger_id_no']+","+self.user_info[0]['passenger_type']+'_',
         data['passengerTicketStr'] = self.set_type + "," + ",".join(passengerTicketStrList).rstrip("_{0}".format(self.set_type))
         data['oldPassengerStr'] = "".join(oldPassengerStr)
         data['tour_flag'] = 'dc'
@@ -369,9 +366,23 @@ class select:
         data['REPEAT_SUBMIT_TOKEN'] = self.token
         checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data, ))
         if 'data' in checkOrderInfo:
+            if checkOrderInfo["data"]["ifShowPassCode"] == "y":
+                print("需要验证码，正在使用自动识别验证码功能")
+                for i in range(3):
+                    codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand&%s' % random.random()
+                    result = myurllib2.get(codeimg)
+                    img_path = './tkcode'
+                    open(img_path, 'wb').write(result)
+                    data['pass_code'] = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"], img_path).main()
+                    checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data, ))
+                    if self.getQueueCount(train_no, set_type):
+                        return True
+                    else:
+                        print("验证码识别错误，第{0}次重试".format(i))
             if checkOrderInfo['data']['submitStatus'] is True:
                     print ('车票提交通过，正在尝试排队')
-                    return True
+                    if self.getQueueCount(train_no, set_type):
+                        return True
             else:
                 if "errMsg" in checkOrderInfo['data'] and checkOrderInfo['data']["errMsg"]:
                     print checkOrderInfo['data']["errMsg"]
@@ -459,23 +470,26 @@ class select:
             "dwAll": "N",
             "REPEAT_SUBMIT_TOKEN": self.get_token(),
         }
-        checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
-        if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
-            c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
-            if 'submitStatus' in c_data and c_data['submitStatus']:
-                print("出票成功!")
-                if self.queryOrderWaitTime():
-                    return True
-            else:
-                if 'errMsg' in c_data and c_data['errMsg']:
-                    print("出票失败，" + c_data['errMsg'])
+        try:
+            checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
+            if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
+                c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
+                if 'submitStatus' in c_data and c_data['submitStatus']:
+                    print("出票成功!")
+                    if self.queryOrderWaitTime():
+                        return True
                 else:
-                    print(c_data)
-                    print('订票失败!很抱歉,请重试提交预订功能!')
-        elif "messages" in checkQueueOrderResult and checkQueueOrderResult["messages"]:
-            print("提交订单失败,错误信息: "+ checkQueueOrderResult["messages"])
-        else:
-            print("未知错误：" + str(checkQueueOrderResult["validateMessages"]))
+                    if 'errMsg' in c_data and c_data['errMsg']:
+                        print("出票失败，" + c_data['errMsg'])
+                    else:
+                        print(c_data)
+                        print('订票失败!很抱歉,请重试提交预订功能!')
+            elif "messages" in checkQueueOrderResult and checkQueueOrderResult["messages"]:
+                print("提交订单失败,错误信息: " + checkQueueOrderResult["messages"])
+            else:
+                print("订单提交中，请耐心等待：" + str(checkQueueOrderResult["validateMessages"]))
+        except ValueError:
+            pass
 
     def queryOrderWaitTime(self):
         """
@@ -494,14 +508,16 @@ class select:
             if num > 20:
                 print("超出排队时间，自动放弃，正在重新刷票")
                 break
-            queryOrderWaitTimeResult = json.loads(myurllib2.Post(queryOrderWaitTimeUrl, data))
+            try:
+                queryOrderWaitTimeResult = json.loads(myurllib2.Post(queryOrderWaitTimeUrl, data))
+            except ValueError:
+                pass
             if "status" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["status"]:
                 if "orderId" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["orderId"] != "null":
                     self.initNoComplete()
                     orderId = self.queryMyOrderNoComplete()
                     if orderId:
-                        print ("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(orderId))
-                        return True
+                        raise ticketIsExitsException(("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(orderId)))
                     else:
                         print("等待出票中...")
                 elif "msg" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["msg"]:

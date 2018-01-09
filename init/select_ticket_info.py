@@ -224,8 +224,9 @@ class select:
                                 train_no = ticket_info[3]
                                 print ('车次: ' + train_no + ' 始发车站: ' + self.from_station + ' 终点站: ' +
                                        self.to_station + ' ' + self._station_seat[j].encode("utf8") + ':' + ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))])
-                                if self.ticket_black_list.has_key(train_no) and (self.ticket_black_list["train_no"] - datetime.datetime.now()).seconds/60 < self.ticket_black_list_time:
+                                if self.ticket_black_list.has_key(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds/60 < int(self.ticket_black_list_time):
                                     print("该车次{} 正在被关小黑屋，跳过此车次".format(train_no))
+                                    break
                                 else:
                                     print ('正在尝试提交订票...')
                                     if self.check_user():
@@ -520,6 +521,7 @@ class select:
                         raise ticketIsExitsException(("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(orderId)))
                     else:
                         print("等待出票中...")
+                        continue
                 elif "msg" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["msg"]:
                     print("订单提交失败：" + queryOrderWaitTimeResult["data"]["msg"])
                     break
@@ -604,8 +606,6 @@ class select:
                         print("12306接口无响应，正在重试")
                     else:
                         print(e.message)
-                except Exception as e:
-                    print e.message
 
 
 if __name__ == '__main__':

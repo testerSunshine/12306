@@ -29,4 +29,4 @@ def _get_yaml():
 #     return _get_yaml()["damatu"]
 #
 #
-# print _get_yaml()
+# print _get_yaml()["set"]["12306count"][1]["pwd"]

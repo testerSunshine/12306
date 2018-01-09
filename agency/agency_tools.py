@@ -19,7 +19,7 @@ class proxy:
         header = {}
         header['User-Agent'] = User_Agent
 
-        for i in range(1, 10):
+        for i in range(1, 5):
             url = 'http://www.xicidaili.com/nn/'+str(i)
             req = urllib2.Request(url, headers=header)
             res = urllib2.urlopen(req).read()
@@ -50,7 +50,7 @@ class proxy:
                 f.write(write_proxy)
                 proxy_num += 1
             except Exception, e:
-                print ("代理链接超时，去除此IP："+ proxy)
+                print ("代理链接超时，去除此IP：{0}".format(proxy))
                 print e
                 continue
         print("总共可使用ip量为{}个".format(proxy_num))
@@ -70,7 +70,7 @@ class proxy:
     def main(self):
         self.get_proxy()
         self.filter_proxy()
-        self.get_filter_proxy()
+
 
 if __name__ == "__main__":
     a = proxy()

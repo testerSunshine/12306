@@ -20,7 +20,7 @@
 #ticket_black_list:加入小黑屋的等待时间，默认3 min
 #ticke_peoples: 乘客
 #damatu：打码兔账号，用于自动登录
-
+#is_aotu_code是否自动打码，如果选择Ture,则调用打码兔打码，默认不使用打码兔
 set:
   station_date: "2018-02-06"
   station_trains:
@@ -39,21 +39,22 @@ set:
   set_type:
     - "二等座"
     - "一等座"
-#    - "一等座"
   is_more_ticket: Ture
-  select_refresh_interval: 1
-  expect_refresh_interval: 1
-  ticket_black_list_time: 3
+  ticke_peoples:
+    - "文贤平"
+    - "梁敏"
+  12306count:
+    - uesr: "@qq.com"
+    - pwd: "QWERTY"
 
-ticke_peoples:
-  - "文贤平"
-  - "梁敏"
+select_refresh_interval: 1
+expect_refresh_interval: 1
+ticket_black_list_time: 3
+is_aotu_code: False
 
 damatu:
   uesr: ""
-  pwd: ""
+  pwd: "wen1995"
 
-12306count:
-  uesr: "@qq.com"
-  pwd: "QWERTY"
+
 

@@ -42,11 +42,11 @@ class select:
         station_date = ticket_info_config["set"]["station_date"].encode("utf8")
         set_type = ticket_info_config["set"]["set_type"]
         is_more_ticket = ticket_info_config["set"]["is_more_ticket"].encode("utf8")
-        ticke_peoples = ticket_info_config["ticke_peoples"]
-        select_refresh_interval = ticket_info_config["set"]["select_refresh_interval"]
+        ticke_peoples = ticket_info_config["set"]["ticke_peoples"]
+        select_refresh_interval = ticket_info_config["select_refresh_interval"]
         station_trains = ticket_info_config["set"]["station_trains"]
-        expect_refresh_interval = ticket_info_config["set"]["expect_refresh_interval"]
-        ticket_black_list_time = ticket_info_config["set"]["ticket_black_list_time"]
+        expect_refresh_interval = ticket_info_config["expect_refresh_interval"]
+        ticket_black_list_time = ticket_info_config["ticket_black_list_time"]
         print "*"*20
         print "当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}\n候选购买车次：{7}\n未开始刷票间隔时间：{8}\n僵尸票关小黑屋时长：{9}\n".format\
                                                                                       (
@@ -218,7 +218,7 @@ class select:
                                             self.getRepeatSubmitToken()
                                             self.user_info = self.getPassengerDTOs()
                                             if self.checkOrderInfo():
-                                                if self.getQueueCount(train_no):
+                                                if self.getQueueCount(train_no, self._station_seat[j].encode("utf8")):
                                                     break
                                 else:
                                     pass
@@ -370,7 +370,7 @@ class select:
             print (checkOrderInfo['messages'][0])
             print ("排队失败，重新刷票中")
 
-    def getQueueCount(self, train_no):
+    def getQueueCount(self, train_no, set_type):
         """
         # 模拟查询当前的列车排队人数的方法
         # 返回信息组成的提示字符串
@@ -400,12 +400,17 @@ class select:
             if "status" in getQueueCountResult and getQueueCountResult["status"] is True:
                 if "countT" in getQueueCountResult["data"]:
                     ticket = getQueueCountResult["data"]["ticket"]
+                    ticket_split = ticket.split(",")[1] if ticket.find(",") != -1 else ticket
+                    if set_type == "无座":    # 修改无座和硬座的座位号提交是个字符串的问题
+                        ticket = ticket_split[1]
+                    elif set_type == "硬座":
+                        ticket = ticket_split[0]
                     countT = getQueueCountResult["data"]["countT"]
                     if int(countT) is 0:
-                        print("排队成功, 当前余票还剩余:" + ticket + "张")
                         if int(ticket) < len(self.user_info):
                             print("当前余票数小于乘车人数，放弃订票")
                         else:
+                            print("排队成功, 当前余票还剩余:" + ticket + "张")
                             if self.checkQueueOrder():
                                 return True
                     else:

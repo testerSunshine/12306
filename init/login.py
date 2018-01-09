@@ -6,6 +6,7 @@ import re
 from time import sleep
 
 from config.ticketConf import _get_yaml
+from PIL import Image
 from damatuCode.damatuWeb import DamatuApi
 from myUrllib import myurllib2
 
@@ -21,13 +22,27 @@ def cookietp():
 
 
 def readImg():
+    """
+    增加手动打码，只是登录接口，完全不用担心提交票的效率问题
+    思路
+    1.调用PIL显示图片
+    2.图片位置说明，验证码图片中每个图片代表一个下标，依次类推，1，2，3，4，5，6，7，8
+    3.控制台输入对应下标，按照英文逗号分开，即可手动完成打码，
+    :return:
+    """
+
     global randCode
     stoidinput("下载验证码...")
     img_path = './tkcode'
     result = myurllib2.get(codeimg)
     try:
         open(img_path, 'wb').write(result)
-        randCode = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"], img_path).main()
+        if _get_yaml()["is_aotu_code"]:
+            randCode = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"], img_path).main()
+        else:
+            img = Image.open('./tkcode')
+            img.show()
+            codexy()
     except OSError as e:
         print (e)
         pass
@@ -52,48 +67,48 @@ def errorinput(text):
     return False
 
 
-# def codexy():
-#     """
-#     获取验证码
-#     :return: str
-#     """
-#
-#     Ofset = raw_input("[*] 请输入验证码: ")
-#     select = Ofset.split(',')
-#     global randCode
-#     post = []
-#     offsetsX = 0  # 选择的答案的left值,通过浏览器点击8个小图的中点得到的,这样基本没问题
-#     offsetsY = 0  # 选择的答案的top值
-#     for ofset in select:
-#         if ofset == '1':
-#             offsetsY = 46
-#             offsetsX = 42
-#         elif ofset == '2':
-#             offsetsY = 46
-#             offsetsX = 105
-#         elif ofset == '3':
-#             offsetsY = 45
-#             offsetsX = 184
-#         elif ofset == '4':
-#             offsetsY = 48
-#             offsetsX = 256
-#         elif ofset == '5':
-#             offsetsY = 36
-#             offsetsX = 117
-#         elif ofset == '6':
-#             offsetsY = 112
-#             offsetsX = 115
-#         elif ofset == '7':
-#             offsetsY = 114
-#             offsetsX = 181
-#         elif ofset == '8':
-#             offsetsY = 111
-#             offsetsX = 252
-#         else:
-#             pass
-#         post.append(offsetsX)
-#         post.append(offsetsY)
-#     randCode = str(post).replace(']', '').replace('[', '').replace("'", '').replace(' ', '')
+def codexy():
+    """
+    获取验证码
+    :return: str
+    """
+
+    Ofset = raw_input("[*] 请输入验证码: ")
+    select = Ofset.split(',')
+    global randCode
+    post = []
+    offsetsX = 0  # 选择的答案的left值,通过浏览器点击8个小图的中点得到的,这样基本没问题
+    offsetsY = 0  # 选择的答案的top值
+    for ofset in select:
+        if ofset == '1':
+            offsetsY = 46
+            offsetsX = 42
+        elif ofset == '2':
+            offsetsY = 46
+            offsetsX = 105
+        elif ofset == '3':
+            offsetsY = 45
+            offsetsX = 184
+        elif ofset == '4':
+            offsetsY = 48
+            offsetsX = 256
+        elif ofset == '5':
+            offsetsY = 36
+            offsetsX = 117
+        elif ofset == '6':
+            offsetsY = 112
+            offsetsX = 115
+        elif ofset == '7':
+            offsetsY = 114
+            offsetsX = 181
+        elif ofset == '8':
+            offsetsY = 111
+            offsetsX = 252
+        else:
+            pass
+        post.append(offsetsX)
+        post.append(offsetsY)
+    randCode = str(post).replace(']', '').replace('[', '').replace("'", '').replace(' ', '')
 
 
 def login(user, passwd):
@@ -172,7 +187,7 @@ def getUserinfo():
 
 
 def main():
-    login(_get_yaml()["12306count"]["uesr"], _get_yaml()["12306count"]["pwd"])
+    login(_get_yaml()["set"]["12306count"][0]["uesr"], _get_yaml()["set"]["12306count"][1]["pwd"])
 
 
 def logout():

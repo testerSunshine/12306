@@ -506,7 +506,7 @@ class select:
         # }
         num = 1
         while True:
-            _random = "{0}{1}".format(int(time.time()), random.randint(1, 9)),
+            _random = int(round(time.time() * 1000))
             num += 1
             if num > 30:
                 print("超出排队时间，自动放弃，正在重新刷票")
@@ -533,7 +533,7 @@ class select:
                     print("第{}排队中,请耐心等待".format(num))
                     time.sleep(2)
             else:
-                print("接口 {} 无响应".format(queryOrderWaitTimeUrl))
+                print("排队中")
         order_id = self.queryMyOrderNoComplete()  # 尝试查看订单列表，如果有订单，则判断成功，不过一般可能性不大
         if order_id:
             raise ticketIsExitsException("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(order_id))

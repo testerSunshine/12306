@@ -19,6 +19,9 @@
   - myException - 异常
   - myUrllib - urllib库
 
+- 思路图
+     ![image](https://github.com/testerSunshine/master/uml/uml.png)
+
 - 项目声明：
   - 本软件只供学习交流使用，务作为商业用途，交流群：286271084
   - 能为你抢到一张回家的票，是我最大的心愿

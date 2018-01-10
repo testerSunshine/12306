@@ -243,8 +243,8 @@ class select:
                                 pass
                         print "当前车次{0} 查询无符合条件坐席，正在重新查询".format(ticket_info[3])
                     else:
+                        time.sleep(self.expect_refresh_interval)
                         pass
-                        # time.sleep(self.expect_refresh_interval)
             else:
                 raise ticketConfigException("车次配置信息有误，请检查")
 
@@ -258,7 +258,6 @@ class select:
         check_user = json.loads(myurllib2.Post(check_user_url, data), encoding='utf-8')
         check_user_flag = check_user['data']['flag']
         if check_user_flag is True:
-            print ('订票成功!')
             print ('尝试提交订单...')
             return True
         else:
@@ -294,7 +293,6 @@ class select:
             else:
                 print ('出票失败')
         elif 'messages' in submitResult and submitResult['messages']:
-            print(submitResult['messages'][0])
             raise ticketIsExitsException("检查到有未支付的订单，程序自动停止")
 
     def getPassengerTicketStr(self, set_type):
@@ -392,7 +390,6 @@ class select:
                     print checkOrderInfo
         elif 'messages' in checkOrderInfo and checkOrderInfo['messages']:
             print (checkOrderInfo['messages'][0])
-            print ("排队失败，重新刷票中")
 
     def getQueueCount(self, train_no, set_type):
         """
@@ -478,12 +475,12 @@ class select:
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
                 if 'submitStatus' in c_data and c_data['submitStatus']:
-                    print("出票成功!")
+                    print("提交订单成功！")
                     if self.queryOrderWaitTime():
                         return True
                 else:
                     if 'errMsg' in c_data and c_data['errMsg']:
-                        print("出票失败，" + c_data['errMsg'])
+                        print("提交订单成功！，" + c_data['errMsg'])
                     else:
                         print(c_data)
                         print('订票失败!很抱歉,请重试提交预订功能!')
@@ -508,7 +505,7 @@ class select:
         num = 1
         while True:
             num += 1
-            if num > 20:
+            if num > 30:
                 print("超出排队时间，自动放弃，正在重新刷票")
                 break
             try:
@@ -541,7 +538,8 @@ class select:
                     break
             else:
                 print("订单提交中,请耐心等待")
-                time.sleep(3)
+                time.sleep(1)
+        raise ticketNumOutException("订单提交时排队超时，重新刷票")
 
     def queryMyOrderNoComplete(self):
         """

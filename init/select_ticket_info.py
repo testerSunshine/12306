@@ -42,7 +42,7 @@ class select:
         to_station = ticket_info_config["set"]["to_station"].encode("utf8")
         station_date = ticket_info_config["set"]["station_date"].encode("utf8")
         set_type = ticket_info_config["set"]["set_type"]
-        is_more_ticket = ticket_info_config["set"]["is_more_ticket"].encode("utf8")
+        is_more_ticket = ticket_info_config["set"]["is_more_ticket"]
         ticke_peoples = ticket_info_config["set"]["ticke_peoples"]
         select_refresh_interval = ticket_info_config["select_refresh_interval"]
         station_trains = ticket_info_config["set"]["station_trains"]
@@ -79,6 +79,9 @@ class select:
 
     def get_set_type(self):
         return self.set_type
+
+    def conversion_int(self, str):
+        return int(str)
 
     def station_seat(self, index):
         """
@@ -423,7 +426,8 @@ class select:
             if "status" in getQueueCountResult and getQueueCountResult["status"] is True:
                 if "countT" in getQueueCountResult["data"]:
                     ticket = getQueueCountResult["data"]["ticket"]
-                    ticket_split = sum(ticket.split(",")) if ticket.find(",") != -1 else ticket
+                    ticket_split = sum(map(self.conversion_int, ticket.split(","))) if ticket.find(",") != -1 else ticket
+                    # ticket_sum = sum([int(ticket_split[0]),int(ticket_split[1])])
                     # if set_type == "无座":    # 修改无座和硬座的座位号提交是个字符串的问题
                     #     ticket = ticket_split[1]
                     # elif set_type == "硬座":

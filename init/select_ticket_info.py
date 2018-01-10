@@ -241,10 +241,9 @@ class select:
                                                 break
                             else:
                                 pass
-                        print "当前车次{0} 查询无符合条件坐席，正在重新查询".format(ticket_info[3])
                     else:
-                        time.sleep(self.expect_refresh_interval)
                         pass
+                time.sleep(self.expect_refresh_interval)
             else:
                 raise ticketConfigException("车次配置信息有误，请检查")
 
@@ -438,7 +437,7 @@ class select:
                         if self.checkQueueOrder():
                             return True
                 else:
-                    print("当前排队人数:" + str(countT) + "当前余票还剩余:{} 张，继续排队中".format(ticket_split))
+                    print("当前排队人数:" + str(countT) + "当前余票还剩余:{0} 张，继续排队中".format(ticket_split))
             else:
                 print("排队发现未知错误{0}，将此列车 {1}加入小黑屋".format(getQueueCountResult, train_no))
                 self.ticket_black_list[train_no] = datetime.datetime.now()
@@ -490,9 +489,9 @@ class select:
             elif "messages" in checkQueueOrderResult and checkQueueOrderResult["messages"]:
                 print("提交订单失败,错误信息: " + checkQueueOrderResult["messages"])
             else:
-                print("订单提交中，请耐心等待：" + str(checkQueueOrderResult["validateMessages"]))
+                print("提交订单中，请耐心等待：" + str(checkQueueOrderResult["validateMessages"]))
         else:
-            print("接口 {} 无响应".format("confirmSingleForQueue"))
+            print("接口 {} 无响应".format(checkQueueOrderUrl))
 
     def queryOrderWaitTime(self):
         """
@@ -523,20 +522,21 @@ class select:
                         print queryOrderWaitTimeResult["data"]["msg"]
                         break
                     elif "waitTime"in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["waitTime"]:
-                        print("排队等待时间预计还剩{}".format(queryOrderWaitTimeResult["data"]["waitTime"]))
+                        print("排队等待时间预计还剩 {0} ms".format(0-queryOrderWaitTimeResult["data"]["waitTime"]))
                     else:
                         print ("正在等待中")
                 elif "messages" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["messages"]:
-                    print("订单提交失败： " + queryOrderWaitTimeResult["messages"])
+                    print("排队等待失败： " + queryOrderWaitTimeResult["messages"])
                 else:
-                    print("订单提交中,请耐心等待")
+                    print("第{}排队中,请耐心等待".format(num))
                     time.sleep(2)
             else:
-                print("接口 {} 无响应".format("queryOrderWaitTime"))
+                print("接口 {} 无响应".format(queryOrderWaitTimeUrl))
         order_id = self.queryMyOrderNoComplete()  # 尝试查看订单列表，如果有订单，则判断成功，不过一般可能性不大
         if order_id:
             raise ticketIsExitsException("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(order_id))
-        raise ticketNumOutException("订单提交失败！")
+        else:
+            print(ticketNumOutException("订单提交失败！,正在重新刷票"))
 
     def queryMyOrderNoComplete(self):
         """
@@ -565,7 +565,7 @@ class select:
                 else:
                     return False
         else:
-            print("接口 {} 无响应".format("queryMyOrderNoComplete"))
+            print("接口 {} 无响应".format(queryMyOrderNoCompleteUrl))
 
     def initNoComplete(self):
         """
@@ -601,7 +601,7 @@ class select:
                         break
                     start_time = datetime.datetime.now()
                     self.submitOrderRequest(from_station, to_station)
-                    print "正在第{0}次查询  乘车日期: {1}  查询无票  代理设置无  总耗时{2}ms".format(num, self.station_date, (datetime.datetime.now()-start_time).microseconds/1000)
+                    print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询 无 票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(self.station_trains), (datetime.datetime.now()-start_time).microseconds/1000)
                 except PassengerUserException as e:
                     print e.message
                     break

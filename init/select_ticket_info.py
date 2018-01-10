@@ -217,7 +217,7 @@ class select:
             if value['result']:
                 for i in value['result']:
                     ticket_info = i.split('|')
-                    if ticket_info[11] == "Y" and ticket_info[1] == "预订":  # 筛选未在开始时间内的车次
+                    if ticket_info[11] == "Y" and ticket_info[1].encode("utf8") == "预订":  # 筛选未在开始时间内的车次
                         for j in range(len(self._station_seat)):
                             is_ticket_pass = ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))]
                             # print self._station_seat[j]

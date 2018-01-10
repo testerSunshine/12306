@@ -243,8 +243,8 @@ class select:
                                 pass
                         print "当前车次{0} 查询无符合条件坐席，正在重新查询".format(ticket_info[3])
                     else:
-                        print("当前车次{0} 还处于待售状态，请耐心等待".format(ticket_info[3]))
-                        time.sleep(self.expect_refresh_interval)
+                        pass
+                        # time.sleep(self.expect_refresh_interval)
             else:
                 raise ticketConfigException("车次配置信息有误，请检查")
 
@@ -599,7 +599,7 @@ class select:
                         break
                     start_time = datetime.datetime.now()
                     self.submitOrderRequest(from_station, to_station)
-                    print "正在第{0}次查询 乘车日期: {1}, 总耗时{2}ms".format(num, self.station_date, (datetime.datetime.now()-start_time).microseconds/1000)
+                    print "正在第{0}次查询  乘车日期: {1}  查询无票  代理设置无  总耗时{2}ms".format(num, self.station_date, (datetime.datetime.now()-start_time).microseconds/1000)
                 except PassengerUserException as e:
                     print e.message
                     break

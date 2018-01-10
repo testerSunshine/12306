@@ -437,11 +437,11 @@ class select:
                         if int(ticket_split) < len(self.user_info):
                             print("当前余票数小于乘车人数，放弃订票")
                         else:
-                            print("排队成功, 当前余票还剩余:" + ticket_split + "张")
+                            print("排队成功, 当前余票还剩余: {0} 张".format(ticket_split))
                             if self.checkQueueOrder():
                                 return True
                     else:
-                        print("当前排队人数:" + str(countT) + "当前余票还剩余:" + ticket_split + "张，继续排队中")
+                        print("当前排队人数:" + str(countT) + "当前余票还剩余:{} 张，继续排队中".format(ticket_split))
                 else:
                     print("排队发现未知错误{0}，将此列车 {1}加入小黑屋".format(getQueueCountResult, train_no))
                     self.ticket_black_list[train_no] = datetime.datetime.now()

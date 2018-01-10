@@ -498,20 +498,22 @@ class select:
         排队获取订单等待信息,每隔3秒请求一次，最高请求次数为20次！
         :return: 
         """
-        queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime"
-        data = {
-            "random": "149545481029" + str(random.randint(1, 9)),
-            "tourFlag": "dc",
-            "REPEAT_SUBMIT_TOKEN": self.get_token(),
-        }
+        # queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime"
+        # data = {
+        #     "random": "{0}{1}".format(int(time.time()), random.randint(1, 9)),
+        #     "tourFlag": "dc",
+        #     "REPEAT_SUBMIT_TOKEN": self.get_token(),
+        # }
         num = 1
         while True:
+            _random = "{0}{1}".format(int(time.time()), random.randint(1, 9)),
             num += 1
             if num > 30:
                 print("超出排队时间，自动放弃，正在重新刷票")
                 break
             try:
-                queryOrderWaitTimeResult = json.loads(myurllib2.Post(queryOrderWaitTimeUrl, data))
+                queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime?random={0}&tourFlag=dc&_json_att=&REPEAT_SUBMIT_TOKEN={1}".format(_random, self.get_token())
+                queryOrderWaitTimeResult = json.loads(myurllib2.get(queryOrderWaitTimeUrl))
             except ValueError:
                 queryOrderWaitTimeResult = {}
             if queryOrderWaitTimeResult:
@@ -601,7 +603,7 @@ class select:
                         break
                     start_time = datetime.datetime.now()
                     self.submitOrderRequest(from_station, to_station)
-                    print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询 无 票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(self.station_trains), (datetime.datetime.now()-start_time).microseconds/1000)
+                    print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(self.station_trains), (datetime.datetime.now()-start_time).microseconds/1000)
                 except PassengerUserException as e:
                     print e.message
                     break

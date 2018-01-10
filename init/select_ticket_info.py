@@ -293,7 +293,7 @@ class select:
             else:
                 print ('出票失败')
         elif 'messages' in submitResult and submitResult['messages']:
-            raise ticketIsExitsException("检查到有未支付的订单，程序自动停止")
+            raise ticketIsExitsException(submitResult['messages'][0])
 
     def getPassengerTicketStr(self, set_type):
         """
@@ -375,8 +375,12 @@ class select:
                     open(img_path, 'wb').write(result)
                     data['pass_code'] = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"], img_path).main()
                     checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data, ))
-                    if self.getQueueCount(train_no, set_type):
-                        return True
+                    if checkOrderInfo['data']['submitStatus'] is True:
+                        print ('车票提交通过，正在尝试排队')
+                        if self.getQueueCount(train_no, set_type):
+                            return True
+                        else:
+                            raise ticketNumOutException("提交订单失败")
                     else:
                         print("验证码识别错误，第{0}次重试".format(i))
             if checkOrderInfo['data']['submitStatus'] is True:
@@ -415,41 +419,38 @@ class select:
             'train_location': self.get_ticketInfoForPassengerForm()['train_location'],
             'REPEAT_SUBMIT_TOKEN': self.get_token(),
         }
-        for i in range(3):
-            print("第{0}次排队".format(i+1))
-            getQueueCountResult = json.loads(myurllib2.Post(getQueueCountUrl, data))
-            if "status" in getQueueCountResult and getQueueCountResult["status"] is True:
-                if "countT" in getQueueCountResult["data"]:
-                    ticket = getQueueCountResult["data"]["ticket"]
-                    ticket_split = sum(map(self.conversion_int, ticket.split(","))) if ticket.find(",") != -1 else ticket
-                    # ticket_sum = sum([int(ticket_split[0]),int(ticket_split[1])])
-                    # if set_type == "无座":    # 修改无座和硬座的座位号提交是个字符串的问题
-                    #     ticket = ticket_split[1]
-                    # elif set_type == "硬座":
-                    #     ticket = ticket_split[0]
-                    countT = getQueueCountResult["data"]["countT"]
-                    if int(countT) is 0:
-                        if int(ticket_split) < len(self.user_info):
-                            print("当前余票数小于乘车人数，放弃订票")
-                        else:
-                            print("排队成功, 当前余票还剩余: {0} 张".format(ticket_split))
-                            if self.checkQueueOrder():
-                                return True
+        getQueueCountResult = json.loads(myurllib2.Post(getQueueCountUrl, data))
+        if "status" in getQueueCountResult and getQueueCountResult["status"] is True:
+            if "countT" in getQueueCountResult["data"]:
+                ticket = getQueueCountResult["data"]["ticket"]
+                ticket_split = sum(map(self.conversion_int, ticket.split(","))) if ticket.find(",") != -1 else ticket
+                # ticket_sum = sum([int(ticket_split[0]),int(ticket_split[1])])
+                # if set_type == "无座":    # 修改无座和硬座的座位号提交是个字符串的问题
+                #     ticket = ticket_split[1]
+                # elif set_type == "硬座":
+                #     ticket = ticket_split[0]
+                countT = getQueueCountResult["data"]["countT"]
+                if int(countT) is 0:
+                    if int(ticket_split) < len(self.user_info):
+                        print("当前余票数小于乘车人数，放弃订票")
                     else:
-                        print("当前排队人数:" + str(countT) + "当前余票还剩余:{} 张，继续排队中".format(ticket_split))
+                        print("排队成功, 当前余票还剩余: {0} 张".format(ticket_split))
+                        if self.checkQueueOrder():
+                            return True
                 else:
-                    print("排队发现未知错误{0}，将此列车 {1}加入小黑屋".format(getQueueCountResult, train_no))
-                    self.ticket_black_list[train_no] = datetime.datetime.now()
-                    break
-            elif "messages" in getQueueCountResult and getQueueCountResult["messages"]:
-                print("排队异常，错误信息：{0}, 将此列车 {1}加入小黑屋".format(getQueueCountResult["messages"][0], train_no))
-                self.ticket_black_list[train_no] = datetime.datetime.now()
-                break
+                    print("当前排队人数:" + str(countT) + "当前余票还剩余:{} 张，继续排队中".format(ticket_split))
             else:
+                print("排队发现未知错误{0}，将此列车 {1}加入小黑屋".format(getQueueCountResult, train_no))
+                self.ticket_black_list[train_no] = datetime.datetime.now()
+        elif "messages" in getQueueCountResult and getQueueCountResult["messages"]:
+            print("排队异常，错误信息：{0}, 将此列车 {1}加入小黑屋".format(getQueueCountResult["messages"][0], train_no))
+            self.ticket_black_list[train_no] = datetime.datetime.now()
+        else:
+            if "validateMessages" in getQueueCountResult and getQueueCountResult["validateMessages"]:
                 print(str(getQueueCountResult["validateMessages"]))
                 self.ticket_black_list[train_no] = datetime.datetime.now()
-                break
-        time.sleep(1)
+            else:
+                print("未知错误 {0}".format("".join(getQueueCountResult)))
 
     def checkQueueOrder(self):
         """
@@ -472,15 +473,17 @@ class select:
         }
         try:
             checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
+        except ValueError:
+            checkQueueOrderResult = {}
+        if checkQueueOrderResult:
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
                 if 'submitStatus' in c_data and c_data['submitStatus']:
                     print("提交订单成功！")
-                    if self.queryOrderWaitTime():
-                        return True
+                    self.queryOrderWaitTime()
                 else:
                     if 'errMsg' in c_data and c_data['errMsg']:
-                        print("提交订单成功！，" + c_data['errMsg'])
+                        print("提交订单失败，" + c_data['errMsg'])
                     else:
                         print(c_data)
                         print('订票失败!很抱歉,请重试提交预订功能!')
@@ -488,8 +491,8 @@ class select:
                 print("提交订单失败,错误信息: " + checkQueueOrderResult["messages"])
             else:
                 print("订单提交中，请耐心等待：" + str(checkQueueOrderResult["validateMessages"]))
-        except ValueError:
-            pass
+        else:
+            print("接口 {} 无响应".format("confirmSingleForQueue"))
 
     def queryOrderWaitTime(self):
         """
@@ -511,57 +514,58 @@ class select:
             try:
                 queryOrderWaitTimeResult = json.loads(myurllib2.Post(queryOrderWaitTimeUrl, data))
             except ValueError:
-                pass
-            if "status" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["status"]:
-                if "orderId" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["orderId"] != "null":
-                    self.initNoComplete()
-                    orderId = self.queryMyOrderNoComplete()
-                    if orderId:
-                        raise ticketIsExitsException(("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(orderId)))
-                    else:
-                        print("等待出票中...")
-                        continue
-                elif "msg" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["msg"]:
-                    orderId = self.queryMyOrderNoComplete()
-                    if orderId:
-                        raise ticketIsExitsException(
-                            ("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(orderId)))
-                    else:
+                queryOrderWaitTimeResult = {}
+            if queryOrderWaitTimeResult:
+                if "status" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["status"]:
+                    if "orderId" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["orderId"] is not None:
+                            raise ticketIsExitsException("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(queryOrderWaitTimeResult["data"]["orderId"]))
+                    elif "msg" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["msg"]:
+                        print queryOrderWaitTimeResult["data"]["msg"]
                         break
-            elif "messages" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["messages"]:
-                print("订单提交失败： " + queryOrderWaitTimeResult["messages"])
-                orderId = self.queryMyOrderNoComplete()
-                if orderId:
-                    raise ticketIsExitsException(
-                        ("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(orderId)))
+                    elif "waitTime"in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["waitTime"]:
+                        print("排队等待时间预计还剩{}".format(queryOrderWaitTimeResult["data"]["waitTime"]))
+                    else:
+                        print ("正在等待中")
+                elif "messages" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["messages"]:
+                    print("订单提交失败： " + queryOrderWaitTimeResult["messages"])
                 else:
-                    break
+                    print("订单提交中,请耐心等待")
+                    time.sleep(2)
             else:
-                print("订单提交中,请耐心等待")
-                time.sleep(1)
-        raise ticketNumOutException("订单提交时排队超时，重新刷票")
+                print("接口 {} 无响应".format("queryOrderWaitTime"))
+        order_id = self.queryMyOrderNoComplete()  # 尝试查看订单列表，如果有订单，则判断成功，不过一般可能性不大
+        if order_id:
+            raise ticketIsExitsException("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(order_id))
+        raise ticketNumOutException("订单提交失败！")
 
     def queryMyOrderNoComplete(self):
         """
         获取订单列表信息
         :return:
         """
+        self.initNoComplete()
         queryMyOrderNoCompleteUrl = "https://kyfw.12306.cn/otn/queryOrder/queryMyOrderNoComplete"
         data = {"_json_att": None}
-        queryMyOrderNoCompleteResult = json.loads(myurllib2.Post(queryMyOrderNoCompleteUrl, data))
-        if "data" in queryMyOrderNoCompleteResult and queryMyOrderNoCompleteResult["data"] and "orderDBList" in queryMyOrderNoCompleteResult["data"] and queryMyOrderNoCompleteResult["data"]["orderDBList"]:
-            orderId = queryMyOrderNoCompleteResult["data"]["orderDBList"][0]["sequence_no"]
-            return orderId
-        elif "data" in queryMyOrderNoCompleteResult and "orderCacheDTO" in queryMyOrderNoCompleteResult["data"] and queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]:
-            if "message" in queryMyOrderNoCompleteResult["data"]["orderCacheDTO"] and queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]:
-                print(queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]["message"])
-                raise ticketNumOutException(queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]["message"])
-        else:
-            if "message" in queryMyOrderNoCompleteResult and queryMyOrderNoCompleteResult["message"]:
-                print queryMyOrderNoCompleteResult["message"]
-                return False
+        try:
+            queryMyOrderNoCompleteResult = json.loads(myurllib2.Post(queryMyOrderNoCompleteUrl, data))
+        except ValueError:
+            queryMyOrderNoCompleteResult = {}
+        if queryMyOrderNoCompleteResult:
+            if "data" in queryMyOrderNoCompleteResult and queryMyOrderNoCompleteResult["data"] and "orderDBList" in queryMyOrderNoCompleteResult["data"] and queryMyOrderNoCompleteResult["data"]["orderDBList"]:
+                orderId = queryMyOrderNoCompleteResult["data"]["orderDBList"][0]["sequence_no"]
+                return orderId
+            elif "data" in queryMyOrderNoCompleteResult and "orderCacheDTO" in queryMyOrderNoCompleteResult["data"] and queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]:
+                if "message" in queryMyOrderNoCompleteResult["data"]["orderCacheDTO"] and queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]:
+                    print(queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]["message"])
+                    raise ticketNumOutException(queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]["message"])
             else:
-                return False
+                if "message" in queryMyOrderNoCompleteResult and queryMyOrderNoCompleteResult["message"]:
+                    print queryMyOrderNoCompleteResult["message"]
+                    return False
+                else:
+                    return False
+        else:
+            print("接口 {} 无响应".format("queryMyOrderNoComplete"))
 
     def initNoComplete(self):
         """

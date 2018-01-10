@@ -42,7 +42,7 @@ class select:
         to_station = ticket_info_config["set"]["to_station"].encode("utf8")
         station_date = ticket_info_config["set"]["station_date"].encode("utf8")
         set_type = ticket_info_config["set"]["set_type"]
-        is_more_ticket = ticket_info_config["set"]["is_more_ticket"].encode("utf8")
+        is_more_ticket = ticket_info_config["set"]["is_more_ticket"]
         ticke_peoples = ticket_info_config["set"]["ticke_peoples"]
         select_refresh_interval = ticket_info_config["select_refresh_interval"]
         station_trains = ticket_info_config["set"]["station_trains"]
@@ -225,8 +225,8 @@ class select:
                                 # tiket_values = [k for k in value['map'].values()]
                                 self.secretStr = ticket_info[0]
                                 train_no = ticket_info[3]
-                                # print ('车次: ' + train_no + ' 始发车站: ' + self.from_station + ' 终点站: ' +
-                                #        self.to_station + ' ' + self._station_seat[j].encode("utf8") + ':' + ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))])
+                                print ('车次: ' + train_no + ' 始发车站: ' + self.from_station + ' 终点站: ' +
+                                       self.to_station + ' ' + self._station_seat[j].encode("utf8") + ':' + ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))])
                                 if self.ticket_black_list.has_key(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds/60 < int(self.ticket_black_list_time):
                                     print("该车次{} 正在被关小黑屋，跳过此车次".format(train_no))
                                     break
@@ -242,11 +242,9 @@ class select:
                             else:
                                 pass
                         print "当前车次{0} 查询无符合条件坐席，正在重新查询".format(ticket_info[3])
-                    # elif ticket_info[11] == "N":
-                    #     print("当前车次{0} 无票".format(ticket_info[3]))
-                    # else:
-                    #     print("当前这次还处于待售状态，请耐心等待")
-                    #     time.sleep(self.expect_refresh_interval)
+                    else:
+                        print("当前车次{0} 还处于待售状态，请耐心等待".format(ticket_info[3]))
+                        time.sleep(self.expect_refresh_interval)
             else:
                 raise ticketConfigException("车次配置信息有误，请检查")
 
@@ -592,20 +590,16 @@ class select:
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         if self.leftTicketLog(from_station, to_station):
             num = 1
-            runedTime=0
             while 1:
                 try:
                     num += 1
-                    sleepTime=self.select_refresh_interval*1000-runedTime
-                    if sleepTime>0:
-                        time.sleep(sleepTime/1000.0)
+                    time.sleep(self.select_refresh_interval)
                     if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
                         print "12306休息时间，本程序自动停止,明天早上七点运行"
                         break
                     start_time = datetime.datetime.now()
                     self.submitOrderRequest(from_station, to_station)
-                    runedTime=(datetime.datetime.now()-start_time).microseconds/1000
-                    print "正在第{0}次查询 乘车日期: {1}, 总耗时{2}ms".format(num, self.station_date, runedTime)
+                    print "正在第{0}次查询 乘车日期: {1}, 总耗时{2}ms".format(num, self.station_date, (datetime.datetime.now()-start_time).microseconds/1000)
                 except PassengerUserException as e:
                     print e.message
                     break

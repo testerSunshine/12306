@@ -18,8 +18,8 @@ def md5(byte):  # md5加密byte
 
 
 class DamatuApi():
-    ID = '53330'
-    KEY = '9e5dd939b00d7473c2fa8c1283baa306'
+    ID = '40838'
+    KEY = 'ca9507e17e8d5ddf7c57cd18d8d33010'
     HOST = 'http://api.dama2.com:7766/app/'
 
     def __init__(self, username, password, file_path):
@@ -110,8 +110,8 @@ class DamatuApi():
     def main(self):
         balance = self.getBalance()
         if int(balance) > 40:
-            result=self.decode(287)
-            img_code = result.replace('|', ',') if not isinstance(result,int) else ''
+            result = self.decode(287)
+            img_code = result.replace('|', ',') if not isinstance(result, int) else ""
             return img_code
         else:
             raise balanceException('余额不足，当前余额为: {}'.format(balance))

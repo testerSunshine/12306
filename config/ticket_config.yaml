@@ -15,9 +15,10 @@
 #to_station: 到达站
 #set_type: 坐席(商务座,二等座,特等座,软卧,硬卧,硬座,无座)
 #is_more_ticket:余票不足是否自动提交
-#select_refresh_interval:抢票刷新间隔时间，1为一秒，0.1为100毫秒，以此类推
+#select_refresh_interval:抢票刷新间隔时间，1为一秒，0.1为100毫秒，以此类推 如果捡漏推荐为1秒，刷票设置0.01
 #expect_refresh_interval:售票未开始，等待刷新间隔时间，1为一秒，0.1为100毫秒，以此类推
 #ticket_black_list:加入小黑屋的等待时间，默认3 min
+#enable_proxy:是否开启代理模式，代理速度比较慢，如果是抢票阶段，不建议开启
 #ticke_peoples: 乘客
 #damatu：打码兔账号，用于自动登录
 #is_aotu_code是否自动打码，如果选择Ture,则调用打码兔打码，默认不使用打码兔
@@ -39,7 +40,7 @@ set:
   set_type:
     - "二等座"
     - "一等座"
-  is_more_ticket: Ture
+  is_more_ticket: True
   ticke_peoples:
     - "文贤平"
     - "梁敏"
@@ -47,10 +48,11 @@ set:
     - uesr: "@qq.com"
     - pwd: "QWERTY"
 
-select_refresh_interval: 1
+select_refresh_interval: 0.01
 expect_refresh_interval: 1
 ticket_black_list_time: 3
 is_aotu_code: False
+#enable_proxy: False
 
 damatu:
   uesr: ""

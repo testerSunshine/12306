@@ -523,11 +523,20 @@ class select:
                         print("等待出票中...")
                         continue
                 elif "msg" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["msg"]:
-                    print("订单提交失败：" + queryOrderWaitTimeResult["data"]["msg"])
-                    break
+                    orderId = self.queryMyOrderNoComplete()
+                    if orderId:
+                        raise ticketIsExitsException(
+                            ("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(orderId)))
+                    else:
+                        break
             elif "messages" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["messages"]:
                 print("订单提交失败： " + queryOrderWaitTimeResult["messages"])
-                break
+                orderId = self.queryMyOrderNoComplete()
+                if orderId:
+                    raise ticketIsExitsException(
+                        ("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(orderId)))
+                else:
+                    break
             else:
                 print("订单提交中,请耐心等待")
                 time.sleep(3)

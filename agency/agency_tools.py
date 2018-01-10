@@ -74,4 +74,4 @@ class proxy:
 
 if __name__ == "__main__":
     a = proxy()
-    a.main()
+    a.get_filter_proxy()

@@ -20,7 +20,7 @@
   - myUrllib - urllib库
 
 - 思路图
-     ![image](https://github.com/testerSunshine/12306/uml/uml.png)
+     ![image](https://github.com/testerSunshine/12306/blob/master/uml/uml.png)
 
 - 项目声明：
   - 本软件只供学习交流使用，务作为商业用途，交流群：286271084

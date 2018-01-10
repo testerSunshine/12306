@@ -423,21 +423,23 @@ class select:
             if "status" in getQueueCountResult and getQueueCountResult["status"] is True:
                 if "countT" in getQueueCountResult["data"]:
                     ticket = getQueueCountResult["data"]["ticket"]
-                    ticket_split = sum(ticket.split(",")) if ticket.find(",") != -1 else ticket
+                    ticketCount=0
+                    for tic in ticket.split(','):
+                        ticketCount+=int(tic)
                     # if set_type == "无座":    # 修改无座和硬座的座位号提交是个字符串的问题
                     #     ticket = ticket_split[1]
                     # elif set_type == "硬座":
                     #     ticket = ticket_split[0]
                     countT = getQueueCountResult["data"]["countT"]
                     if int(countT) is 0:
-                        if int(ticket_split) < len(self.user_info):
+                        if ticketCount < len(self.user_info):
                             print("当前余票数小于乘车人数，放弃订票")
                         else:
-                            print("排队成功, 当前余票还剩余:" + ticket_split + "张")
+                            print("排队成功, 当前余票还剩余:" + str(ticketCount) + "张")
                             if self.checkQueueOrder():
                                 return True
                     else:
-                        print("当前排队人数:" + str(countT) + "当前余票还剩余:" + ticket_split + "张，继续排队中")
+                        print("当前排队人数:" + str(countT) + "当前余票还剩余:" + str(ticketCount) + "张，继续排队中")
                 else:
                     print("排队发现未知错误{0}，将此列车 {1}加入小黑屋".format(getQueueCountResult, train_no))
                     self.ticket_black_list[train_no] = datetime.datetime.now()

@@ -7,6 +7,7 @@ import threading
 import urllib
 import sys
 import time
+import Queue
 from collections import OrderedDict
 
 from config.ticketConf import _get_yaml
@@ -32,6 +33,7 @@ class select:
         self.user_info = ""
         self.secretStr = ""
         self.ticket_black_list = dict()
+        self.submitQueue=Queue.Queue(20)
 
     def get_ticket_info(self):
         """
@@ -226,25 +228,29 @@ class select:
                                 # tiket_values = [k for k in value['map'].values()]
                                 self.secretStr = ticket_info[0]
                                 train_no = ticket_info[3]
-                                print ('车次: ' + train_no + ' 始发车站: ' + self.from_station + ' 终点站: ' +
-                                       self.to_station + ' ' + self._station_seat[j].encode("utf8") + ':' + ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))])
+                                # print ('车次: ' + train_no + ' 始发车站: ' + self.from_station + ' 终点站: ' +
+                                #        self.to_station + ' ' + self._station_seat[j].encode("utf8") + ':' + ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))])
                                 if self.ticket_black_list.has_key(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds/60 < int(self.ticket_black_list_time):
                                     print("该车次{} 正在被关小黑屋，跳过此车次".format(train_no))
                                     break
                                 else:
                                     print ('正在尝试提交订票...')
-                                    if self.check_user():
-                                        self.submit_station()
-                                        self.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
-                                        self.getRepeatSubmitToken()
-                                        self.user_info = self.getPassengerDTOs()
-                                        if self.checkOrderInfo(train_no, self._station_seat[j].encode("utf8")):
-                                                break
+                                    self.submitQueue.put({"obj":self,"train_no":train_no,"seat":self._station_seat[j].encode("utf8")})
+                                    # if self.check_user():
+                                    #     self.submit_station()
+                                    #     self.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
+                                    #     self.getRepeatSubmitToken()
+                                    #     self.user_info = self.getPassengerDTOs()
+                                    #     if self.checkOrderInfo(train_no, self._station_seat[j].encode("utf8")):
+                                    #             break
                             else:
                                 pass
-                    else:
-                        pass
-                time.sleep(self.expect_refresh_interval)
+                        print "当前车次{0} 查询无符合条件坐席，正在重新查询".format(ticket_info[3])
+                    # elif ticket_info[11] == "N":
+                    #     print("当前车次{0} 无票".format(ticket_info[3]))
+                    # else:
+                    #     print("当前这次还处于待售状态，请耐心等待")
+                    #     time.sleep(self.expect_refresh_interval)
             else:
                 raise ticketConfigException("车次配置信息有误，请检查")
 
@@ -619,16 +625,20 @@ class select:
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         if self.leftTicketLog(from_station, to_station):
             num = 1
+            runedTime=0
             while 1:
                 try:
                     num += 1
-                    time.sleep(self.select_refresh_interval)
+                    sleepTime=self.select_refresh_interval*1000-runedTime
+                    if sleepTime>0:
+                        time.sleep(sleepTime/1000.0)
                     if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
                         print "12306休息时间，本程序自动停止,明天早上七点运行"
                         break
                     start_time = datetime.datetime.now()
                     self.submitOrderRequest(from_station, to_station)
-                    print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(self.station_trains), (datetime.datetime.now()-start_time).microseconds/1000)
+                    runedTime=(datetime.datetime.now()-start_time).microseconds/1000
+                    print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(self.station_trains), runedTime)
                 except PassengerUserException as e:
                     print e.message
                     break
@@ -648,27 +658,41 @@ class select:
                         print(e.message)
 
 
-# class selectProducer(threading.Thread):
-#     """刷票队列"""
-#     def __init__(self,  t_name, queue):
-#         threading.Thread.__init__(self, name=t_name)
-#         self.data = queue
-#         print "{0} 正在运行".format(t_name)
-#
-#     def run(self):
-#         pass
-#
-#
-# class submitOrderConsumer(threading.Thread):
-#     """订单队列"""
-#     def __init__(self,  t_name, queue):
-#         threading.Thread.__init__(self, name=t_name)
-#         self.data = queue
-#         print "{0} 正在运行".format(t_name)
-#
-#     def run(self):
-#         pass
+class selectProducer(threading.Thread):
+    """刷票队列"""
+    def __init__(self, t_name, data):
+        self.data=data
+        # tName=data.train_no+"_"+str(random.random)
+        threading.Thread.__init__(self, name=t_name)
+        print "{0} 正在运行".format(t_name)
 
+    def run(self):
+        self.worker(self.data)
+
+    def worker(self,data):
+        if data.obj.check_user():
+            data.obj.submit_station()
+            data.obj.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
+            data.obj.getRepeatSubmitToken()
+            data.obj.user_info = self.getPassengerDTOs()
+            if data.obj.checkOrderInfo(data.train_no, data.seat):
+                return
+
+
+class submitOrderConsumer(threading.Thread):
+    """订单队列"""
+    def __init__(self,t_name, queue):
+        threading.Thread.__init__(self, name=t_name)
+        self.data = queue
+        print "{0} 正在运行".format(t_name)
+
+    def run(self):
+        while 1:
+            if not self.data.empty():
+                taskData=self.data.get()
+                selectProducer('submit_'+str(random.random),taskData).start()
+            else:
+                time.sleep(1.5)
 
 if __name__ == '__main__':
     a = select('上海', '北京')

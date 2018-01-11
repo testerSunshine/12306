@@ -680,7 +680,6 @@ class selectProducer(threading.Thread):
                 return
             obj.submitQueue.task_done()
 
-
 class submitOrderConsumer(threading.Thread):
     """订单队列"""
     def __init__(self,t_name, queue):

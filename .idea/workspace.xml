@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="79a86edc-721f-4aad-920d-b595d0348b7f" name="Default" comment="fix">
+    <list default="true" id="79a86edc-721f-4aad-920d-b595d0348b7f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/ticket_config.yaml" afterPath="$PROJECT_DIR$/config/ticket_config.yaml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/init/select_ticket_info.py" afterPath="$PROJECT_DIR$/init/select_ticket_info.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -86,8 +85,8 @@
       <file leaf-file-name="select_ticket_info.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/init/select_ticket_info.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="407">
-              <caret line="489" column="29" lean-forward="false" selection-start-line="489" selection-start-column="29" selection-end-line="489" selection-end-column="29" />
+            <state relative-caret-position="459">
+              <caret line="492" column="25" lean-forward="false" selection-start-line="492" selection-start-column="25" selection-end-line="492" selection-end-column="25" />
               <folding>
                 <element signature="e#23#34#0" expanded="true" />
               </folding>
@@ -801,7 +800,14 @@
       <option name="project" value="LOCAL" />
       <updated>1515657697172</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="跳出下单循环">
+      <created>1515662814175</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1515662814175</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -915,7 +921,8 @@
     <MESSAGE value="修改提交需要验证码逻辑" />
     <MESSAGE value="提交验证码拉去类别问题" />
     <MESSAGE value="增加提交订单验证码校验" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加提交订单验证码校验" />
+    <MESSAGE value="跳出下单循环" />
+    <option name="LAST_COMMIT_MESSAGE" value="跳出下单循环" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1109,8 +1116,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/init/select_ticket_info.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
-          <caret line="489" column="29" lean-forward="false" selection-start-line="489" selection-start-column="29" selection-end-line="489" selection-end-column="29" />
+        <state relative-caret-position="459">
+          <caret line="492" column="25" lean-forward="false" selection-start-line="492" selection-start-column="25" selection-end-line="492" selection-end-column="25" />
           <folding>
             <element signature="e#23#34#0" expanded="true" />
           </folding>

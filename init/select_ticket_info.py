@@ -490,6 +490,7 @@ class select:
                         break
                 else:
                     print("不需要验证码")
+                    break
             checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}

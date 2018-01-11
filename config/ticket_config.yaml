@@ -23,9 +23,9 @@
 #damatu：打码兔账号，用于自动登录
 #is_aotu_code是否自动打码，如果选择Ture,则调用打码兔打码，默认不使用打码兔
 set:
-  station_date: "2018-02-09"
+  station_date: "2018-02-07"
   station_trains:
-    - "G4741"
+    - "G4933"
     - "G2365"
     - "G1371"
     - "G1377"
@@ -34,7 +34,7 @@ set:
 #    - "G1373"
 #    - "G1363"
   from_station: "上海"
-  to_station: "邵阳"
+  to_station: "长沙"
   set_type:
     - "二等座"
   is_more_ticket: True
@@ -42,7 +42,7 @@ set:
     - "文贤平"
 #    - "梁敏"
   12306count:
-#    - uesr: "13828728396"
+#    - uesr: ""
 #    - pwd: "649823049lilymin"
     - uesr: "931128603@qq.com"
     - pwd: "QWERTY"
@@ -54,7 +54,7 @@ is_aotu_code: True
 #enable_proxy: False
 
 damatu:
-  uesr: "wenxianping"
+  uesr: ""
   pwd: "wen1995"
 
 

@@ -33,7 +33,7 @@ class select:
         self.user_info = ""
         self.secretStr = ""
         self.ticket_black_list = dict()
-        self.submitQueue=Queue.Queue(20)
+        self.submitQueue=Queue.Queue(2)
 
     def get_ticket_info(self):
         """
@@ -623,6 +623,7 @@ class select:
     def main(self):
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         if self.leftTicketLog(from_station, to_station):
+            submitOrderConsumer("daemon1",self.submitQueue).start()
             num = 1
             runedTime=0
             while 1:
@@ -669,13 +670,15 @@ class selectProducer(threading.Thread):
         self.worker(self.data)
 
     def worker(self,data):
-        if data.obj.check_user():
-            data.obj.submit_station()
-            data.obj.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
-            data.obj.getRepeatSubmitToken()
-            data.obj.user_info = self.getPassengerDTOs()
-            if data.obj.checkOrderInfo(data.train_no, data.seat):
+        obj=data['obj']
+        if obj.check_user():
+            obj.submit_station()
+            obj.getPassengerTicketStr(data['seat'])
+            obj.getRepeatSubmitToken()
+            obj.user_info = obj.getPassengerDTOs()
+            if obj.checkOrderInfo(data['train_no'], data['seat']):
                 return
+            obj.submitQueue.task_done()
 
 
 class submitOrderConsumer(threading.Thread):
@@ -689,7 +692,7 @@ class submitOrderConsumer(threading.Thread):
         while 1:
             if not self.data.empty():
                 taskData=self.data.get()
-                selectProducer('submit_'+str(random.random),taskData).start()
+                selectProducer(taskData['train_no']+str(random.random()),taskData).start()
             else:
                 time.sleep(1.5)
 

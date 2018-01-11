@@ -467,7 +467,7 @@ class select:
             for i in range(3):
                 if is_node_code:
                     print("需要验证码，正在使用自动识别验证码功能")
-                    codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand&%s' % random.random()
+                    codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=passenger&rand=sjrand&%s' % random.random()
                     result = myurllib2.get(codeimg)
                     img_path = './tkcode'
                     open(img_path, 'wb').write(result)

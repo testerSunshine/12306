@@ -466,32 +466,45 @@ class select:
         try:
             for i in range(3):
                 if is_node_code:
-                    print("需要验证码，正在使用自动识别验证码功能")
+                    print("正在使用自动识别验证码功能")
+                    randurl = 'https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn'
                     codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=passenger&rand=sjrand&%s' % random.random()
                     result = myurllib2.get(codeimg)
                     img_path = './tkcode'
                     open(img_path, 'wb').write(result)
-                    data['randCode'] = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"],
+                    randCode = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"],
                                                   img_path).main()
+                    randData = {
+                        "randCode": randCode,
+                        "rand": "randp",
+                        "_json_att": None,
+                        "REPEAT_SUBMIT_TOKEN": self.get_token()
+                    }
+                    fresult = json.loads(myurllib2.Post(randurl, randData), encoding='utf8')  # 校验验证码是否正确
+                    checkcode = fresult['data']['msg']
+                    if checkcode == 'FALSE':
+                        print ("验证码有误,第{}次尝试重试".format(i))
+                    else:
+                        print("验证码通过,正在提交订单")
+                        data['randCode'] = randCode
                 else:
                     print("不需要验证码")
-                checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
-                if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
-                    c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
-                    if 'submitStatus' in c_data and c_data['submitStatus'] is True:
-                        print("提交订单成功！")
-                        break
-                    else:
-                        if 'errMsg' in c_data and c_data['errMsg']:
-                            print("提交订单失败，{0}，重新识别中".format(c_data['errMsg']))
-                        else:
-                            print(c_data)
-                            print('订票失败!很抱歉,请重试提交预订功能!')
-                elif "messages" in checkQueueOrderResult and checkQueueOrderResult["messages"]:
-                    print("提交订单失败,错误信息: " + checkQueueOrderResult["messages"])
+            checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
+            if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
+                c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
+                if 'submitStatus' in c_data and c_data['submitStatus'] is True:
+                    print("提交订单成功！")
+                    self.queryOrderWaitTime()
                 else:
-                    print("提交订单中，请耐心等待：" + str(checkQueueOrderResult["validateMessages"]))
-            self.queryOrderWaitTime()
+                    if 'errMsg' in c_data and c_data['errMsg']:
+                        print("提交订单失败，{0}".format(c_data['errMsg']))
+                    else:
+                        print(c_data)
+                        print('订票失败!很抱歉,请重试提交预订功能!')
+            elif "messages" in checkQueueOrderResult and checkQueueOrderResult["messages"]:
+                print("提交订单失败,错误信息: " + checkQueueOrderResult["messages"])
+            else:
+                print("提交订单中，请耐心等待：" + str(checkQueueOrderResult["validateMessages"]))
         except ValueError:
             print("接口 {} 无响应".format(checkQueueOrderUrl))
 

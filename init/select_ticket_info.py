@@ -33,7 +33,8 @@ class select:
         self.user_info = ""
         self.secretStr = ""
         self.ticket_black_list = dict()
-        self.submitQueue=Queue.Queue(15)
+        self.submitQueue = Queue.Queue(5)
+        self.ticket_skip_time = dict()
 
     def get_ticket_info(self):
         """
@@ -233,16 +234,13 @@ class select:
                                 if self.ticket_black_list.has_key(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds/60 < int(self.ticket_black_list_time):
                                     print("该车次{} 正在被关小黑屋，跳过此车次".format(train_no))
                                     break
+                                if self.ticket_skip_time.has_key(train_no) and (datetime.datetime.now() - self.ticket_skip_time[train_no]).seconds < 10:
+                                    # 判断离上次车次订票时间，如果间隔太小，则跳过,如果想不停地疯狂提交，那请设置99999，就无等待了
+                                    break
                                 else:
+                                    self.submitQueue.put({"obj": self, "train_no": train_no, "seat": self._station_seat[j].encode("utf8")})
                                     print ('正在尝试提交订票...')
-                                    self.submitQueue.put({"obj":self,"train_no":train_no,"seat":self._station_seat[j].encode("utf8")})
-                                    # if self.check_user():
-                                    #     self.submit_station()
-                                    #     self.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
-                                    #     self.getRepeatSubmitToken()
-                                    #     self.user_info = self.getPassengerDTOs()
-                                    #     if self.checkOrderInfo(train_no, self._station_seat[j].encode("utf8")):
-                                    #             break
+                                    self.ticket_skip_time[train_no] = datetime.datetime.now()
                             else:
                                 pass
                     else:
@@ -371,11 +369,11 @@ class select:
         data['REPEAT_SUBMIT_TOKEN'] = self.token
         checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data, ))
         if 'data' in checkOrderInfo:
-            if checkOrderInfo["data"]["ifShowPassCode"] == "Y":
+            if "ifShowPassCode" in checkOrderInfo["data"] and checkOrderInfo["data"]["ifShowPassCode"] == "Y":
                 is_need_code = True
                 if self.getQueueCount(train_no, set_type, is_need_code):
                     return True
-            if checkOrderInfo['data']['submitStatus'] is True:
+            if "ifShowPassCode" in checkOrderInfo["data"] and checkOrderInfo['data']['submitStatus'] is True:
                     print ('车票提交通过，正在尝试排队')
                     is_need_code = False
                     if self.getQueueCount(train_no, set_type, is_need_code):
@@ -488,8 +486,10 @@ class select:
                     else:
                         print("验证码通过,正在提交订单")
                         data['randCode'] = randCode
+                        break
                 else:
                     print("不需要验证码")
+                    break
             checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
@@ -546,7 +546,7 @@ class select:
                 elif "messages" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["messages"]:
                     print("排队等待失败： " + queryOrderWaitTimeResult["messages"])
                 else:
-                    print("第{}排队中,请耐心等待".format(num))
+                    print("第{}次排队中,请耐心等待".format(num))
             else:
                 print("排队中")
             time.sleep(2)
@@ -609,77 +609,77 @@ class select:
     def main(self):
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         if self.leftTicketLog(from_station, to_station):
-            submitOrderConsumer("daemon1",self.submitQueue).start()
+            submitOrderConsumer("daemon1", self.submitQueue).start()
             num = 1
-            runedTime=0
+            runedTime = 0
             while 1:
-                try:
-                    num += 1
-                    sleepTime=self.select_refresh_interval*1000-runedTime
-                    if sleepTime>0:
-                        time.sleep(sleepTime/1000.0)
-                    if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
-                        print "12306休息时间，本程序自动停止,明天早上七点运行"
-                        break
-                    start_time = datetime.datetime.now()
-                    self.submitOrderRequest(from_station, to_station)
-                    runedTime=(datetime.datetime.now()-start_time).microseconds/1000
-                    print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(self.station_trains), runedTime)
-                except PassengerUserException as e:
-                    print e.message
+                num += 1
+                sleepTime = self.select_refresh_interval*1000-runedTime
+                if sleepTime > 0:
+                    time.sleep(sleepTime/1000.0)
+                if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
+                    print "12306休息时间，本程序自动停止,明天早上七点运行"
                     break
-                except ticketConfigException as e:
-                    print e.message
-                    break
-                except ticketIsExitsException as e:
-                    print e.message
-                    break
-                except ticketNumOutException as e:
-                    print e.message
-                    break
-                except ValueError as e:
-                    if e.message == "No JSON object could be decoded":
-                        print("12306接口无响应，正在重试")
-                    else:
-                        print(e.message)
+                start_time = datetime.datetime.now()
+                self.submitOrderRequest(from_station, to_station)
+                runedTime = (datetime.datetime.now()-start_time).microseconds/1000
+                print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(self.station_trains), runedTime)
 
 
 class selectProducer(threading.Thread):
     """刷票队列"""
     def __init__(self, t_name, data):
-        self.data=data
-        # tName=data.train_no+"_"+str(random.random)
-        threading.Thread.__init__(self, name=t_name)
-        print "{0} 正在运行".format(t_name)
+        self.t_name = t_name
+        self.data = data
+        threading.Thread.__init__(self, name=self.t_name)
+        print "{0} 正在运行".format(self.t_name)
 
     def run(self):
         self.worker(self.data)
 
-    def worker(self,data):
-        obj=data['obj']
-        if obj.check_user():
-            obj.submit_station()
-            obj.getPassengerTicketStr(data['seat'])
-            obj.getRepeatSubmitToken()
-            obj.user_info = obj.getPassengerDTOs()
-            if obj.checkOrderInfo(data['train_no'], data['seat']):
-                return
-            obj.submitQueue.task_done()
+    def worker(self, data):
+        obj = data['obj']
+        try:
+            if obj.check_user():
+                obj.submit_station()
+                obj.getPassengerTicketStr(data['seat'])
+                obj.getRepeatSubmitToken()
+                obj.user_info = obj.getPassengerDTOs()
+                if obj.checkOrderInfo(data['train_no'], data['seat']):
+                    return
+                obj.submitQueue.task_done()
+        except PassengerUserException as e:
+            print e.message
+        except ticketConfigException as e:
+            print e.message
+        except ticketIsExitsException as e:
+            print e.message
+        except ticketNumOutException as e:
+            print e.message
+        except ValueError as e:
+            if e.message == "No JSON object could be decoded":
+                print("12306接口无响应，正在重试")
+            else:
+                print(e.message)
+        print("{0} 线程运行结束".format(self.t_name))
+
 
 class submitOrderConsumer(threading.Thread):
     """订单队列"""
-    def __init__(self,t_name, queue):
+    def __init__(self, t_name, queue):
         threading.Thread.__init__(self, name=t_name)
         self.data = queue
         print "{0} 正在运行".format(t_name)
 
     def run(self):
         while 1:
-            if not self.data.empty():
-                taskData=self.data.get()
-                selectProducer(taskData['train_no']+str(random.random()),taskData).start()
-            else:
-                time.sleep(1.5)
+                if not self.data.empty():
+                    taskData = self.data.get()
+                    selectProducer(taskData['train_no']+str(random.random()), taskData).start()
+                else:
+                    time.sleep(1.5)
+
+
 
 if __name__ == '__main__':
     a = select('上海', '北京')

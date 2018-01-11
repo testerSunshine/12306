@@ -33,7 +33,7 @@ class select:
         self.user_info = ""
         self.secretStr = ""
         self.ticket_black_list = dict()
-        self.submitQueue=Queue.Queue(2)
+        self.submitQueue=Queue.Queue(15)
 
     def get_ticket_info(self):
         """

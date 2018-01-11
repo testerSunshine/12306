@@ -487,6 +487,7 @@ class select:
                     else:
                         print("验证码通过,正在提交订单")
                         data['randCode'] = randCode
+                        break
                 else:
                     print("不需要验证码")
             checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))

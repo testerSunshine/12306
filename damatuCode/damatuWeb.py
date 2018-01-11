@@ -18,8 +18,8 @@ def md5(byte):  # md5加密byte
 
 
 class DamatuApi():
-    ID = '40838'
-    KEY = 'ca9507e17e8d5ddf7c57cd18d8d33010'
+    ID = '53330'
+    KEY = '9e5dd939b00d7473c2fa8c1283baa306'
     HOST = 'http://api.dama2.com:7766/app/'
 
     def __init__(self, username, password, file_path):

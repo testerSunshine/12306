@@ -252,7 +252,7 @@ class select:
                     #     print("当前这次还处于待售状态，请耐心等待")
                     #     time.sleep(self.expect_refresh_interval)
             else:
-                raise ticketConfigException("车次配置信息有误，请检查")
+                print "车次配置信息有误，或者返回数据异常，请检查 {}".format(station_ticket)
 
     def check_user(self):
         """
@@ -354,7 +354,6 @@ class select:
                     self.user_info[i]['passenger_name'] + "," + self.user_info[i]['passenger_type'] + "," +
                     self.user_info[i]['passenger_id_no'] + "," + self.user_info[i]['passenger_type'] + '_')
         return passengerTicketStrList, oldPassengerStr
-
 
     def checkOrderInfo(self, train_no, set_type):
         """

@@ -7,7 +7,7 @@ import threading
 import urllib
 import sys
 import time
-from Queue import Queue
+import Queue
 from collections import OrderedDict
 
 from config.ticketConf import _get_yaml
@@ -33,6 +33,7 @@ class select:
         self.user_info = ""
         self.secretStr = ""
         self.ticket_black_list = dict()
+        self.submitQueue=Queue.Queue(15)
 
     def get_ticket_info(self):
         """
@@ -234,7 +235,7 @@ class select:
                                     break
                                 else:
                                     print ('正在尝试提交订票...')
-                                    return train_no   # 提交车次
+                                    self.submitQueue.put({"obj":self,"train_no":train_no,"seat":self._station_seat[j].encode("utf8")})
                                     # if self.check_user():
                                     #     self.submit_station()
                                     #     self.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
@@ -248,7 +249,7 @@ class select:
                         pass
                 time.sleep(self.expect_refresh_interval)
             else:
-                raise ticketConfigException("车次配置信息有误，请检查")
+                print "车次配置信息有误，或者返回数据异常，请检查 {}".format(station_ticket)
 
     def check_user(self):
         """
@@ -370,54 +371,24 @@ class select:
         data['REPEAT_SUBMIT_TOKEN'] = self.token
         checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data, ))
         if 'data' in checkOrderInfo:
-            if checkOrderInfo["data"]["ifShowPassCode"] == "y":
-                print("需要验证码，正在使用自动识别验证码功能")
-                for i in range(3):
-                    codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand&%s' % random.random()
-                    result = myurllib2.get(codeimg)
-                    img_path = './tkcode'
-                    open(img_path, 'wb').write(result)
-                    data['pass_code'] = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"], img_path).main()
-                    checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data, ))
-                    if checkOrderInfo['data']['submitStatus'] is True:
-                        print ('车票提交通过，正在尝试排队')
-                        if self.getQueueCount(train_no, set_type):
-                            return True
-                        else:
-                            raise ticketNumOutException("提交订单失败")
-                    else:
-                        print("验证码识别错误，第{0}次重试".format(i))
+            if checkOrderInfo["data"]["ifShowPassCode"] == "Y":
+                is_need_code = True
+                if self.getQueueCount(train_no, set_type, is_need_code):
+                    return True
             if checkOrderInfo['data']['submitStatus'] is True:
                     print ('车票提交通过，正在尝试排队')
-                    if self.getQueueCount(train_no, set_type):
+                    is_need_code = False
+                    if self.getQueueCount(train_no, set_type, is_need_code):
                         return True
             else:
                 if "errMsg" in checkOrderInfo['data'] and checkOrderInfo['data']["errMsg"]:
                     print checkOrderInfo['data']["errMsg"]
-                    if checkOrderInfo['data']["errMsg"].find("验证码") != -1:
-                        print("需要验证码，正在使用自动识别验证码功能")
-                        for i in range(3):
-                            codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand&%s' % random.random()
-                            result = myurllib2.get(codeimg)
-                            img_path = './tkcode'
-                            open(img_path, 'wb').write(result)
-                            data['pass_code'] = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"],
-                                                          img_path).main()
-                            checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data, ))
-                            if checkOrderInfo['data']['submitStatus'] is True:
-                                print ('车票提交通过，正在尝试排队')
-                                if self.getQueueCount(train_no, set_type):
-                                    return True
-                                else:
-                                    raise ticketNumOutException("提交订单失败")
-                            else:
-                                print("验证码识别错误，第{0}次重试".format(i))
                 else:
                     print checkOrderInfo
         elif 'messages' in checkOrderInfo and checkOrderInfo['messages']:
             print (checkOrderInfo['messages'][0])
 
-    def getQueueCount(self, train_no, set_type):
+    def getQueueCount(self, train_no, set_type, is_need_code):
         """
         # 模拟查询当前的列车排队人数的方法
         # 返回信息组成的提示字符串
@@ -457,7 +428,7 @@ class select:
                         print("当前余票数小于乘车人数，放弃订票")
                     else:
                         print("排队成功, 当前余票还剩余: {0} 张".format(ticket_split))
-                        if self.checkQueueOrder():
+                        if self.checkQueueOrder(is_need_code):
                             return True
                 else:
                     print("当前排队人数:" + str(countT) + "当前余票还剩余:{0} 张，继续排队中".format(ticket_split))
@@ -474,7 +445,7 @@ class select:
             else:
                 print("未知错误 {0}".format("".join(getQueueCountResult)))
 
-    def checkQueueOrder(self):
+    def checkQueueOrder(self, is_node_code=False):
         """
         模拟提交订单是确认按钮，参数获取方法还是get_ticketInfoForPassengerForm 中获取
         :return: 
@@ -495,20 +466,39 @@ class select:
         }
         try:
             for i in range(3):
-                checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
-                if checkQueueOrderResult:
-                    break
-        except ValueError:
-            checkQueueOrderResult = {}
-        if checkQueueOrderResult:
+                if is_node_code:
+                    print("正在使用自动识别验证码功能")
+                    randurl = 'https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn'
+                    codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=passenger&rand=sjrand&%s' % random.random()
+                    result = myurllib2.get(codeimg)
+                    img_path = './tkcode'
+                    open(img_path, 'wb').write(result)
+                    randCode = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"],
+                                                  img_path).main()
+                    randData = {
+                        "randCode": randCode,
+                        "rand": "randp",
+                        "_json_att": None,
+                        "REPEAT_SUBMIT_TOKEN": self.get_token()
+                    }
+                    fresult = json.loads(myurllib2.Post(randurl, randData), encoding='utf8')  # 校验验证码是否正确
+                    checkcode = fresult['data']['msg']
+                    if checkcode == 'FALSE':
+                        print ("验证码有误,第{}次尝试重试".format(i))
+                    else:
+                        print("验证码通过,正在提交订单")
+                        data['randCode'] = randCode
+                else:
+                    print("不需要验证码")
+            checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
-                if 'submitStatus' in c_data and c_data['submitStatus']:
+                if 'submitStatus' in c_data and c_data['submitStatus'] is True:
                     print("提交订单成功！")
                     self.queryOrderWaitTime()
                 else:
                     if 'errMsg' in c_data and c_data['errMsg']:
-                        print("提交订单失败，" + c_data['errMsg'])
+                        print("提交订单失败，{0}".format(c_data['errMsg']))
                     else:
                         print(c_data)
                         print('订票失败!很抱歉,请重试提交预订功能!')
@@ -516,7 +506,7 @@ class select:
                 print("提交订单失败,错误信息: " + checkQueueOrderResult["messages"])
             else:
                 print("提交订单中，请耐心等待：" + str(checkQueueOrderResult["validateMessages"]))
-        else:
+        except ValueError:
             print("接口 {} 无响应".format(checkQueueOrderUrl))
 
     def queryOrderWaitTime(self):
@@ -619,17 +609,22 @@ class select:
     def main(self):
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         if self.leftTicketLog(from_station, to_station):
+            submitOrderConsumer("daemon1",self.submitQueue).start()
             num = 1
+            runedTime=0
             while 1:
                 try:
                     num += 1
-                    time.sleep(self.select_refresh_interval)
+                    sleepTime=self.select_refresh_interval*1000-runedTime
+                    if sleepTime>0:
+                        time.sleep(sleepTime/1000.0)
                     if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
                         print "12306休息时间，本程序自动停止,明天早上七点运行"
                         break
                     start_time = datetime.datetime.now()
                     self.submitOrderRequest(from_station, to_station)
-                    print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(self.station_trains), (datetime.datetime.now()-start_time).microseconds/1000)
+                    runedTime=(datetime.datetime.now()-start_time).microseconds/1000
+                    print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(self.station_trains), runedTime)
                 except PassengerUserException as e:
                     print e.message
                     break
@@ -651,80 +646,40 @@ class select:
 
 class selectProducer(threading.Thread):
     """刷票队列"""
-    def __init__(self,  t_name, queue, selectObj, from_station, to_station, expect_refresh_interval, select_refresh_interval):
+    def __init__(self, t_name, data):
+        self.data=data
+        # tName=data.train_no+"_"+str(random.random)
         threading.Thread.__init__(self, name=t_name)
-        self.data = queue
-        self.selectObj = selectObj
-        self.from_station, self.to_station = from_station, to_station
-        self.expect_refresh_interval, self.select_refresh_interval = expect_refresh_interval, select_refresh_interval
         print "{0} 正在运行".format(t_name)
 
     def run(self):
-        from_station, to_station = self.selectObj.station_table(self.from_station, self.to_station)
-        if self.selectObj.leftTicketLog(from_station, to_station):
-            num = 1
-            while 1:
-                try:
-                    num += 1
-                    time.sleep(self.select_refresh_interval)
-                    if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
-                        print "12306休息时间，本程序自动停止,明天早上七点运行
-                        break
-                    else:
-                        self.selectObj
-        tain_no = self.selectObj.submitOrderRequest()
+        self.worker(self.data)
 
+    def worker(self,data):
+        obj=data['obj']
+        if obj.check_user():
+            obj.submit_station()
+            obj.getPassengerTicketStr(data['seat'])
+            obj.getRepeatSubmitToken()
+            obj.user_info = obj.getPassengerDTOs()
+            if obj.checkOrderInfo(data['train_no'], data['seat']):
+                return
+            obj.submitQueue.task_done()
 
 class submitOrderConsumer(threading.Thread):
     """订单队列"""
-    def __init__(self,  t_name, queue, selectObj):
+    def __init__(self,t_name, queue):
         threading.Thread.__init__(self, name=t_name)
         self.data = queue
         print "{0} 正在运行".format(t_name)
 
     def run(self):
-        pass
-
-def get_ticket_info():
-    """
-    获取配置信息
-    :return:
-    """
-    ticket_info_config = _get_yaml()
-    from_station = ticket_info_config["set"]["from_station"].encode("utf8")
-    to_station = ticket_info_config["set"]["to_station"].encode("utf8")
-    station_date = ticket_info_config["set"]["station_date"].encode("utf8")
-    set_type = ticket_info_config["set"]["set_type"]
-    is_more_ticket = ticket_info_config["set"]["is_more_ticket"]
-    ticke_peoples = ticket_info_config["set"]["ticke_peoples"]
-    select_refresh_interval = ticket_info_config["select_refresh_interval"]
-    station_trains = ticket_info_config["set"]["station_trains"]
-    expect_refresh_interval = ticket_info_config["expect_refresh_interval"]
-    ticket_black_list_time = ticket_info_config["ticket_black_list_time"]
-    print "*"*20
-    print "当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}\n候选购买车次：{7}\n未开始刷票间隔时间：{8}\n僵尸票关小黑屋时长：{9}".format\
-                                                                                  (
-                                                                                  from_station,
-                                                                                  to_station,
-                                                                                  station_date,
-                                                                                  ",".join(set_type),
-                                                                                  is_more_ticket,
-                                                                                  ",".join(ticke_peoples),
-                                                                                  select_refresh_interval,
-                                                                                  ",".join(station_trains),
-                                                                                  expect_refresh_interval,
-                                                                                  ticket_black_list_time,
-        )
-    print "*"*20
-    return from_station, to_station, station_date, set_type, is_more_ticket, ticke_peoples, select_refresh_interval, station_trains, expect_refresh_interval, ticket_black_list_time
-
-
-
-def main():
-    queue = Queue(20)
-    from_station, to_station, station_date, set_type, is_more_ticket, ticke_peoples, select_refresh_interval, station_trains, expect_refresh_interval, ticket_black_list_time = get_ticket_info()
-
-
+        while 1:
+            if not self.data.empty():
+                taskData=self.data.get()
+                selectProducer(taskData['train_no']+str(random.random()),taskData).start()
+            else:
+                time.sleep(1.5)
 
 if __name__ == '__main__':
     a = select('上海', '北京')

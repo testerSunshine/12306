@@ -374,54 +374,25 @@ class select:
         data['REPEAT_SUBMIT_TOKEN'] = self.token
         checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data, ))
         if 'data' in checkOrderInfo:
-            if checkOrderInfo["data"]["ifShowPassCode"] == "y":
-                print("需要验证码，正在使用自动识别验证码功能")
-                for i in range(3):
-                    codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand&%s' % random.random()
-                    result = myurllib2.get(codeimg)
-                    img_path = './tkcode'
-                    open(img_path, 'wb').write(result)
-                    data['pass_code'] = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"], img_path).main()
-                    checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data, ))
-                    if checkOrderInfo['data']['submitStatus'] is True:
-                        print ('车票提交通过，正在尝试排队')
-                        if self.getQueueCount(train_no, set_type):
-                            return True
-                        else:
-                            raise ticketNumOutException("提交订单失败")
-                    else:
-                        print("验证码识别错误，第{0}次重试".format(i))
+            if checkOrderInfo["data"]["ifShowPassCode"] == "Y":
+                is_need_code = True
+                if self.getQueueCount(train_no, set_type, is_need_code):
+                    return True
             if checkOrderInfo['data']['submitStatus'] is True:
                     print ('车票提交通过，正在尝试排队')
-                    if self.getQueueCount(train_no, set_type):
+                    is_need_code = False
+                    if self.getQueueCount(train_no, set_type, is_need_code):
                         return True
             else:
                 if "errMsg" in checkOrderInfo['data'] and checkOrderInfo['data']["errMsg"]:
                     print checkOrderInfo['data']["errMsg"]
-                    if checkOrderInfo['data']["errMsg"].find("验证码") != -1:
-                        print("需要验证码，正在使用自动识别验证码功能")
-                        for i in range(3):
-                            codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand&%s' % random.random()
-                            result = myurllib2.get(codeimg)
-                            img_path = './tkcode'
-                            open(img_path, 'wb').write(result)
-                            data['pass_code'] = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"],
-                                                          img_path).main()
-                            checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data, ))
-                            if checkOrderInfo['data']['submitStatus'] is True:
-                                print ('车票提交通过，正在尝试排队')
-                                if self.getQueueCount(train_no, set_type):
-                                    return True
-                                else:
-                                    raise ticketNumOutException("提交订单失败")
-                            else:
-                                print("验证码识别错误，第{0}次重试".format(i))
+
                 else:
                     print checkOrderInfo
         elif 'messages' in checkOrderInfo and checkOrderInfo['messages']:
             print (checkOrderInfo['messages'][0])
 
-    def getQueueCount(self, train_no, set_type):
+    def getQueueCount(self, train_no, set_type, is_need_code):
         """
         # 模拟查询当前的列车排队人数的方法
         # 返回信息组成的提示字符串
@@ -461,7 +432,7 @@ class select:
                         print("当前余票数小于乘车人数，放弃订票")
                     else:
                         print("排队成功, 当前余票还剩余: {0} 张".format(ticket_split))
-                        if self.checkQueueOrder():
+                        if self.checkQueueOrder(is_need_code):
                             return True
                 else:
                     print("当前排队人数:" + str(countT) + "当前余票还剩余:{0} 张，继续排队中".format(ticket_split))
@@ -478,11 +449,12 @@ class select:
             else:
                 print("未知错误 {0}".format("".join(getQueueCountResult)))
 
-    def checkQueueOrder(self):
+    def checkQueueOrder(self, is_node_code=False):
         """
         模拟提交订单是确认按钮，参数获取方法还是get_ticketInfoForPassengerForm 中获取
         :return: 
         """
+
         passengerTicketStrList, oldPassengerStr = self.getPassengerTicketStrListAndOldPassengerStr()
         checkQueueOrderUrl = "https://kyfw.12306.cn/otn/confirmPassenger/confirmSingleForQueue"
         data = {
@@ -499,20 +471,39 @@ class select:
         }
         try:
             for i in range(3):
-                checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
-                if checkQueueOrderResult:
-                    break
-        except ValueError:
-            checkQueueOrderResult = {}
-        if checkQueueOrderResult:
+                if is_node_code:
+                    print("正在使用自动识别验证码功能")
+                    randurl = 'https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn'
+                    codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=passenger&rand=sjrand&%s' % random.random()
+                    result = myurllib2.get(codeimg)
+                    img_path = './tkcode'
+                    open(img_path, 'wb').write(result)
+                    randCode = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"],
+                                                  img_path).main()
+                    randData = {
+                        "randCode": randCode,
+                        "rand": "randp",
+                        "_json_att": None,
+                        "REPEAT_SUBMIT_TOKEN": self.get_token()
+                    }
+                    fresult = json.loads(myurllib2.Post(randurl, randData), encoding='utf8')  # 校验验证码是否正确
+                    checkcode = fresult['data']['msg']
+                    if checkcode == 'FALSE':
+                        print ("验证码有误,第{}次尝试重试".format(i))
+                    else:
+                        print("验证码通过,正在提交订单")
+                        data['randCode'] = randCode
+                else:
+                    print("不需要验证码")
+            checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
-                if 'submitStatus' in c_data and c_data['submitStatus']:
+                if 'submitStatus' in c_data and c_data['submitStatus'] is True:
                     print("提交订单成功！")
                     self.queryOrderWaitTime()
                 else:
                     if 'errMsg' in c_data and c_data['errMsg']:
-                        print("提交订单失败，" + c_data['errMsg'])
+                        print("提交订单失败，{0}".format(c_data['errMsg']))
                     else:
                         print(c_data)
                         print('订票失败!很抱歉,请重试提交预订功能!')
@@ -520,7 +511,7 @@ class select:
                 print("提交订单失败,错误信息: " + checkQueueOrderResult["messages"])
             else:
                 print("提交订单中，请耐心等待：" + str(checkQueueOrderResult["validateMessages"]))
-        else:
+        except ValueError:
             print("接口 {} 无响应".format(checkQueueOrderUrl))
 
     def queryOrderWaitTime(self):

@@ -327,28 +327,28 @@ class select:
         """
         passengerTicketStrList = []
         oldPassengerStr = []
-        try:
-            if len(self.user_info) is 1:
+        if not self.user_info:
+            raise PassengerUserException("联系人不在列表中，请查证后添加")
+        if len(self.user_info) is 1:
+            passengerTicketStrList.append(
+                '0,' + self.user_info[0]['passenger_id_type_code'] + "," + self.user_info[0][
+                    "passenger_name"] + "," +
+                self.user_info[0]['passenger_type'] + "," + self.user_info[0]['passenger_id_no'] + "," +
+                self.user_info[0]['mobile_no'] + ',N')
+            oldPassengerStr.append(
+                self.user_info[0]['passenger_name'] + "," + self.user_info[0]['passenger_type'] + "," +
+                self.user_info[0]['passenger_id_no'] + "," + self.user_info[0]['passenger_type'] + '_')
+        else:
+            for i in range(len(self.user_info)):
                 passengerTicketStrList.append(
-                    '0,' + self.user_info[0]['passenger_id_type_code'] + "," + self.user_info[0][
-                        "passenger_name"] + "," +
-                    self.user_info[0]['passenger_type'] + "," + self.user_info[0]['passenger_id_no'] + "," +
-                    self.user_info[0]['mobile_no'] + ',N')
+                    '0,' + self.user_info[i]['passenger_id_type_code'] + "," + self.user_info[i][
+                        "passenger_name"] + "," + self.user_info[i]['passenger_type'] + "," + self.user_info[i][
+                        'passenger_id_no'] + "," + self.user_info[i]['mobile_no'] + ',N_' + self.set_type)
                 oldPassengerStr.append(
-                    self.user_info[0]['passenger_name'] + "," + self.user_info[0]['passenger_type'] + "," +
-                    self.user_info[0]['passenger_id_no'] + "," + self.user_info[0]['passenger_type'] + '_')
-            else:
-                for i in range(len(self.user_info)):
-                    passengerTicketStrList.append(
-                        '0,' + self.user_info[i]['passenger_id_type_code'] + "," + self.user_info[i][
-                            "passenger_name"] + "," + self.user_info[i]['passenger_type'] + "," + self.user_info[i][
-                            'passenger_id_no'] + "," + self.user_info[i]['mobile_no'] + ',N_' + self.set_type)
-                    oldPassengerStr.append(
-                        self.user_info[i]['passenger_name'] + "," + self.user_info[i]['passenger_type'] + "," +
-                        self.user_info[i]['passenger_id_no'] + "," + self.user_info[i]['passenger_type'] + '_')
-            return passengerTicketStrList, oldPassengerStr
-        except Exception as e:
-            raise PassengerUserException("联系人不在列表中，请查证后添加 {0}".format(e.message))
+                    self.user_info[i]['passenger_name'] + "," + self.user_info[i]['passenger_type'] + "," +
+                    self.user_info[i]['passenger_id_no'] + "," + self.user_info[i]['passenger_type'] + '_')
+        return passengerTicketStrList, oldPassengerStr
+
 
     def checkOrderInfo(self, train_no, set_type):
         """

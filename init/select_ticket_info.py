@@ -3,6 +3,7 @@ import json
 import datetime
 import random
 import re
+import threading
 import urllib
 import sys
 import time
@@ -326,25 +327,28 @@ class select:
         """
         passengerTicketStrList = []
         oldPassengerStr = []
-        if len(self.user_info) is 1:
-            passengerTicketStrList.append(
-                '0,' + self.user_info[0]['passenger_id_type_code'] + "," + self.user_info[0][
-                    "passenger_name"] + "," +
-                self.user_info[0]['passenger_type'] + "," + self.user_info[0]['passenger_id_no'] + "," +
-                self.user_info[0]['mobile_no'] + ',N')
-            oldPassengerStr.append(
-                self.user_info[0]['passenger_name'] + "," + self.user_info[0]['passenger_type'] + "," +
-                self.user_info[0]['passenger_id_no'] + "," + self.user_info[0]['passenger_type'] + '_')
-        else:
-            for i in range(len(self.user_info)):
+        try:
+            if len(self.user_info) is 1:
                 passengerTicketStrList.append(
-                    '0,' + self.user_info[i]['passenger_id_type_code'] + "," + self.user_info[i][
-                        "passenger_name"] + "," + self.user_info[i]['passenger_type'] + "," + self.user_info[i][
-                        'passenger_id_no'] + "," + self.user_info[i]['mobile_no'] + ',N_' + self.set_type)
+                    '0,' + self.user_info[0]['passenger_id_type_code'] + "," + self.user_info[0][
+                        "passenger_name"] + "," +
+                    self.user_info[0]['passenger_type'] + "," + self.user_info[0]['passenger_id_no'] + "," +
+                    self.user_info[0]['mobile_no'] + ',N')
                 oldPassengerStr.append(
-                    self.user_info[i]['passenger_name'] + "," + self.user_info[i]['passenger_type'] + "," +
-                    self.user_info[i]['passenger_id_no'] + "," + self.user_info[i]['passenger_type'] + '_')
-        return passengerTicketStrList, oldPassengerStr
+                    self.user_info[0]['passenger_name'] + "," + self.user_info[0]['passenger_type'] + "," +
+                    self.user_info[0]['passenger_id_no'] + "," + self.user_info[0]['passenger_type'] + '_')
+            else:
+                for i in range(len(self.user_info)):
+                    passengerTicketStrList.append(
+                        '0,' + self.user_info[i]['passenger_id_type_code'] + "," + self.user_info[i][
+                            "passenger_name"] + "," + self.user_info[i]['passenger_type'] + "," + self.user_info[i][
+                            'passenger_id_no'] + "," + self.user_info[i]['mobile_no'] + ',N_' + self.set_type)
+                    oldPassengerStr.append(
+                        self.user_info[i]['passenger_name'] + "," + self.user_info[i]['passenger_type'] + "," +
+                        self.user_info[i]['passenger_id_no'] + "," + self.user_info[i]['passenger_type'] + '_')
+            return passengerTicketStrList, oldPassengerStr
+        except Exception as e:
+            raise PassengerUserException("联系人不在列表中，请查证后添加 {0}".format(e.message))
 
     def checkOrderInfo(self, train_no, set_type):
         """
@@ -389,6 +393,24 @@ class select:
             else:
                 if "errMsg" in checkOrderInfo['data'] and checkOrderInfo['data']["errMsg"]:
                     print checkOrderInfo['data']["errMsg"]
+                    if checkOrderInfo['data']["errMsg"].find("验证码") != -1:
+                        print("需要验证码，正在使用自动识别验证码功能")
+                        for i in range(3):
+                            codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand&%s' % random.random()
+                            result = myurllib2.get(codeimg)
+                            img_path = './tkcode'
+                            open(img_path, 'wb').write(result)
+                            data['pass_code'] = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"],
+                                                          img_path).main()
+                            checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data, ))
+                            if checkOrderInfo['data']['submitStatus'] is True:
+                                print ('车票提交通过，正在尝试排队')
+                                if self.getQueueCount(train_no, set_type):
+                                    return True
+                                else:
+                                    raise ticketNumOutException("提交订单失败")
+                            else:
+                                print("验证码识别错误，第{0}次重试".format(i))
                 else:
                     print checkOrderInfo
         elif 'messages' in checkOrderInfo and checkOrderInfo['messages']:
@@ -471,7 +493,10 @@ class select:
             "REPEAT_SUBMIT_TOKEN": self.get_token(),
         }
         try:
-            checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
+            for i in range(3):
+                checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
+                if checkQueueOrderResult:
+                    break
         except ValueError:
             checkQueueOrderResult = {}
         if checkQueueOrderResult:
@@ -531,9 +556,9 @@ class select:
                     print("排队等待失败： " + queryOrderWaitTimeResult["messages"])
                 else:
                     print("第{}排队中,请耐心等待".format(num))
-                    time.sleep(2)
             else:
                 print("排队中")
+            time.sleep(2)
         order_id = self.queryMyOrderNoComplete()  # 尝试查看订单列表，如果有订单，则判断成功，不过一般可能性不大
         if order_id:
             raise ticketIsExitsException("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(order_id))
@@ -621,6 +646,28 @@ class select:
                         print("12306接口无响应，正在重试")
                     else:
                         print(e.message)
+
+
+# class selectProducer(threading.Thread):
+#     """刷票队列"""
+#     def __init__(self,  t_name, queue):
+#         threading.Thread.__init__(self, name=t_name)
+#         self.data = queue
+#         print "{0} 正在运行".format(t_name)
+#
+#     def run(self):
+#         pass
+#
+#
+# class submitOrderConsumer(threading.Thread):
+#     """订单队列"""
+#     def __init__(self,  t_name, queue):
+#         threading.Thread.__init__(self, name=t_name)
+#         self.data = queue
+#         print "{0} 正在运行".format(t_name)
+#
+#     def run(self):
+#         pass
 
 
 if __name__ == '__main__':

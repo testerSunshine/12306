@@ -385,7 +385,7 @@ class select:
         new_train_date = time.strftime("%a %b %d %Y", l_time)
         getQueueCountUrl = 'https://kyfw.12306.cn/otn/confirmPassenger/getQueueCount'
         data = {
-            'train_date': new_train_date + "00:00:00 GMT+0800 (CST)",
+            'train_date': str(new_train_date) + "00:00:00 GMT+0800 (CST)",
             'train_no': self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['train_no'],
             'stationTrainCode':	self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['station_train_code'],
             'seatType':	self.set_type,

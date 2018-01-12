@@ -43,8 +43,8 @@ set:
     - "硬卧"
   is_more_ticket: True
   ticke_peoples:
-    - "彭淑杰"
-    - "金宏博"
+    - ""
+    - ""
   12306count:
 #    - uesr: ""
 #    - pwd: "649823049lilymin"

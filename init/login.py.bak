@@ -54,7 +54,7 @@ def stoidinput(text):
     :param text:
     :return:
     """
-    print("\033[34m[*]\033[0m %s " % text)
+    print "\033[34m[*]\033[0m %s " % text
 
 
 def errorinput(text):
@@ -63,7 +63,7 @@ def errorinput(text):
     :param text:
     :return:
     """
-    print("\033[32m[!]\033[0m %s " % text)
+    print "\033[32m[!]\033[0m %s " % text
     return False
 
 
@@ -73,7 +73,7 @@ def codexy():
     :return: str
     """
 
-    Ofset = input("[*] 请输入验证码: ")
+    Ofset = raw_input("[*] 请输入验证码: ")
     select = Ofset.split(',')
     global randCode
     post = []
@@ -138,7 +138,6 @@ def login(user, passwd):
         ldata = {
             "_json_att": None
         }
-        print(randdata)
         fresult = json.loads(myurllib2.Post(randurl, randdata), encoding='utf8')
         checkcode = fresult['data']['msg']
         if checkcode == 'FALSE':
@@ -178,7 +177,7 @@ def getUserinfo():
     """
     url = 'https://kyfw.12306.cn/otn/modifyUser/initQueryUserInfo'
     data = dict(_json_att=None)
-    result = myurllib2.Post(url, data).decode('utf-8')
+    result = myurllib2.Post(url, data)
     userinfo = result
     name = r'<input name="userDTO.loginUserDTO.user_name" style="display:none;" type="text" value="(\S+)" />'
     try:

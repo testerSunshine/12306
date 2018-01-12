@@ -25,8 +25,7 @@
 set:
   station_date: "2018-02-10"
   station_trains:
-    - "T17"
-    - "T297"
+    - "G1970"
 #    - "G2365"
 #    - "G1371"
 #    - "G1377"
@@ -37,19 +36,18 @@ set:
 #    - "G1373"
 #    - "G1363"
 #    - "G4933"
-  from_station: "北京"
-  to_station: "牡丹江"
+  from_station: "上海"
+  to_station: "兰州西"
   set_type:
-    - "硬卧"
+    - "一等座"
   is_more_ticket: True
   ticke_peoples:
-    - ""
-    - ""
+    - "肖汉飞"
   12306count:
-#    - uesr: ""
+#    - uesr: "13828728396"
 #    - pwd: "649823049lilymin"
-    - uesr: "@qq.com"
-    - pwd: "QWERTY"
+    - uesr: "vanglis"
+    - pwd: "fei314159"
 
 select_refresh_interval: 0.1
 expect_refresh_interval: 0.3
@@ -58,7 +56,7 @@ is_aotu_code: False
 #enable_proxy: False
 
 damatu:
-  uesr: ""
+  uesr: "wenxianping"
   pwd: "wen1995"
 
 

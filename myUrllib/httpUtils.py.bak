@@ -36,7 +36,7 @@ class HTTPClient(object):
         if response.status_code == 200:
             return response.content
         else:
-            print(("请求失败。{0}".format(response)))
+            print("请求失败。{0}".format(response))
 
     def post(self, url, data=None, proxy=None, **kwargs):
         if proxy:
@@ -51,4 +51,4 @@ class HTTPClient(object):
         if response.status_code == 200:
             return response.content
         else:
-            print(("请求失败。{0}".format(response)))
+            print("请求失败。{0}".format(response))

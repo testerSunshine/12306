@@ -1,7 +1,7 @@
 #encoding=utf8
 import socket
-import urllib.request, urllib.parse, urllib.error
-import urllib.request, urllib.error, urllib.parse
+import urllib
+import urllib2
 from bs4 import BeautifulSoup
 
 
@@ -21,8 +21,8 @@ class proxy:
 
         for i in range(1, 5):
             url = 'http://www.xicidaili.com/nn/'+str(i)
-            req = urllib.request.Request(url, headers=header)
-            res = urllib.request.urlopen(req).read()
+            req = urllib2.Request(url, headers=header)
+            res = urllib2.urlopen(req).read()
 
             soup = BeautifulSoup(res, "html.parser")
             ips = soup.findAll('tr')
@@ -45,15 +45,15 @@ class proxy:
         for proxy in self.proxy_list:
             proxy_temp = {"http://": proxy}
             try:
-                urllib.request.urlopen(url, proxies=proxy_temp).read()
+                urllib.urlopen(url, proxies=proxy_temp).read()
                 write_proxy = proxy+"\n"
                 f.write(write_proxy)
                 proxy_num += 1
-            except Exception as e:
-                print(("代理链接超时，去除此IP：{0}".format(proxy)))
-                print(e)
+            except Exception, e:
+                print ("代理链接超时，去除此IP：{0}".format(proxy))
+                print e
                 continue
-        print(("总共可使用ip量为{}个".format(proxy_num)))
+        print("总共可使用ip量为{}个".format(proxy_num))
 
     def get_filter_proxy(self):
         """

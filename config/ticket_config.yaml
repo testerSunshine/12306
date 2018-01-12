@@ -23,9 +23,10 @@
 #damatu：打码兔账号，用于自动登录
 #is_aotu_code是否自动打码，如果选择Ture,则调用打码兔打码，默认不使用打码兔
 set:
-  station_date: "2018-02-09"
+  station_date: "2018-02-10"
   station_trains:
-    - "K575"
+    - "T17"
+    - "T297"
 #    - "G2365"
 #    - "G1371"
 #    - "G1377"
@@ -36,13 +37,14 @@ set:
 #    - "G1373"
 #    - "G1363"
 #    - "G4933"
-  from_station: "上海"
-  to_station: "邵阳"
+  from_station: "北京"
+  to_station: "牡丹江"
   set_type:
     - "硬卧"
   is_more_ticket: True
   ticke_peoples:
-    - "文贤平"
+    - "彭淑杰"
+    - "金宏博"
   12306count:
 #    - uesr: "13828728396"
 #    - pwd: "649823049lilymin"

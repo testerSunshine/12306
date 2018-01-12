@@ -3,6 +3,7 @@ __author__ = 'MR.wen'
 
 import os
 import yaml
+import codecs
 
 
 def _get_yaml():
@@ -11,7 +12,7 @@ def _get_yaml():
     :return: s  字典
     """
     path = os.path.join(os.path.dirname(__file__) + '/ticket_config.yaml')
-    f = open(path)
+    f = codecs.open(path,encoding='utf-8')
     s = yaml.load(f)
     f.close()
     return s

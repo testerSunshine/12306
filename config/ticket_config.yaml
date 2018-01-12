@@ -46,9 +46,9 @@ set:
     - "彭淑杰"
     - "金宏博"
   12306count:
-#    - uesr: "13828728396"
+#    - uesr: ""
 #    - pwd: "649823049lilymin"
-    - uesr: "931128603@qq.com"
+    - uesr: "@qq.com"
     - pwd: "QWERTY"
 
 select_refresh_interval: 0.1
@@ -58,7 +58,7 @@ is_aotu_code: False
 #enable_proxy: False
 
 damatu:
-  uesr: "wenxianping"
+  uesr: ""
   pwd: "wen1995"
 
 

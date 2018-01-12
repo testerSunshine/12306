@@ -42,12 +42,12 @@ set:
     - "一等座"
   is_more_ticket: True
   ticke_peoples:
-    - "肖汉飞"
+    - "test"
   12306count:
 #    - uesr: "13828728396"
 #    - pwd: "649823049lilymin"
-    - uesr: "vanglis"
-    - pwd: "fei314159"
+    - uesr: "****"
+    - pwd: "****"
 
 select_refresh_interval: 0.1
 expect_refresh_interval: 0.3

@@ -3,6 +3,7 @@ import json
 import datetime
 import random
 import re
+import socket
 import threading
 import urllib
 import sys
@@ -625,6 +626,8 @@ class select:
                 else:
                     print(e.message)
             except KeyError as e:
+                print(e.message)
+            except socket.error as e:
                 print(e.message)
 
 

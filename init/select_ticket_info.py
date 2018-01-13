@@ -448,6 +448,8 @@ class select:
             "seatDetailType": "000",   # 开始需要选择座位，但是目前12306不支持自动选择作为，那这个参数为默认
             "roomType": "00",  # 好像是根据一个id来判断选中的，两种 第一种是00，第二种是10，但是我在12306的页面没找到该id，目前写死是00，不知道会出什么错
             "dwAll": "N",
+            "whatsSelect": 1,
+            "_json_at": None,
             "REPEAT_SUBMIT_TOKEN": self.get_token(),
         }
         try:
@@ -478,6 +480,7 @@ class select:
                 else:
                     print("不需要验证码")
                     break
+            print("".join(data))
             checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}

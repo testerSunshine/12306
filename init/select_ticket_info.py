@@ -627,6 +627,8 @@ class select:
                     print(e.message)
             except KeyError as e:
                 print(e.message)
+            except TabError as e:
+                print(e.message)
             except socket.error as e:
                 print(e.message)
 

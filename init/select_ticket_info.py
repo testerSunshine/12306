@@ -24,8 +24,8 @@ import codecs
 
 
 class select:
-    def __init__(self):
-        self.from_station, self.to_station, self.station_date, self._station_seat, self.is_more_ticket, self.ticke_peoples, self.select_refresh_interval, self.station_trains, self.expect_refresh_interval, self.ticket_black_list_time = self.get_ticket_info()
+    def __init__(self,ticket_config):
+        self.from_station, self.to_station, self.station_date, self._station_seat, self.is_more_ticket, self.ticke_peoples, self.select_refresh_interval, self.station_trains, self.expect_refresh_interval, self.ticket_black_list_time = self.get_ticket_info(ticket_config)
         self.order_request_params = {}  # 订单提交时的参数
         self.ticketInfoForPassengerForm = {}  # 初始化当前页面参数
         self.current_seats = {}  # 席别信息
@@ -34,13 +34,14 @@ class select:
         self.user_info = ""
         self.secretStr = ""
         self.ticket_black_list = dict()
+        self.ticket_config = ticket_config
 
-    def get_ticket_info(self):
+    def get_ticket_info(self,ticket_config):
         """
         获取配置信息
         :return:
         """
-        ticket_info_config = _get_yaml()
+        ticket_info_config = _get_yaml(ticket_config)
         from_station = ticket_info_config["set"]["from_station"]
         to_station = ticket_info_config["set"]["to_station"]
         station_date = ticket_info_config["set"]["station_date"]

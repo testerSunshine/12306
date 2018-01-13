@@ -1,10 +1,14 @@
 # -*- coding=utf-8 -*-
 
 from init import login, select_ticket_info
+from concurrent.futures import ThreadPoolExecutor
+
+pool = ThreadPoolExecutor(max_workers=1)
+
+def run(ticket_config):
+    login.go_login(ticket_config).login()
+    select_ticket_info.select(ticket_config).main()
 
 
-def run():
-    login.main()
-    select_ticket_info.select().main()
 
-run()
+f1 = pool.submit(run("ticket_config.yaml"))

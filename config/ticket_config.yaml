@@ -25,8 +25,7 @@
 set:
   station_date: "2018-02-10"
   station_trains:
-    - "T17"
-    - "T297"
+    - "G1970"
 #    - "G2365"
 #    - "G1371"
 #    - "G1377"
@@ -43,13 +42,14 @@ set:
     - "硬卧"
   is_more_ticket: True
   ticke_peoples:
-    - ""
+    - "肖汉飞"
     - ""
   12306count:
 #    - uesr: "11"
 #    - pwd: "649823049lilymin"
-    - uesr: "@qq.com"
-    - pwd: "QWERTY"
+    - uesr: "vanglis"
+    - pwd: "fei314159"
+
 
 select_refresh_interval: 0.1
 expect_refresh_interval: 0.3
@@ -58,7 +58,7 @@ is_aotu_code: False
 #enable_proxy: False
 
 damatu:
-  uesr: ""
+  uesr: "wenxianping"
   pwd: "wen1995"
 
 

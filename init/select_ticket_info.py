@@ -10,6 +10,7 @@ import sys
 import time
 from collections import OrderedDict
 
+from config.emailConf import sendEmail
 from config.ticketConf import _get_yaml
 from damatuCode.damatuWeb import DamatuApi
 from myException.PassengerUserException import PassengerUserException
@@ -457,7 +458,7 @@ class select:
                 if is_node_code:
                     print("正在使用自动识别验证码功能")
                     randurl = 'https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn'
-                    codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=passenger&rand=sjrand&%s' % random.random()
+                    codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=passenger&rand=randp&%s' % random.random()
                     result = myurllib2.get(codeimg)
                     img_path = './tkcode'
                     open(img_path, 'wb').write(result)
@@ -471,16 +472,16 @@ class select:
                     }
                     fresult = json.loads(myurllib2.Post(randurl, randData), encoding='utf8')  # 校验验证码是否正确
                     checkcode = fresult['data']['msg']
-                    if checkcode == 'FALSE':
-                        print ("验证码有误,第{}次尝试重试".format(i))
-                    else:
+                    if checkcode == 'TRUE':
                         print("验证码通过,正在提交订单")
                         data['randCode'] = randCode
                         break
+                    else:
+                        print ("验证码有误, 接口返回{0} 第{1}次尝试重试".format(fresult, i))
                 else:
                     print("不需要验证码")
                     break
-            print("".join(data))
+            # print("".join(data))
             checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
@@ -526,6 +527,7 @@ class select:
             if queryOrderWaitTimeResult:
                 if "status" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["status"]:
                     if "orderId" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["orderId"] is not None:
+                            sendEmail("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(queryOrderWaitTimeResult["data"]["orderId"]))
                             raise ticketIsExitsException("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(queryOrderWaitTimeResult["data"]["orderId"]))
                     elif "msg" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["msg"]:
                         print queryOrderWaitTimeResult["data"]["msg"]
@@ -540,10 +542,12 @@ class select:
                     print("第{}次排队中,请耐心等待".format(num))
             else:
                 print("排队中")
-            time.sleep(2)
+            time.sleep(1)
         order_id = self.queryMyOrderNoComplete()  # 尝试查看订单列表，如果有订单，则判断成功，不过一般可能性不大
         if order_id:
+            sendEmail("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(order_id))
             raise ticketIsExitsException("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(order_id))
+
         else:
             print(ticketNumOutException("订单提交失败！,正在重新刷票"))
 

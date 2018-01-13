@@ -74,3 +74,15 @@
 - 2018.1.12更新
     - 优化抢票页面逻辑
     -增强代码稳定性
+
+- 2018.1.13更新
+    - 修改下单验证码功能
+    - 增加邮箱功能
+    ```
+    #is_email: 是否需要邮件通知 ex: True or False 切记，邮箱加完一定要到config目录下测试emailConf功能是否正常
+    #email: 发送的邮箱地址 ex: 1@qq.com
+    #notice_email_list: 被通知人邮箱 ex: 2@qq.com
+    #username: 邮箱账号
+    #password: 邮箱密码
+    #host: 邮箱地址
+    ```

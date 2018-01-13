@@ -176,25 +176,13 @@ class select:
                 print("未查找到常用联系人")
                 raise PassengerUserException("未查找到常用联系人,请先添加联系人在试试")
 
-    def leftTicketLog(self, from_station, to_station):
-        """
-        模拟进入车次列表页
-        :param from_station:
-        :param to_station:
-        :return:
-        """
-        leftTicketLogUrl = 'https://kyfw.12306.cn/otn/leftTicket/log?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT'.format(
-            self.station_date, from_station, to_station)
-        leftTicketLog = json.loads(myurllib2.get(leftTicketLogUrl), encoding='utf-8')
-        if "status" in leftTicketLog and leftTicketLog["status"] is True:
-            return True
-        else:
-            if "message" in leftTicketLog and leftTicketLog["message"]:
-                print leftTicketLog["message"]
-            elif "validateMessages" in leftTicketLog and leftTicketLog["validateMessages"]:
-                print leftTicketLog["validateMessages"]
+    def submitOrderRequestFunc(self, from_station, to_station, station_date=None):
+        select_url = 'https://kyfw.12306.cn/otn/leftTicket/queryZ?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT'.format(
+            self.station_date if station_date is None else station_date, from_station, to_station)
+        station_ticket = json.loads(myurllib2.get(select_url), encoding='utf-8')
+        return station_ticket
 
-    def submitOrderRequest(self, from_station, to_station):
+    def submitOrderRequestImplement(self, from_station, to_station,):
         """
         提交车次信息
         车次对应字典
@@ -209,8 +197,7 @@ class select:
         } 参照station_seat()方法
         :return:
         """
-        select_url = 'https://kyfw.12306.cn/otn/leftTicket/queryZ?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT'.format(self.station_date, from_station, to_station)
-        station_ticket = json.loads(myurllib2.get(select_url), encoding='utf-8')
+        station_ticket = self.submitOrderRequestFunc(from_station, to_station)
         value = station_ticket['data']
         if not value:
             print ('{0}-{1} 车次坐席查询为空...'.format(self.from_station, self.to_station))
@@ -233,6 +220,7 @@ class select:
                                     break
                                 else:
                                     print ('正在尝试提交订票...')
+                                    self.submitOrderRequestFunc(from_station, to_station, self.time())
                                     if self.check_user():
                                         self.submit_station()
                                         self.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
@@ -393,13 +381,11 @@ class select:
         :param token:
         :return:
         """
-        old_train_date = self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['train_date']+"00:00:00"  # 模仿12306格式 Sun May 21 2017 00:00:00 GMT+0800 (中国标准时间)
-        m_time = time.mktime(time.strptime(old_train_date, "%Y%m%d%H:%M:%S"))
-        l_time = time.localtime(m_time)
-        new_train_date = time.strftime("%a %b %d %Y %H:%M:%S", l_time)
+        l_time = time.localtime(time.time())
+        new_train_date = time.strftime("%a %b %d %Y", l_time)
         getQueueCountUrl = 'https://kyfw.12306.cn/otn/confirmPassenger/getQueueCount'
         data = {
-            'train_date': new_train_date,
+            'train_date': str(new_train_date) + " 00:00:00 GMT+0800 (CST)",
             'train_no': self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['train_no'],
             'stationTrainCode':	self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['station_train_code'],
             'seatType':	self.set_type,
@@ -547,7 +533,7 @@ class select:
                 elif "messages" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["messages"]:
                     print("排队等待失败： " + queryOrderWaitTimeResult["messages"])
                 else:
-                    print("第{}排队中,请耐心等待".format(num))
+                    print("第{}次排队中,请耐心等待".format(num))
             else:
                 print("排队中")
             time.sleep(2)
@@ -609,37 +595,37 @@ class select:
 
     def main(self):
         from_station, to_station = self.station_table(self.from_station, self.to_station)
-        if self.leftTicketLog(from_station, to_station):
-            num = 1
-            while 1:
-                try:
-                    num += 1
-                    time.sleep(self.select_refresh_interval)
-                    if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
-                        print "12306休息时间，本程序自动停止,明天早上七点运行"
-                        break
-                    start_time = datetime.datetime.now()
-                    self.submitOrderRequest(from_station, to_station)
-                    print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(self.station_trains), (datetime.datetime.now()-start_time).microseconds/1000)
-                except PassengerUserException as e:
-                    print e.message
+        # if self.leftTicketLog(from_station, to_station):
+        num = 1
+        while 1:
+            try:
+                num += 1
+                time.sleep(self.select_refresh_interval)
+                if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
+                    print "12306休息时间，本程序自动停止,明天早上七点运行"
                     break
-                except ticketConfigException as e:
-                    print e.message
-                    break
-                except ticketIsExitsException as e:
-                    print e.message
-                    break
-                except ticketNumOutException as e:
-                    print e.message
-                    break
-                except ValueError as e:
-                    if e.message == "No JSON object could be decoded":
-                        print("12306接口无响应，正在重试")
-                    else:
-                        print(e.message)
-                except KeyError as e:
+                start_time = datetime.datetime.now()
+                self.submitOrderRequestImplement(from_station, to_station)
+                print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(self.station_trains), (datetime.datetime.now()-start_time).microseconds/1000)
+            except PassengerUserException as e:
+                print e.message
+                break
+            except ticketConfigException as e:
+                print e.message
+                break
+            except ticketIsExitsException as e:
+                print e.message
+                break
+            except ticketNumOutException as e:
+                print e.message
+                break
+            except ValueError as e:
+                if e.message == "No JSON object could be decoded":
+                    print("12306接口无响应，正在重试")
+                else:
                     print(e.message)
+            except KeyError as e:
+                print(e.message)
 
 
 # class selectProducer(threading.Thread):

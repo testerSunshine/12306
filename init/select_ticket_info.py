@@ -227,7 +227,8 @@ class select:
                                         self.submit_station()
                                         self.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
                                         self.getRepeatSubmitToken()
-                                        self.user_info = self.getPassengerDTOs()
+                                        if not self.user_info:  # 修改每次都调用用户接口导致用户接口不能用
+                                            self.user_info = self.getPassengerDTOs()
                                         if self.checkOrderInfo(train_no, self._station_seat[j].encode("utf8")):
                                                 break
                             else:

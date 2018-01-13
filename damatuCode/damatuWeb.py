@@ -124,4 +124,3 @@ class DamatuApi():
 # print(dmt.decode('tkcode', 287))  # 上传打码
 # # print(dmt.decodeUrl('https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand&0.7586344633015405', 310))  # 上传打码
 # # print(dmt.reportError('894657096')) # 上报错误
-

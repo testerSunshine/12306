@@ -533,7 +533,7 @@ class select:
                 elif "messages" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["messages"]:
                     print("排队等待失败： " + queryOrderWaitTimeResult["messages"])
                 else:
-                    print("第{}排队中,请耐心等待".format(num))
+                    print("第{}次排队中,请耐心等待".format(num))
             else:
                 print("排队中")
             time.sleep(2)

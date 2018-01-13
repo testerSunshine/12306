@@ -42,13 +42,13 @@ set:
     - "硬卧"
   is_more_ticket: True
   ticke_peoples:
-    - "肖汉飞"
+    - "xxx"
     - ""
   12306count:
 #    - uesr: "11"
 #    - pwd: "649823049lilymin"
-    - uesr: "vanglis"
-    - pwd: "fei314159"
+    - uesr: "*"
+    - pwd: "***"
 
 
 select_refresh_interval: 0.1
@@ -58,7 +58,7 @@ is_aotu_code: False
 #enable_proxy: False
 
 damatu:
-  uesr: "wenxianping"
+  uesr: "***"
   pwd: "wen1995"
 
 

@@ -9,10 +9,12 @@ import urllib
 import sys
 import time
 from collections import OrderedDict
+from init import login
 
 from config.emailConf import sendEmail
 from config.ticketConf import _get_yaml
 from damatuCode.damatuWeb import DamatuApi
+from init.login import login
 from myException.PassengerUserException import PassengerUserException
 from myException.ticketConfigException import ticketConfigException
 from myException.ticketIsExitsException import ticketIsExitsException
@@ -611,8 +613,9 @@ class select:
                 num += 1
                 time.sleep(self.select_refresh_interval)
                 if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
-                    print "12306休息时间，本程序自动停止,明天早上七点运行"
-                    break
+                    print "12306休息时间，本程序自动停止,明天早上七点将自动运行"
+                    time.sleep(28800)
+                    login.main()   # 重新登录
                 start_time = datetime.datetime.now()
                 self.submitOrderRequestImplement(from_station, to_station)
                 print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(self.station_trains), (datetime.datetime.now()-start_time).microseconds/1000)

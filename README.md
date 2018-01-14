@@ -3,9 +3,54 @@
 - python版本支持
   - 2.7
 - 依赖库
-  - 依赖打码兔 需要去打码兔注册账号，打码兔账号地址：http://www.dama2.com，一般充值1元就够用了
+  - 依赖打码兔 需要去打码兔注册（用户）账号，打码兔账号地址：http://www.dama2.com，一般充值1元就够用了，充值打码兔之后，首次运行是需要到官网黑白名单授权
   - 项目依赖包 requirements.txt
   - 安装方法 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+
+- 项目使用说明
+  - 需要配置邮箱，可以配置可以不配置，配置邮箱的格式在yaml里面可以看到ex
+  - 提交订单验证码哪里依赖打码兔，所以如果是订票遇到验证码的时候，没有打码兔是过不了的，不推荐手动，手动太慢
+  - 配置yaml文件的时候，需注意空格和遵循yaml语法格式，项目的yaml配置ex：
+      - ticket_config.yaml 配置说明
+        ```
+        #station_date:出发日期，格式ex：2018-01-06
+        #station_trains:过滤车次，格式ex：
+                        #    - "G1353"
+                        #    - "G1329"
+                        #    - "G1355"
+                        #    - "G1303"
+                        #    - "G1357"
+                        #    - "G1305"
+                        #    - "G1359"
+                        #    - "G1361"
+                        #    - "G1373"
+                        #    - "G1363"
+        #from_station: 始发站
+        #to_station: 到达站
+        #set_type: 坐席(商务座,二等座,特等座,软卧,硬卧,硬座,无座)
+        #is_more_ticket:余票不足是否自动提交
+        #select_refresh_interval:抢票刷新间隔时间，1为一秒，0.1为100毫秒，以此类推 如果捡漏推荐为1秒，刷票设置0.01
+        #expect_refresh_interval:售票未开始，等待刷新间隔时间，1为一秒，0.1为100毫秒，以此类推
+        #ticket_black_list:加入小黑屋的等待时间，默认3 min    小黑屋的功能是上次买票失败，证明此票已无机会，下次刷新看到此票跳过
+        #enable_proxy:是否开启代理模式，代理速度比较慢，如果是抢票阶段，不建议开启
+        #ticke_peoples: 乘客 ex: "张三"
+        #damatu：打码兔账号，用于自动登录和订单自动打码
+        #is_aotu_code是否自动打码，如果选择Ture,则调用打码兔打码，默认不使用打码兔
+        #is_email: 是否需要邮件通知 ex: True or False 切记，邮箱加完一定到config目录下测试emailConf功能是否正常
+
+        #邮箱配置 列举163
+        #  email: "xxx@163.com"
+        #  notice_email_list: "123@qq.com"
+        #  username: "xxxxx"
+        #  password: "xxxxx
+        #  host: "smtp.163.com"
+        #邮箱配置 列举qq  ，qq设置比较复杂，需要在邮箱--账户--开启smtp服务，取得授权码==邮箱登录密码
+        #  email: "xxx@qq.com"
+        #  notice_email_list: "123@qq.com"
+        #  username: "xxxxx"
+        #  password: "授权码"
+        #  host: "smtp.qq.com"
+        ```
 
 - 项目开始
   - 修改config/ticket_config.yaml文件，按照提示更改自己想要的信息

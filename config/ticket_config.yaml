@@ -41,29 +41,29 @@
 set:
   station_date: "2018-02-12"
   station_trains:
-    - "G4741"
-    - "G2365"
-    - "G1371"
     - "G1377"
-    - "G1329"
+#    - "K4300"
+#    - "K5226"
+#    - "K7772"
+#    - "G1329"
 #    - "G1359"
 #    - "G1361"
 #    - "G1373"
 #    - "G1363"
 #    - "G4933"
-  from_station: "上海"
-  to_station: "邵阳"
+  from_station: "昆山"
+  to_station: "长沙"
   set_type:
     - "二等座"
   is_more_ticket: True
   ticke_peoples:
-    - "文贤平"
+    - "宋倩倩"
 #    - "彭淑杰"
   12306count:
 #    - uesr: ""
 #    - pwd: "apple1995"
-    - uesr: "931128603@qq.com"
-    - pwd: "QWERTY"
+    - uesr: ""
+    - pwd: "songyu1995"
 
 select_refresh_interval: 0.1
 expect_refresh_interval: 0.3
@@ -72,11 +72,11 @@ is_aotu_code: False
 #enable_proxy: False
 
 damatu:
-  uesr: ""
+  uesr: "wenxianping"
   pwd: "wen1995"
 
 email_conf:
-  is_email: True
+  is_email: False
   email: "@qq.com "
   notice_email_list: "@qq.com"
   username: ""

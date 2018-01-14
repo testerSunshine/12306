@@ -28,7 +28,7 @@ def sendEmail(msg):
         msg['From'] = sender
         msg['To'] = receiver
 
-        smtp = smtplib.SMTP()
+        smtp = smtplib.SMTP_SSL()
         smtp.connect(host)
         smtp.login(username, password)
         smtp.sendmail(sender, receiver.split(","), msg.as_string())

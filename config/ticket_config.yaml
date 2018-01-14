@@ -22,40 +22,48 @@
 #ticke_peoples: 乘客
 #damatu：打码兔账号，用于自动登录
 #is_aotu_code是否自动打码，如果选择Ture,则调用打码兔打码，默认不使用打码兔
-#is_email: 是否需要邮件通知 ex: True or False 切记，邮箱加完一定要到config目录下测试emailConf功能是否正常
-#email: 发送的邮箱地址 ex: 1@qq.com
-#notice_email_list: 被通知人邮箱 ex: 2@qq.com
-#username: 邮箱账号
-#password: 邮箱密码
-#host: 邮箱地址
+#is_email: 是否需要邮件通知 ex: True or False 切记，邮箱加完一定到config目录下测试emailConf功能是否正常
+
+#邮箱配置 列举163
+#  email: "xxx@163.com"
+#  notice_email_list: "123@qq.com"
+#  username: "xxxxx"
+#  password: "xxxxx
+#  host: "smtp.163.com"
+#邮箱配置 列举qq  ，qq设置比较复杂，需要在邮箱--账户--开启smtp服务，取得授权码==邮箱登录密码
+#  email: "xxx@qq.com"
+#  notice_email_list: "123@qq.com"
+#  username: "xxxxx"
+#  password: "授权码"
+#  host: "smtp.qq.com"
 
 
 set:
-  station_date: "2018-02-07"
+  station_date: "2018-02-12"
   station_trains:
     - "G4741"
     - "G2365"
     - "G1371"
     - "G1377"
-    - "G4933"
+    - "G1329"
 #    - "G1359"
 #    - "G1361"
 #    - "G1373"
 #    - "G1363"
 #    - "G4933"
   from_station: "上海"
-  to_station: "长沙"
+  to_station: "邵阳"
   set_type:
-    - "一等座"
+    - "二等座"
   is_more_ticket: True
   ticke_peoples:
-    - "宋倩倩"
+    - "文贤平"
 #    - "彭淑杰"
   12306count:
 #    - uesr: ""
 #    - pwd: "apple1995"
-    - uesr: ""
-    - pwd: "songyu1995"
+    - uesr: "931128603@qq.com"
+    - pwd: "QWERTY"
 
 select_refresh_interval: 0.1
 expect_refresh_interval: 0.3
@@ -64,16 +72,16 @@ is_aotu_code: False
 #enable_proxy: False
 
 damatu:
-  uesr: ""
+  uesr: "wenxianping"
   pwd: "wen1995"
 
 email_conf:
   is_email: True
-  email: ""
-  notice_email_list: ""
-  username: ".wen"
-  password: "!"
-  host: "mail..com"
+  email: "@qq.com "
+  notice_email_list: "@qq.com"
+  username: ""
+  password: "xwopwxbkupbqbfgb"
+  host: "smtp.qq.com"
 
 
 

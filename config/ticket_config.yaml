@@ -72,7 +72,7 @@ is_aotu_code: False
 #enable_proxy: False
 
 damatu:
-  uesr: "wenxianping"
+  uesr: ""
   pwd: "wen1995"
 
 email_conf:

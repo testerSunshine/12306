@@ -224,7 +224,7 @@ class select:
                                     break
                                 else:
                                     print ('正在尝试提交订票...')
-                                    self.submitOrderRequestFunc(from_station, to_station, self.time())
+                                    # self.submitOrderRequestFunc(from_station, to_station, self.time())
                                     if self.check_user():
                                         self.submit_station()
                                         self.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
@@ -523,8 +523,10 @@ class select:
                 print("超出排队时间，自动放弃，正在重新刷票")
                 break
             try:
-                queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime?random={0}&tourFlag=dc&_json_att=&REPEAT_SUBMIT_TOKEN={1}".format(_random, self.get_token())
-                queryOrderWaitTimeResult = json.loads(myurllib2.get(queryOrderWaitTimeUrl))
+                # queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime?random={0}&tourFlag=dc&_json_att=&REPEAT_SUBMIT_TOKEN={1}".format(_random, self.get_token())
+                data = {"random": random.random(), "tourFlag": "dc"}
+                queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime"
+                queryOrderWaitTimeResult = json.loads(myurllib2.Post(queryOrderWaitTimeUrl, data))
             except ValueError:
                 queryOrderWaitTimeResult = {}
             if queryOrderWaitTimeResult:

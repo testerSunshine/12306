@@ -390,7 +390,7 @@ class select:
         new_train_date = time.strftime("%a %b %d %Y", l_time)
         getQueueCountUrl = 'https://kyfw.12306.cn/otn/confirmPassenger/getQueueCount'
         data = {
-            'train_date': str(new_train_date) + " 00:00:00 GMT+0800 (CST)",
+            'train_date': str(new_train_date) + " 00:00:00 GMT+0800 (中国标准时间)",
             'train_no': self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['train_no'],
             'stationTrainCode':	self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['station_train_code'],
             'seatType':	self.set_type,
@@ -406,11 +406,6 @@ class select:
             if "countT" in getQueueCountResult["data"]:
                 ticket = getQueueCountResult["data"]["ticket"]
                 ticket_split = sum(map(self.conversion_int, ticket.split(","))) if ticket.find(",") != -1 else ticket
-                # ticket_sum = sum([int(ticket_split[0]),int(ticket_split[1])])
-                # if set_type == "无座":    # 修改无座和硬座的座位号提交是个字符串的问题
-                #     ticket = ticket_split[1]
-                # elif set_type == "硬座":
-                #     ticket = ticket_split[0]
                 countT = getQueueCountResult["data"]["countT"]
                 if int(countT) is 0:
                     if int(ticket_split) < len(self.user_info):
@@ -453,7 +448,7 @@ class select:
             "roomType": "00",  # 好像是根据一个id来判断选中的，两种 第一种是00，第二种是10，但是我在12306的页面没找到该id，目前写死是00，不知道会出什么错
             "dwAll": "N",
             "whatsSelect": 1,
-            "_json_at": None,
+            "_json_at": "",
             "REPEAT_SUBMIT_TOKEN": self.get_token(),
         }
         try:
@@ -524,7 +519,7 @@ class select:
                 break
             try:
                 # queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime?random={0}&tourFlag=dc&_json_att=&REPEAT_SUBMIT_TOKEN={1}".format(_random, self.get_token())
-                data = {"random": random.random(), "tourFlag": "dc"}
+                data = {"random": _random, "tourFlag": "dc"}
                 queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime"
                 queryOrderWaitTimeResult = json.loads(myurllib2.Post(queryOrderWaitTimeUrl, data))
             except ValueError:
@@ -646,26 +641,7 @@ class select:
                 print(e.message)
 
 
-# class selectProducer(threading.Thread):
-#     """刷票队列"""
-#     def __init__(self,  t_name, queue):
-#         threading.Thread.__init__(self, name=t_name)
-#         self.data = queue
-#         print "{0} 正在运行".format(t_name)
-#
-#     def run(self):
-#         pass
-#
-#
-# class submitOrderConsumer(threading.Thread):
-#     """订单队列"""
-#     def __init__(self,  t_name, queue):
-#         threading.Thread.__init__(self, name=t_name)
-#         self.data = queue
-#         print "{0} 正在运行".format(t_name)
-#
-#     def run(self):
-#         pass
+
 
 
 if __name__ == '__main__':

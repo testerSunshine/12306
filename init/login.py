@@ -3,6 +3,7 @@
 import random
 import json
 import re
+import socket
 from time import sleep
 
 from config.ticketConf import _get_yaml
@@ -111,13 +112,14 @@ def codexy():
     randCode = str(post).replace(']', '').replace('[', '').replace("'", '').replace(' ', '')
 
 
-def login(user, passwd):
+def go_login():
     """
     登陆
     :param user: 账户名
     :param passwd: 密码
     :return: 
     """
+    user, passwd = _get_yaml()["set"]["12306count"][0]["uesr"], _get_yaml()["set"]["12306count"][1]["pwd"]
     login_num = 0
     while True:
         cookietp()
@@ -166,7 +168,16 @@ def login(user, passwd):
                     getUserinfo()
                     break
             except ValueError as e:
-                errorinput(e)
+                if e.message == "No JSON object could be decoded":
+                    print("12306接口无响应，正在重试")
+                else:
+                    print(e.message)
+            except KeyError as e:
+                print(e.message)
+            except TypeError as e:
+                print(e.message)
+            except socket.error as e:
+                print(e.message)
         sleep(1)
 
 
@@ -184,10 +195,6 @@ def getUserinfo():
         stoidinput("欢迎 %s 登录" % re.search(name, result).group(1))
     except AttributeError:
         pass
-
-
-def main():
-    login(_get_yaml()["set"]["12306count"][0]["uesr"], _get_yaml()["set"]["12306count"][1]["pwd"])
 
 
 def logout():

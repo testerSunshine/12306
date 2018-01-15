@@ -20,9 +20,9 @@ def get(url):
         request = urllib2.Request(url=url)
         request.add_header("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
         request.add_header('X-Requested-With', 'xmlHttpRequest')
-        request.add_header('User-Agent',
-                           'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36')
-        request.add_header('Referer', 'https://kyfw.12306.cn/otn/login/init')
+        request.add_header('User-Agent', "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+                           )
+        request.add_header('Referer', 'https://kyfw.12306.cn/otn/confirmPassenger/initDc')
         request.add_header('Accept', '*/*')
         result = urllib2.urlopen(request).read()
         assert isinstance(result, object)
@@ -44,9 +44,9 @@ def Post(url, data):
         # request = urllib2Post.Request(ajax_url, urllib.urlencode(dc))
         request.add_header("Content-Type", "application/x-www-form-urlencoded;application/json;charset=utf-8")
         request.add_header('X-Requested-With', 'xmlHttpRequest')
-        request.add_header('User-Agent',
-                           'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36')
-        request.add_header('Referer', 'https://kyfw.12306.cn/otn/login/init')
+        request.add_header('User-Agent', "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+                           )
+        request.add_header('Referer', 'https://kyfw.12306.cn/otn/confirmPassenger/initDc')
         request.add_header('Accept', '*/*')
         # request.add_header('Accept-Encoding', 'gzip, deflate')
         for i in range(3):

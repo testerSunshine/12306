@@ -14,7 +14,7 @@ from init import login
 from config.emailConf import sendEmail
 from config.ticketConf import _get_yaml
 from damatuCode.damatuWeb import DamatuApi
-from init.login import login
+from init.login import go_login
 from myException.PassengerUserException import PassengerUserException
 from myException.ticketConfigException import ticketConfigException
 from myException.ticketIsExitsException import ticketIsExitsException
@@ -36,6 +36,7 @@ class select:
         self.user_info = ""
         self.secretStr = ""
         self.ticket_black_list = dict()
+        self.is_check_user = dict()
 
     def get_ticket_info(self):
         """
@@ -225,14 +226,13 @@ class select:
                                 else:
                                     print ('正在尝试提交订票...')
                                     # self.submitOrderRequestFunc(from_station, to_station, self.time())
-                                    if self.check_user():
-                                        self.submit_station()
-                                        self.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
-                                        self.getRepeatSubmitToken()
-                                        if not self.user_info:  # 修改每次都调用用户接口导致用户接口不能用
-                                            self.user_info = self.getPassengerDTOs()
-                                        if self.checkOrderInfo(train_no, self._station_seat[j].encode("utf8")):
-                                                break
+                                    self.submit_station()
+                                    self.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
+                                    self.getRepeatSubmitToken()
+                                    if not self.user_info:  # 修改每次都调用用户接口导致用户接口不能用
+                                        self.user_info = self.getPassengerDTOs()
+                                    if self.checkOrderInfo(train_no, self._station_seat[j].encode("utf8")):
+                                            break
                             else:
                                 pass
                     else:
@@ -251,13 +251,18 @@ class select:
         check_user = json.loads(myurllib2.Post(check_user_url, data), encoding='utf-8')
         check_user_flag = check_user['data']['flag']
         if check_user_flag is True:
-            print ('尝试提交订单...')
             return True
         else:
             if check_user['messages']:
                 print ('用户检查失败：%s，可能未登录，可能session已经失效' % check_user['messages'][0])
+                print ('正在尝试重新登录')
+                self.call_login()
+                self.is_check_user["user_time"] = datetime.datetime.now()
             else:
                 print ('用户检查失败： %s，可能未登录，可能session已经失效' % check_user)
+                print ('正在尝试重新登录')
+                self.call_login()
+                self.is_check_user["user_time"] = datetime.datetime.now()
 
     def submit_station(self):
         """
@@ -601,18 +606,26 @@ class select:
     #     else:
     #         self.submitOrderRequest()
 
+    def call_login(self):
+        """登录回调方法"""
+        go_login()
+
     def main(self):
+        self.call_login()
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         # if self.leftTicketLog(from_station, to_station):
         num = 1
         while 1:
             try:
                 num += 1
+                if "user_time" in self.is_check_user and (datetime.datetime.now() - self.is_check_user["user_time"]).seconds/60 > 10:
+                    # 十分钟调用一次检查用户是否登录
+                    self.check_user()
                 time.sleep(self.select_refresh_interval)
                 if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
-                    print "12306休息时间，本程序自动停止,明天早上七点将自动运行"
-                    time.sleep(28800)
-                    login.main()   # 重新登录
+                    print "12306休息时间，本程序自动停止,明天早上6点将自动运行"
+                    time.sleep(60 * 60 * 7)
+                    self.call_login()
                 start_time = datetime.datetime.now()
                 self.submitOrderRequestImplement(from_station, to_station)
                 print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(self.station_trains), (datetime.datetime.now()-start_time).microseconds/1000)
@@ -643,7 +656,7 @@ class select:
 
 
 
-
 if __name__ == '__main__':
-    a = select('上海', '北京')
-    a.main()
+    login()
+    # a = select('上海', '北京')
+    # a.main()

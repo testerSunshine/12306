@@ -18,7 +18,8 @@ class go_login:
         self.text = ""
         self.user = _get_yaml(ticket_config)["set"]["12306count"][0]["uesr"]
         self.passwd = _get_yaml(ticket_config)["set"]["12306count"][1]["pwd"]
-        #self.randCode = ""
+        self.randCode = self.readImg()
+
 
 
     def cookietp(self):
@@ -39,14 +40,16 @@ class go_login:
         :return:
         """
 
-        global randCode
+        #global randCode
         self.stoidinput("下载验证码...")
         img_path = './tkcode'
         result = myurllib2.get(self.codeimg)
+        #print(result)
         try:
             open(img_path, 'wb').write(result)
             if _get_yaml(self.ticket_config)["is_aotu_code"]:
-                randCode = DamatuApi(_get_yaml(ticket_config)["damatu"]["uesr"], _get_yaml(ticket_config)["damatu"]["pwd"], img_path).main()
+                #print(_get_yaml(self.ticket_config)["damatu"]["uesr"])
+                randCode = DamatuApi(_get_yaml(self.ticket_config)["damatu"]["uesr"], _get_yaml(self.ticket_config)["damatu"]["pwd"], img_path).main()
             else:
                 img = Image.open('./tkcode')
                 img.show()
@@ -54,6 +57,7 @@ class go_login:
         except OSError as e:
             print (e)
             pass
+        return randCode
 
 
     def stoidinput(self,text):
@@ -130,7 +134,7 @@ class go_login:
         login_num = 0
         while True:
             self.cookietp()
-            self.readImg()
+            #self.readImg()
             login_num += 1
             randurl = 'https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn'
             logurl = 'https://kyfw.12306.cn/otn/login/loginAysnSuggest'
@@ -144,7 +148,6 @@ class go_login:
             ldata = {
                 "_json_att": None
             }
-            print(randdata)
             fresult = json.loads(myurllib2.Post(randurl, randdata), encoding='utf8')
             checkcode = fresult['data']['msg']
             if checkcode == 'FALSE':

@@ -28,7 +28,7 @@ class DamatuApi():
         self.file_path = file_path
 
     def getSign(self, param=b''):
-        return (md5(bytes(self.KEY) + bytes(self.username) + param))[:8]
+        return (md5(self.KEY.encode(encoding="utf-8") + self.username.encode(encoding="utf-8") + param))[:8]
 
     def getPwd(self):
         return md5str(self.KEY + md5str(md5str(self.username) + md5str(self.password)))
@@ -47,7 +47,7 @@ class DamatuApi():
                 'sign': self.getSign()
                 }
         res = self.post('d2Balance', data)
-        res = str(res)
+        res = res.decode(encoding="utf-8")
         jres = json.loads(res)
         if jres['ret'] == 0:
             return jres['balance']
@@ -68,7 +68,7 @@ class DamatuApi():
                 'sign': self.getSign(fdata)
                 }
         res = self.post('d2File', data)
-        res = str(res)
+        res = res.decode(encoding='utf-8')
         jres = json.loads(res)
         if jres['ret'] == 0:
             # 注意这个json里面有ret，id，result，cookie，根据自己的需要获取
@@ -124,4 +124,3 @@ class DamatuApi():
 # print(dmt.decode('tkcode', 287))  # 上传打码
 # # print(dmt.decodeUrl('https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand&0.7586344633015405', 310))  # 上传打码
 # # print(dmt.reportError('894657096')) # 上报错误
-

@@ -14,7 +14,6 @@ from init import login
 from config.emailConf import email
 from config.ticketConf import _get_yaml
 from damatuCode.damatuWeb import DamatuApi
-#from init.login import login
 from myException.PassengerUserException import PassengerUserException
 from myException.ticketConfigException import ticketConfigException
 from myException.ticketIsExitsException import ticketIsExitsException
@@ -35,6 +34,7 @@ class select:
         self.user_info = ""
         self.secretStr = ""
         self.ticket_black_list = dict()
+        self.is_check_user = dict()
         self.ticket_config = ticket_config
 
     def get_ticket_info(self,ticket_config):
@@ -129,7 +129,6 @@ class select:
         """
         today = datetime.date.today()
         tomorrow = today+datetime.timedelta(1)
-        #print(tomorrow.strftime('%Y-%m-%d'))
         return tomorrow.strftime('%Y-%m-%d')
 
     def getRepeatSubmitToken(self):
@@ -174,9 +173,9 @@ class select:
             return _normal_passenger if _normal_passenger else normal_passengers[0]  # 如果配置乘车人没有在账号，则默认返回第一个用户
         else:
             if 'data' in jsonData and 'exMsg' in jsonData['data'] and jsonData['data']['exMsg']:
-                print((jsonData['data']['exMsg']))
+                print(jsonData['data']['exMsg'])
             elif 'messages' in jsonData and jsonData['messages']:
-                print((jsonData['messages'][0]))
+                print(jsonData['messages'][0])
             else:
                 print("未查找到常用联系人")
                 raise PassengerUserException("未查找到常用联系人,请先添加联系人在试试")
@@ -225,22 +224,21 @@ class select:
                                 # tiket_values = [k for k in value['map'].values()]
                                 self.secretStr = ticket_info[0]
                                 train_no = ticket_info[3]
-                                print(('车次: ' + train_no + ' 始发车站: ' + self.from_station + ' 终点站: ' +
-                                       self.to_station + ' ' + self._station_seat[j] + ':' + ticket_info[self.station_seat(self._station_seat[j])]))
-                                if train_no in self.ticket_black_list and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds/60 < int(self.ticket_black_list_time):
-                                    print(("该车次{} 正在被关小黑屋，跳过此车次".format(train_no)))
+                                print ('车次: ' + train_no + ' 始发车站: ' + self.from_station + ' 终点站: ' +
+                                       self.to_station + ' ' + self._station_seat[j] + ':' + ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))])
+                                if self.ticket_black_list.has_key(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds/60 < int(self.ticket_black_list_time):
+                                    print("该车次{} 正在被关小黑屋，跳过此车次".format(train_no))
                                     break
                                 else:
                                     print ('正在尝试提交订票...')
-                                    self.submitOrderRequestFunc(from_station, to_station, self.time())
-                                    if self.check_user():
-                                        self.submit_station()
-                                        self.getPassengerTicketStr(self._station_seat[j])
-                                        self.getRepeatSubmitToken()
-                                        if not self.user_info:  # 修改每次都调用用户接口导致用户接口不能用
-                                            self.user_info = self.getPassengerDTOs()
-                                        if self.checkOrderInfo(train_no, self._station_seat[j]):
-                                                break
+                                    # self.submitOrderRequestFunc(from_station, to_station, self.time())
+                                    self.submit_station()
+                                    self.getPassengerTicketStr(self._station_seat[j])
+                                    self.getRepeatSubmitToken()
+                                    if not self.user_info:  # 修改每次都调用用户接口导致用户接口不能用
+                                        self.user_info = self.getPassengerDTOs()
+                                    if self.checkOrderInfo(train_no, self._station_seat[j]):
+                                            break
                             else:
                                 pass
                     else:
@@ -259,13 +257,18 @@ class select:
         check_user = json.loads(myurllib2.Post(check_user_url, data))
         check_user_flag = check_user['data']['flag']
         if check_user_flag is True:
-            print ('尝试提交订单...')
             return True
         else:
             if check_user['messages']:
-                print(('用户检查失败：%s，可能未登录，可能session已经失效' % check_user['messages'][0]))
+                print ('用户检查失败：%s，可能未登录，可能session已经失效' % check_user['messages'][0])
+                print ('正在尝试重新登录')
+                self.call_login()
+                self.is_check_user["user_time"] = datetime.datetime.now()
             else:
-                print(('用户检查失败： %s，可能未登录，可能session已经失效' % check_user))
+                print ('用户检查失败： %s，可能未登录，可能session已经失效' % check_user)
+                print ('正在尝试重新登录')
+                self.call_login()
+                self.is_check_user["user_time"] = datetime.datetime.now()
 
     def submit_station(self):
         """
@@ -385,7 +388,7 @@ class select:
                 else:
                     print(checkOrderInfo)
         elif 'messages' in checkOrderInfo and checkOrderInfo['messages']:
-            print((checkOrderInfo['messages'][0]))
+            print(checkOrderInfo['messages'][0])
 
     def getQueueCount(self, train_no, set_type, is_need_code):
         """
@@ -398,7 +401,7 @@ class select:
         new_train_date = time.strftime("%a %b %d %Y", l_time)
         getQueueCountUrl = 'https://kyfw.12306.cn/otn/confirmPassenger/getQueueCount'
         data = {
-            'train_date': str(new_train_date) + " 00:00:00 GMT+0800 (CST)",
+            'train_date': str(new_train_date) + " 00:00:00 GMT+0800 (中国标准时间)",
             'train_no': self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['train_no'],
             'stationTrainCode':	self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['station_train_code'],
             'seatType':	self.set_type,
@@ -414,33 +417,28 @@ class select:
             if "countT" in getQueueCountResult["data"]:
                 ticket = getQueueCountResult["data"]["ticket"]
                 ticket_split = sum(map(self.conversion_int, ticket.split(","))) if ticket.find(",") != -1 else ticket
-                # ticket_sum = sum([int(ticket_split[0]),int(ticket_split[1])])
-                # if set_type == "无座":    # 修改无座和硬座的座位号提交是个字符串的问题
-                #     ticket = ticket_split[1]
-                # elif set_type == "硬座":
-                #     ticket = ticket_split[0]
                 countT = getQueueCountResult["data"]["countT"]
                 if int(countT) is 0:
                     if int(ticket_split) < len(self.user_info):
                         print("当前余票数小于乘车人数，放弃订票")
                     else:
-                        print(("排队成功, 当前余票还剩余: {0} 张".format(ticket_split)))
+                        print("排队成功, 当前余票还剩余: {0} 张".format(ticket_split))
                         if self.checkQueueOrder(is_need_code):
                             return True
                 else:
-                    print(("当前排队人数:" + str(countT) + "当前余票还剩余:{0} 张，继续排队中".format(ticket_split)))
+                    print("当前排队人数:" + str(countT) + "当前余票还剩余:{0} 张，继续排队中".format(ticket_split))
             else:
-                print(("排队发现未知错误{0}，将此列车 {1}加入小黑屋".format(getQueueCountResult, train_no)))
+                print("排队发现未知错误{0}，将此列车 {1}加入小黑屋".format(getQueueCountResult, train_no))
                 self.ticket_black_list[train_no] = datetime.datetime.now()
         elif "messages" in getQueueCountResult and getQueueCountResult["messages"]:
-            print(("排队异常，错误信息：{0}, 将此列车 {1}加入小黑屋".format(getQueueCountResult["messages"][0], train_no)))
+            print("排队异常，错误信息：{0}, 将此列车 {1}加入小黑屋".format(getQueueCountResult["messages"][0], train_no))
             self.ticket_black_list[train_no] = datetime.datetime.now()
         else:
             if "validateMessages" in getQueueCountResult and getQueueCountResult["validateMessages"]:
-                print((str(getQueueCountResult["validateMessages"])))
+                print(str(getQueueCountResult["validateMessages"]))
                 self.ticket_black_list[train_no] = datetime.datetime.now()
             else:
-                print(("未知错误 {0}".format("".join(getQueueCountResult))))
+                print("未知错误 {0}".format("".join(getQueueCountResult)))
 
     def checkQueueOrder(self, is_node_code=False):
         """
@@ -488,7 +486,7 @@ class select:
                         data['randCode'] = randCode
                         break
                     else:
-                        print(("验证码有误, 接口返回{0} 第{1}次尝试重试".format(fresult, i)))
+                        print("验证码有误, 接口返回{0} 第{1}次尝试重试".format(fresult, i))
                 else:
                     print("不需要验证码")
                     break
@@ -501,16 +499,16 @@ class select:
                     self.queryOrderWaitTime()
                 else:
                     if 'errMsg' in c_data and c_data['errMsg']:
-                        print(("提交订单失败，{0}".format(c_data['errMsg'])))
+                        print("提交订单失败，{0}".format(c_data['errMsg']))
                     else:
                         print(c_data)
                         print('订票失败!很抱歉,请重试提交预订功能!')
             elif "messages" in checkQueueOrderResult and checkQueueOrderResult["messages"]:
-                print(("提交订单失败,错误信息: " + checkQueueOrderResult["messages"]))
+                print("提交订单失败,错误信息: " + checkQueueOrderResult["messages"])
             else:
-                print(("提交订单中，请耐心等待：" + str(checkQueueOrderResult["validateMessages"])))
+                print("提交订单中，请耐心等待：" + str(checkQueueOrderResult["validateMessages"]))
         except ValueError:
-            print(("接口 {} 无响应".format(checkQueueOrderUrl)))
+            print("接口 {} 无响应".format(checkQueueOrderUrl))
 
     def queryOrderWaitTime(self):
         """
@@ -531,8 +529,10 @@ class select:
                 print("超出排队时间，自动放弃，正在重新刷票")
                 break
             try:
-                queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime?random={0}&tourFlag=dc&_json_att=&REPEAT_SUBMIT_TOKEN={1}".format(_random, self.get_token())
-                queryOrderWaitTimeResult = json.loads(myurllib2.get(queryOrderWaitTimeUrl))
+                # queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime?random={0}&tourFlag=dc&_json_att=&REPEAT_SUBMIT_TOKEN={1}".format(_random, self.get_token())
+                data = {"random": _random, "tourFlag": "dc"}
+                queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime"
+                queryOrderWaitTimeResult = json.loads(myurllib2.Post(queryOrderWaitTimeUrl, data))
             except ValueError:
                 queryOrderWaitTimeResult = {}
             if queryOrderWaitTimeResult:
@@ -544,23 +544,23 @@ class select:
                         print(queryOrderWaitTimeResult["data"]["msg"])
                         break
                     elif "waitTime"in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["waitTime"]:
-                        print(("排队等待时间预计还剩 {0} ms".format(0-queryOrderWaitTimeResult["data"]["waitTime"])))
+                        print("排队等待时间预计还剩 {0} ms".format(0-queryOrderWaitTimeResult["data"]["waitTime"]))
                     else:
                         print ("正在等待中")
                 elif "messages" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["messages"]:
-                    print(("排队等待失败： " + queryOrderWaitTimeResult["messages"]))
+                    print("排队等待失败： " + queryOrderWaitTimeResult["messages"])
                 else:
-                    print(("第{}次排队中,请耐心等待".format(num)))
+                    print("第{}次排队中,请耐心等待".format(num))
             else:
                 print("排队中")
             time.sleep(1)
         order_id = self.queryMyOrderNoComplete()  # 尝试查看订单列表，如果有订单，则判断成功，不过一般可能性不大
         if order_id:
-            sendEmail("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(order_id))
+            email("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(order_id),self.ticket_config).sendEmail()
             raise ticketIsExitsException("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(order_id))
 
         else:
-            print((ticketNumOutException("订单提交失败！,正在重新刷票")))
+            print(ticketNumOutException("订单提交失败！,正在重新刷票"))
 
     def queryMyOrderNoComplete(self):
         """
@@ -580,7 +580,7 @@ class select:
                 return orderId
             elif "data" in queryMyOrderNoCompleteResult and "orderCacheDTO" in queryMyOrderNoCompleteResult["data"] and queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]:
                 if "message" in queryMyOrderNoCompleteResult["data"]["orderCacheDTO"] and queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]:
-                    print((queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]["message"]))
+                    print(queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]["message"])
                     raise ticketNumOutException(queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]["message"])
             else:
                 if "message" in queryMyOrderNoCompleteResult and queryMyOrderNoCompleteResult["message"]:
@@ -589,7 +589,7 @@ class select:
                 else:
                     return False
         else:
-            print(("接口 {} 无响应".format(queryMyOrderNoCompleteUrl)))
+            print("接口 {} 无响应".format(queryMyOrderNoCompleteUrl))
 
     def initNoComplete(self):
         """
@@ -612,18 +612,26 @@ class select:
     #     else:
     #         self.submitOrderRequest()
 
+    def call_login(self):
+        """登录回调方法"""
+        login.go_login(self.ticket_config).login()
+
     def main(self):
+        self.call_login()
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         # if self.leftTicketLog(from_station, to_station):
         num = 1
         while 1:
             try:
                 num += 1
+                if "user_time" in self.is_check_user and (datetime.datetime.now() - self.is_check_user["user_time"]).seconds/60 > 10:
+                    # 十分钟调用一次检查用户是否登录
+                    self.check_user()
                 time.sleep(self.select_refresh_interval)
                 if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
                     print("12306休息时间，本程序自动停止,明天早上七点将自动运行")
-                    time.sleep(28800)
-                    login.main()   # 重新登录
+                    time.sleep(60 * 60 * 7)
+                    self.call_login()
                 start_time = datetime.datetime.now()
                 self.submitOrderRequestImplement(from_station, to_station)
                 print("正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(self.station_trains), (datetime.datetime.now()-start_time).microseconds/1000))
@@ -643,37 +651,18 @@ class select:
                 if e.message == "No JSON object could be decoded":
                     print("12306接口无响应，正在重试")
                 else:
-                    print((e.message))
+                    print(e.message)
             except KeyError as e:
-                print((e.message))
+                print(e.message)
             except TypeError as e:
-                print((e.message))
+                print(e.message)
             except socket.error as e:
-                print((e.message))
+                print(e.message)
 
 
-# class selectProducer(threading.Thread):
-#     """刷票队列"""
-#     def __init__(self,  t_name, queue):
-#         threading.Thread.__init__(self, name=t_name)
-#         self.data = queue
-#         print "{0} 正在运行".format(t_name)
-#
-#     def run(self):
-#         pass
-#
-#
-# class submitOrderConsumer(threading.Thread):
-#     """订单队列"""
-#     def __init__(self,  t_name, queue):
-#         threading.Thread.__init__(self, name=t_name)
-#         self.data = queue
-#         print "{0} 正在运行".format(t_name)
-#
-#     def run(self):
-#         pass
 
 
 if __name__ == '__main__':
-    a = select('上海', '北京')
-    a.main()
+    login.go_login().login()
+    # a = select('上海', '北京')
+    # a.main()

@@ -6,9 +6,9 @@ from concurrent.futures import ThreadPoolExecutor
 pool = ThreadPoolExecutor(max_workers=1)
 
 def run(ticket_config):
-    login.go_login(ticket_config).login()
+    #login.go_login(ticket_config).login()
     select_ticket_info.select(ticket_config).main()
 
 
 
-f1 = pool.submit(run("ticket_config2.yaml"))
+f1 = pool.submit(run("ticket_config4.yaml"))

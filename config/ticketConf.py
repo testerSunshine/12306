@@ -3,6 +3,8 @@ __author__ = 'MR.wen'
 
 import os
 import yaml
+import PyQt5
+
 
 
 def _get_yaml():

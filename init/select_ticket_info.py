@@ -4,22 +4,24 @@ import datetime
 import random
 import re
 import socket
-import threading
 import urllib
 import sys
 import time
 from collections import OrderedDict
+
+from config import urlConf
 from init import login
 
 from config.emailConf import sendEmail
 from config.ticketConf import _get_yaml
 from damatuCode.damatuWeb import DamatuApi
-from init.login import go_login
+from init.login import GoLogin
 from myException.PassengerUserException import PassengerUserException
+from myException.UserPasswordException import UserPasswordException
 from myException.ticketConfigException import ticketConfigException
 from myException.ticketIsExitsException import ticketIsExitsException
 from myException.ticketNumOutException import ticketNumOutException
-from myUrllib import myurllib2
+from myUrllib.httpUtils import HTTPClient
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -37,6 +39,8 @@ class select:
         self.secretStr = ""
         self.ticket_black_list = dict()
         self.is_check_user = dict()
+        self.httpClint = HTTPClient()
+        self.confUrl = urlConf.urls
 
     def get_ticket_info(self):
         """
@@ -137,12 +141,11 @@ class select:
         获取提交车票请求token
         :return: token
         """
-        initdc_url = 'https://kyfw.12306.cn/otn/confirmPassenger/initDc'
-        initdc_result = myurllib2.get(initdc_url)
+        initdc_url = self.confUrl["initdc_url"]["req+url"]
+        initdc_result = self.httpClint.send(initdc_url)
         token_name = re.compile(r"var globalRepeatSubmitToken = '(\S+)'")
         ticketInfoForPassengerForm_name = re.compile(r'var ticketInfoForPassengerForm=(\{.+\})?')
         order_request_params_name = re.compile(r'var orderRequestDTO=(\{.+\})?')
-        # if token_name and ticketInfoForPassengerForm_name and order_request_params_name:
         self.token = re.search(token_name, initdc_result).group(1)
         re_tfpf = re.findall(ticketInfoForPassengerForm_name, initdc_result)
         re_orp = re.findall(order_request_params_name, initdc_result)
@@ -160,15 +163,14 @@ class select:
         获取乘客信息
         :return: 
         """
-        get_passengerDTOs = 'https://kyfw.12306.cn/otn/confirmPassenger/getPassengerDTOs'
+        get_passengerDTOs = self.confUrl["get_passengerDTOs"]["req_url"]
         get_data = {
             '_json_att': None,
             'REPEAT_SUBMIT_TOKEN': self.token
         }
-        jsonData = json.loads(myurllib2.Post(get_passengerDTOs, get_data))
+        jsonData = self.httpClint.send(get_passengerDTOs, get_data)
         if 'data' in jsonData and jsonData['data'] and 'normal_passengers' in jsonData['data'] and jsonData['data'][
             'normal_passengers']:
-            # return jsonData['data']['normal_passengers']
             normal_passengers = jsonData['data']['normal_passengers']
             _normal_passenger = [normal_passengers[i] for i in range(len(normal_passengers))if normal_passengers[i]["passenger_name"] in self.ticke_peoples]
             return _normal_passenger if _normal_passenger else normal_passengers[0]  # 如果配置乘车人没有在账号，则默认返回第一个用户
@@ -182,9 +184,9 @@ class select:
                 raise PassengerUserException("未查找到常用联系人,请先添加联系人在试试")
 
     def submitOrderRequestFunc(self, from_station, to_station, station_date=None):
-        select_url = 'https://kyfw.12306.cn/otn/leftTicket/queryZ?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT'.format(
+        select_url = self.confUrl["select_url"]["req_url"].format(
             self.station_date if station_date is None else station_date, from_station, to_station)
-        station_ticket = json.loads(myurllib2.get(select_url), encoding='utf-8')
+        station_ticket = self.httpClint.send(select_url)
         return station_ticket
 
     def submitOrderRequestImplement(self, from_station, to_station,):
@@ -246,9 +248,9 @@ class select:
         检查用户是否达到订票条件
         :return:
         """
-        check_user_url = 'https://kyfw.12306.cn/otn/login/checkUser'
+        check_user_url = self.confUrl["check_user_url"]["req_url"]
         data = dict(_json_att=None)
-        check_user = json.loads(myurllib2.Post(check_user_url, data), encoding='utf-8')
+        check_user = self.httpClint.send(check_user_url, data)
         check_user_flag = check_user['data']['flag']
         if check_user_flag is True:
             return True
@@ -275,7 +277,7 @@ class select:
         :return:
         """
 
-        submit_station_url = 'https://kyfw.12306.cn/otn/leftTicket/submitOrderRequest'
+        submit_station_url = self.confUrl["submit_station_url"]["req_url"]
         data = [('secretStr', urllib.unquote(self.secretStr)),  # 字符串加密
                 ('train_date', self.time()),  # 出发时间
                 ('back_train_date', self.time()),  # 返程时间
@@ -284,7 +286,7 @@ class select:
                 ('query_from_station_name', self.from_station),  # 起始车站
                 ('query_to_station_name', self.to_station),  # 终点车站
                 ]
-        submitResult = json.loads(myurllib2.Post(submit_station_url, data), encoding='utf-8')
+        submitResult = self.httpClint.send(submit_station_url, data)
         if 'data' in submitResult and submitResult['data']:
             if submitResult['data'] == 'N':
                 print ('出票成功')
@@ -355,7 +357,7 @@ class select:
         :return: 
         """
         passengerTicketStrList, oldPassengerStr = self.getPassengerTicketStrListAndOldPassengerStr()
-        checkOrderInfoUrl = 'https://kyfw.12306.cn/otn/confirmPassenger/checkOrderInfo'
+        checkOrderInfoUrl = self.confUrl["checkOrderInfoUrl"]["req_url"]
         data = OrderedDict()
         data['cancel_flag'] = 2
         data['bed_level_order_num'] = "000000000000000000000000000000"
@@ -364,7 +366,7 @@ class select:
         data['tour_flag'] = 'dc'
         data['whatsSelect'] = 1
         data['REPEAT_SUBMIT_TOKEN'] = self.token
-        checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data, ))
+        checkOrderInfo = self.httpClint.send(checkOrderInfoUrl, data)
         if 'data' in checkOrderInfo:
             if "ifShowPassCode" in checkOrderInfo["data"] and checkOrderInfo["data"]["ifShowPassCode"] == "Y":
                 is_need_code = True
@@ -393,7 +395,7 @@ class select:
         """
         l_time = time.localtime(time.time())
         new_train_date = time.strftime("%a %b %d %Y", l_time)
-        getQueueCountUrl = 'https://kyfw.12306.cn/otn/confirmPassenger/getQueueCount'
+        getQueueCountUrl = self.confUrl["getQueueCountUrl"]["req_url"]
         data = {
             'train_date': str(new_train_date) + " 00:00:00 GMT+0800 (中国标准时间)",
             'train_no': self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['train_no'],
@@ -406,7 +408,7 @@ class select:
             'train_location': self.get_ticketInfoForPassengerForm()['train_location'],
             'REPEAT_SUBMIT_TOKEN': self.get_token(),
         }
-        getQueueCountResult = json.loads(myurllib2.Post(getQueueCountUrl, data))
+        getQueueCountResult = self.httpClint.send(getQueueCountUrl, data)
         if "status" in getQueueCountResult and getQueueCountResult["status"] is True:
             if "countT" in getQueueCountResult["data"]:
                 ticket = getQueueCountResult["data"]["ticket"]
@@ -441,7 +443,7 @@ class select:
         """
 
         passengerTicketStrList, oldPassengerStr = self.getPassengerTicketStrListAndOldPassengerStr()
-        checkQueueOrderUrl = "https://kyfw.12306.cn/otn/confirmPassenger/confirmSingleForQueue"
+        checkQueueOrderUrl = self.confUrl["checkQueueOrderUrl"]["req_url"]
         data = {
             "passengerTicketStr": self.set_type + "," + ",".join(passengerTicketStrList).rstrip("_{0}".format(self.set_type)),
             "oldPassengerStr": "".join(oldPassengerStr),
@@ -460,9 +462,9 @@ class select:
             for i in range(3):
                 if is_node_code:
                     print("正在使用自动识别验证码功能")
-                    randurl = 'https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn'
-                    codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=passenger&rand=randp&%s' % random.random()
-                    result = myurllib2.get(codeimg)
+                    checkRandCodeAnsyn = self.confUrl["checkRandCodeAnsyn"]["req_url"]
+                    codeImgByOrder = self.confUrl["codeImgByOrder"]["req_url"]
+                    result = self.httpClint.send(codeImgByOrder)
                     img_path = './tkcode'
                     open(img_path, 'wb').write(result)
                     randCode = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"],
@@ -473,7 +475,7 @@ class select:
                         "_json_att": None,
                         "REPEAT_SUBMIT_TOKEN": self.get_token()
                     }
-                    fresult = json.loads(myurllib2.Post(randurl, randData), encoding='utf8')  # 校验验证码是否正确
+                    fresult = self.httpClint.send(checkRandCodeAnsyn, randData)  # 校验验证码是否正确
                     checkcode = fresult['data']['msg']
                     if checkcode == 'TRUE':
                         print("验证码通过,正在提交订单")
@@ -484,8 +486,7 @@ class select:
                 else:
                     print("不需要验证码")
                     break
-            # print("".join(data))
-            checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
+            checkQueueOrderResult = self.httpClint.send(checkQueueOrderUrl, data)
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
                 if 'submitStatus' in c_data and c_data['submitStatus'] is True:
@@ -509,12 +510,6 @@ class select:
         排队获取订单等待信息,每隔3秒请求一次，最高请求次数为20次！
         :return: 
         """
-        # queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime"
-        # data = {
-        #     "random": "{0}{1}".format(int(time.time()), random.randint(1, 9)),
-        #     "tourFlag": "dc",
-        #     "REPEAT_SUBMIT_TOKEN": self.get_token(),
-        # }
         num = 1
         while True:
             _random = int(round(time.time() * 1000))
@@ -523,10 +518,9 @@ class select:
                 print("超出排队时间，自动放弃，正在重新刷票")
                 break
             try:
-                # queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime?random={0}&tourFlag=dc&_json_att=&REPEAT_SUBMIT_TOKEN={1}".format(_random, self.get_token())
                 data = {"random": _random, "tourFlag": "dc"}
-                queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime"
-                queryOrderWaitTimeResult = json.loads(myurllib2.Post(queryOrderWaitTimeUrl, data))
+                queryOrderWaitTimeUrl = self.confUrl["queryOrderWaitTimeUrl"]["req_url"]
+                queryOrderWaitTimeResult = self.httpClint.send(queryOrderWaitTimeUrl, data)
             except ValueError:
                 queryOrderWaitTimeResult = {}
             if queryOrderWaitTimeResult:
@@ -562,10 +556,10 @@ class select:
         :return:
         """
         self.initNoComplete()
-        queryMyOrderNoCompleteUrl = "https://kyfw.12306.cn/otn/queryOrder/queryMyOrderNoComplete"
+        queryMyOrderNoCompleteUrl = self.confUrl["queryMyOrderNoCompleteUrl"]["req_url"]
         data = {"_json_att": None}
         try:
-            queryMyOrderNoCompleteResult = json.loads(myurllib2.Post(queryMyOrderNoCompleteUrl, data))
+            queryMyOrderNoCompleteResult = self.httpClint.send(queryMyOrderNoCompleteUrl, data)
         except ValueError:
             queryMyOrderNoCompleteResult = {}
         if queryMyOrderNoCompleteResult:
@@ -590,9 +584,9 @@ class select:
         获取订单前需要进入订单列表页，获取订单列表页session
         :return:
         """
-        initNoCompleteUrl = "https://kyfw.12306.cn/otn/queryOrder/initNoComplete"
+        initNoCompleteUrl = self.confUrl["initNoCompleteUrl"]["req_url"]
         data = {"_json_att": None}
-        myurllib2.Post(initNoCompleteUrl, data)
+        self.httpClint.send(initNoCompleteUrl, data)
 
     # def call_submit_ticket(self, function_name=None):
     #     """
@@ -608,7 +602,8 @@ class select:
 
     def call_login(self):
         """登录回调方法"""
-        go_login()
+        login = GoLogin(self.httpClint, self.confUrl)
+        login.go_login()
 
     def main(self):
         self.call_login()
@@ -639,6 +634,9 @@ class select:
                 print e.message
                 break
             except ticketNumOutException as e:
+                print e.message
+                break
+            except UserPasswordException as e:
                 print e.message
                 break
             except ValueError as e:

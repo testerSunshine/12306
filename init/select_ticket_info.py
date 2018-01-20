@@ -3,20 +3,25 @@ import json
 import datetime
 import random
 import re
-import threading
+import socket
 import urllib
 import sys
 import time
-import Queue
 from collections import OrderedDict
 
+from config import urlConf
+from init import login
+
+from config.emailConf import sendEmail
 from config.ticketConf import _get_yaml
 from damatuCode.damatuWeb import DamatuApi
+from init.login import GoLogin
 from myException.PassengerUserException import PassengerUserException
+from myException.UserPasswordException import UserPasswordException
 from myException.ticketConfigException import ticketConfigException
 from myException.ticketIsExitsException import ticketIsExitsException
 from myException.ticketNumOutException import ticketNumOutException
-from myUrllib import myurllib2
+from myUrllib.httpUtils import HTTPClient
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -33,8 +38,9 @@ class select:
         self.user_info = ""
         self.secretStr = ""
         self.ticket_black_list = dict()
-        self.submitQueue = Queue.Queue(5)
-        self.ticket_skip_time = dict()
+        self.is_check_user = dict()
+        self.httpClint = HTTPClient()
+        self.confUrl = urlConf.urls
 
     def get_ticket_info(self):
         """
@@ -53,7 +59,7 @@ class select:
         expect_refresh_interval = ticket_info_config["expect_refresh_interval"]
         ticket_black_list_time = ticket_info_config["ticket_black_list_time"]
         print "*"*20
-        print "当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}\n候选购买车次：{7}\n未开始刷票间隔时间：{8}\n僵尸票关小黑屋时长：{9}".format\
+        print "当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}\n候选购买车次：{7}\n未开始刷票间隔时间：{8}\n僵尸票关小黑屋时长：{9}\n".format\
                                                                                       (
                                                                                       from_station,
                                                                                       to_station,
@@ -135,12 +141,11 @@ class select:
         获取提交车票请求token
         :return: token
         """
-        initdc_url = 'https://kyfw.12306.cn/otn/confirmPassenger/initDc'
-        initdc_result = myurllib2.get(initdc_url)
+        initdc_url = self.confUrl["initdc_url"]["req+url"]
+        initdc_result = self.httpClint.send(initdc_url)
         token_name = re.compile(r"var globalRepeatSubmitToken = '(\S+)'")
         ticketInfoForPassengerForm_name = re.compile(r'var ticketInfoForPassengerForm=(\{.+\})?')
         order_request_params_name = re.compile(r'var orderRequestDTO=(\{.+\})?')
-        # if token_name and ticketInfoForPassengerForm_name and order_request_params_name:
         self.token = re.search(token_name, initdc_result).group(1)
         re_tfpf = re.findall(ticketInfoForPassengerForm_name, initdc_result)
         re_orp = re.findall(order_request_params_name, initdc_result)
@@ -158,15 +163,14 @@ class select:
         获取乘客信息
         :return: 
         """
-        get_passengerDTOs = 'https://kyfw.12306.cn/otn/confirmPassenger/getPassengerDTOs'
+        get_passengerDTOs = self.confUrl["get_passengerDTOs"]["req_url"]
         get_data = {
             '_json_att': None,
             'REPEAT_SUBMIT_TOKEN': self.token
         }
-        jsonData = json.loads(myurllib2.Post(get_passengerDTOs, get_data))
+        jsonData = self.httpClint.send(get_passengerDTOs, get_data)
         if 'data' in jsonData and jsonData['data'] and 'normal_passengers' in jsonData['data'] and jsonData['data'][
             'normal_passengers']:
-            # return jsonData['data']['normal_passengers']
             normal_passengers = jsonData['data']['normal_passengers']
             _normal_passenger = [normal_passengers[i] for i in range(len(normal_passengers))if normal_passengers[i]["passenger_name"] in self.ticke_peoples]
             return _normal_passenger if _normal_passenger else normal_passengers[0]  # 如果配置乘车人没有在账号，则默认返回第一个用户
@@ -179,25 +183,13 @@ class select:
                 print("未查找到常用联系人")
                 raise PassengerUserException("未查找到常用联系人,请先添加联系人在试试")
 
-    def leftTicketLog(self, from_station, to_station):
-        """
-        模拟进入车次列表页
-        :param from_station:
-        :param to_station:
-        :return:
-        """
-        leftTicketLogUrl = 'https://kyfw.12306.cn/otn/leftTicket/log?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT'.format(
-            self.station_date, from_station, to_station)
-        leftTicketLog = json.loads(myurllib2.get(leftTicketLogUrl), encoding='utf-8')
-        if "status" in leftTicketLog and leftTicketLog["status"] is True:
-            return True
-        else:
-            if "message" in leftTicketLog and leftTicketLog["message"]:
-                print leftTicketLog["message"]
-            elif "validateMessages" in leftTicketLog and leftTicketLog["validateMessages"]:
-                print leftTicketLog["validateMessages"]
+    def submitOrderRequestFunc(self, from_station, to_station, station_date=None):
+        select_url = self.confUrl["select_url"]["req_url"].format(
+            self.station_date if station_date is None else station_date, from_station, to_station)
+        station_ticket = self.httpClint.send(select_url)
+        return station_ticket
 
-    def submitOrderRequest(self, from_station, to_station):
+    def submitOrderRequestImplement(self, from_station, to_station,):
         """
         提交车次信息
         车次对应字典
@@ -212,8 +204,7 @@ class select:
         } 参照station_seat()方法
         :return:
         """
-        select_url = 'https://kyfw.12306.cn/otn/leftTicket/queryZ?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT'.format(self.station_date, from_station, to_station)
-        station_ticket = json.loads(myurllib2.get(select_url), encoding='utf-8')
+        station_ticket = self.submitOrderRequestFunc(from_station, to_station)
         value = station_ticket['data']
         if not value:
             print ('{0}-{1} 车次坐席查询为空...'.format(self.from_station, self.to_station))
@@ -234,13 +225,16 @@ class select:
                                 if self.ticket_black_list.has_key(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds/60 < int(self.ticket_black_list_time):
                                     print("该车次{} 正在被关小黑屋，跳过此车次".format(train_no))
                                     break
-                                if self.ticket_skip_time.has_key(train_no) and (datetime.datetime.now() - self.ticket_skip_time[train_no]).seconds < 10:
-                                    # 判断离上次车次订票时间，如果间隔太小，则跳过,如果想不停地疯狂提交，那请设置99999，就无等待了
-                                    break
                                 else:
-                                    self.submitQueue.put({"obj": self, "train_no": train_no, "seat": self._station_seat[j].encode("utf8")})
                                     print ('正在尝试提交订票...')
-                                    self.ticket_skip_time[train_no] = datetime.datetime.now()
+                                    # self.submitOrderRequestFunc(from_station, to_station, self.time())
+                                    self.submit_station()
+                                    self.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
+                                    self.getRepeatSubmitToken()
+                                    if not self.user_info:  # 修改每次都调用用户接口导致用户接口不能用
+                                        self.user_info = self.getPassengerDTOs()
+                                    if self.checkOrderInfo(train_no, self._station_seat[j].encode("utf8")):
+                                            break
                             else:
                                 pass
                     else:
@@ -254,18 +248,23 @@ class select:
         检查用户是否达到订票条件
         :return:
         """
-        check_user_url = 'https://kyfw.12306.cn/otn/login/checkUser'
+        check_user_url = self.confUrl["check_user_url"]["req_url"]
         data = dict(_json_att=None)
-        check_user = json.loads(myurllib2.Post(check_user_url, data), encoding='utf-8')
+        check_user = self.httpClint.send(check_user_url, data)
         check_user_flag = check_user['data']['flag']
         if check_user_flag is True:
-            print ('尝试提交订单...')
             return True
         else:
             if check_user['messages']:
                 print ('用户检查失败：%s，可能未登录，可能session已经失效' % check_user['messages'][0])
+                print ('正在尝试重新登录')
+                self.call_login()
+                self.is_check_user["user_time"] = datetime.datetime.now()
             else:
                 print ('用户检查失败： %s，可能未登录，可能session已经失效' % check_user)
+                print ('正在尝试重新登录')
+                self.call_login()
+                self.is_check_user["user_time"] = datetime.datetime.now()
 
     def submit_station(self):
         """
@@ -278,7 +277,7 @@ class select:
         :return:
         """
 
-        submit_station_url = 'https://kyfw.12306.cn/otn/leftTicket/submitOrderRequest'
+        submit_station_url = self.confUrl["submit_station_url"]["req_url"]
         data = [('secretStr', urllib.unquote(self.secretStr)),  # 字符串加密
                 ('train_date', self.time()),  # 出发时间
                 ('back_train_date', self.time()),  # 返程时间
@@ -287,7 +286,7 @@ class select:
                 ('query_from_station_name', self.from_station),  # 起始车站
                 ('query_to_station_name', self.to_station),  # 终点车站
                 ]
-        submitResult = json.loads(myurllib2.Post(submit_station_url, data), encoding='utf-8')
+        submitResult = self.httpClint.send(submit_station_url, data)
         if 'data' in submitResult and submitResult['data']:
             if submitResult['data'] == 'N':
                 print ('出票成功')
@@ -358,7 +357,7 @@ class select:
         :return: 
         """
         passengerTicketStrList, oldPassengerStr = self.getPassengerTicketStrListAndOldPassengerStr()
-        checkOrderInfoUrl = 'https://kyfw.12306.cn/otn/confirmPassenger/checkOrderInfo'
+        checkOrderInfoUrl = self.confUrl["checkOrderInfoUrl"]["req_url"]
         data = OrderedDict()
         data['cancel_flag'] = 2
         data['bed_level_order_num'] = "000000000000000000000000000000"
@@ -367,7 +366,7 @@ class select:
         data['tour_flag'] = 'dc'
         data['whatsSelect'] = 1
         data['REPEAT_SUBMIT_TOKEN'] = self.token
-        checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data, ))
+        checkOrderInfo = self.httpClint.send(checkOrderInfoUrl, data)
         if 'data' in checkOrderInfo:
             if "ifShowPassCode" in checkOrderInfo["data"] and checkOrderInfo["data"]["ifShowPassCode"] == "Y":
                 is_need_code = True
@@ -381,6 +380,7 @@ class select:
             else:
                 if "errMsg" in checkOrderInfo['data'] and checkOrderInfo['data']["errMsg"]:
                     print checkOrderInfo['data']["errMsg"]
+
                 else:
                     print checkOrderInfo
         elif 'messages' in checkOrderInfo and checkOrderInfo['messages']:
@@ -393,13 +393,11 @@ class select:
         :param token:
         :return:
         """
-        old_train_date = self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['train_date']+"00:00:00"  # 模仿12306格式 Sun May 21 2017 00:00:00 GMT+0800 (中国标准时间)
-        m_time = time.mktime(time.strptime(old_train_date, "%Y%m%d%H:%M:%S"))
-        l_time = time.localtime(m_time)
-        new_train_date = time.strftime("%a %b %d %Y %H:%M:%S", l_time)
-        getQueueCountUrl = 'https://kyfw.12306.cn/otn/confirmPassenger/getQueueCount'
+        l_time = time.localtime(time.time())
+        new_train_date = time.strftime("%a %b %d %Y", l_time)
+        getQueueCountUrl = self.confUrl["getQueueCountUrl"]["req_url"]
         data = {
-            'train_date': new_train_date,
+            'train_date': str(new_train_date) + " 00:00:00 GMT+0800 (中国标准时间)",
             'train_no': self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['train_no'],
             'stationTrainCode':	self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['station_train_code'],
             'seatType':	self.set_type,
@@ -410,16 +408,11 @@ class select:
             'train_location': self.get_ticketInfoForPassengerForm()['train_location'],
             'REPEAT_SUBMIT_TOKEN': self.get_token(),
         }
-        getQueueCountResult = json.loads(myurllib2.Post(getQueueCountUrl, data))
+        getQueueCountResult = self.httpClint.send(getQueueCountUrl, data)
         if "status" in getQueueCountResult and getQueueCountResult["status"] is True:
             if "countT" in getQueueCountResult["data"]:
                 ticket = getQueueCountResult["data"]["ticket"]
                 ticket_split = sum(map(self.conversion_int, ticket.split(","))) if ticket.find(",") != -1 else ticket
-                # ticket_sum = sum([int(ticket_split[0]),int(ticket_split[1])])
-                # if set_type == "无座":    # 修改无座和硬座的座位号提交是个字符串的问题
-                #     ticket = ticket_split[1]
-                # elif set_type == "硬座":
-                #     ticket = ticket_split[0]
                 countT = getQueueCountResult["data"]["countT"]
                 if int(countT) is 0:
                     if int(ticket_split) < len(self.user_info):
@@ -448,8 +441,9 @@ class select:
         模拟提交订单是确认按钮，参数获取方法还是get_ticketInfoForPassengerForm 中获取
         :return: 
         """
+
         passengerTicketStrList, oldPassengerStr = self.getPassengerTicketStrListAndOldPassengerStr()
-        checkQueueOrderUrl = "https://kyfw.12306.cn/otn/confirmPassenger/confirmSingleForQueue"
+        checkQueueOrderUrl = self.confUrl["checkQueueOrderUrl"]["req_url"]
         data = {
             "passengerTicketStr": self.set_type + "," + ",".join(passengerTicketStrList).rstrip("_{0}".format(self.set_type)),
             "oldPassengerStr": "".join(oldPassengerStr),
@@ -460,15 +454,17 @@ class select:
             "seatDetailType": "000",   # 开始需要选择座位，但是目前12306不支持自动选择作为，那这个参数为默认
             "roomType": "00",  # 好像是根据一个id来判断选中的，两种 第一种是00，第二种是10，但是我在12306的页面没找到该id，目前写死是00，不知道会出什么错
             "dwAll": "N",
+            "whatsSelect": 1,
+            "_json_at": "",
             "REPEAT_SUBMIT_TOKEN": self.get_token(),
         }
         try:
             for i in range(3):
                 if is_node_code:
                     print("正在使用自动识别验证码功能")
-                    randurl = 'https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn'
-                    codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=passenger&rand=sjrand&%s' % random.random()
-                    result = myurllib2.get(codeimg)
+                    checkRandCodeAnsyn = self.confUrl["checkRandCodeAnsyn"]["req_url"]
+                    codeImgByOrder = self.confUrl["codeImgByOrder"]["req_url"]
+                    result = self.httpClint.send(codeImgByOrder)
                     img_path = './tkcode'
                     open(img_path, 'wb').write(result)
                     randCode = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"],
@@ -479,18 +475,18 @@ class select:
                         "_json_att": None,
                         "REPEAT_SUBMIT_TOKEN": self.get_token()
                     }
-                    fresult = json.loads(myurllib2.Post(randurl, randData), encoding='utf8')  # 校验验证码是否正确
+                    fresult = self.httpClint.send(checkRandCodeAnsyn, randData)  # 校验验证码是否正确
                     checkcode = fresult['data']['msg']
-                    if checkcode == 'FALSE':
-                        print ("验证码有误,第{}次尝试重试".format(i))
-                    else:
+                    if checkcode == 'TRUE':
                         print("验证码通过,正在提交订单")
                         data['randCode'] = randCode
                         break
+                    else:
+                        print ("验证码有误, 接口返回{0} 第{1}次尝试重试".format(fresult, i))
                 else:
                     print("不需要验证码")
                     break
-            checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
+            checkQueueOrderResult = self.httpClint.send(checkQueueOrderUrl, data)
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
                 if 'submitStatus' in c_data and c_data['submitStatus'] is True:
@@ -514,12 +510,6 @@ class select:
         排队获取订单等待信息,每隔3秒请求一次，最高请求次数为20次！
         :return: 
         """
-        # queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime"
-        # data = {
-        #     "random": "{0}{1}".format(int(time.time()), random.randint(1, 9)),
-        #     "tourFlag": "dc",
-        #     "REPEAT_SUBMIT_TOKEN": self.get_token(),
-        # }
         num = 1
         while True:
             _random = int(round(time.time() * 1000))
@@ -528,13 +518,15 @@ class select:
                 print("超出排队时间，自动放弃，正在重新刷票")
                 break
             try:
-                queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime?random={0}&tourFlag=dc&_json_att=&REPEAT_SUBMIT_TOKEN={1}".format(_random, self.get_token())
-                queryOrderWaitTimeResult = json.loads(myurllib2.get(queryOrderWaitTimeUrl))
+                data = {"random": _random, "tourFlag": "dc"}
+                queryOrderWaitTimeUrl = self.confUrl["queryOrderWaitTimeUrl"]["req_url"]
+                queryOrderWaitTimeResult = self.httpClint.send(queryOrderWaitTimeUrl, data)
             except ValueError:
                 queryOrderWaitTimeResult = {}
             if queryOrderWaitTimeResult:
                 if "status" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["status"]:
                     if "orderId" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["orderId"] is not None:
+                            sendEmail("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(queryOrderWaitTimeResult["data"]["orderId"]))
                             raise ticketIsExitsException("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(queryOrderWaitTimeResult["data"]["orderId"]))
                     elif "msg" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["msg"]:
                         print queryOrderWaitTimeResult["data"]["msg"]
@@ -549,10 +541,12 @@ class select:
                     print("第{}次排队中,请耐心等待".format(num))
             else:
                 print("排队中")
-            time.sleep(2)
+            time.sleep(1)
         order_id = self.queryMyOrderNoComplete()  # 尝试查看订单列表，如果有订单，则判断成功，不过一般可能性不大
         if order_id:
+            sendEmail("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(order_id))
             raise ticketIsExitsException("恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(order_id))
+
         else:
             print(ticketNumOutException("订单提交失败！,正在重新刷票"))
 
@@ -562,10 +556,10 @@ class select:
         :return:
         """
         self.initNoComplete()
-        queryMyOrderNoCompleteUrl = "https://kyfw.12306.cn/otn/queryOrder/queryMyOrderNoComplete"
+        queryMyOrderNoCompleteUrl = self.confUrl["queryMyOrderNoCompleteUrl"]["req_url"]
         data = {"_json_att": None}
         try:
-            queryMyOrderNoCompleteResult = json.loads(myurllib2.Post(queryMyOrderNoCompleteUrl, data))
+            queryMyOrderNoCompleteResult = self.httpClint.send(queryMyOrderNoCompleteUrl, data)
         except ValueError:
             queryMyOrderNoCompleteResult = {}
         if queryMyOrderNoCompleteResult:
@@ -590,9 +584,9 @@ class select:
         获取订单前需要进入订单列表页，获取订单列表页session
         :return:
         """
-        initNoCompleteUrl = "https://kyfw.12306.cn/otn/queryOrder/initNoComplete"
+        initNoCompleteUrl = self.confUrl["initNoCompleteUrl"]["req_url"]
         data = {"_json_att": None}
-        myurllib2.Post(initNoCompleteUrl, data)
+        self.httpClint.send(initNoCompleteUrl, data)
 
     # def call_submit_ticket(self, function_name=None):
     #     """
@@ -606,81 +600,61 @@ class select:
     #     else:
     #         self.submitOrderRequest()
 
+    def call_login(self):
+        """登录回调方法"""
+        login = GoLogin(self.httpClint, self.confUrl)
+        login.go_login()
+
     def main(self):
+        self.call_login()
         from_station, to_station = self.station_table(self.from_station, self.to_station)
-        if self.leftTicketLog(from_station, to_station):
-            submitOrderConsumer("daemon1", self.submitQueue).start()
-            num = 1
-            runedTime = 0
-            while 1:
-                num += 1
-                sleepTime = self.select_refresh_interval*1000-runedTime
-                if sleepTime > 0:
-                    time.sleep(sleepTime/1000.0)
-                if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
-                    print "12306休息时间，本程序自动停止,明天早上七点运行"
-                    break
-                start_time = datetime.datetime.now()
-                self.submitOrderRequest(from_station, to_station)
-                runedTime = (datetime.datetime.now()-start_time).microseconds/1000
-                print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(self.station_trains), runedTime)
-
-
-class selectProducer(threading.Thread):
-    """刷票队列"""
-    def __init__(self, t_name, data):
-        self.t_name = t_name
-        self.data = data
-        threading.Thread.__init__(self, name=self.t_name)
-        print "{0} 正在运行".format(self.t_name)
-
-    def run(self):
-        self.worker(self.data)
-
-    def worker(self, data):
-        obj = data['obj']
-        try:
-            if obj.check_user():
-                obj.submit_station()
-                obj.getPassengerTicketStr(data['seat'])
-                obj.getRepeatSubmitToken()
-                obj.user_info = obj.getPassengerDTOs()
-                if obj.checkOrderInfo(data['train_no'], data['seat']):
-                    return
-                obj.submitQueue.task_done()
-        except PassengerUserException as e:
-            print e.message
-        except ticketConfigException as e:
-            print e.message
-        except ticketIsExitsException as e:
-            print e.message
-        except ticketNumOutException as e:
-            print e.message
-        except ValueError as e:
-            if e.message == "No JSON object could be decoded":
-                print("12306接口无响应，正在重试")
-            else:
-                print(e.message)
-        print("{0} 线程运行结束".format(self.t_name))
-
-
-class submitOrderConsumer(threading.Thread):
-    """订单队列"""
-    def __init__(self, t_name, queue):
-        threading.Thread.__init__(self, name=t_name)
-        self.data = queue
-        print "{0} 正在运行".format(t_name)
-
-    def run(self):
+        # if self.leftTicketLog(from_station, to_station):
+        num = 1
         while 1:
-                if not self.data.empty():
-                    taskData = self.data.get()
-                    selectProducer(taskData['train_no']+str(random.random()), taskData).start()
+            try:
+                num += 1
+                if "user_time" in self.is_check_user and (datetime.datetime.now() - self.is_check_user["user_time"]).seconds/60 > 10:
+                    # 十分钟调用一次检查用户是否登录
+                    self.check_user()
+                time.sleep(self.select_refresh_interval)
+                if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
+                    print "12306休息时间，本程序自动停止,明天早上6点将自动运行"
+                    time.sleep(60 * 60 * 7)
+                    self.call_login()
+                start_time = datetime.datetime.now()
+                self.submitOrderRequestImplement(from_station, to_station)
+                print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(self.station_trains), (datetime.datetime.now()-start_time).microseconds/1000)
+            except PassengerUserException as e:
+                print e.message
+                break
+            except ticketConfigException as e:
+                print e.message
+                break
+            except ticketIsExitsException as e:
+                print e.message
+                break
+            except ticketNumOutException as e:
+                print e.message
+                break
+            except UserPasswordException as e:
+                print e.message
+                break
+            except ValueError as e:
+                if e.message == "No JSON object could be decoded":
+                    print("12306接口无响应，正在重试")
                 else:
-                    time.sleep(1.5)
+                    print(e.message)
+            except KeyError as e:
+                print(e.message)
+            except TypeError as e:
+                print(e.message)
+            except socket.error as e:
+                print(e.message)
+
 
 
 
 if __name__ == '__main__':
-    a = select('上海', '北京')
-    a.main()
+    login()
+    # a = select('上海', '北京')
+    # a.main()

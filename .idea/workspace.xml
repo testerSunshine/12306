@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="79a86edc-721f-4aad-920d-b595d0348b7f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/markdown-navigator.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/markdown-navigator/profiles_settings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
+    <list default="true" id="79a86edc-721f-4aad-920d-b595d0348b7f" name="Default" comment="test version">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/config/emailConf.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/config/urlConf.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/myException/UserPasswordException.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tkcode" afterPath="$PROJECT_DIR$/tkcode" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/ticketConf.py" afterPath="$PROJECT_DIR$/config/ticketConf.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/ticket_config.yaml" afterPath="$PROJECT_DIR$/config/ticket_config.yaml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/init/login.py" afterPath="$PROJECT_DIR$/init/login.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/init/select_ticket_info.py" afterPath="$PROJECT_DIR$/init/select_ticket_info.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myUrllib/httpUtils.py" afterPath="$PROJECT_DIR$/myUrllib/httpUtils.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myUrllib/myurllib2.py" afterPath="$PROJECT_DIR$/myUrllib/myurllib2.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run.py" afterPath="$PROJECT_DIR$/run.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -43,7 +51,7 @@
         <entry file="file://$PROJECT_DIR$/init/login.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="2030">
-              <caret line="145" column="38" lean-forward="false" selection-start-line="141" selection-start-column="7" selection-end-line="145" selection-end-column="38" />
+              <caret line="145" column="28" lean-forward="false" selection-start-line="141" selection-start-column="7" selection-end-line="145" selection-end-column="28" />
               <folding>
                 <element signature="e#41#54#0" expanded="true" />
               </folding>
@@ -77,7 +85,7 @@
         <entry file="file://$PROJECT_DIR$/config/ticketConf.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="168">
-              <caret line="12" column="18" lean-forward="true" selection-start-line="12" selection-start-column="18" selection-end-line="12" selection-end-column="18" />
+              <caret line="12" column="7" lean-forward="true" selection-start-line="12" selection-start-column="7" selection-end-line="12" selection-end-column="7" />
               <folding>
                 <element signature="e#46#55#0" expanded="true" />
               </folding>
@@ -85,11 +93,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="select_ticket_info.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="select_ticket_info.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/init/select_ticket_info.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="527">
-              <caret line="240" column="41" lean-forward="false" selection-start-line="240" selection-start-column="41" selection-end-line="240" selection-end-column="41" />
+            <state relative-caret-position="-456">
+              <caret line="204" column="16" lean-forward="true" selection-start-line="204" selection-start-column="16" selection-end-line="204" selection-end-column="16" />
               <folding>
                 <element signature="e#23#34#0" expanded="true" />
               </folding>
@@ -97,10 +105,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ticket_config.yaml" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ticket_config.yaml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/config/ticket_config.yaml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
+            <state relative-caret-position="44">
               <caret line="56" column="9" lean-forward="false" selection-start-line="56" selection-start-column="9" selection-end-line="56" selection-end-column="9" />
               <folding />
             </state>
@@ -250,6 +258,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -281,8 +291,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -844,15 +852,15 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17238913" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17453505" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5465538" sideWeight="0.50429183" order="14" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.54413545" sideWeight="0.49570817" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.48004836" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.48004836" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="17" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="17" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.7315599" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297568" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297568" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1086,7 +1094,7 @@
     <entry file="file://$PROJECT_DIR$/config/ticketConf.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
-          <caret line="12" column="18" lean-forward="true" selection-start-line="12" selection-start-column="18" selection-end-line="12" selection-end-column="18" />
+          <caret line="12" column="7" lean-forward="true" selection-start-line="12" selection-start-column="7" selection-end-line="12" selection-end-column="7" />
           <folding>
             <element signature="e#46#55#0" expanded="true" />
           </folding>
@@ -1096,7 +1104,7 @@
     <entry file="file://$PROJECT_DIR$/init/login.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2030">
-          <caret line="145" column="38" lean-forward="false" selection-start-line="141" selection-start-column="7" selection-end-line="145" selection-end-column="38" />
+          <caret line="145" column="28" lean-forward="false" selection-start-line="141" selection-start-column="7" selection-end-line="145" selection-end-column="28" />
           <folding>
             <element signature="e#41#54#0" expanded="true" />
           </folding>
@@ -1121,21 +1129,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/ticket_config.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="56" column="9" lean-forward="false" selection-start-line="56" selection-start-column="9" selection-end-line="56" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/init/select_ticket_info.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="240" column="41" lean-forward="false" selection-start-line="240" selection-start-column="41" selection-end-line="240" selection-end-column="41" />
+        <state relative-caret-position="-456">
+          <caret line="204" column="16" lean-forward="true" selection-start-line="204" selection-start-column="16" selection-end-line="204" selection-end-column="16" />
           <folding>
             <element signature="e#23#34#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/ticket_config.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="56" column="9" lean-forward="false" selection-start-line="56" selection-start-column="9" selection-end-line="56" selection-end-column="9" />
+          <folding />
         </state>
       </provider>
     </entry>

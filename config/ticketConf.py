@@ -6,7 +6,6 @@ import yaml
 import PyQt5
 
 
-
 def _get_yaml():
     """
     解析yaml

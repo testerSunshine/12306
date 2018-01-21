@@ -1,17 +1,14 @@
 # -*- coding=utf-8 -*-
 import json
 import datetime
-import random
 import re
 import socket
 import urllib
 import sys
 import time
 from collections import OrderedDict
-
 from config import urlConf
 from init import login
-
 from config.emailConf import sendEmail
 from config.ticketConf import _get_yaml
 from damatuCode.damatuWeb import DamatuApi
@@ -141,7 +138,7 @@ class select:
         获取提交车票请求token
         :return: token
         """
-        initdc_url = self.confUrl["initdc_url"]["req+url"]
+        initdc_url = self.confUrl["initdc_url"]["req_url"]
         initdc_result = self.httpClint.send(initdc_url)
         token_name = re.compile(r"var globalRepeatSubmitToken = '(\S+)'")
         ticketInfoForPassengerForm_name = re.compile(r'var ticketInfoForPassengerForm=(\{.+\})?')
@@ -187,7 +184,7 @@ class select:
         select_url = self.confUrl["select_url"]["req_url"].format(
             self.station_date if station_date is None else station_date, from_station, to_station)
         station_ticket = self.httpClint.send(select_url)
-        return station_ticket
+        return json.loads(station_ticket)
 
     def submitOrderRequestImplement(self, from_station, to_station,):
         """
@@ -650,8 +647,6 @@ class select:
                 print(e.message)
             except socket.error as e:
                 print(e.message)
-
-
 
 
 if __name__ == '__main__':

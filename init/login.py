@@ -149,7 +149,7 @@ class GoLogin:
             if messages.find("密码输入错误") is not -1:
                 raise UserPasswordException("{0}".format(messages))
             else:
-                print ("登录失败: {0}".format("".join(tresult)))
+                print ("登录失败: {0}".format(messages))
                 print ("尝试重新登陆")
                 return False
         else:
@@ -180,6 +180,8 @@ class GoLogin:
         :return:
         """
         user, passwd = _get_yaml()["set"]["12306count"][0]["uesr"], _get_yaml()["set"]["12306count"][1]["pwd"]
+        if not user or not passwd:
+            raise UserPasswordException("温馨提示: 用户名或者密码为空，请仔细检查!")
         login_num = 0
         while True:
             self.cookietp()

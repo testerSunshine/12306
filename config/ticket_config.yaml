@@ -39,9 +39,12 @@
 
 
 set:
-  station_date: "2018-02-12"
+  station_dates:
+    - "2018-01-27"
+#    - "2018-02-04"
+#    - "2018-02-05"
   station_trains:
-    - "G1377"
+    - "G1303"
 #    - "K4300"
 #    - "K5226"
 #    - "K7772"
@@ -51,19 +54,19 @@ set:
 #    - "G1373"
 #    - "G1363"
 #    - "G4933"
-  from_station: "昆山"
-  to_station: "长沙"
+  from_station: "上海"
+  to_station: "广州"
   set_type:
     - "二等座"
   is_more_ticket: True
   ticke_peoples:
-    - "宋倩倩"
+    - "文贤平"
 #    - "彭淑杰"
   12306count:
 #    - uesr: ""
 #    - pwd: "apple1995"
-    - uesr: ""
-    - pwd: "songyu1995"
+    - uesr: "@qq.com"
+    - pwd: "QWERTY"
 
 select_refresh_interval: 0.1
 expect_refresh_interval: 0.3

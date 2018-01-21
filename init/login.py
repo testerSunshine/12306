@@ -181,7 +181,7 @@ class GoLogin:
         """
         user, passwd = _get_yaml()["set"]["12306count"][0]["uesr"], _get_yaml()["set"]["12306count"][1]["pwd"]
         if not user or not passwd:
-            raise UserPasswordException("温馨提示: 用户名或者密码为空，请仔细检查!")
+            raise UserPasswordException("温馨提示: 用户名或者密码为空，请仔细检查")
         login_num = 0
         while True:
             self.cookietp()

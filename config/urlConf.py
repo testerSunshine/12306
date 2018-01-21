@@ -84,5 +84,11 @@ urls = {
     "initNoCompleteUrl": {
         "req_url": "https://kyfw.12306.cn/otn/queryOrder/initNoComplete",
         "req_type": "post"
+    },
+    "cancelNoCompleteMyOrder": {
+        "req_url": "https://kyfw.12306.cn/otn/queryOrder/cancelNoCompleteMyOrder",
+        "req_type": "post"
     }
+
+
 }

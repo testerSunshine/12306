@@ -57,6 +57,10 @@ class HTTPClient(object):
         self._s.headers.update(headers)
         return self
 
+    def resetHeaders(self):
+        self._s.headers.clear()
+        self._s.headers.update(self._set_header())
+
     def getHeadersHost(self):
         return self._s.headers["Host"]
 
@@ -73,16 +77,30 @@ class HTTPClient(object):
 
     def send(self, url, data=None, **kwargs):
         """send request to url.If response 200,return response, else return None."""
-        method = "post"if data else "get"
+        if data:
+            method = "post"
+            self.setHeaders({"Content-Length": "{0}".format(len(data))})
+        else:
+            method = "get"
+            self.resetHeaders()
         response = self._s.request(method=method,
                                    url=url,
                                    data=data,
                                    **kwargs)
+        # print "url: {0} 返回码: {1}, 返回码type: {2}".format(url, response.status_code, type(response.status_code))
+        # print "response.content" + response.content
         try:
+            if not response.content:
+                response = self._s.request(method=method,
+                                           url=url,
+                                           data=data,
+                                           **kwargs)
             if response.content:
                 return json.loads(response.content) if method == "post" else response.content
             else:
                 return ""
+        except requests.exceptions.ConnectionError as e:
+            print e.message
         except ValueError as e:
             if e.message == "No JSON object could be decoded":
                 print("12306接口无响应，正在重试")

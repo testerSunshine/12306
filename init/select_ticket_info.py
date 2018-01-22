@@ -20,7 +20,7 @@ from myException.ticketIsExitsException import ticketIsExitsException
 from myException.ticketNumOutException import ticketNumOutException
 from myUrllib import myurllib2
 import codecs
-
+from init import gol
 
 
 class select:
@@ -36,6 +36,7 @@ class select:
         self.ticket_black_list = dict()
         self.is_check_user = dict()
         self.ticket_config = ticket_config
+
 
     def get_ticket_info(self,ticket_config):
         """
@@ -137,7 +138,7 @@ class select:
         :return: token
         """
         initdc_url = 'https://kyfw.12306.cn/otn/confirmPassenger/initDc'
-        initdc_result = myurllib2.get(initdc_url).decode(encoding="utf-8")
+        initdc_result = self.s.get(initdc_url, verify=False).content.decode(encoding='utf-8')
         token_name = re.compile(r"var globalRepeatSubmitToken = '(\S+)'")
         ticketInfoForPassengerForm_name = re.compile(r'var ticketInfoForPassengerForm=(\{.+\})?')
         order_request_params_name = re.compile(r'var orderRequestDTO=(\{.+\})?')
@@ -164,7 +165,7 @@ class select:
             '_json_att': None,
             'REPEAT_SUBMIT_TOKEN': self.token
         }
-        jsonData = json.loads(myurllib2.Post(get_passengerDTOs, get_data))
+        jsonData = self.s.post(get_passengerDTOs, data = get_data, verify=False).json()
         if 'data' in jsonData and jsonData['data'] and 'normal_passengers' in jsonData['data'] and jsonData['data'][
             'normal_passengers']:
             # return jsonData['data']['normal_passengers']
@@ -182,13 +183,15 @@ class select:
 
     def submitOrderRequestFunc(self, from_station, to_station, station_date=None):
         global station_ticket
-        select_url = 'https://kyfw.12306.cn/otn/leftTicket/queryZ?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT'.format(
-            self.station_date if station_date is None else station_date, from_station, to_station)
         try:
-            station_ticket = json.loads(myurllib2.get(select_url))
-        except:
-            print("网络可能存在问题，请您重试一下！")
-            self.submitOrderRequestFunc(from_station, to_station, station_date=None)
+            select_url = 'https://kyfw.12306.cn/otn/leftTicket/queryZ?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT'.format(
+                self.station_date if station_date is None else station_date, from_station, to_station)
+            station_ticket = self.s.get(select_url, allow_redirects=False, verify=False)
+            while station_ticket.status_code is not 200 :
+                station_ticket = self.s.get(select_url, allow_redirects=False, verify=False)
+            station_ticket = station_ticket.json()
+        except KeyboardInterrupt:
+            pass
 
         return station_ticket
 
@@ -225,8 +228,8 @@ class select:
                                 self.secretStr = ticket_info[0]
                                 train_no = ticket_info[3]
                                 print ('车次: ' + train_no + ' 始发车站: ' + self.from_station + ' 终点站: ' +
-                                       self.to_station + ' ' + self._station_seat[j] + ':' + ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))])
-                                if self.ticket_black_list.has_key(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds/60 < int(self.ticket_black_list_time):
+                                       self.to_station + ' ' + self._station_seat[j] + ':' + ticket_info[self.station_seat(self._station_seat[j])])
+                                if self.ticket_black_list.__contains__(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds/60 < int(self.ticket_black_list_time):
                                     print("该车次{} 正在被关小黑屋，跳过此车次".format(train_no))
                                     break
                                 else:
@@ -254,7 +257,7 @@ class select:
         """
         check_user_url = 'https://kyfw.12306.cn/otn/login/checkUser'
         data = dict(_json_att=None)
-        check_user = json.loads(myurllib2.Post(check_user_url, data))
+        check_user = self.s.post(check_user_url, data=data, verify=False).json()
         check_user_flag = check_user['data']['flag']
         if check_user_flag is True:
             return True
@@ -290,7 +293,12 @@ class select:
                 ('query_from_station_name', self.from_station),  # 起始车站
                 ('query_to_station_name', self.to_station),  # 终点车站
                 ]
-        submitResult = json.loads(myurllib2.Post(submit_station_url, data))
+
+        submitResult = self.s.post(submit_station_url, allow_redirects=False, data=data, verify=False)
+        while submitResult.status_code is not 200:
+            submitResult = self.s.post(submit_station_url, allow_redirects=False, data=data, verify=False)
+        submitResult = submitResult.json()
+        print(submitResult)
         if 'data' in submitResult and submitResult['data']:
             if submitResult['data'] == 'N':
                 print ('出票成功')
@@ -370,7 +378,7 @@ class select:
         data['tour_flag'] = 'dc'
         data['whatsSelect'] = 1
         data['REPEAT_SUBMIT_TOKEN'] = self.token
-        checkOrderInfo = json.loads(myurllib2.Post(checkOrderInfoUrl, data, ))
+        checkOrderInfo = self.s.post(checkOrderInfoUrl, data=data, verify=False).json()
         if 'data' in checkOrderInfo:
             if "ifShowPassCode" in checkOrderInfo["data"] and checkOrderInfo["data"]["ifShowPassCode"] == "Y":
                 is_need_code = True
@@ -412,7 +420,7 @@ class select:
             'train_location': self.get_ticketInfoForPassengerForm()['train_location'],
             'REPEAT_SUBMIT_TOKEN': self.get_token(),
         }
-        getQueueCountResult = json.loads(myurllib2.Post(getQueueCountUrl, data))
+        getQueueCountResult = self.s.post(getQueueCountUrl, data=data, verify=False).json()
         if "status" in getQueueCountResult and getQueueCountResult["status"] is True:
             if "countT" in getQueueCountResult["data"]:
                 ticket = getQueueCountResult["data"]["ticket"]
@@ -479,7 +487,7 @@ class select:
                         "_json_att": None,
                         "REPEAT_SUBMIT_TOKEN": self.get_token()
                     }
-                    fresult = json.loads(myurllib2.Post(randurl, randData), encoding='utf8')  # 校验验证码是否正确
+                    fresult = self.s.post(randurl, data=randData, verify=False).json()  # 校验验证码是否正确
                     checkcode = fresult['data']['msg']
                     if checkcode == 'TRUE':
                         print("验证码通过,正在提交订单")
@@ -491,7 +499,7 @@ class select:
                     print("不需要验证码")
                     break
             # print("".join(data))
-            checkQueueOrderResult = json.loads(myurllib2.Post(checkQueueOrderUrl, data))
+            checkQueueOrderResult = self.s.post(checkQueueOrderUrl, data=data, verify=False).json()
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
                 if 'submitStatus' in c_data and c_data['submitStatus'] is True:
@@ -532,7 +540,7 @@ class select:
                 # queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime?random={0}&tourFlag=dc&_json_att=&REPEAT_SUBMIT_TOKEN={1}".format(_random, self.get_token())
                 data = {"random": _random, "tourFlag": "dc"}
                 queryOrderWaitTimeUrl = "https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime"
-                queryOrderWaitTimeResult = json.loads(myurllib2.Post(queryOrderWaitTimeUrl, data))
+                queryOrderWaitTimeResult = self.s.post(queryOrderWaitTimeUrl, data=data, verify=False).json()
             except ValueError:
                 queryOrderWaitTimeResult = {}
             if queryOrderWaitTimeResult:
@@ -571,7 +579,7 @@ class select:
         queryMyOrderNoCompleteUrl = "https://kyfw.12306.cn/otn/queryOrder/queryMyOrderNoComplete"
         data = {"_json_att": None}
         try:
-            queryMyOrderNoCompleteResult = json.loads(myurllib2.Post(queryMyOrderNoCompleteUrl, data))
+            queryMyOrderNoCompleteResult = self.s.post(queryMyOrderNoCompleteUrl, data=data, verify=False).json()
         except ValueError:
             queryMyOrderNoCompleteResult = {}
         if queryMyOrderNoCompleteResult:
@@ -598,7 +606,7 @@ class select:
         """
         initNoCompleteUrl = "https://kyfw.12306.cn/otn/queryOrder/initNoComplete"
         data = {"_json_att": None}
-        myurllib2.Post(initNoCompleteUrl, data)
+        self.s.post(initNoCompleteUrl, data=data, verify=False)
 
     # def call_submit_ticket(self, function_name=None):
     #     """
@@ -618,6 +626,8 @@ class select:
 
     def main(self):
         self.call_login()
+        self.s = gol.get_value('s')
+        #print(self.s.cookies)
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         # if self.leftTicketLog(from_station, to_station):
         num = 1

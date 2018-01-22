@@ -166,11 +166,16 @@ class GoLogin:
             uamauthclientUrl = self.urlConf["uamauthclient"]["req_url"]
             data = {"tk": uamtk}
             uamauthclientResult = self.httpClint.send(uamauthclientUrl, data)
-            if "result_code" in uamauthclientResult and uamauthclientResult["result_code"] == 0:
-                print("欢迎 {} 登录".format(uamauthclientResult["username"]))
-                return True
+            if uamauthclientResult:
+                if "result_code" in uamauthclientResult and uamauthclientResult["result_code"] == 0:
+                    print("欢迎 {} 登录".format(uamauthclientResult["username"]))
+                    return True
+                else:
+                    return False
             else:
-                return False
+                self.httpClint.send(uamauthclientUrl, data)
+                url = self.urlConf["getUserInfo"]["req_url"]
+                self.httpClint.send(url)
 
     def go_login(self):
         """
@@ -192,8 +197,8 @@ class GoLogin:
             if self.codeCheck():
                 uamtk = self.baseLogin(user, passwd)
                 if uamtk:
-                    if self.getUserName(uamtk):
-                        break
+                    self.getUserName(uamtk)
+                    break
 
     def logout(self):
         url = 'https://kyfw.12306.cn/otn/login/loginOut'

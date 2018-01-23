@@ -23,7 +23,7 @@ from myException.ticketNumOutException import ticketNumOutException
 from myUrllib import myurllib2
 import codecs
 from init import gol
-
+import traceback
 
 class select:
     def __init__(self, ticket_config):
@@ -175,6 +175,7 @@ class select:
         }
         jsonData = self.s.post(
             get_passengerDTOs, data=get_data, verify=False).json()
+
         if 'data' in jsonData and jsonData['data'] and 'normal_passengers' in jsonData['data'] and jsonData['data'][
                 'normal_passengers']:
             # return jsonData['data']['normal_passengers']
@@ -257,7 +258,8 @@ class select:
                                         self._station_seat[j])
                                     self.getRepeatSubmitToken()
                                     if not self.user_info:  # 修改每次都调用用户接口导致用户接口不能用
-                                        self.user_info = self.getPassengerDTOs()
+                                        self.user_info = self.getPassengerDTOs(
+                                        )
                                     if self.checkOrderInfo(train_no, self._station_seat[j]):
                                         break
                             else:
@@ -422,6 +424,9 @@ class select:
             else:
                 if "errMsg" in checkOrderInfo['data'] and checkOrderInfo['data']["errMsg"]:
                     print(checkOrderInfo['data']["errMsg"])
+                    print("排队异常，错误信息：{0}, 将此列车 {1}加入小黑屋".format(
+                        getQueueCountResult["messages"][0], train_no))
+                    self.ticket_black_list[train_no] = datetime.datetime.now()
 
                 else:
                     print(checkOrderInfo)
@@ -696,28 +701,28 @@ class select:
                 print("正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, self.station_date, ",".join(
                     self.station_trains), (datetime.datetime.now() - start_time).microseconds / 1000))
             except PassengerUserException as e:
-                print(e.message)
+                traceback.print_exc()
                 break
             except ticketConfigException as e:
-                print(e.message)
+                traceback.print_exc()
                 break
             except ticketIsExitsException as e:
-                print(e.message)
+                traceback.print_exc()
                 break
             except ticketNumOutException as e:
-                print(e.message)
+                traceback.print_exc()
                 break
             except ValueError as e:
                 if e.message == "No JSON object could be decoded":
                     print("12306接口无响应，正在重试")
                 else:
-                    print(e.message)
+                    traceback.print_exc()
             except KeyError as e:
-                print(e.message)
+                traceback.print_exc()
             except TypeError as e:
-                print(e.message)
+                traceback.print_exc()
             except socket.error as e:
-                print(e.message)
+                traceback.print_exc()
 
 
 if __name__ == '__main__':

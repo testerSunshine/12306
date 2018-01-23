@@ -170,7 +170,7 @@ class select:
             'normal_passengers']:
             normal_passengers = jsonData['data']['normal_passengers']
             _normal_passenger = [normal_passengers[i] for i in range(len(normal_passengers))if normal_passengers[i]["passenger_name"] in self.ticke_peoples]
-            return _normal_passenger if _normal_passenger else normal_passengers[0]  # 如果配置乘车人没有在账号，则默认返回第一个用户
+            return _normal_passenger if _normal_passenger else [normal_passengers[0]]  # 如果配置乘车人没有在账号，则默认返回第一个用户
         else:
             if 'data' in jsonData and 'exMsg' in jsonData['data'] and jsonData['data']['exMsg']:
                 print(jsonData['data']['exMsg'])
@@ -246,20 +246,21 @@ class select:
         检查用户是否达到订票条件
         :return:
         """
-        check_user_url = self.confUrl["check_user_url"]["req_url"]
-        data = dict(_json_att=None)
-        check_user = self.httpClint.send(check_user_url, data)
-        check_user_flag = check_user['data']['flag']
-        if check_user_flag is True:
-            return True
+        # check_user_url = self.confUrl["check_user_url"]["req_url"]
+        # data = dict(_json_att=None)
+        # check_user = self.httpClint.send(check_user_url, data)
+        # check_user_flag = check_user['data']['flag']
+        is_login = self.call_login(auth=True)
+        if "result_code" in is_login and is_login["result_code"] == 0:
+            self.is_check_user["user_time"] = datetime.datetime.now()
         else:
-            if check_user['messages']:
-                print ('用户检查失败：%s，可能未登录，可能session已经失效' % check_user['messages'][0])
+            if "result_message" in is_login and is_login["result_message"]:
+                print ('用户检查失败：%s，可能未登录，可能session已经失效' % is_login["result_message"])
                 print ('正在尝试重新登录')
                 self.call_login()
                 self.is_check_user["user_time"] = datetime.datetime.now()
             else:
-                print ('用户检查失败： %s，可能未登录，可能session已经失效' % check_user)
+                print ('用户检查失败： %s，可能未登录，可能session已经失效' % is_login)
                 print ('正在尝试重新登录')
                 self.call_login()
                 self.is_check_user["user_time"] = datetime.datetime.now()
@@ -618,23 +619,27 @@ class select:
     #     else:
     #         self.submitOrderRequest()
 
-    def call_login(self):
+    def call_login(self, auth=False):
         """
         登录回调方法
         :return:
         """
         login = GoLogin(self.httpClint, self.confUrl)
-        login.go_login()
+        if auth:
+            return login.auth()
+        else:
+            login.go_login()
 
     def main(self):
         self.call_login()
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         # if self.leftTicketLog(from_station, to_station):
+        self.check_user()
         num = 1
         while 1:
             try:
                 num += 1
-                if "user_time" in self.is_check_user and (datetime.datetime.now() - self.is_check_user["user_time"]).seconds/60 > 10:
+                if "user_time" in self.is_check_user and (datetime.datetime.now() - self.is_check_user["user_time"]).seconds/60 > 5:
                     # 十分钟检查一次用户是否登录
                     self.check_user()
                 time.sleep(self.select_refresh_interval)

@@ -77,6 +77,7 @@ class HTTPClient(object):
 
     def send(self, url, data=None, **kwargs):
         """send request to url.If response 200,return response, else return None."""
+        error_data = {"code": 99999, "data": ""}
         if data:
             method = "post"
             self.setHeaders({"Content-Length": "{0}".format(len(data))})
@@ -84,31 +85,34 @@ class HTTPClient(object):
             method = "get"
             self.resetHeaders()
         response = self._s.request(method=method,
+                                   timeout=10,
                                    url=url,
                                    data=data,
                                    **kwargs)
-        # print "url: {0} 返回码: {1}, 返回码type: {2}".format(url, response.status_code, type(response.status_code))
-        # print "response.content" + response.content
         try:
             if not response.content:
                 response = self._s.request(method=method,
+                                           timeout=10,
                                            url=url,
                                            data=data,
                                            **kwargs)
             if response.content:
                 return json.loads(response.content) if method == "post" else response.content
             else:
-                return ""
+                return error_data
+        except requests.exceptions.Timeout as e:
+            print e.message
+            return error_data
         except requests.exceptions.ConnectionError as e:
             print e.message
+            return error_data
         except ValueError as e:
             if e.message == "No JSON object could be decoded":
                 print("12306接口无响应，正在重试")
+                return error_data
             else:
                 print(e.message)
-        except KeyError as e:
-            print(e.message)
-        except TypeError as e:
-            print(e.message)
+                return error_data
         except socket.error as e:
             print(e.message)
+            return error_data

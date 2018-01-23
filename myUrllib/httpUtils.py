@@ -79,7 +79,7 @@ class HTTPClient(object):
     def send(self, url, data=None, **kwargs):
         """send request to url.If response 200,return response, else return None."""
         allow_redirects = False
-        error_data = {"code": 99999, "data": ""}
+        error_data = {"code": 99999, "message": "重试次数达到上限"}
         if data:
             method = "post"
             self.setHeaders({"Content-Length": "{0}".format(len(data))})
@@ -107,3 +107,4 @@ class HTTPClient(object):
                     return error_data
             else:
                 sleep(0.1)
+        return error_data

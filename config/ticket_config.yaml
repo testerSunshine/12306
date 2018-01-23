@@ -62,4 +62,10 @@ damatu:
   pwd: "wen1995"
 
 
-
+email_conf:
+  is_email: True
+  email: "***@163.com"
+  notice_email_list: "***@163.com"
+  username: "***"
+  password: "****"
+  host: "smtp.163.com"

@@ -2,6 +2,7 @@
 import datetime
 import json
 import socket
+from time import sleep
 
 import requests
 
@@ -77,6 +78,7 @@ class HTTPClient(object):
 
     def send(self, url, data=None, **kwargs):
         """send request to url.If response 200,return response, else return None."""
+        allow_redirects = False
         error_data = {"code": 99999, "data": ""}
         if data:
             method = "post"
@@ -84,35 +86,24 @@ class HTTPClient(object):
         else:
             method = "get"
             self.resetHeaders()
-        response = self._s.request(method=method,
-                                   timeout=10,
-                                   url=url,
-                                   data=data,
-                                   **kwargs)
-        try:
-            if not response.content:
-                response = self._s.request(method=method,
-                                           timeout=10,
-                                           url=url,
-                                           data=data,
-                                           **kwargs)
-            if response.content:
-                return json.loads(response.content) if method == "post" else response.content
+        for i in range(10):
+            response = self._s.request(method=method,
+                                       timeout=10,
+                                       url=url,
+                                       data=data,
+                                       allow_redirects=allow_redirects,
+                                       **kwargs)
+            if response.status_code == 200:
+                try:
+                    if response.content:
+                        return json.loads(response.content) if method == "post" else response.content
+                    else:
+                        return error_data
+                except (requests.exceptions.Timeout, requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError) as e:
+                    print e.message
+                    return error_data
+                except socket.error as e:
+                    print(e.message)
+                    return error_data
             else:
-                return error_data
-        except requests.exceptions.Timeout as e:
-            print e.message
-            return error_data
-        except requests.exceptions.ConnectionError as e:
-            print e.message
-            return error_data
-        except ValueError as e:
-            if e.message == "No JSON object could be decoded":
-                print("12306接口无响应，正在重试")
-                return error_data
-            else:
-                print(e.message)
-                return error_data
-        except socket.error as e:
-            print(e.message)
-            return error_data
+                sleep(0.1)

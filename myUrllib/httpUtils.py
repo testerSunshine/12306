@@ -87,24 +87,22 @@ class HTTPClient(object):
             method = "get"
             self.resetHeaders()
         for i in range(10):
-            response = self._s.request(method=method,
-                                       timeout=10,
-                                       url=url,
-                                       data=data,
-                                       allow_redirects=allow_redirects,
-                                       **kwargs)
-            if response.status_code == 200:
-                try:
-                    if response.content:
-                        return json.loads(response.content) if method == "post" else response.content
-                    else:
-                        return error_data
-                except (requests.exceptions.Timeout, requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError) as e:
-                    print e.message
-                    return error_data
-                except socket.error as e:
-                    print(e.message)
-                    return error_data
-            else:
-                sleep(0.1)
+            try:
+                response = self._s.request(method=method,
+                                           timeout=10,
+                                           url=url,
+                                           data=data,
+                                           allow_redirects=allow_redirects,
+                                           **kwargs)
+                if response.status_code == 200:
+                        if response.content:
+                            return json.loads(response.content) if method == "post" else response.content
+                        else:
+                            return error_data
+                else:
+                    sleep(0.1)
+            except (requests.exceptions.Timeout, requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
+                pass
+            except socket.error:
+                pass
         return error_data

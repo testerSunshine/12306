@@ -246,21 +246,20 @@ class select:
         检查用户是否达到订票条件
         :return:
         """
-        # check_user_url = self.confUrl["check_user_url"]["req_url"]
-        # data = dict(_json_att=None)
-        # check_user = self.httpClint.send(check_user_url, data)
-        # check_user_flag = check_user['data']['flag']
-        is_login = self.call_login(auth=True)
-        if "result_code" in is_login and is_login["result_code"] == 0:
+        check_user_url = self.confUrl["check_user_url"]["req_url"]
+        data = {"_json_att": ""}
+        check_user = self.httpClint.send(check_user_url, data)
+        check_user_flag = check_user['data']['flag']
+        if check_user_flag is True:
             self.is_check_user["user_time"] = datetime.datetime.now()
         else:
-            if "result_message" in is_login and is_login["result_message"]:
-                print ('用户检查失败：%s，可能未登录，可能session已经失效' % is_login["result_message"])
+            if check_user['messages']:
+                print ('用户检查失败：%s，可能未登录，可能session已经失效' % check_user['messages'][0])
                 print ('正在尝试重新登录')
                 self.call_login()
                 self.is_check_user["user_time"] = datetime.datetime.now()
             else:
-                print ('用户检查失败： %s，可能未登录，可能session已经失效' % is_login)
+                print ('用户检查失败： %s，可能未登录，可能session已经失效' % check_user)
                 print ('正在尝试重新登录')
                 self.call_login()
                 self.is_check_user["user_time"] = datetime.datetime.now()
@@ -633,14 +632,13 @@ class select:
     def main(self):
         self.call_login()
         from_station, to_station = self.station_table(self.from_station, self.to_station)
-        # if self.leftTicketLog(from_station, to_station):
         self.check_user()
         num = 1
         while 1:
             try:
                 num += 1
                 if "user_time" in self.is_check_user and (datetime.datetime.now() - self.is_check_user["user_time"]).seconds/60 > 5:
-                    # 十分钟检查一次用户是否登录
+                    # 5分钟检查一次用户是否登录
                     self.check_user()
                 time.sleep(self.select_refresh_interval)
                 if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":

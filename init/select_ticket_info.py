@@ -234,23 +234,25 @@ class select:
             if value['result']:
                 for i in value['result']:
                     ticket_info = i.split('|')
-                    if ticket_info[11] == "Y" and ticket_info[1] == "预订":  # 筛选未在开始时间内的车次
-                        for j in range(len(self._station_seat)):
-                            is_ticket_pass = ticket_info[self.station_seat(
-                                self._station_seat[j])]
-                            # print self._station_seat[j]
-                            # 过滤有效目标车次
-                            if is_ticket_pass != '' and is_ticket_pass != '无' and ticket_info[3] in self.station_trains and is_ticket_pass != '*':
-                                # tiket_values = [k for k in value['map'].values()]
-                                self.secretStr = ticket_info[0]
-                                train_no = ticket_info[3]
-                                print ('车次: ' + train_no + ' 始发车站: ' + self.from_station + ' 终点站: ' +
-                                       self.to_station + ' ' + self._station_seat[j] + ':' + ticket_info[self.station_seat(self._station_seat[j])])
-                                if self.ticket_black_list.__contains__(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds / 60 < int(self.ticket_black_list_time):
-                                    print("该车次{} 正在被关小黑屋，跳过此车次".format(train_no))
-                                    self.ticket_black_list[train_no] = datetime.datetime.now()
-                                    break
-                                else:
+                    train_no = ticket_info[3]
+                    # print(ticket_info[3], ticket_info[11] ,  ticket_info[1] ,self.ticket_black_list.__contains__(train_no) )
+                    if ticket_info[3] in self.station_trains:
+                        
+                        if self.ticket_black_list.__contains__(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds / 60 < int(self.ticket_black_list_time):
+                                print("该车次{} 正在被关小黑屋，跳过此车次".format(train_no))
+                                # self.ticket_black_list[train_no] = datetime.datetime.now()
+                        elif ticket_info[11] == "Y" and ticket_info[1] == "预订":  # 筛选未在开始时间内的车次
+                            for j in range(len(self._station_seat)):
+                                is_ticket_pass = ticket_info[self.station_seat(
+                                    self._station_seat[j])]
+                                # print self._station_seat[j]
+                                # 过滤有效目标车次
+                                if is_ticket_pass != '' and is_ticket_pass != '无' and is_ticket_pass != '*':
+                                    # tiket_values = [k for k in value['map'].values()]
+                                    self.secretStr = ticket_info[0]
+                                    print ('车次: ' + train_no + ' 始发车站: ' + self.from_station + ' 终点站: ' +
+                                        self.to_station + ' ' + self._station_seat[j] + ':' + ticket_info[self.station_seat(self._station_seat[j])])
+                                
                                     print ('正在尝试提交订票...')
                                     # self.submitOrderRequestFunc(from_station, to_station, self.time())
                                     self.submit_station()
@@ -258,14 +260,13 @@ class select:
                                         self._station_seat[j])
                                     self.getRepeatSubmitToken()
                                     if not self.user_info:  # 修改每次都调用用户接口导致用户接口不能用
-                                        self.user_info = self.getPassengerDTOs(
-                                        )
+                                        self.user_info = self.getPassengerDTOs()
                                     if self.checkOrderInfo(train_no, self._station_seat[j]):
                                         break
-                            else:
-                                pass
-                    else:
-                        pass
+                                else:
+                                    pass
+                        else:
+                            pass
                 time.sleep(self.expect_refresh_interval)
             else:
                 print("车次配置信息有误，或者返回数据异常，请检查 {}".format(station_ticket))
@@ -338,19 +339,30 @@ class select:
         :return: 
         """
 
-        passengerTicketStr = {
-            "商务座": "SWZ",
-            "特等座": "TZ",
-            "一等座": "ZY",
-            "二等座": "ZE",
-            "高级软卧": "GR",
-            "软卧": "RW",
-            "硬卧": "YW",
-            "动卧": "SRRB",
-            "高级动卧": "YYRW",
-            "软座": "RZ",
-            "硬座": "YZ",
-            "无座": "WZ"}
+        # passengerTicketStr = {
+        #     "商务座": "SWZ",
+        #     "特等座": "TZ",
+        #     "一等座": "ZY",
+        #     "二等座": "ZE",
+        #     "高级软卧": "GR",
+        #     "软卧": "RW",
+        #     "硬卧": "YW",
+        #     "动卧": "SRRB",
+        #     "高级动卧": "YYRW",
+        #     "软座": "RZ",
+        #     "硬座": "YZ",
+        #     "无座": "WZ"}
+
+        passengerTicketStr = { 
+            '一等座': 'M', 
+            '特等座': 'P', 
+            '二等座': 'O', 
+            '商务座': 9, 
+            '硬座': 1, 
+            '无座': 1, 
+            '软卧': 4, 
+            '硬卧': 3, 
+        } 
         self.set_type = str(passengerTicketStr[set_type.replace(' ', '')])
 
     def ticket_type(self):
@@ -398,6 +410,10 @@ class select:
         :return: 
         """
         passengerTicketStrList, oldPassengerStr = self.getPassengerTicketStrListAndOldPassengerStr()
+        # print('*'* 20 )
+        # print(passengerTicketStrList)
+        # print(oldPassengerStr) 
+        # print('*'* 20 )
         checkOrderInfoUrl = 'https://kyfw.12306.cn/otn/confirmPassenger/checkOrderInfo'
         data = OrderedDict()
         data['cancel_flag'] = 2
@@ -409,6 +425,7 @@ class select:
         data['tour_flag'] = 'dc'
         data['whatsSelect'] = 1
         data['REPEAT_SUBMIT_TOKEN'] = self.token
+        # print(checkOrderInfoUrl, data)
         checkOrderInfo = self.s.post(
             checkOrderInfoUrl, data=data, verify=False).json()
         if 'data' in checkOrderInfo:
@@ -423,9 +440,8 @@ class select:
                     return True
             else:
                 if "errMsg" in checkOrderInfo['data'] and checkOrderInfo['data']["errMsg"]:
-                    print(checkOrderInfo['data']["errMsg"])
-                    print("排队异常，错误信息：{0}, 将此列车 {1}加入小黑屋".format(
-                        getQueueCountResult["messages"][0], train_no))
+                    print("checkOrderInfo 排队异常，错误信息：{0}, 将此列车 {1}加入小黑屋".format(
+                        checkOrderInfo['data']["errMsg"], train_no))
                     self.ticket_black_list[train_no] = datetime.datetime.now()
 
                 else:
@@ -478,7 +494,7 @@ class select:
                     getQueueCountResult, train_no))
                 self.ticket_black_list[train_no] = datetime.datetime.now()
         elif "messages" in getQueueCountResult and getQueueCountResult["messages"]:
-            print("排队异常，错误信息：{0}, 将此列车 {1}加入小黑屋".format(
+            print("getQueueCount 排队异常，错误信息：{0}, 将此列车 {1}加入小黑屋".format(
                 getQueueCountResult["messages"][0], train_no))
             self.ticket_black_list[train_no] = datetime.datetime.now()
         else:

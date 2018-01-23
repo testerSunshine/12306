@@ -247,6 +247,7 @@ class select:
                                        self.to_station + ' ' + self._station_seat[j] + ':' + ticket_info[self.station_seat(self._station_seat[j])])
                                 if self.ticket_black_list.__contains__(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds / 60 < int(self.ticket_black_list_time):
                                     print("该车次{} 正在被关小黑屋，跳过此车次".format(train_no))
+                                    self.ticket_black_list[train_no] = datetime.datetime.now()
                                     break
                                 else:
                                     print ('正在尝试提交订票...')

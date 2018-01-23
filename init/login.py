@@ -13,7 +13,7 @@ from init import gol
 
 
 class go_login:
-    def __init__(self,ticket_config = ""):
+    def __init__(self, ticket_config=""):
         self.captcha_url = 'https://kyfw.12306.cn/passport/captcha/captcha-image?login_site=E&module=login&rand=sjrand&%s' % random.random()
         self.ticket_config = ticket_config
         self.text = ""
@@ -25,9 +25,8 @@ class go_login:
         s = requests.Session()
         return s
 
-
     def get_logincookies(self):
-        global login_cookies,randCode
+        global login_cookies, randCode
         init_url = "https://kyfw.12306.cn/otn/login/init"
         uamtk_data = {'appid': 'otn'}
         httpZF_url = "https://kyfw.12306.cn/otn/HttpZF/logdevice?algID=i8UYSfDgWt&hashCode=td9I6c9a9k73Jv8Nc2ie0FGZWit-S-0MQJfASXNUQmk&FMQw=0&q4f3=zh-CN&VySQ=FGFKKeD8kVn5VC6vc-6l42-GJzul0oeM&VPIf=1&custID=133&VEek=unknown&dzuS=0&yD16=0&EOQP=c227b88b01f5c513710d4b9f16a5ce52&lEnu=2886927661&jp76=e237f9703f53d448d77c858b634154a5&hAqN=MacIntel&platform=WEB&ks0Q=b9a555dce60346a48de933b3e16ebd6e&TeRS=877x1440&tOHY=24xx900x1440&Fvje=i1l1o1s1&q5aJ=-8&wNLf=99115dfb07133750ba677d055874de87&0aew=Mozilla/5.0%20(Macintosh;%20Intel%20Mac%20OS%20X%2010_13_2)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/63.0.3239.132%20Safari/537.36&E3gR=ea438f8fd5bf8a3ac1fe9bd188f2c823&timestamp=1516195328849"
@@ -37,54 +36,67 @@ class go_login:
         login_userLogin = "https://kyfw.12306.cn/otn/login/userLogin"
         #userLogin = "https://kyfw.12306.cn/otn/passport?redirect=/otn/login/userLogin"
         uamauthclient = "https://kyfw.12306.cn/otn/uamauthclient"
-        self.s.get(init_url,verify=False)
-        self.s.post(uamtk_url,data=uamtk_data,verify=False)
+        self.s.get(init_url, verify=False)
+        self.s.post(uamtk_url, data=uamtk_data, verify=False)
         content = self.s.get(httpZF_url, verify=False).content
         content = content.decode(encoding='utf-8').split("'")[1]
         d = json.loads(content)
-        requests.utils.add_dict_to_cookiejar(self.s.cookies, {"RAIL_DEVICEID" : d['dfp']})
+        requests.utils.add_dict_to_cookiejar(
+            self.s.cookies, {"RAIL_DEVICEID": d['dfp']})
         #requests.utils.add_dict_to_cookiejar(self.s.cookies, {"RAIL_DEVICEID": 'XHe6FfHQKdYj65DI8SswKR16VuCcV5nT8G62Uyj0uiGpChNOindm0SNWaPvgL2_obrOdD22vuuZf1WmTDAERbW1IRBdpJVAaKYA8Ks9FOVufsrLZ2ccVy3g5XdNQIyXrjmk-psvlj7TSvHrcpUVcvlQd2cn5qEp7'})
-        requests.utils.add_dict_to_cookiejar(self.s.cookies, {"RAIL_EXPIRATION" : d['exp']})
-        requests.utils.add_dict_to_cookiejar(self.s.cookies, {"_jc_save_fromDate": '2018-01-27'})
-        requests.utils.add_dict_to_cookiejar(self.s.cookies, {"_jc_save_toStation": '%u5170%u5DDE%u897F%2CLAJ'})
-        requests.utils.add_dict_to_cookiejar(self.s.cookies, {"_jc_save_toDate": '2018-01-22'})
-        requests.utils.add_dict_to_cookiejar(self.s.cookies, {"_jc_save_wfdc_flag": 'dc'})
-        requests.utils.add_dict_to_cookiejar(self.s.cookies, {"_jc_save_fromStation": '%u4E0A%u6D77%u8679%u6865%2CAOH'})
+        requests.utils.add_dict_to_cookiejar(
+            self.s.cookies, {"RAIL_EXPIRATION": d['exp']})
+        requests.utils.add_dict_to_cookiejar(
+            self.s.cookies, {"_jc_save_fromDate": '2018-01-27'})
+        requests.utils.add_dict_to_cookiejar(
+            self.s.cookies, {"_jc_save_toStation": '%u5170%u5DDE%u897F%2CLAJ'})
+        requests.utils.add_dict_to_cookiejar(
+            self.s.cookies, {"_jc_save_toDate": '2018-01-22'})
+        requests.utils.add_dict_to_cookiejar(
+            self.s.cookies, {"_jc_save_wfdc_flag": 'dc'})
+        requests.utils.add_dict_to_cookiejar(
+            self.s.cookies, {"_jc_save_fromStation": '%u4E0A%u6D77%u8679%u6865%2CAOH'})
         randCode = self.get_randcode()
-        randdata ={"answer":randCode,
-                   "login_site":"E",
-                   "rand":"sjrand"}
-        login_data = {"username":self.user,
-                      "password":self.passwd,
-                      "appid":"otn"}
-        rand_result = self.s.post(captcha_check_url, data=randdata, verify=False).json()
+        randdata = {"answer": randCode,
+                    "login_site": "E",
+                    "rand": "sjrand"}
+        login_data = {"username": self.user,
+                      "password": self.passwd,
+                      "appid": "otn"}
+        rand_result = self.s.post(
+            captcha_check_url, data=randdata, verify=False).json()
         print(rand_result)
-        if rand_result['result_code'] is not '4' :
+        while rand_result['result_code'] is not '4':
             randCode = self.get_randcode()
             randdata = {"answer": randCode,
                         "login_site": "E",
                         "rand": "sjrand"}
-            rand_result = self.s.post(captcha_check_url, data=randdata, verify=False).json()
+            rand_result = self.s.post(
+                captcha_check_url, data=randdata, verify=False).json()
             print(rand_result)
 
-        login_result = self.s.post(login_url, allow_redirects=False, data=login_data, verify=False)
+        login_result = self.s.post(
+            login_url, allow_redirects=False, data=login_data, verify=False)
         login_code = login_result.status_code
         print(login_code)
-        #解决登录接口302重定向问题
-        while login_code == 302 :
-            login_result = self.s.post(login_url, allow_redirects=False, data=login_data, verify=False)
+        # 解决登录接口302重定向问题
+        while login_code == 302:
+            login_result = self.s.post(
+                login_url, allow_redirects=False, data=login_data, verify=False)
             login_code = login_result.status_code
-            if login_code == 200 :
+            if login_code == 200:
                 print(login_result.json())
-        login_userLogin_data = {'_json_att' : ''}
+        login_userLogin_data = {'_json_att': ''}
         self.s.post(login_userLogin, data=login_userLogin_data, verify=False)
-        uamtk_result = self.s.post(uamtk_url, data=uamtk_data, verify=False).json()
+        uamtk_result = self.s.post(
+            uamtk_url, data=uamtk_data, verify=False).json()
+        print(uamtk_result)
         uamauthclient_data = {'tk': uamtk_result['newapptk']}
-        uamauthclient_result = self.s.post(uamauthclient, data=uamauthclient_data, verify=False).json()
+        uamauthclient_result = self.s.post(
+            uamauthclient, data=uamauthclient_data, verify=False).json()
         print(uamauthclient_result)
         login_cookies = self.s.cookies.get_dict()
         return login_cookies
-
 
     def get_randcode(self):
         self.stoidinput("下载验证码...")
@@ -130,7 +142,6 @@ class go_login:
         # for index, c in enumerate(myurllib2.cookiejar):
         #     stoidinput(c)
 
-
     # def readImg(self):
     #     """
     #     增加手动打码，只是登录接口，完全不用担心提交订单效率
@@ -162,8 +173,7 @@ class go_login:
     #         pass
     #     return randCode
 
-
-    def stoidinput(self,text):
+    def stoidinput(self, text):
         """
         正常信息输出
         :param text:
@@ -171,8 +181,7 @@ class go_login:
         """
         print("\033[34m[*]\033[0m %s " % text)
 
-
-    def errorinput(self,text):
+    def errorinput(self, text):
         """
         错误信息输出
         :param text:
@@ -180,7 +189,6 @@ class go_login:
         """
         print("\033[32m[!]\033[0m %s " % text)
         return False
-
 
     def codexy(self):
         """
@@ -223,14 +231,14 @@ class go_login:
                 pass
             post.append(offsetsX)
             post.append(offsetsY)
-        randCode = str(post).replace(']', '').replace('[', '').replace("'", '').replace(' ', '')
+        randCode = str(post).replace(']', '').replace(
+            '[', '').replace("'", '').replace(' ', '')
         return randCode
-
 
     def login(self):
         self.get_logincookies()
         gol._init()
-        gol.set_value('s',self.s)
+        gol.set_value('s', self.s)
 
     #
     # def getUserinfo(self):
@@ -248,9 +256,6 @@ class go_login:
     #         self.stoidinput("欢迎 %s 登录" % re.search(name, result).group(1))
     #     except AttributeError:
     #         pass
-
-
-
 
     def logout(self):
         url = 'https://kyfw.12306.cn/otn/login/loginOut'

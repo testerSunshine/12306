@@ -22,6 +22,7 @@
 #ticke_peoples: 乘客
 #damatu：打码兔账号，用于自动登录
 #is_aotu_code是否自动打码，如果选择Ture,则调用打码兔打码，默认不使用打码兔
+#aotu_code_type 1为打码兔，2为若快
 #is_email: 是否需要邮件通知 ex: True or False 切记，邮箱加完一定到config目录下测试emailConf功能是否正常
 
 #邮箱配置 列举163
@@ -39,9 +40,22 @@
 
 
 set:
-  station_date: "2018-02-12"
+  station_dates:
+#    - "2018-01-27"
+#    - "2018-01-28"
+    - "2018-02-09"
+    - "2018-02-10"
+#    - "2018-02-09"
   station_trains:
+    - "G4741"
+    - "G2365"
+    - "G1371"
+    - "G1337"
     - "G1377"
+    - "G1329"
+#    - "G1302"
+#    - "G1372"
+#    - "G1326"
 #    - "K4300"
 #    - "K5226"
 #    - "K7772"
@@ -51,35 +65,36 @@ set:
 #    - "G1373"
 #    - "G1363"
 #    - "G4933"
-  from_station: "昆山"
-  to_station: "长沙"
+  from_station: "上海"
+  to_station: "邵阳"
   set_type:
     - "二等座"
   is_more_ticket: True
   ticke_peoples:
-    - "宋倩倩"
+    - "文贤平"
 #    - "彭淑杰"
   12306count:
 #    - uesr: ""
 #    - pwd: "apple1995"
-    - uesr: ""
-    - pwd: "songyu1995"
+    - uesr: "931128603@qq.com"
+    - pwd: "QWERTY"
 
-select_refresh_interval: 0.1
-expect_refresh_interval: 0.3
+select_refresh_interval: 0.5
+expect_refresh_interval: 0.1
 ticket_black_list_time: 3
-is_aotu_code: False
+is_aotu_code: True
+aotu_code_type: 2
 #enable_proxy: False
 
 damatu:
-  uesr: ""
-  pwd: "wen1995"
+  uesr: "931128603"
+  pwd: "qazWSX1995"
 
 email_conf:
-  is_email: False
-  email: "@qq.com "
-  notice_email_list: "@qq.com"
-  username: ""
+  is_email: True
+  email: "931128603@qq.com "
+  notice_email_list: "61995120@qq.com"
+  username: "931128603"
   password: "xwopwxbkupbqbfgb"
   host: "smtp.qq.com"
 

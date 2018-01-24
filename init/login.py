@@ -9,15 +9,19 @@ from time import sleep
 from config.ticketConf import _get_yaml
 from PIL import Image
 from damatuCode.damatuWeb import DamatuApi
+from damatuCode.ruokuai import RClient
 from myException.UserPasswordException import UserPasswordException
+from myException.balanceException import balanceException
 from myUrllib import myurllib2
 
 
 class GoLogin:
-    def __init__(self, httpClint, urlConf):
+    def __init__(self, httpClint, urlConf, is_aotu_code, aotu_code_type):
         self.httpClint = httpClint
         self.randCode = ""
         self.urlConf = urlConf
+        self.is_aotu_code = is_aotu_code
+        self.aotu_code_type = aotu_code_type
 
     def cookietp(self):
         print("正在获取cookie")
@@ -28,7 +32,7 @@ class GoLogin:
         # for index, c in enumerate(myurllib2.cookiejar):
         #     stoidinput(c)
 
-    def readImg(self):
+    def readImg(self, code_url):
         """
         增加手动打码，只是登录接口，完全不用担心提交订单效率
         思路
@@ -38,28 +42,39 @@ class GoLogin:
         :return:
         """
         print ("下载验证码...")
-        codeimgUrl = self.urlConf["getCodeImg"]["req_url"]
+        codeimgUrl = code_url
         img_path = './tkcode'
-        result = self.httpClint.send(codeimgUrl)
+        result = self.httpClint.send(codeimgUrl, is_logger=False)
         try:
             open(img_path, 'wb').write(result)
-            if _get_yaml()["is_aotu_code"]:
-                self.randCode = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"], img_path).main()
+            if self.is_aotu_code:
+                if self.aotu_code_type == 1:
+                    return DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"], img_path).main()
+                elif self.aotu_code_type == 2:
+                    rc = RClient(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"])
+                    im = open('./tkcode', 'rb').read()
+                    Result = rc.rk_create(im, 6113)
+                    if "Result" in Result:
+                        return self.codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
+                    else:
+                        if "Error" in Result and Result["Error"]:
+                            print Result["Error"]
+                            return ""
             else:
                 img = Image.open('./tkcode')
                 img.show()
-                self.codexy()
+                return self.codexy()
         except OSError as e:
             print (e)
-            pass
+            return ""
 
-    def codexy(self):
+    def codexy(self, Ofset=None, is_raw_input=True):
         """
         获取验证码
         :return: str
         """
-
-        Ofset = raw_input("请输入验证码: ")
+        if is_raw_input:
+            Ofset = raw_input("请输入验证码: ")
         select = Ofset.split(',')
         post = []
         offsetsX = 0  # 选择的答案的left值,通过浏览器点击8个小图的中点得到的,这样基本没问题
@@ -93,7 +108,9 @@ class GoLogin:
                 pass
             post.append(offsetsX)
             post.append(offsetsY)
-        self.randCode = str(post).replace(']', '').replace('[', '').replace("'", '').replace(' ', '')
+        randCode = str(post).replace(']', '').replace('[', '').replace("'", '').replace(' ', '')
+        print("验证码识别坐标为{0}".format(randCode))
+        return randCode
 
     def auth(self):
         """认证"""
@@ -149,7 +166,7 @@ class GoLogin:
             if messages.find("密码输入错误") is not -1:
                 raise UserPasswordException("{0}".format(messages))
             else:
-                print ("登录失败: {0}".format("".join(tresult)))
+                print ("登录失败: {0}".format(messages))
                 print ("尝试重新登陆")
                 return False
         else:
@@ -166,11 +183,16 @@ class GoLogin:
             uamauthclientUrl = self.urlConf["uamauthclient"]["req_url"]
             data = {"tk": uamtk}
             uamauthclientResult = self.httpClint.send(uamauthclientUrl, data)
-            if "result_code" in uamauthclientResult and uamauthclientResult["result_code"] == 0:
-                print("欢迎 {} 登录".format(uamauthclientResult["username"]))
-                return True
+            if uamauthclientResult:
+                if "result_code" in uamauthclientResult and uamauthclientResult["result_code"] == 0:
+                    print("欢迎 {} 登录".format(uamauthclientResult["username"]))
+                    return True
+                else:
+                    return False
             else:
-                return False
+                self.httpClint.send(uamauthclientUrl, data)
+                url = self.urlConf["getUserInfo"]["req_url"]
+                self.httpClint.send(url)
 
     def go_login(self):
         """
@@ -179,19 +201,25 @@ class GoLogin:
         :param passwd: 密码
         :return:
         """
+        if self.is_aotu_code and self.aotu_code_type == 1:
+            balance = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"]).getBalance()
+            if int(balance) < 40:
+                raise balanceException('余额不足，当前余额为: {}'.format(balance))
         user, passwd = _get_yaml()["set"]["12306count"][0]["uesr"], _get_yaml()["set"]["12306count"][1]["pwd"]
+        if not user or not passwd:
+            raise UserPasswordException("温馨提示: 用户名或者密码为空，请仔细检查")
         login_num = 0
         while True:
             self.cookietp()
             self.httpClint.set_cookies(_jc_save_wfdc_flag="dc", _jc_save_fromStation="%u4E0A%u6D77%u8679%u6865%2CAOH", _jc_save_toStation="%u5170%u5DDE%u897F%2CLAJ", _jc_save_fromDate="2018-02-14", _jc_save_toDate="2018-01-16", RAIL_DEVICEID="EN_3_EGSe2GWGHXJeCkFQ52kHvNCrNlkz9n1GOqqQ1wR0i98WsD8Gj-a3YHZ-XYKeESWgCiJyyucgSwkFOzVHhHqfpidLPcm2vK9n83uzOPuShO3Pl4lCydAtQu4BdFqz-RVmiduNFixrcrN_Ny43135JiEtqLaI")
-            self.readImg()
+            self.randCode = self.readImg(self.urlConf["getCodeImg"]["req_url"])
             login_num += 1
             self.auth()
             if self.codeCheck():
                 uamtk = self.baseLogin(user, passwd)
                 if uamtk:
-                    if self.getUserName(uamtk):
-                        break
+                    self.getUserName(uamtk)
+                    break
 
     def logout(self):
         url = 'https://kyfw.12306.cn/otn/login/loginOut'

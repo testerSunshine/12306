@@ -5,7 +5,9 @@ import socket
 from time import sleep
 
 import requests
+import sys
 
+from config import logger
 
 class HTTPClient(object):
 
@@ -76,7 +78,7 @@ class HTTPClient(object):
         self._s.headers.update({"Referer": referer})
         return self
 
-    def send(self, url, data=None, **kwargs):
+    def send(self, url, data=None, is_logger=True, **kwargs):
         """send request to url.If response 200,return response, else return None."""
         allow_redirects = False
         error_data = {"code": 99999, "message": "重试次数达到上限"}
@@ -86,6 +88,8 @@ class HTTPClient(object):
         else:
             method = "get"
             self.resetHeaders()
+        logger.log(
+            u"url: {0}\n入参: {1}\n请求方式: {2}\n".format(url,data,method,))
         for i in range(10):
             try:
                 response = self._s.request(method=method,
@@ -95,10 +99,15 @@ class HTTPClient(object):
                                            allow_redirects=allow_redirects,
                                            **kwargs)
                 if response.status_code == 200:
-                        if response.content:
-                            return json.loads(response.content) if method == "post" else response.content
-                        else:
-                            return error_data
+                    if response.content:
+                        if is_logger:
+                            logger.log(
+                                u"出参：{0}".format(response.content))
+                        return json.loads(response.content) if method == "post" else response.content
+                    else:
+                        logger.log(
+                            u"url: {} 返回参数为空".format(url))
+                        return error_data
                 else:
                     sleep(0.1)
             except (requests.exceptions.Timeout, requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):

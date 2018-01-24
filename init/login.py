@@ -44,7 +44,7 @@ class GoLogin:
         print ("下载验证码...")
         codeimgUrl = code_url
         img_path = './tkcode'
-        result = self.httpClint.send(codeimgUrl)
+        result = self.httpClint.send(codeimgUrl, is_logger=False)
         try:
             open(img_path, 'wb').write(result)
             if self.is_aotu_code:

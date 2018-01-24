@@ -41,10 +41,10 @@
 
 set:
   station_dates:
-    - "2018-01-27"
+#    - "2018-01-27"
 #    - "2018-01-28"
-#    - "2018-02-10"
-#    - "2018-02-09"
+    - "2018-02-10"
+    - "2018-02-09"
   station_trains:
     - "G2365"
 #    - "K4300"
@@ -67,25 +67,25 @@ set:
   12306count:
 #    - uesr: ""
 #    - pwd: "apple1995"
-    - uesr: "@qq.com"
+    - uesr: "931128603@qq.com"
     - pwd: "QWERTY"
 
-select_refresh_interval: 0.1
-expect_refresh_interval: 0.3
+select_refresh_interval: 0.5
+expect_refresh_interval: 0.1
 ticket_black_list_time: 3
-is_aotu_code: False
+is_aotu_code: True
 aotu_code_type: 2
 #enable_proxy: False
 
 damatu:
-  uesr: ""
+  uesr: "931128603"
   pwd: "qazWSX1995"
 
 email_conf:
-  is_email: False
-  email: "@qq.com "
-  notice_email_list: "@qq.com"
-  username: ""
+  is_email: True
+  email: "931128603@qq.com "
+  notice_email_list: "61995120@qq.com"
+  username: "931128603"
   password: "xwopwxbkupbqbfgb"
   host: "smtp.qq.com"
 

@@ -88,8 +88,9 @@ class HTTPClient(object):
         else:
             method = "get"
             self.resetHeaders()
-        logger.log(
-            u"url: {0}\n入参: {1}\n请求方式: {2}\n".format(url,data,method,))
+        if is_logger:
+            logger.log(
+                u"url: {0}\n入参: {1}\n请求方式: {2}\n".format(url,data,method,))
         for i in range(10):
             try:
                 response = self._s.request(method=method,

@@ -186,7 +186,7 @@ class select:
     def submitOrderRequestFunc(self, from_station, to_station, station_date=None):
         select_url = self.confUrl["select_url"]["req_url"].format(
             station_date, from_station, to_station)
-        station_ticket = self.httpClint.send(select_url)
+        station_ticket = self.httpClint.send(select_url, is_logger=False)
         return json.loads(station_ticket)
 
     def submitOrderRequestImplement(self, from_station, to_station,):
@@ -538,7 +538,7 @@ class select:
                 elif "messages" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["messages"]:
                     print("排队等待失败： " + queryOrderWaitTimeResult["messages"])
                 else:
-                    print("第{}次排队中,请耐心等待".format(num))
+                    print("第{}次排队中,请耐心等待".format(num+1))
             else:
                 print("排队中")
             time.sleep(2)

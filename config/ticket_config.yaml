@@ -63,12 +63,11 @@ set:
   is_more_ticket: True
   ticke_peoples:
     - "文贤平"
-#    - "彭淑杰"
   12306count:
 #    - uesr: ""
 #    - pwd: "apple1995"
-    - uesr: "931128603@qq.com"
-    - pwd: "QWERTY"
+    - uesr: ""
+    - pwd: "Q"
 
 select_refresh_interval: 0.5
 expect_refresh_interval: 0.1
@@ -78,15 +77,15 @@ aotu_code_type: 2
 #enable_proxy: False
 
 damatu:
-  uesr: "931128603"
-  pwd: "qazWSX1995"
+  uesr: ""
+  pwd: "q"
 
 email_conf:
   is_email: True
-  email: "931128603@qq.com "
-  notice_email_list: "61995120@qq.com"
-  username: "931128603"
-  password: "xwopwxbkupbqbfgb"
+  email: ""
+  notice_email_list: "om"
+  username: ""
+  password: ""
   host: "smtp.qq.com"
 
 

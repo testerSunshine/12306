@@ -22,6 +22,7 @@
 #ticke_peoples: 乘客
 #damatu：打码兔账号，用于自动登录
 #is_aotu_code是否自动打码，如果选择Ture,则调用打码兔打码，默认不使用打码兔
+#aotu_code_type 1为打码兔，2为若快
 #is_email: 是否需要邮件通知 ex: True or False 切记，邮箱加完一定到config目录下测试emailConf功能是否正常
 
 #邮箱配置 列举163
@@ -41,10 +42,11 @@
 set:
   station_dates:
     - "2018-01-27"
-#    - "2018-02-04"
-#    - "2018-02-05"
+#    - "2018-01-28"
+#    - "2018-02-10"
+#    - "2018-02-09"
   station_trains:
-    - "G1303"
+    - "G2365"
 #    - "K4300"
 #    - "K5226"
 #    - "K7772"
@@ -55,7 +57,7 @@ set:
 #    - "G1363"
 #    - "G4933"
   from_station: "上海"
-  to_station: "广州"
+  to_station: "邵阳"
   set_type:
     - "二等座"
   is_more_ticket: True
@@ -72,11 +74,12 @@ select_refresh_interval: 0.1
 expect_refresh_interval: 0.3
 ticket_black_list_time: 3
 is_aotu_code: False
+aotu_code_type: 2
 #enable_proxy: False
 
 damatu:
   uesr: ""
-  pwd: "wen1995"
+  pwd: "qazWSX1995"
 
 email_conf:
   is_email: False

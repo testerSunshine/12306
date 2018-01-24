@@ -22,7 +22,7 @@ class DamatuApi():
     KEY = 'ca9507e17e8d5ddf7c57cd18d8d33010'
     HOST = 'http://api.dama2.com:7766/app/'
 
-    def __init__(self, username, password, file_path):
+    def __init__(self, username, password, file_path=None):
         self.username = username
         self.password = password
         self.file_path = file_path
@@ -108,13 +108,10 @@ class DamatuApi():
         return jres['ret']
 
     def main(self):
-        balance = self.getBalance()
-        if int(balance) > 40:
-            result = self.decode(287)
-            img_code = result.replace('|', ',') if not isinstance(result, int) else ""
-            return img_code
-        else:
-            raise balanceException('余额不足，当前余额为: {}'.format(balance))
+        result = self.decode(287)
+        img_code = result.replace('|', ',') if not isinstance(result, int) else ""
+        print("验证码识别坐标为{0}".format(img_code))
+        return img_code
 
 # # 调用类型实例：
 # # 1.实例化类型 参数是打码兔用户账号和密码

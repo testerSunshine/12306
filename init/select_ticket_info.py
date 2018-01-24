@@ -27,6 +27,8 @@ sys.setdefaultencoding('utf-8')
 class select:
     def __init__(self):
         self.from_station, self.to_station, self.station_dates, self._station_seat, self.is_more_ticket, self.ticke_peoples, self.select_refresh_interval, self.station_trains, self.expect_refresh_interval, self.ticket_black_list_time = self.get_ticket_info()
+        self.is_aotu_code = _get_yaml()["is_aotu_code"]
+        self.aotu_code_type = _get_yaml()["aotu_code_type"]
         self.order_request_params = {}  # 订单提交时的参数
         self.ticketInfoForPassengerForm = {}  # 初始化当前页面参数
         self.current_seats = {}  # 席别信息
@@ -38,6 +40,7 @@ class select:
         self.is_check_user = dict()
         self.httpClint = HTTPClient()
         self.confUrl = urlConf.urls
+        self.login = GoLogin(self.httpClint, self.confUrl, self.is_aotu_code, self.aotu_code_type)
 
     def get_ticket_info(self):
         """
@@ -462,11 +465,7 @@ class select:
                     print("正在使用自动识别验证码功能")
                     checkRandCodeAnsyn = self.confUrl["checkRandCodeAnsyn"]["req_url"]
                     codeImgByOrder = self.confUrl["codeImgByOrder"]["req_url"]
-                    result = self.httpClint.send(codeImgByOrder)
-                    img_path = './tkcode'
-                    open(img_path, 'wb').write(result)
-                    randCode = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"],
-                                                  img_path).main()
+                    randCode = self.login.readImg(codeImgByOrder)
                     randData = {
                         "randCode": randCode,
                         "rand": "randp",
@@ -623,16 +622,16 @@ class select:
         登录回调方法
         :return:
         """
-        login = GoLogin(self.httpClint, self.confUrl)
         if auth:
-            return login.auth()
+            return self.login.auth()
         else:
-            login.go_login()
+            self.login.go_login()
 
     def main(self):
         self.call_login()
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         self.check_user()
+        time.sleep(0.1)
         num = 1
         while 1:
             try:
@@ -671,7 +670,7 @@ class select:
             except KeyError as e:
                 print(e.message)
             except TypeError as e:
-                print(e.message)
+                print("12306接口无响应，正在重试 {0}".format(e.message))
             except socket.error as e:
                 print(e.message)
 

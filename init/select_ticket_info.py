@@ -20,10 +20,12 @@ from myException.PassengerUserException import PassengerUserException
 from myException.ticketConfigException import ticketConfigException
 from myException.ticketIsExitsException import ticketIsExitsException
 from myException.ticketNumOutException import ticketNumOutException
+from json import JSONDecodeError
 from myUrllib import myurllib2
 import codecs
 from init import gol
 import traceback
+
 
 class select:
     def __init__(self, ticket_config):
@@ -237,10 +239,10 @@ class select:
                     train_no = ticket_info[3]
                     # print(ticket_info[3], ticket_info[11] ,  ticket_info[1] ,self.ticket_black_list.__contains__(train_no) )
                     if ticket_info[3] in self.station_trains:
-                        
+
                         if self.ticket_black_list.__contains__(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds / 60 < int(self.ticket_black_list_time):
-                                print("该车次{} 正在被关小黑屋，跳过此车次".format(train_no))
-                                # self.ticket_black_list[train_no] = datetime.datetime.now()
+                            print("该车次{} 正在被关小黑屋，跳过此车次".format(train_no))
+                            # self.ticket_black_list[train_no] = datetime.datetime.now()
                         elif ticket_info[11] == "Y" and ticket_info[1] == "预订":  # 筛选未在开始时间内的车次
                             for j in range(len(self._station_seat)):
                                 is_ticket_pass = ticket_info[self.station_seat(
@@ -251,8 +253,8 @@ class select:
                                     # tiket_values = [k for k in value['map'].values()]
                                     self.secretStr = ticket_info[0]
                                     print ('车次: ' + train_no + ' 始发车站: ' + self.from_station + ' 终点站: ' +
-                                        self.to_station + ' ' + self._station_seat[j] + ':' + ticket_info[self.station_seat(self._station_seat[j])])
-                                
+                                           self.to_station + ' ' + self._station_seat[j] + ':' + ticket_info[self.station_seat(self._station_seat[j])])
+
                                     print ('正在尝试提交订票...')
                                     # self.submitOrderRequestFunc(from_station, to_station, self.time())
                                     self.submit_station()
@@ -353,16 +355,16 @@ class select:
         #     "硬座": "YZ",
         #     "无座": "WZ"}
 
-        passengerTicketStr = { 
-            '一等座': 'M', 
-            '特等座': 'P', 
-            '二等座': 'O', 
-            '商务座': 9, 
-            '硬座': 1, 
-            '无座': 1, 
-            '软卧': 4, 
-            '硬卧': 3, 
-        } 
+        passengerTicketStr = {
+            '一等座': 'M',
+            '特等座': 'P',
+            '二等座': 'O',
+            '商务座': 9,
+            '硬座': 1,
+            '无座': 1,
+            '软卧': 4,
+            '硬卧': 3,
+        }
         self.set_type = str(passengerTicketStr[set_type.replace(' ', '')])
 
     def ticket_type(self):
@@ -412,7 +414,7 @@ class select:
         passengerTicketStrList, oldPassengerStr = self.getPassengerTicketStrListAndOldPassengerStr()
         # print('*'* 20 )
         # print(passengerTicketStrList)
-        # print(oldPassengerStr) 
+        # print(oldPassengerStr)
         # print('*'* 20 )
         checkOrderInfoUrl = 'https://kyfw.12306.cn/otn/confirmPassenger/checkOrderInfo'
         data = OrderedDict()
@@ -728,17 +730,21 @@ class select:
             except ticketNumOutException as e:
                 traceback.print_exc()
                 break
+            except JSONDecodeError as e:
+                traceback.print_exc()
             except ValueError as e:
-                if e.message == "No JSON object could be decoded":
+                traceback.print_exc()
+                if e.msg == "No JSON object could be decoded":
                     print("12306接口无响应，正在重试")
-                else:
-                    traceback.print_exc()
             except KeyError as e:
                 traceback.print_exc()
             except TypeError as e:
                 traceback.print_exc()
             except socket.error as e:
                 traceback.print_exc()
+            except:
+                traceback.print_exc()
+
 
 
 if __name__ == '__main__':

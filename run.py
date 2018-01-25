@@ -2,6 +2,7 @@
 
 from init import login, select_ticket_info
 from concurrent.futures import ThreadPoolExecutor
+import sys
 
 pool = ThreadPoolExecutor(max_workers=1)
 
@@ -11,4 +12,4 @@ def run(ticket_config):
 
 
 
-f1 = pool.submit(run("ticket_config.yaml"))
+f1 = pool.submit(run(sys.argv[1]))

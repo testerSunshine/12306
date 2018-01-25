@@ -41,39 +41,18 @@
 
 set:
   station_dates:
+#    - "2018-01-27"
+#    - "2018-01-28"
+#    - "2018-02-22"
     - "2018-02-23"
-
   station_trains:
-    - "G1031"
-    - "G1013"
-    - "G73"
-    - "G6001"
-    - "G6163"
-    - "G1015"
-    - "G79"
-    - "G6031"
-    - "G279"
-    - "G817"
-    - "G1017"
-    - "G6485"
-    - "G821"
-    - "G1019"
-    - "G6033"
-    - "G75"
-    - "G6025"
-    - "G1021"
-    - "G825"
-    - "G6027"
-    - "G6141"
-#    - "G4741"
-#    - "G2365"
-#    - "G1371"
-#    - "G1337"
-#    - "G1377"
-#    - "G1329"
-#    - "G1302"
-#    - "G1372"
-#    - "G1326"
+    - "D2879"
+    - "D1813"
+    - "D2975"
+    - "D1825"
+    - "D1829"
+    - "D2841"
+    - "D1833"
 #    - "K4300"
 #    - "K5226"
 #    - "K7772"
@@ -83,13 +62,14 @@ set:
 #    - "G1373"
 #    - "G1363"
 #    - "G4933"
-  from_station: "长沙南"
-  to_station: "深圳北"
+  from_station: "三江南"
+  to_station: "广州南"
   set_type:
+    - "一等座"
     - "二等座"
   is_more_ticket: True
   ticke_peoples:
-    - "高智"
+    - "梁敏"
 #    - "彭淑杰"
   12306count:
 #    - uesr: ""
@@ -97,9 +77,8 @@ set:
     - uesr: "931128603@qq.com"
     - pwd: "QWERTY"
 
-select_refresh_interval: 0.5
-expect_refresh_interval: 0.1
-ticket_black_list_time: 3
+select_refresh_interval: 0.3
+ticket_black_list_time: 6
 is_aotu_code: True
 aotu_code_type: 2
 #enable_proxy: False

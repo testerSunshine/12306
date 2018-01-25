@@ -37,23 +37,26 @@ class GoLogin:
         识别验证码
         :return: 坐标
         """
-        if self.is_aotu_code:
-            if self.aotu_code_type == 1:
-                return DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"], "./tkcode").main()
-            elif self.aotu_code_type == 2:
-                rc = RClient(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"])
-                im = open('./tkcode', 'rb').read()
-                Result = rc.rk_create(im, 6113)
-                if "Result" in Result:
-                    return self.codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
-                else:
-                    if "Error" in Result and Result["Error"]:
-                        print Result["Error"]
-                        return ""
-        else:
-            img = Image.open('./tkcode')
-            img.show()
-            return self.codexy()
+        try:
+            if self.is_aotu_code:
+                if self.aotu_code_type == 1:
+                    return DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"], "./tkcode").main()
+                elif self.aotu_code_type == 2:
+                    rc = RClient(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"])
+                    im = open('./tkcode', 'rb').read()
+                    Result = rc.rk_create(im, 6113)
+                    if "Result" in Result:
+                        return self.codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
+                    else:
+                        if "Error" in Result and Result["Error"]:
+                            print Result["Error"]
+                            return ""
+            else:
+                img = Image.open('./tkcode')
+                img.show()
+                return self.codexy()
+        except:
+            pass
 
     def readImg(self, code_url):
         """
@@ -224,6 +227,7 @@ class GoLogin:
             if self.codeCheck():
                 uamtk = self.baseLogin(user, passwd)
                 if uamtk:
+                    self.getUserName(uamtk)
                     break
 
     def logout(self):

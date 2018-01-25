@@ -226,15 +226,22 @@ class select:
         } 参照station_seat()方法
         :return:
         """
-        
-        station_ticket = dict([(station_date  ,  self.submitOrderRequestFunc(
-            from_station, to_station, station_date=station_date)['data']) for station_date in  self.station_dates])
+
+        station_ticket= {}
+        for station_date in  self.station_dates:
+            sub_result = self.submitOrderRequestFunc(from_station, to_station, station_date=station_date) 
+            if 'data' not in sub_result :
+                print(f'查询日期 {station_date}  {self.from_station}-{self.to_station} 车次, 返回结果不正确...')
+            else:
+                station_ticket[station_date] = sub_result['data']
+
         if not station_ticket:
                 print(f"车次配置信息有误，或者返回数据异常，请检查 {station_ticket}")
+        
         for _station_ticket  in  station_ticket  :
-            if not station_ticket[_station_ticket]['result']:
+            if 'result' not in  station_ticket[_station_ticket]:
                 print(f'查询日期 {_station_ticket}  {self.from_station}-{self.to_station} 车次, 坐席查询为空...')
-            else:
+            else: 
                 for i in station_ticket[_station_ticket]['result']:
                     ticket_info = i.split('|')
                     train_no = ticket_info[3]

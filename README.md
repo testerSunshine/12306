@@ -4,6 +4,7 @@
   - 2.7
 - 依赖库
   - 依赖打码兔 需要去打码兔注册（用户）账号，打码兔账号地址：http://www.dama2.com，一般充值1元就够用了，充值打码兔之后，首次运行是需要到官网黑白名单授权
+  - 依赖若快 若快注册地址：http://www.ruokuai.com/client/index?6726 推荐用若快，打码兔在12306验证码更新之后识别率不是很高
   - 项目依赖包 requirements.txt
   - 安装方法 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 

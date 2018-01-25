@@ -45,28 +45,31 @@ class GoLogin:
         codeimgUrl = code_url
         img_path = './tkcode'
         result = self.httpClint.send(codeimgUrl, is_logger=False)
-        try:
-            open(img_path, 'wb').write(result)
-            if self.is_aotu_code:
-                if self.aotu_code_type == 1:
-                    return DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"], img_path).main()
-                elif self.aotu_code_type == 2:
-                    rc = RClient(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"])
-                    im = open('./tkcode', 'rb').read()
-                    Result = rc.rk_create(im, 6113)
-                    if "Result" in Result:
-                        return self.codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
-                    else:
-                        if "Error" in Result and Result["Error"]:
-                            print Result["Error"]
-                            return ""
-            else:
-                img = Image.open('./tkcode')
-                img.show()
-                return self.codexy()
-        except OSError as e:
-            print (e)
-            return ""
+        if "message" in result:
+            print("验证码下载失败，正在重试")
+        else:
+            try:
+                open(img_path, 'wb').write(result)
+                if self.is_aotu_code:
+                    if self.aotu_code_type == 1:
+                        return DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"], img_path).main()
+                    elif self.aotu_code_type == 2:
+                        rc = RClient(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"])
+                        im = open('./tkcode', 'rb').read()
+                        Result = rc.rk_create(im, 6113)
+                        if "Result" in Result:
+                            return self.codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
+                        else:
+                            if "Error" in Result and Result["Error"]:
+                                print Result["Error"]
+                                return ""
+                else:
+                    img = Image.open('./tkcode')
+                    img.show()
+                    return self.codexy()
+            except OSError as e:
+                print (e)
+                return ""
 
     def codexy(self, Ofset=None, is_raw_input=True):
         """

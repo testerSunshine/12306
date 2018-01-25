@@ -23,9 +23,9 @@
 #damatu：打码兔账号，用于自动登录
 #is_aotu_code是否自动打码，如果选择Ture,则调用打码兔打码，默认不使用打码兔
 set:
-  station_date: "2018-02-10"
+  station_date: "2018-02-21"
   station_trains:
-    - "G1970"
+    - "Z42"
 #    - "G2365"
 #    - "G1371"
 #    - "G1377"
@@ -36,8 +36,8 @@ set:
 #    - "G1373"
 #    - "G1363"
 #    - "G4933"
-  from_station: "北京"
-  to_station: "牡丹江"
+  from_station: "嘉峪关"
+  to_station: "上海"
   set_type:
     - "硬卧"
   is_more_ticket: True

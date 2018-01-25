@@ -499,7 +499,12 @@ class select:
                     print("不需要验证码")
                     break
             # print("".join(data))
-            checkQueueOrderResult = self.s.post(checkQueueOrderUrl, data=data, verify=False).json()
+            checkQueueOrderResultObj = self.s.post(checkQueueOrderUrl, allow_redirects=False, data=data, verify=False)
+            #解决进入排队时接口302问题
+            while checkQueueOrderResultObj.status_code == 302:
+                checkQueueOrderResultObj = self.s.post(checkQueueOrderUrl, allow_redirects=False, data=data,
+                                                       verify=False)
+            checkQueueOrderResult = checkQueueOrderResultObj.json()
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
                 if 'submitStatus' in c_data and c_data['submitStatus'] is True:

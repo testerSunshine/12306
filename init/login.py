@@ -59,7 +59,7 @@ class go_login:
                       "appid":"otn"}
         rand_result = self.s.post(captcha_check_url, data=randdata, verify=False).json()
         print(rand_result)
-        if rand_result['result_code'] is not '4' :
+        while rand_result['result_code'] is not '4' :
             randCode = self.get_randcode()
             randdata = {"answer": randCode,
                         "login_site": "E",
@@ -78,7 +78,10 @@ class go_login:
                 print(login_result.json())
         login_userLogin_data = {'_json_att' : ''}
         self.s.post(login_userLogin, data=login_userLogin_data, verify=False)
-        uamtk_result = self.s.post(uamtk_url, data=uamtk_data, verify=False).json()
+        uamtk_result = self.s.post(uamtk_url, allow_redirects=False, data=uamtk_data, verify=False)
+        while uamtk_result.status_code == 302 :
+            uamtk_result = self.s.post(uamtk_url, allow_redirects=False, data=uamtk_data, verify=False)
+        uamtk_result = uamtk_result.json()
         uamauthclient_data = {'tk': uamtk_result['newapptk']}
         uamauthclient_result = self.s.post(uamauthclient, data=uamauthclient_data, verify=False).json()
         print(uamauthclient_result)

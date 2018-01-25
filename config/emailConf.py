@@ -2,7 +2,7 @@
 __author__ = 'MR.wen'
 from email.header import Header
 from email.mime.text import MIMEText
-from config.ticketConf import _get_yaml
+from ticketConf import _get_yaml
 import smtplib
 
 

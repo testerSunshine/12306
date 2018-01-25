@@ -26,7 +26,7 @@ sys.setdefaultencoding('utf-8')
 
 class select:
     def __init__(self):
-        self.from_station, self.to_station, self.station_dates, self._station_seat, self.is_more_ticket, self.ticke_peoples, self.select_refresh_interval, self.station_trains, self.expect_refresh_interval, self.ticket_black_list_time = self.get_ticket_info()
+        self.from_station, self.to_station, self.station_dates, self._station_seat, self.is_more_ticket, self.ticke_peoples, self.select_refresh_interval, self.station_trains, self.ticket_black_list_time = self.get_ticket_info()
         self.is_aotu_code = _get_yaml()["is_aotu_code"]
         self.aotu_code_type = _get_yaml()["aotu_code_type"]
         self.order_request_params = {}  # 订单提交时的参数
@@ -56,10 +56,9 @@ class select:
         ticke_peoples = ticket_info_config["set"]["ticke_peoples"]
         select_refresh_interval = ticket_info_config["select_refresh_interval"]
         station_trains = ticket_info_config["set"]["station_trains"]
-        expect_refresh_interval = ticket_info_config["expect_refresh_interval"]
         ticket_black_list_time = ticket_info_config["ticket_black_list_time"]
         print "*"*20
-        print "当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}\n候选购买车次：{7}\n未开始刷票间隔时间：{8}\n僵尸票关小黑屋时长：{9}\n".format\
+        print "当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}\n候选购买车次：{7}\n僵尸票关小黑屋时长：{8}\n".format\
                                                                                       (
                                                                                       from_station,
                                                                                       to_station,
@@ -69,11 +68,10 @@ class select:
                                                                                       ",".join(ticke_peoples),
                                                                                       select_refresh_interval,
                                                                                       ",".join(station_trains),
-                                                                                      expect_refresh_interval,
                                                                                       ticket_black_list_time,
             )
         print "*"*20
-        return from_station, to_station, station_dates, set_type, is_more_ticket, ticke_peoples, select_refresh_interval, station_trains, expect_refresh_interval, ticket_black_list_time
+        return from_station, to_station, station_dates, set_type, is_more_ticket, ticke_peoples, select_refresh_interval, station_trains, ticket_black_list_time
 
     def get_order_request_params(self):
         return self.order_request_params
@@ -240,7 +238,6 @@ class select:
                                     pass
                         else:
                             pass
-                    time.sleep(self.expect_refresh_interval)
                 else:
                     print "车次配置信息有误，或者返回数据异常，请检查 {}".format(station_ticket)
 

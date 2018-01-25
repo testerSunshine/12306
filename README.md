@@ -189,5 +189,7 @@
     - 修复bug
     - 优化抢票功能
 
+- 2018.1.25更新
+    - 删除 expect_refresh_interval 无用字段，优化代码
 
 

@@ -32,6 +32,29 @@ class GoLogin:
         # for index, c in enumerate(myurllib2.cookiejar):
         #     stoidinput(c)
 
+    def getRandCode(self):
+        """
+        识别验证码
+        :return: 坐标
+        """
+        if self.is_aotu_code:
+            if self.aotu_code_type == 1:
+                return DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"], "./tkcode").main()
+            elif self.aotu_code_type == 2:
+                rc = RClient(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"])
+                im = open('./tkcode', 'rb').read()
+                Result = rc.rk_create(im, 6113)
+                if "Result" in Result:
+                    return self.codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
+                else:
+                    if "Error" in Result and Result["Error"]:
+                        print Result["Error"]
+                        return ""
+        else:
+            img = Image.open('./tkcode')
+            img.show()
+            return self.codexy()
+
     def readImg(self, code_url):
         """
         增加手动打码，只是登录接口，完全不用担心提交订单效率
@@ -47,26 +70,8 @@ class GoLogin:
         result = self.httpClint.send(codeimgUrl, is_logger=False)
         try:
             open(img_path, 'wb').write(result)
-            if self.is_aotu_code:
-                if self.aotu_code_type == 1:
-                    return DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"], img_path).main()
-                elif self.aotu_code_type == 2:
-                    rc = RClient(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"])
-                    im = open('./tkcode', 'rb').read()
-                    Result = rc.rk_create(im, 6113)
-                    if "Result" in Result:
-                        return self.codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
-                    else:
-                        if "Error" in Result and Result["Error"]:
-                            print Result["Error"]
-                            return ""
-            else:
-                img = Image.open('./tkcode')
-                img.show()
-                return self.codexy()
         except OSError as e:
             print (e)
-            return ""
 
     def codexy(self, Ofset=None, is_raw_input=True):
         """
@@ -212,13 +217,13 @@ class GoLogin:
         while True:
             self.cookietp()
             self.httpClint.set_cookies(_jc_save_wfdc_flag="dc", _jc_save_fromStation="%u4E0A%u6D77%u8679%u6865%2CAOH", _jc_save_toStation="%u5170%u5DDE%u897F%2CLAJ", _jc_save_fromDate="2018-02-14", _jc_save_toDate="2018-01-16", RAIL_DEVICEID="EN_3_EGSe2GWGHXJeCkFQ52kHvNCrNlkz9n1GOqqQ1wR0i98WsD8Gj-a3YHZ-XYKeESWgCiJyyucgSwkFOzVHhHqfpidLPcm2vK9n83uzOPuShO3Pl4lCydAtQu4BdFqz-RVmiduNFixrcrN_Ny43135JiEtqLaI")
-            self.randCode = self.readImg(self.urlConf["getCodeImg"]["req_url"])
+            self.readImg(self.urlConf["getCodeImg"]["req_url"])
+            self.randCode = self.getRandCode()
             login_num += 1
             self.auth()
             if self.codeCheck():
                 uamtk = self.baseLogin(user, passwd)
                 if uamtk:
-                    self.getUserName(uamtk)
                     break
 
     def logout(self):

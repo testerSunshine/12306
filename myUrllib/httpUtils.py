@@ -9,6 +9,7 @@ import sys
 
 from config import logger
 
+
 class HTTPClient(object):
 
     def __init__(self):

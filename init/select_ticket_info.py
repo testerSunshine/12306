@@ -19,6 +19,8 @@ from myException.ticketConfigException import ticketConfigException
 from myException.ticketIsExitsException import ticketIsExitsException
 from myException.ticketNumOutException import ticketNumOutException
 from myUrllib.httpUtils import HTTPClient
+import threading
+
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -41,6 +43,8 @@ class select:
         self.httpClint = HTTPClient()
         self.confUrl = urlConf.urls
         self.login = GoLogin(self.httpClint, self.confUrl, self.is_aotu_code, self.aotu_code_type)
+        self.is_download_img = False
+        self.randCode = ""
 
     def get_ticket_info(self):
         """
@@ -136,6 +140,22 @@ class select:
         tomorrow = today+datetime.timedelta(1)
         return tomorrow.strftime('%Y-%m-%d')
 
+    def callReadImg(self, code_url):
+        """
+        下载验证码
+        :param code_url: 验证码url
+        :return:
+        """
+        self.login.readImg(code_url=code_url)
+        self.is_aotu_code = True
+
+    def callRandCode(self):
+        """
+        识别验证码
+        :return:
+        """
+        self.randCode = self.login.getRandCode()
+
     def getRepeatSubmitToken(self):
         """
         获取提交车票请求token
@@ -228,6 +248,8 @@ class select:
                                         break
                                     else:
                                         print ('正在尝试提交订票...')
+                                        t = threading.Thread(target=self.callReadImg, args=self.confUrl["codeImgByOrder"]["req_url"])
+                                        t.start()
                                         # self.submitOrderRequestFunc(from_station, to_station, self.time())
                                         self.submit_station()
                                         self.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
@@ -240,7 +262,7 @@ class select:
                                     pass
                         else:
                             pass
-                    time.sleep(self.expect_refresh_interval)
+                    # time.sleep(self.expect_refresh_interval)
                 else:
                     print "车次配置信息有误，或者返回数据异常，请检查 {}".format(station_ticket)
 
@@ -459,13 +481,16 @@ class select:
             "_json_at": "",
             "REPEAT_SUBMIT_TOKEN": self.get_token(),
         }
+
         try:
             for i in range(3):
                 if is_node_code:
+
                     print("正在使用自动识别验证码功能")
                     checkRandCodeAnsyn = self.confUrl["checkRandCodeAnsyn"]["req_url"]
                     codeImgByOrder = self.confUrl["codeImgByOrder"]["req_url"]
-                    randCode = self.login.readImg(codeImgByOrder)
+                    self.login.readImg(codeImgByOrder)
+                    randCode = self.login.getRandCode()
                     randData = {
                         "randCode": randCode,
                         "rand": "randp",

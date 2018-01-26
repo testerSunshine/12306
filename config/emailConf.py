@@ -33,7 +33,7 @@ def sendEmail(msg):
         smtp.login(username, password)
         smtp.sendmail(sender, receiver.split(","), msg.as_string())
         smtp.quit()
-        print("邮件已通知, 请查收")
+        print(u"邮件已通知, 请查收")
     else:
         pass
 

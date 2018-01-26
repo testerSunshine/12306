@@ -110,7 +110,7 @@ class DamatuApi():
     def main(self):
         result = self.decode(287)
         img_code = result.replace('|', ',') if not isinstance(result, int) else ""
-        print("验证码识别坐标为{0}".format(img_code))
+        print(u"验证码识别坐标为{0}".format(img_code))
         return img_code
 
 # # 调用类型实例：

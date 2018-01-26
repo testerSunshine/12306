@@ -24,7 +24,7 @@ class go_login:
         self.text = ""
         self.user = self.config_data["set"]["12306count"][0]["uesr"]
         self.passwd = self.config_data["set"]["12306count"][1]["pwd"]
-        self.aotu_code_type = self.config_data['aotu_code_type']
+        self.auto_code_type = self.config_data['auto_code_type']
 
         self.s = self.create_session()
 
@@ -172,10 +172,10 @@ class go_login:
         # else:
         try:
             open(img_path, 'wb').write(result)
-            if self.aotu_code_type == 1:
+            if self.auto_code_type == 1:
                 return DamatuApi(self.config_data["damatu"]["uesr"], self.config_data["damatu"]["pwd"], img_path).main()
 
-            elif self.aotu_code_type == 2:
+            elif self.auto_code_type == 2:
                 rc = RClient(
                     self.config_data["ruokuai"]["uesr"], self.config_data["ruokuai"]["pwd"])
                 im = open('./tkcode', 'rb').read()

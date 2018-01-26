@@ -28,6 +28,10 @@ import traceback
 
 
 class select:
+
+    retry_limit = 3
+    env_retry_limit = 0
+
     def __init__(self, ticket_config):
         self.from_station, self.to_station, self.station_dates, self._station_seat, self.is_more_ticket, self.ticke_peoples, self.select_refresh_interval, self.station_trains, self.expect_refresh_interval, self.ticket_black_list_time = self.get_ticket_info(
             ticket_config)
@@ -196,7 +200,7 @@ class select:
                 raise PassengerUserException("未查找到常用联系人,请先添加联系人在试试")
 
     def submitOrderRequestFunc(self, from_station, to_station, station_date):
-        _status_code = 0 
+        _status_code = 0
         try:
             select_url = 'https://kyfw.12306.cn/otn/leftTicket/queryZ?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT'.format(
                 station_date, from_station, to_station)
@@ -227,26 +231,37 @@ class select:
         :return:
         """
 
-        station_ticket= {}
-        for station_date in  self.station_dates:
-            sub_result = self.submitOrderRequestFunc(from_station, to_station, station_date=station_date) 
-            if 'data' not in sub_result :
+        station_ticket = {}
+        broken_data_num = 1
+        for station_date in self.station_dates:
+            sub_result = self.submitOrderRequestFunc(
+                from_station, to_station, station_date=station_date)
+            if 'data' not in sub_result:
+                broken_data_num += 1
                 print(f'查询日期 {station_date}  {self.from_station}-{self.to_station} 车次, 返回结果不正确...')
             else:
                 station_ticket[station_date] = sub_result['data']
 
-        if not station_ticket:
-                print(f"车次配置信息有误，或者返回数据异常，请检查 {station_ticket}")
+        if broken_data_num == len(self.station_dates):
+            self.env_retry_limit += 1
+        else :
+            self.env_retry_limit += 0
         
-        for _station_ticket  in  station_ticket  :
-            if 'result' not in  station_ticket[_station_ticket]:
+        if self.env_retry_limit >= self.retry_limit:
+            time.sleep(60*2)
+
+        if not station_ticket:
+            print(f"车次配置信息有误，或者返回数据异常，请检查 {station_ticket}")
+
+        for _station_ticket in station_ticket:
+            if 'result' not in station_ticket[_station_ticket]:
                 print(f'查询日期 {_station_ticket}  {self.from_station}-{self.to_station} 车次, 坐席查询为空...')
-            else: 
+            else:
                 for i in station_ticket[_station_ticket]['result']:
                     ticket_info = i.split('|')
                     train_no = ticket_info[3]
                     # print(ticket_info[3], ticket_info[11] ,  ticket_info[1] ,self.ticket_black_list.__contains__(train_no) )
-                    
+
                     if ticket_info[3] in self.station_trains:
 
                         if self.ticket_black_list.__contains__(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds / 60 < int(self.ticket_black_list_time):
@@ -263,14 +278,14 @@ class select:
                                     self.secretStr = ticket_info[0]
                                     print (f'车次:  {train_no} 发车日期{_station_ticket}   始发车站: {self.from_station}  终点站: {self.to_station}  {self._station_seat[j]} {ticket_info[self.station_seat(self._station_seat[j])]} ')
 
-                                    print ('正在尝试提交订票...' ,end=' ')
+                                    print ('正在尝试提交订票...', end=' ')
                                     # self.submitOrderRequestFunc(from_station, to_station, self.time())
                                     self.submit_station()
                                     self.getPassengerTicketStr(
                                         self._station_seat[j])
                                     self.getRepeatSubmitToken()
                                     if not self.user_info:  # 修改每次都调用用户接口导致用户接口不能用
-                                        print('检查联系人' , end=' ')
+                                        print('检查联系人', end=' ')
                                         self.user_info = self.getPassengerDTOs()
                                     if self.checkOrderInfo(train_no, self._station_seat[j]):
                                         break
@@ -544,8 +559,8 @@ class select:
                     print("正在使用自动识别验证码功能")
                     randurl = 'https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn'
                     codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=passenger&rand=randp&%s' % random.random()
-                    result = self.s.get(codeimg, verify = False)
-                    result = result.content 
+                    result = self.s.get(codeimg, verify=False)
+                    result = result.content
 
                     img_path = './tkcode'
                     open(img_path, 'wb').write(result)
@@ -570,8 +585,8 @@ class select:
                     print("不需要验证码")
                     break
             # print("".join(data))
-           
-            for i in range(5): 
+
+            for i in range(5):
                 try:
                     checkQueueOrderResult = self.s.post(
                         checkQueueOrderUrl, data=data, verify=False).json()
@@ -579,7 +594,7 @@ class select:
                     print(f"接口 {checkQueueOrderUrl} 无响应 重试{i}")
                     time.sleep(0.1)
                     if i > 3:
-                        raise ValueError('12306 没救了') 
+                        raise ValueError('12306 没救了')
 
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {
@@ -596,7 +611,7 @@ class select:
             elif "messages" in checkQueueOrderResult and checkQueueOrderResult["messages"]:
                 print("提交订单失败,错误信息: " + checkQueueOrderResult["messages"])
             else:
-                print(f"提交订单中，请耐心等待：{checkQueueOrderResult.text}"  )
+                print(f"提交订单中，请耐心等待：{checkQueueOrderResult.text}")
         except ValueError:
             print("接口 {} 无响应".format(checkQueueOrderUrl))
 
@@ -640,7 +655,7 @@ class select:
                     else:
                         print ("正在等待中")
                 elif "messages" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["messages"]:
-                    print(f'排队等待失败： {queryOrderWaitTimeResult["messages"]}'  )
+                    print(f'排队等待失败： {queryOrderWaitTimeResult["messages"]}')
                 else:
                     print(f"第{num}次排队中,请耐心等待")
             else:
@@ -760,7 +775,6 @@ class select:
                 traceback.print_exc()
             except socket.error as e:
                 traceback.print_exc()
-
 
 
 if __name__ == '__main__':

@@ -29,7 +29,7 @@ import traceback
 
 class select:
 
-    retry_limit = 3
+    retry_limit = 5
     env_retry_limit = 0
 
     def __init__(self, ticket_config):
@@ -232,28 +232,31 @@ class select:
         """
 
         station_ticket = {}
-        broken_data_num = 1
+        broken_data_num = 0
         for station_date in self.station_dates:
             sub_result = self.submitOrderRequestFunc(
                 from_station, to_station, station_date=station_date)
             if 'data' not in sub_result:
+                print(f'查询日期 {station_date}  {self.from_station}-{self.to_station} 车次, 返回结果不正确... {broken_data_num}')
                 broken_data_num += 1
-                print(f'查询日期 {station_date}  {self.from_station}-{self.to_station} 车次, 返回结果不正确...')
             else:
                 station_ticket[station_date] = sub_result['data']
 
         if broken_data_num == len(self.station_dates):
             self.env_retry_limit += 1
-        else :
+        else:
             self.env_retry_limit += 0
-        
-        if self.env_retry_limit >= self.retry_limit:
-            time.sleep(60*60* 1)
 
         if not station_ticket:
             print(f"车次配置信息有误，或者返回数据异常，请检查 {station_ticket}")
+        if self.env_retry_limit >= self.retry_limit:
+            _sleep_interval = 60 * 60 * 1
+            print(f'连续请求{self.env_retry_limit}次， 数据返回结果不正确， 睡一觉{_sleep_interval} ...')
+            time.sleep(_sleep_interval)
 
+        have_trains = 0
         for _station_ticket in station_ticket:
+
             if 'result' not in station_ticket[_station_ticket]:
                 print(f'查询日期 {_station_ticket}  {self.from_station}-{self.to_station} 车次, 坐席查询为空...')
             else:
@@ -263,7 +266,7 @@ class select:
                     # print(ticket_info[3], ticket_info[11] ,  ticket_info[1] ,self.ticket_black_list.__contains__(train_no) )
 
                     if ticket_info[3] in self.station_trains:
-
+                        have_trains += 1
                         if self.ticket_black_list.__contains__(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds / 60 < int(self.ticket_black_list_time):
                             print(f"{_station_ticket} 该车次{train_no} 正在被关小黑屋，跳过此车次")
                             # self.ticket_black_list[train_no] = datetime.datetime.now()
@@ -293,9 +296,13 @@ class select:
                                     pass
                         else:
                             pass
+
                 time.sleep(self.expect_refresh_interval)
                 # else:
                 #     print("车次配置信息有误，或者返回数据异常，请检查 {}".format(station_ticket))
+        if not have_trains:
+            print(f'此次查询结果中没有 {self.station_trains}  {self.from_station}-{self.to_station} 请确认配置项...')
+            self.env_retry_limit += 1
 
     def check_user(self):
         """

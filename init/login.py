@@ -10,7 +10,7 @@ from PIL import Image
 from damatuCode.damatuWeb import DamatuApi
 import requests
 from init import gol
-
+import traceback
 
 class go_login:
     def __init__(self, ticket_config=""):
@@ -39,8 +39,13 @@ class go_login:
         self.s.get(init_url, verify=False)
         self.s.post(uamtk_url, data=uamtk_data, verify=False)
         content = self.s.get(httpZF_url, verify=False).content
-        content = content.decode(encoding='utf-8').split("'")[1]
-        d = json.loads(content)
+        
+        try:
+            content = content.decode(encoding='utf-8').split("'")[1]
+            d = json.loads(content)
+        except IndexError as e :
+            traceback.print_exc()
+
         requests.utils.add_dict_to_cookiejar(
             self.s.cookies, {"RAIL_DEVICEID": d['dfp']})
         #requests.utils.add_dict_to_cookiejar(self.s.cookies, {"RAIL_DEVICEID": 'XHe6FfHQKdYj65DI8SswKR16VuCcV5nT8G62Uyj0uiGpChNOindm0SNWaPvgL2_obrOdD22vuuZf1WmTDAERbW1IRBdpJVAaKYA8Ks9FOVufsrLZ2ccVy3g5XdNQIyXrjmk-psvlj7TSvHrcpUVcvlQd2cn5qEp7'})
@@ -115,9 +120,7 @@ class go_login:
                 img.show()
                 randCode = self.codexy()
         except OSError as e:
-            print(e)
-            pass
-        print(randCode)
+            traceback.print_exc()
         return randCode
     # def cookietp(self):
     #     global initcookies

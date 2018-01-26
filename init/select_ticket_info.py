@@ -486,13 +486,14 @@ class select:
             getQueueCountUrl, data=data, verify=False).json()
         if "status" in getQueueCountResult and getQueueCountResult["status"] is True:
             if "countT" in getQueueCountResult["data"]:
-                ticket = getQueueCountResult["data"]["ticket"]
+                ticket = getQueueCountResult["data"]["count"]
+                print(getQueueCountResult)
                 ticket_split = sum(map(self.conversion_int, ticket.split(
                     ","))) if ticket.find(",") != -1 else ticket
                 countT = getQueueCountResult["data"]["countT"]
                 if int(countT) is 0:
                     if int(ticket_split) < len(self.user_info):
-                        print("当前余票数小于乘车人数，放弃订票")
+                        print(f"当前余票数小于乘车人数，放弃订票 {ticket_split}  ")
                     else:
                         print("排队成功, 当前余票还剩余: {0} 张".format(ticket_split))
                         if self.checkQueueOrder(is_need_code):
@@ -543,7 +544,9 @@ class select:
                     print("正在使用自动识别验证码功能")
                     randurl = 'https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn'
                     codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=passenger&rand=randp&%s' % random.random()
-                    result = myurllib2.get(codeimg)
+                    result = self.s.get(codeimg, verify = False)
+                    result = result.content 
+
                     img_path = './tkcode'
                     open(img_path, 'wb').write(result)
                     randCode = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"],
@@ -573,7 +576,7 @@ class select:
                     checkQueueOrderResult = self.s.post(
                         checkQueueOrderUrl, data=data, verify=False).json()
                 except:
-                    print("接口 {} 无响应 重试{i}".format(checkQueueOrderUrl))
+                    print(f"接口 {checkQueueOrderUrl} 无响应 重试{i}")
                     time.sleep(0.1)
                     if i > 3:
                         raise ValueError('12306 没救了') 
@@ -731,8 +734,7 @@ class select:
                     self.call_login()
                 start_time = datetime.datetime.now()
                 self.submitOrderRequestImplement(from_station, to_station)
-                print("正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, self.station_dates, ",".join(
-                    self.station_trains), (datetime.datetime.now() - start_time).microseconds / 1000))
+                print(f"执行时间 {datetime.datetime.now()}  正在第{num}次查询  乘车日期: {self.station_dates}  车次{self.station_trains} 查询无票  代理设置 无  总耗时{ (datetime.datetime.now() - start_time).microseconds / 1000}ms")
             except PassengerUserException as e:
                 traceback.print_exc()
                 break

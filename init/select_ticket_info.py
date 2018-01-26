@@ -363,6 +363,12 @@ class select:
             else:
                 print ('出票失败', end=' ')
         elif 'messages' in submitResult and submitResult['messages']:
+            msg = submitResult['messages'][0]
+            print(msg)
+            
+            if '未完成订单' in  msg :
+                mail_content = f'也许您有未完成订单，请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！{msg} \n 12306 Account  { _get_yaml(self.ticket_config)["set"]["12306count"] } '
+                email(mail_content, self.ticket_config).sendEmail()
             raise ticketIsExitsException(submitResult['messages'][0])
 
     def getPassengerTicketStr(self, set_type):
@@ -651,7 +657,7 @@ class select:
             if queryOrderWaitTimeResult:
                 if "status" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["status"]:
                     if "orderId" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["orderId"] is not None:
-                        mail_content = f'恭喜您订票成功，订单号为：{queryOrderWaitTimeResult["data"]["orderId"]}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！ 12306 Account [{ self.ticket_config["set"]["12306count"][0]["uesr"]} ]'
+                        mail_content = f'恭喜您订票成功，订单号为：{queryOrderWaitTimeResult["data"]["orderId"]}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！ \n 12306 Account  { _get_yaml(self.ticket_config)["set"]["12306count"] }'
                         email(mail_content, self.ticket_config).sendEmail()
                         raise ticketIsExitsException(mail_content)
                     elif "msg" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["msg"]:
@@ -736,6 +742,7 @@ class select:
         login.go_login(self.ticket_config).login()
 
     def main(self):
+         
         self.call_login()
         self.s = gol.get_value('s')
         # print(self.s.cookies)

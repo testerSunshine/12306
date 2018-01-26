@@ -13,6 +13,8 @@ from init import gol
 import traceback
 from http.client import RemoteDisconnected
 import time
+from myUrllib.httpUtils  import HTTPClient
+
 
 class go_login:
     def __init__(self, ticket_config=""):
@@ -21,11 +23,12 @@ class go_login:
         self.text = ""
         self.user = _get_yaml(ticket_config)["set"]["12306count"][0]["uesr"]
         self.passwd = _get_yaml(ticket_config)["set"]["12306count"][1]["pwd"]
+
         self.s = self.create_session()
 
     def create_session(self):
-        s = requests.Session()
-        return s
+        s = HTTPClient()
+        return s.session
 
     def get_logincookies(self):
         global login_cookies, randCode
@@ -39,7 +42,7 @@ class go_login:
         #userLogin = "https://kyfw.12306.cn/otn/passport?redirect=/otn/login/userLogin"
         uamauthclient = "https://kyfw.12306.cn/otn/uamauthclient"
         
-        self.s.get(init_url, verify=False)
+        self.s.get(init_url ,verify=False)
         self.s.post(uamtk_url, data=uamtk_data, verify=False)
         content = self.s.get(httpZF_url, verify=False).content
         content = content.decode(encoding='utf-8').split("'")[1]
@@ -85,29 +88,33 @@ class go_login:
         print(login_code)
         # 解决登录接口302重定向问题
         while login_code == 302:
+            
             login_result = self.s.post(
                 login_url, allow_redirects=False, data=login_data, verify=False)
             login_code = login_result.status_code
+            print('Login redirect...')
             if login_code == 200:
-                print(login_result.json())
+                print('登录成功' , login_result.json())
         login_userLogin_data = {'_json_att': ''}
         self.s.post(login_userLogin, data=login_userLogin_data, verify=False)
         uamtk_result = self.s.post(
             uamtk_url, data=uamtk_data, verify=False).json()
-        print(uamtk_result)
+        # print(uamtk_result)
         uamauthclient_data = {'tk': uamtk_result['newapptk']}
         uamauthclient_result = self.s.post(
             uamauthclient, data=uamauthclient_data, verify=False).json()
-        print(uamauthclient_result)
+        # print(uamauthclient_result)
         login_cookies = self.s.cookies.get_dict()
+        print('Get Login Cookie Finish.')
         return login_cookies
 
     def get_randcode(self):
         self.stoidinput("下载验证码...")
         img_path = './tkcode'
-        r = self.s.get(self.captcha_url, verify=False)
+        r = self.s.get(self.captcha_url,  verify=False)
         result = r.content
         # print(result)
+        randCode = ''
         try:
             open(img_path, 'wb').write(result)
             if _get_yaml(self.ticket_config)["is_aotu_code"]:

@@ -20,8 +20,7 @@ from myException.PassengerUserException import PassengerUserException
 from myException.ticketConfigException import ticketConfigException
 from myException.ticketIsExitsException import ticketIsExitsException
 from myException.ticketNumOutException import ticketNumOutException
-from json import JSONDecodeError
-from myUrllib import myurllib2
+from json import JSONDecodeError 
 import codecs
 from init import gol
 import traceback
@@ -234,13 +233,14 @@ class select:
         station_ticket = {}
         broken_data_num = 0
         for station_date in self.station_dates:
-            sub_result = self.submitOrderRequestFunc(
-                from_station, to_station, station_date=station_date)
-            if 'data' not in sub_result:
-                print(f'查询日期 {station_date}  {self.from_station}-{self.to_station} 车次, 返回结果不正确... {broken_data_num}')
-                broken_data_num += 1
-            else:
-                station_ticket[station_date] = sub_result['data']
+            if station_date >= datetime.datetime.now().date().isoformat() and station_date < (datetime.datetime.now() + datetime.timedelta(days=30)).date().isoformat():
+                sub_result = self.submitOrderRequestFunc(
+                    from_station, to_station, station_date=station_date)
+                if 'data' not in sub_result:
+                    print(f'查询日期 {station_date}  {self.from_station}-{self.to_station} 车次, 返回结果不正确... {broken_data_num}')
+                    broken_data_num += 1
+                else:
+                    station_ticket[station_date] = sub_result['data']
 
         if broken_data_num == len(self.station_dates):
             self.env_retry_limit += 1
@@ -267,7 +267,7 @@ class select:
 
                     if ticket_info[3] in self.station_trains:
                         have_trains += 1
-                        if self.ticket_black_list.__contains__(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds / 60 < int(self.ticket_black_list_time):
+                        if self.ticket_black_list.__contains__(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds < int(self.ticket_black_list_time):
                             print(f"{_station_ticket} 该车次{train_no} 正在被关小黑屋，跳过此车次")
                             # self.ticket_black_list[train_no] = datetime.datetime.now()
                         elif ticket_info[11] == "Y" and ticket_info[1] == "预订":  # 筛选未在开始时间内的车次
@@ -571,7 +571,7 @@ class select:
 
                     img_path = './tkcode'
                     open(img_path, 'wb').write(result)
-                    randCode = DamatuApi(_get_yaml()["damatu"]["uesr"], _get_yaml()["damatu"]["pwd"],
+                    randCode = DamatuApi(_get_yaml(self.ticket_config)["damatu"]["uesr"], _get_yaml(self.ticket_config)["damatu"]["pwd"],
                                          img_path).main()
                     randData = {
                         "randCode": randCode,
@@ -749,6 +749,7 @@ class select:
                 if "user_time" in self.is_check_user and (datetime.datetime.now() - self.is_check_user["user_time"]).seconds / 60 > 10:
                     # 十分钟调用一次检查用户是否登录
                     self.check_user()
+                print('begin' ,end=' ')
                 time.sleep(self.select_refresh_interval)
                 if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
                     print("12306休息时间，本程序自动停止,明天早上七点将自动运行")

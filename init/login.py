@@ -8,21 +8,23 @@ from time import sleep
 from config.ticketConf import _get_yaml
 from PIL import Image
 from damatuCode.damatuWeb import DamatuApi
+from damatuCode.ruokuai import RClient
 import requests
 from init import gol
 import traceback
 from http.client import RemoteDisconnected
 import time
-from myUrllib.httpUtils  import HTTPClient
+from myUrllib.httpUtils import HTTPClient
 
 
 class go_login:
-    def __init__(self, ticket_config=""):
+    def __init__(self,  ticket_config=""):
+        self.config_data = _get_yaml(ticket_config)
         self.captcha_url = 'https://kyfw.12306.cn/passport/captcha/captcha-image?login_site=E&module=login&rand=sjrand&%s' % random.random()
-        self.ticket_config = ticket_config
         self.text = ""
-        self.user = _get_yaml(ticket_config)["set"]["12306count"][0]["uesr"]
-        self.passwd = _get_yaml(ticket_config)["set"]["12306count"][1]["pwd"]
+        self.user = self.config_data["set"]["12306count"][0]["uesr"]
+        self.passwd = self.config_data["set"]["12306count"][1]["pwd"]
+        self.aotu_code_type = self.config_data['aotu_code_type']
 
         self.s = self.create_session()
 
@@ -41,8 +43,8 @@ class go_login:
         login_userLogin = "https://kyfw.12306.cn/otn/login/userLogin"
         #userLogin = "https://kyfw.12306.cn/otn/passport?redirect=/otn/login/userLogin"
         uamauthclient = "https://kyfw.12306.cn/otn/uamauthclient"
-        
-        self.s.get(init_url ,verify=False)
+
+        self.s.get(init_url, verify=False)
         self.s.post(uamtk_url, data=uamtk_data, verify=False)
         content = self.s.get(httpZF_url, verify=False).content
         content = content.decode(encoding='utf-8').split("'")[1]
@@ -63,7 +65,7 @@ class go_login:
             self.s.cookies, {"_jc_save_wfdc_flag": 'dc'})
         requests.utils.add_dict_to_cookiejar(
             self.s.cookies, {"_jc_save_fromStation": '%u4E0A%u6D77%u8679%u6865%2CAOH'})
-        randCode = self.get_randcode()
+        randCode = self.readImg(self.captcha_url)
         randdata = {"answer": randCode,
                     "login_site": "E",
                     "rand": "sjrand"}
@@ -74,7 +76,7 @@ class go_login:
             captcha_check_url, data=randdata, verify=False).json()
         print(rand_result)
         while rand_result['result_code'] is not '4':
-            randCode = self.get_randcode()
+            randCode = self.readImg(self.captcha_url)
             randdata = {"answer": randCode,
                         "login_site": "E",
                         "rand": "sjrand"}
@@ -88,13 +90,13 @@ class go_login:
         print(login_code)
         # 解决登录接口302重定向问题
         while login_code == 302:
-            
+
             login_result = self.s.post(
                 login_url, allow_redirects=False, data=login_data, verify=False)
             login_code = login_result.status_code
             print('Login redirect...')
             if login_code == 200:
-                print('登录成功' , login_result.json())
+                print('登录成功', login_result.json())
         login_userLogin_data = {'_json_att': ''}
         self.s.post(login_userLogin, data=login_userLogin_data, verify=False)
         uamtk_result = self.s.post(
@@ -109,7 +111,7 @@ class go_login:
         return login_cookies
 
     def get_randcode(self):
-        self.stoidinput("下载验证码...")
+        print("下载验证码...")
         img_path = './tkcode'
         r = self.s.get(self.captcha_url,  verify=False)
         result = r.content
@@ -117,9 +119,9 @@ class go_login:
         randCode = ''
         try:
             open(img_path, 'wb').write(result)
-            if _get_yaml(self.ticket_config)["is_aotu_code"]:
-                randCode = DamatuApi(_get_yaml(self.ticket_config)["damatu"]["uesr"],
-                                     _get_yaml(self.ticket_config)["damatu"]["pwd"], img_path).main()
+            if self.config_data["is_aotu_code"]:
+                randCode = DamatuApi(self.config_data["damatu"]["uesr"],
+                                     self.config_data["damatu"]["pwd"], img_path).main()
 
             else:
                 img = Image.open('./tkcode')
@@ -151,61 +153,54 @@ class go_login:
         # for index, c in enumerate(myurllib2.cookiejar):
         #     stoidinput(c)
 
-    # def readImg(self):
-    #     """
-    #     增加手动打码，只是登录接口，完全不用担心提交订单效率
-    #     思路
-    #     1.调用PIL显示图片
-    #     2.图片位置说明，验证码图片中每个图片代表一个下标，依次类推，1，2，3，4，5，6，7，8
-    #     3.控制台输入对应下标，按照英文逗号分开，即可手动完成打码，
-    #     :return:
-    #     """
-    #
-    #     #global randCode
-    #     self.stoidinput("下载验证码...")
-    #     img_path = './tkcode'
-    #     r = s.get(self.captcha_url, verify=False)
-    #     captcha_cookie = r.cookies.get_dict()
-    #     result = r.content
-    #     #print(result)
-    #     try:
-    #         open(img_path, 'wb').write(result)
-    #         if _get_yaml(self.ticket_config)["is_aotu_code"]:
-    #             #print(_get_yaml(self.ticket_config)["damatu"]["uesr"])
-    #             randCode = DamatuApi(_get_yaml(self.ticket_config)["damatu"]["uesr"], _get_yaml(self.ticket_config)["damatu"]["pwd"], img_path).main()
-    #         else:
-    #             img = Image.open('./tkcode')
-    #             img.show()
-    #             self.codexy()
-    #     except OSError as e:
-    #         print (e)
-    #         pass
-    #     return randCode
-
-    def stoidinput(self, text):
+    def readImg(self, code_url):
         """
-        正常信息输出
-        :param text:
+        增加手动打码，只是登录接口，完全不用担心提交订单效率
+        思路
+        1.调用PIL显示图片
+        2.图片位置说明，验证码图片中每个图片代表一个下标，依次类推，1，2，3，4，5，6，7，8
+        3.控制台输入对应下标，按照英文逗号分开，即可手动完成打码，
         :return:
         """
-        print("\033[34m[*]\033[0m %s " % text)
+        print ("下载验证码...")
+        codeimgUrl = code_url
+        img_path = './tkcode'
+        r = self.s.get(codeimgUrl,  verify=False)
+        result = r.content
+        # if "message" in result:
+        #     print("验证码下载失败，正在重试")
+        # else:
+        try:
+            open(img_path, 'wb').write(result)
+            if self.aotu_code_type == 1:
+                return DamatuApi(self.config_data["damatu"]["uesr"], self.config_data["damatu"]["pwd"], img_path).main()
 
-    def errorinput(self, text):
-        """
-        错误信息输出
-        :param text:
-        :return:
-        """
-        print("\033[32m[!]\033[0m %s " % text)
-        return False
+            elif self.aotu_code_type == 2:
+                rc = RClient(
+                    self.config_data["ruokuai"]["uesr"], self.config_data["ruokuai"]["pwd"])
+                im = open('./tkcode', 'rb').read()
+                Result = rc.rk_create(im, 6113)
+                if "Result" in Result:
+                    return self.codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
+                else:
+                    if "Error" in Result and Result["Error"]:
+                        print(Result["Error"])
+                        return ""
+            else:
+                img = Image.open('./tkcode')
+                img.show()
+                return self.codexy()
+        except OSError as e:
+            print (e)
+            return ""
 
-    def codexy(self):
+    def codexy(self, Ofset = None, is_raw_input=True):
         """
         获取验证码
         :return: str
         """
-        global randCode
-        Ofset = input("[*] 请输入验证码: ")
+        if is_raw_input :
+            Ofset = input("请输入验证码: ")
         select = Ofset.split(',')
         #global randCode
         post = []
@@ -213,35 +208,37 @@ class go_login:
         offsetsY = 0  # 选择的答案的top值
         for ofset in select:
             if ofset == '1':
-                offsetsY = 41
-                offsetsX = 39
+                offsetsY = 46
+                offsetsX = 42
             elif ofset == '2':
-                offsetsY = 44
-                offsetsX = 110
+                offsetsY = 46
+                offsetsX = 105
             elif ofset == '3':
-                offsetsY = 49
+                offsetsY = 45
                 offsetsX = 184
             elif ofset == '4':
-                offsetsY = 45
-                offsetsX = 253
+                offsetsY = 48
+                offsetsX = 256
             elif ofset == '5':
-                offsetsY = 116
-                offsetsX = 39
+                offsetsY = 36
+                offsetsX = 117
             elif ofset == '6':
-                offsetsY = 113
-                offsetsX = 110
+                offsetsY = 112
+                offsetsX = 115
             elif ofset == '7':
-                offsetsY = 120
-                offsetsX = 184
+                offsetsY = 114
+                offsetsX = 181
             elif ofset == '8':
-                offsetsY = 121
-                offsetsX = 257
+                offsetsY = 111
+                offsetsX = 252
             else:
                 pass
             post.append(offsetsX)
             post.append(offsetsY)
         randCode = str(post).replace(']', '').replace(
             '[', '').replace("'", '').replace(' ', '')
+
+        print("验证码识别坐标为{0}".format(randCode))
         return randCode
 
     def login(self):
@@ -254,12 +251,12 @@ class go_login:
             except (requests.exceptions.ConnectionError, RemoteDisconnected) as e:
                 traceback.print_exc()
                 sleep_interval = 60 * 5
-                print(f'IP可能被封掉，打算睡一觉 {sleep_interval}ms') 
-                time.sleep(60 *5)
+                print(f'IP可能被封掉，打算睡一觉 {sleep_interval}ms')
+                time.sleep(60 * 5)
 
             except IndexError as e:
                 traceback.print_exc()
-    #   
+    #
     # def getUserinfo(self):
     #     """
     #     登录成功后,显示用户名

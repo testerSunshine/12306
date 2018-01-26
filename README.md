@@ -3,7 +3,7 @@
 - python版本支持
   - 2.7
 - 依赖库
-  - 依赖打码兔 需要去打码兔注册（用户）账号，打码兔账号地址：http://www.dama2.com，一般充值1元就够用了，充值打码兔之后，首次运行是需要到官网黑白名单授权
+  - 依赖打码兔 需要去打码兔注册（用户）账号，打码兔账号地址：http://www.dama2.com ，一般充值1元就够用了，充值打码兔之后，首次运行是需要到官网黑白名单授权
   - 依赖若快 若快注册地址：http://www.ruokuai.com/client/index?6726 推荐用若快，打码兔在12306验证码更新之后识别率不是很高
   - 项目依赖包 requirements.txt
   - 安装方法 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
@@ -72,7 +72,7 @@
      ![image](https://github.com/testerSunshine/12306/blob/master/uml/uml.png)
 
 - 项目声明：
-  - 本软件只供学习交流使用，务作为商业用途，交流群：286271084
+  - 本软件只供学习交流使用，勿作为商业用途，交流群：286271084
   - 能为你抢到一张回家的票，是我最大的心愿
 
 - 成功log，如果是购票失败的，请带上失败的log给我，我尽力帮你挑，也可加群一起交流，程序只是加速买票的过程，并不一定能买到票

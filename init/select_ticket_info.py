@@ -248,7 +248,7 @@ class select:
             self.env_retry_limit += 0
         
         if self.env_retry_limit >= self.retry_limit:
-            time.sleep(60*2)
+            time.sleep(60*60* 1)
 
         if not station_ticket:
             print(f"车次配置信息有误，或者返回数据异常，请检查 {station_ticket}")

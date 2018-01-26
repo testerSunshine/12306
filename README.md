@@ -1,7 +1,10 @@
-### 12306
 
+- python3 run.py <config_name>
+- 
+### 12306
 - python版本支持
-  - 2.7 3.0+
+  - 2.7 3.6.2+
+  - 
 - 依赖库
   - 依赖打码兔 需要去打码兔注册账号，打码兔账号地址：http://www.dama2.com，一般充值1元就够用了
   - 项目依赖包 requirements.txt

@@ -11,6 +11,8 @@ from damatuCode.damatuWeb import DamatuApi
 import requests
 from init import gol
 import traceback
+from http.client import RemoteDisconnected
+import time
 
 class go_login:
     def __init__(self, ticket_config=""):
@@ -36,15 +38,12 @@ class go_login:
         login_userLogin = "https://kyfw.12306.cn/otn/login/userLogin"
         #userLogin = "https://kyfw.12306.cn/otn/passport?redirect=/otn/login/userLogin"
         uamauthclient = "https://kyfw.12306.cn/otn/uamauthclient"
+        
         self.s.get(init_url, verify=False)
         self.s.post(uamtk_url, data=uamtk_data, verify=False)
         content = self.s.get(httpZF_url, verify=False).content
-        
-        try:
-            content = content.decode(encoding='utf-8').split("'")[1]
-            d = json.loads(content)
-        except IndexError as e :
-            traceback.print_exc()
+        content = content.decode(encoding='utf-8').split("'")[1]
+        d = json.loads(content)
 
         requests.utils.add_dict_to_cookiejar(
             self.s.cookies, {"RAIL_DEVICEID": d['dfp']})
@@ -239,11 +238,21 @@ class go_login:
         return randCode
 
     def login(self):
-        self.get_logincookies()
-        gol._init()
-        gol.set_value('s', self.s)
+        while True:
+            try:
+                self.get_logincookies()
+                gol._init()
+                gol.set_value('s', self.s)
+                break
+            except (requests.exceptions.ConnectionError, RemoteDisconnected) as e:
+                traceback.print_exc()
+                sleep_interval = 60 * 5
+                print(f'IP可能被封掉，打算睡一觉 {sleep_interval}ms') 
+                time.sleep(60 *5)
 
-    #
+            except IndexError as e:
+                traceback.print_exc()
+    #   
     # def getUserinfo(self):
     #     """
     #     登录成功后,显示用户名

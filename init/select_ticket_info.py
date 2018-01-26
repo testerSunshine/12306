@@ -577,8 +577,7 @@ class select:
 
                     img_path = './tkcode'
                     open(img_path, 'wb').write(result)
-                    randCode = DamatuApi(_get_yaml(self.ticket_config)["damatu"]["uesr"], _get_yaml(self.ticket_config)["damatu"]["pwd"],
-                                         img_path).main()
+                    randCode = login.go_login.readImg(img_path)
                     randData = {
                         "randCode": randCode,
                         "rand": "randp",

@@ -249,6 +249,7 @@ class select:
         check_user_url = self.confUrl["check_user_url"]["req_url"]
         data = {"_json_att": ""}
         check_user = self.httpClint.send(check_user_url, data)
+
         check_user_flag = check_user['data']['flag']
         if check_user_flag is True:
             self.is_check_user["user_time"] = datetime.datetime.now()
@@ -263,6 +264,7 @@ class select:
                 print ('正在尝试重新登录')
                 self.call_login()
                 self.is_check_user["user_time"] = datetime.datetime.now()
+
 
     def submit_station(self):
         """
@@ -329,21 +331,21 @@ class select:
             raise PassengerUserException("联系人不在列表中，请查证后添加")
         if len(self.user_info) is 1:
             passengerTicketStrList.append(
-                '0,' + self.user_info[0]['passenger_id_type_code'] + "," + self.user_info[0][
+                '0,' + self.user_info[0]['passenger_type'] + "," + self.user_info[0][
                     "passenger_name"] + "," +
-                self.user_info[0]['passenger_type'] + "," + self.user_info[0]['passenger_id_no'] + "," +
+                self.user_info[0]['passenger_id_type_code'] + "," + self.user_info[0]['passenger_id_no'] + "," +
                 self.user_info[0]['mobile_no'] + ',N')
             oldPassengerStr.append(
-                self.user_info[0]['passenger_name'] + "," + self.user_info[0]['passenger_type'] + "," +
+                self.user_info[0]['passenger_name'] + "," + self.user_info[0]['passenger_id_type_code'] + "," +
                 self.user_info[0]['passenger_id_no'] + "," + self.user_info[0]['passenger_type'] + '_')
         else:
             for i in range(len(self.user_info)):
                 passengerTicketStrList.append(
-                    '0,' + self.user_info[i]['passenger_id_type_code'] + "," + self.user_info[i][
-                        "passenger_name"] + "," + self.user_info[i]['passenger_type'] + "," + self.user_info[i][
+                    '0,' + self.user_info[i]['passenger_type'] + "," + self.user_info[i][
+                        "passenger_name"] + "," + self.user_info[i]['passenger_id_type_code'] + "," + self.user_info[i][
                         'passenger_id_no'] + "," + self.user_info[i]['mobile_no'] + ',N_' + self.set_type)
                 oldPassengerStr.append(
-                    self.user_info[i]['passenger_name'] + "," + self.user_info[i]['passenger_type'] + "," +
+                    self.user_info[i]['passenger_name'] + "," + self.user_info[i]['passenger_id_type_code'] + "," +
                     self.user_info[i]['passenger_id_no'] + "," + self.user_info[i]['passenger_type'] + '_')
         return passengerTicketStrList, oldPassengerStr
 

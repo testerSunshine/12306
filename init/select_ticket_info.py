@@ -1,12 +1,15 @@
 # -*- coding=utf-8 -*-
 import json
 import datetime
+import random
 import re
 import socket
 import urllib
 import sys
 import time
 from collections import OrderedDict
+
+from agency.cdn_utils import CDNProxy
 from config import urlConf
 from init import login
 from config.emailConf import sendEmail
@@ -45,6 +48,7 @@ class select:
         self.login = GoLogin(self.httpClint, self.confUrl, self.is_aotu_code, self.aotu_code_type)
         self.is_download_img = False
         self.randCode = ""
+        self.cdn_list = []
 
     def get_ticket_info(self):
         """
@@ -144,6 +148,7 @@ class select:
         :param code_url: 验证码url
         :return:
         """
+        print(code_url)
         self.login.readImg(code_url=code_url)
         self.is_aotu_code = True
 
@@ -162,8 +167,8 @@ class select:
         获取提交车票请求token
         :return: token
         """
-        initdc_url = self.confUrl["initdc_url"]["req_url"]
-        initdc_result = self.httpClint.send(initdc_url)
+        initdc_url = self.confUrl["initdc_url"]
+        initdc_result = self.httpClint.send(initdc_url,)
         token_name = re.compile(r"var globalRepeatSubmitToken = '(\S+)'")
         ticketInfoForPassengerForm_name = re.compile(r'var ticketInfoForPassengerForm=(\{.+\})?')
         order_request_params_name = re.compile(r'var orderRequestDTO=(\{.+\})?')
@@ -184,7 +189,7 @@ class select:
         获取乘客信息
         :return: 
         """
-        get_passengerDTOs = self.confUrl["get_passengerDTOs"]["req_url"]
+        get_passengerDTOs = self.confUrl["get_passengerDTOs"]
         get_data = {
             '_json_att': None,
             'REPEAT_SUBMIT_TOKEN': self.token
@@ -205,9 +210,9 @@ class select:
                 raise PassengerUserException("未查找到常用联系人,请先添加联系人在试试")
 
     def submitOrderRequestFunc(self, from_station, to_station, station_date=None):
-        select_url = self.confUrl["select_url"]["req_url"].format(
+        self.confUrl["select_url"]["req_url"] = self.confUrl["select_url"]["req_url"].format(
             station_date, from_station, to_station)
-        station_ticket = self.httpClint.send(select_url, is_logger=False)
+        station_ticket = self.httpClint.send(self.confUrl["select_url"])
         return json.loads(station_ticket)
 
     def submitOrderRequestImplement(self, from_station, to_station,):
@@ -249,8 +254,7 @@ class select:
                                         break
                                     else:
                                         print ('正在尝试提交订票...')
-                                        t = threading.Thread(target=self.callReadImg, args=self.confUrl["codeImgByOrder"]["req_url"])
-                                        t.start()
+
                                         # self.submitOrderRequestFunc(from_station, to_station, self.time())
                                         self.submit_station()
                                         self.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
@@ -272,7 +276,7 @@ class select:
         检查用户是否达到订票条件
         :return:
         """
-        check_user_url = self.confUrl["check_user_url"]["req_url"]
+        check_user_url = self.confUrl["check_user_url"]
         data = {"_json_att": ""}
         check_user = self.httpClint.send(check_user_url, data)
         check_user_flag = check_user['data']['flag']
@@ -300,8 +304,7 @@ class select:
         :param secretStr: 提交车次加密
         :return:
         """
-
-        submit_station_url = self.confUrl["submit_station_url"]["req_url"]
+        submit_station_url = self.confUrl["submit_station_url"]
         data = [('secretStr', urllib.unquote(self.secretStr)),  # 字符串加密
                 ('train_date', self.time()),  # 出发时间
                 ('back_train_date', self.time()),  # 返程时间
@@ -355,21 +358,21 @@ class select:
             raise PassengerUserException("联系人不在列表中，请查证后添加")
         if len(self.user_info) is 1:
             passengerTicketStrList.append(
-                '0,' + self.user_info[0]['passenger_id_type_code'] + "," + self.user_info[0][
+                '0,' + self.user_info[0]['passenger_type'] + "," + self.user_info[0][
                     "passenger_name"] + "," +
-                self.user_info[0]['passenger_type'] + "," + self.user_info[0]['passenger_id_no'] + "," +
+                self.user_info[0]['passenger_id_type_code'] + "," + self.user_info[0]['passenger_id_no'] + "," +
                 self.user_info[0]['mobile_no'] + ',N')
             oldPassengerStr.append(
-                self.user_info[0]['passenger_name'] + "," + self.user_info[0]['passenger_type'] + "," +
+                self.user_info[0]['passenger_name'] + "," + self.user_info[0]['passenger_id_type_code'] + "," +
                 self.user_info[0]['passenger_id_no'] + "," + self.user_info[0]['passenger_type'] + '_')
         else:
             for i in range(len(self.user_info)):
                 passengerTicketStrList.append(
-                    '0,' + self.user_info[i]['passenger_id_type_code'] + "," + self.user_info[i][
-                        "passenger_name"] + "," + self.user_info[i]['passenger_type'] + "," + self.user_info[i][
+                    '0,' + self.user_info[i]['passenger_type'] + "," + self.user_info[i][
+                        "passenger_name"] + "," + self.user_info[i]['passenger_id_type_code'] + "," + self.user_info[i][
                         'passenger_id_no'] + "," + self.user_info[i]['mobile_no'] + ',N_' + self.set_type)
                 oldPassengerStr.append(
-                    self.user_info[i]['passenger_name'] + "," + self.user_info[i]['passenger_type'] + "," +
+                    self.user_info[i]['passenger_name'] + "," + self.user_info[i]['passenger_id_type_code'] + "," +
                     self.user_info[i]['passenger_id_no'] + "," + self.user_info[i]['passenger_type'] + '_')
         return passengerTicketStrList, oldPassengerStr
 
@@ -381,7 +384,7 @@ class select:
         :return: 
         """
         passengerTicketStrList, oldPassengerStr = self.getPassengerTicketStrListAndOldPassengerStr()
-        checkOrderInfoUrl = self.confUrl["checkOrderInfoUrl"]["req_url"]
+        checkOrderInfoUrl = self.confUrl["checkOrderInfoUrl"]
         data = OrderedDict()
         data['cancel_flag'] = 2
         data['bed_level_order_num'] = "000000000000000000000000000000"
@@ -421,7 +424,7 @@ class select:
         """
         l_time = time.localtime(time.time())
         new_train_date = time.strftime("%a %b %d %Y", l_time)
-        getQueueCountUrl = self.confUrl["getQueueCountUrl"]["req_url"]
+        getQueueCountUrl = self.confUrl["getQueueCountUrl"]
         data = {
             'train_date': str(new_train_date) + " 00:00:00 GMT+0800 (中国标准时间)",
             'train_no': self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['train_no'],
@@ -467,7 +470,7 @@ class select:
         识别验证码
         :return: 识别结果
         """
-        checkRandCodeAnsyn = self.confUrl["checkRandCodeAnsyn"]["req_url"]
+        checkRandCodeAnsyn = self.confUrl["checkRandCodeAnsyn"]
         randData = {
             "randCode": randCode,
             "rand": "randp",
@@ -484,7 +487,7 @@ class select:
         """
 
         passengerTicketStrList, oldPassengerStr = self.getPassengerTicketStrListAndOldPassengerStr()
-        checkQueueOrderUrl = self.confUrl["checkQueueOrderUrl"]["req_url"]
+        checkQueueOrderUrl = self.confUrl["checkQueueOrderUrl"]
         data = {
             "passengerTicketStr": self.set_type + "," + ",".join(passengerTicketStrList).rstrip("_{0}".format(self.set_type)),
             "oldPassengerStr": "".join(oldPassengerStr),
@@ -503,29 +506,21 @@ class select:
         try:
             if is_node_code:
                 print("正在使用自动识别验证码功能")
-                while True:
-                    if self.randCode:
-                        checkcode = self.checkRandCodeAnsyn(self.randCode)
-                        if checkcode == 'TRUE':
-                            print("验证码通过,正在提交订单")
-                            data['randCode'] = self.randCode
-                            self.randCode = ""
-                            break
-                        else:
-                            for i in range(3):
-                                codeImgByOrder = self.confUrl["codeImgByOrder"]["req_url"]
-                                self.login.readImg(codeImgByOrder)
-                                randCode = self.login.getRandCode()
-                                if checkcode == 'TRUE':
-                                    print("验证码通过,正在提交订单")
-                                    data['randCode'] = randCode
-                                    break
-                                else:
-                                    print ("验证码有误, {0}次尝试重试".format(i+1))
-                            print("验证码超过限定次数3次，放弃此次订票机会!")
-                            break
+                for i in range(3):
+                    codeImgByOrder = self.confUrl["codeImgByOrder"]
+                    self.login.readImg(codeImgByOrder)
+                    randCode = self.login.getRandCode()
+                    checkcode = self.checkRandCodeAnsyn(randCode)
+                    if checkcode == 'TRUE':
+                        print("验证码通过,正在提交订单")
+                        data['randCode'] = randCode
+                        break
+                    else:
+                        print ("验证码有误, {0}次尝试重试".format(i+1))
+                print("验证码超过限定次数3次，放弃此次订票机会!")
             else:
                 print("不需要验证码")
+            time.sleep(0.5)
             checkQueueOrderResult = self.httpClint.send(checkQueueOrderUrl, data)
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
@@ -541,7 +536,7 @@ class select:
             elif "messages" in checkQueueOrderResult and checkQueueOrderResult["messages"]:
                 print("提交订单失败,错误信息: " + checkQueueOrderResult["messages"])
             else:
-                print("提交订单中，请耐心等待：" + str(checkQueueOrderResult["validateMessages"]))
+                print("提交订单中，请耐心等待：" + checkQueueOrderResult["message"])
         except ValueError:
             print("接口 {} 无响应".format(checkQueueOrderUrl))
 
@@ -562,7 +557,7 @@ class select:
                 break
             try:
                 data = {"random": _random, "tourFlag": "dc"}
-                queryOrderWaitTimeUrl = self.confUrl["queryOrderWaitTimeUrl"]["req_url"]
+                queryOrderWaitTimeUrl = self.confUrl["queryOrderWaitTimeUrl"]
                 queryOrderWaitTimeResult = self.httpClint.send(queryOrderWaitTimeUrl, data)
             except ValueError:
                 queryOrderWaitTimeResult = {}
@@ -595,7 +590,7 @@ class select:
         :return:
         """
         self.initNoComplete()
-        queryMyOrderNoCompleteUrl = self.confUrl["queryMyOrderNoCompleteUrl"]["req_url"]
+        queryMyOrderNoCompleteUrl = self.confUrl["queryMyOrderNoCompleteUrl"]
         data = {"_json_att": ""}
         try:
             queryMyOrderNoCompleteResult = self.httpClint.send(queryMyOrderNoCompleteUrl, data)
@@ -624,7 +619,7 @@ class select:
         :return:
         """
         self.httpClint.set_cookies(acw_tc="AQAAAEnFJnekLwwAtGHjZZCr79B6dpXk", current_captcha_type="Z")
-        initNoCompleteUrl = self.confUrl["initNoCompleteUrl"]["req_url"]
+        initNoCompleteUrl = self.confUrl["initNoCompleteUrl"]
         data = {"_json_att": ""}
         self.httpClint.send(initNoCompleteUrl, data)
 
@@ -634,7 +629,7 @@ class select:
         :param sequence_no: 订单编号
         :return:
         """
-        cancelNoCompleteMyOrderUrl = self.confUrl["cancelNoCompleteMyOrder"]["req_url"]
+        cancelNoCompleteMyOrderUrl = self.confUrl["cancelNoCompleteMyOrder"]
         cancelNoCompleteMyOrderData = {
             "sequence_no": sequence_no,
             "cancel_flag": "cancel_order",
@@ -648,17 +643,12 @@ class select:
         else:
             print("排队超时，取消订单失败， 订单号{0}".format(sequence_no))
 
-    # def call_submit_ticket(self, function_name=None):
-    #     """
-    #     订票失败回调方法，默认执行submitOrderRequest()
-    #     此方法暂不使用
-    #     :param function_name:
-    #     :return:
-    #     """
-    #     if function_name:
-    #         self.function_name()
-    #     else:
-    #         self.submitOrderRequest()
+    def set_cdn(self):
+        """
+        设置cdn
+        :return:
+        """
+        self.httpClint.cdn = eval(self.cdn_list[random.randint(0, len(self.cdn_list)-1)])["result"].replace("'", "")
 
     def call_login(self, auth=False):
         """
@@ -671,6 +661,16 @@ class select:
             self.login.go_login()
 
     def main(self):
+        is_cdn = _get_yaml()["is_cdn"]
+        if is_cdn == 1:
+            CDN = CDNProxy()
+            self.cdn_list = CDN.all_cdn()
+            if self.cdn_list:
+                print("开启cdn查询")
+                print("本次cdn总数为{}".format(len(self.cdn_list)))
+                self.set_cdn()
+            else:
+                raise ticketConfigException("cdn列表为空，请先加载cdn")
         self.call_login()
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         self.check_user()
@@ -689,7 +689,8 @@ class select:
                     self.call_login()
                 start_time = datetime.datetime.now()
                 self.submitOrderRequestImplement(from_station, to_station)
-                print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  代理设置 无  总耗时{3}ms".format(num, ",".join(self.station_dates), ",".join(self.station_trains), (datetime.datetime.now()-start_time).microseconds/1000)
+                print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  cdn查询ip {4}  总耗时{3}ms".format(num, ",".join(self.station_dates), ",".join(self.station_trains), (datetime.datetime.now()-start_time).microseconds/1000, self.httpClint.cdn)
+                self.set_cdn()
             except PassengerUserException as e:
                 print e.message
                 break
@@ -712,8 +713,8 @@ class select:
                     print(e.message)
             except KeyError as e:
                 print(e.message)
-            except TypeError as e:
-                print("12306接口无响应，正在重试 {0}".format(e.message))
+            # except TypeError as e:
+            #     print("12306接口无响应，正在重试 {0}".format(e.message))
             except socket.error as e:
                 print(e.message)
 

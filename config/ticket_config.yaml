@@ -44,7 +44,7 @@ set:
 #    - "2018-01-27"
 #    - "2018-01-28"
 #    - "2018-02-22"
-    - "2018-02-23"
+    - "2018-02-24"
   station_trains:
     - "D2879"
     - "D1813"
@@ -74,26 +74,28 @@ set:
   12306count:
 #    - uesr: ""
 #    - pwd: "apple1995"
-    - uesr: "931128603@qq.com"
+    - uesr: "@qq.com"
     - pwd: "QWERTY"
 
-select_refresh_interval: 0.3
+select_refresh_interval: 0.4
 ticket_black_list_time: 6
 is_aotu_code: True
 aotu_code_type: 2
 #enable_proxy: False
 
 damatu:
-  uesr: "931128603"
+  uesr: ""
   pwd: "qazWSX1995"
 
 email_conf:
   is_email: True
-  email: "931128603@qq.com "
+  email: "@qq.com "
   notice_email_list: "61995120@qq.com"
-  username: "931128603"
+  username: ""
   password: "xwopwxbkupbqbfgb"
   host: "smtp.qq.com"
+
+is_cdn: 1
 
 
 

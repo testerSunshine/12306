@@ -25,7 +25,7 @@ class GoLogin:
 
     def cookietp(self):
         print("正在获取cookie")
-        url = self.urlConf["loginInit"]["req_url"]
+        url = self.urlConf["loginInit"]
         self.httpClint.send(url)
         # Url = "https://kyfw.12306.cn/otn/login/init"
         # myurllib2.get(Url)
@@ -70,8 +70,9 @@ class GoLogin:
         print ("下载验证码...")
         codeimgUrl = code_url
         img_path = './tkcode'
-        result = self.httpClint.send(codeimgUrl, is_logger=False)
+        result = self.httpClint.send(codeimgUrl)
         try:
+            print("下载验证码成功")
             open(img_path, 'wb').write(result)
         except OSError as e:
             print (e)
@@ -122,7 +123,7 @@ class GoLogin:
 
     def auth(self):
         """认证"""
-        authUrl = self.urlConf["auth"]["req_url"]
+        authUrl = self.urlConf["auth"]
         authData = {"appid": "otn"}
         tk = self.httpClint.send(authUrl, authData)
         return tk
@@ -132,7 +133,7 @@ class GoLogin:
         验证码校验
         :return:
         """
-        codeCheck = self.urlConf["codeCheck"]["req_url"]
+        codeCheck = self.urlConf["codeCheck"]
         codeCheckData = {
             "answer": self.randCode,
             "rand": "sjrand",
@@ -155,7 +156,7 @@ class GoLogin:
         :param passwd:
         :return: 权限校验码
         """
-        logurl = self.urlConf["login"]["req_url"]
+        logurl = self.urlConf["login"]
         logData = {
             "username": user,
             "password": passwd,
@@ -188,7 +189,7 @@ class GoLogin:
         if not uamtk:
             return "权限校验码不能为空"
         else:
-            uamauthclientUrl = self.urlConf["uamauthclient"]["req_url"]
+            uamauthclientUrl = self.urlConf["uamauthclient"]
             data = {"tk": uamtk}
             uamauthclientResult = self.httpClint.send(uamauthclientUrl, data)
             if uamauthclientResult:
@@ -199,7 +200,7 @@ class GoLogin:
                     return False
             else:
                 self.httpClint.send(uamauthclientUrl, data)
-                url = self.urlConf["getUserInfo"]["req_url"]
+                url = self.urlConf["getUserInfo"]
                 self.httpClint.send(url)
 
     def go_login(self):
@@ -220,7 +221,7 @@ class GoLogin:
         while True:
             self.cookietp()
             self.httpClint.set_cookies(_jc_save_wfdc_flag="dc", _jc_save_fromStation="%u4E0A%u6D77%u8679%u6865%2CAOH", _jc_save_toStation="%u5170%u5DDE%u897F%2CLAJ", _jc_save_fromDate="2018-02-14", _jc_save_toDate="2018-01-16", RAIL_DEVICEID="EN_3_EGSe2GWGHXJeCkFQ52kHvNCrNlkz9n1GOqqQ1wR0i98WsD8Gj-a3YHZ-XYKeESWgCiJyyucgSwkFOzVHhHqfpidLPcm2vK9n83uzOPuShO3Pl4lCydAtQu4BdFqz-RVmiduNFixrcrN_Ny43135JiEtqLaI")
-            self.readImg(self.urlConf["getCodeImg"]["req_url"])
+            self.readImg(self.urlConf["getCodeImg"])
             self.randCode = self.getRandCode()
             login_num += 1
             self.auth()

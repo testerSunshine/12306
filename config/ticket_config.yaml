@@ -41,11 +41,8 @@
 
 set:
   station_dates:
-#    - "2018-01-27"
-#    - "2018-01-28"
-    - "2018-02-09"
-    - "2018-02-10"
-#    - "2018-02-09"
+    - "2018-01-27"
+
   station_trains:
     - "G4741"
     - "G2365"
@@ -53,18 +50,7 @@ set:
     - "G1337"
     - "G1377"
     - "G1329"
-#    - "G1302"
-#    - "G1372"
-#    - "G1326"
-#    - "K4300"
-#    - "K5226"
-#    - "K7772"
-#    - "G1329"
-#    - "G1359"
-#    - "G1361"
-#    - "G1373"
-#    - "G1363"
-#    - "G4933"
+
   from_station: "上海"
   to_station: "邵阳"
   set_type:
@@ -76,7 +62,7 @@ set:
   12306count:
 #    - uesr: ""
 #    - pwd: "apple1995"
-    - uesr: "931128603@qq.com"
+    - uesr: "@qq.com"
     - pwd: "QWERTY"
 
 select_refresh_interval: 1
@@ -86,18 +72,18 @@ aotu_code_type: 2
 #enable_proxy: False
 
 damatu:
-  uesr: "931128603"
+  uesr: ""
   pwd: "qazWSX1995"
 
 email_conf:
   is_email: True
-  email: "931128603@qq.com "
+  email: "@qq.com "
   notice_email_list: "61995120@qq.com"
-  username: "931128603"
+  username: ""
   password: "xwopwxbkupbqbfgb"
   host: "smtp.qq.com"
 
-is_cdn: 2
+is_cdn: 1
 
 
 

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="79a86edc-721f-4aad-920d-b595d0348b7f" name="Default" comment="test version">
+<<<<<<< Updated upstream
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tkcode" afterPath="$PROJECT_DIR$/tkcode" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agency/cdn_list" afterPath="$PROJECT_DIR$/agency/cdn_list" />
@@ -9,6 +10,13 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cdn_list" afterPath="$PROJECT_DIR$/cdn_list" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/ticket_config.yaml" afterPath="$PROJECT_DIR$/config/ticket_config.yaml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/urlConf.py" afterPath="$PROJECT_DIR$/config/urlConf.py" />
+=======
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agency/cdn_utils.py" afterPath="$PROJECT_DIR$/agency/cdn_utils.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/ticket_config.yaml" afterPath="$PROJECT_DIR$/config/ticket_config.yaml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/urlConf.py" afterPath="$PROJECT_DIR$/config/urlConf.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/init/login.py" afterPath="$PROJECT_DIR$/init/login.py" />
+>>>>>>> Stashed changes
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/init/select_ticket_info.py" afterPath="$PROJECT_DIR$/init/select_ticket_info.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myUrllib/httpUtils.py" afterPath="$PROJECT_DIR$/myUrllib/httpUtils.py" />
     </list>
@@ -24,7 +32,11 @@
     <SUITE FILE_PATH="coverage/12306$12306__2_.coverage" NAME="12306 (2) Coverage Results" MODIFIED="1495725009419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/login" />
     <SUITE FILE_PATH="coverage/12306$run.coverage" NAME="run Coverage Results" MODIFIED="1515392744396" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/yixing" />
     <SUITE FILE_PATH="coverage/12306$12306__1_.coverage" NAME="12306 (1) Coverage Results" MODIFIED="1495724916012" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/12306login" />
+<<<<<<< Updated upstream
     <SUITE FILE_PATH="coverage/12306$cdn_utils.coverage" NAME="cdn_utils Coverage Results" MODIFIED="1517195928620" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/agency" />
+=======
+    <SUITE FILE_PATH="coverage/12306$cdn_utils.coverage" NAME="cdn_utils Coverage Results" MODIFIED="1517200798613" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/agency" />
+>>>>>>> Stashed changes
     <SUITE FILE_PATH="coverage/12306$12306test.coverage" NAME="12306test Coverage Results" MODIFIED="1502779393809" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/yixing/myUrllib" />
     <SUITE FILE_PATH="coverage/12306$select_ticket_info.coverage" NAME="select_ticket_info Coverage Results" MODIFIED="1515251193898" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/yixing/init" />
     <SUITE FILE_PATH="coverage/12306$test.coverage" NAME="test Coverage Results" MODIFIED="1495722875742" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/12306login" />
@@ -33,7 +45,11 @@
     <SUITE FILE_PATH="coverage/12306$ticketConf.coverage" NAME="ticketConf Coverage Results" MODIFIED="1515140061195" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/yixing/config" />
     <SUITE FILE_PATH="coverage/12306$login.coverage" NAME="login Coverage Results" MODIFIED="1501571219088" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/yixing/init" />
     <SUITE FILE_PATH="coverage/12306$tiket.coverage" NAME="tiket Coverage Results" MODIFIED="1495973122962" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/yixing" />
+<<<<<<< Updated upstream
     <SUITE FILE_PATH="coverage/12306$run__1_.coverage" NAME="run (1) Coverage Results" MODIFIED="1517123442292" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+=======
+    <SUITE FILE_PATH="coverage/12306$run__1_.coverage" NAME="run (1) Coverage Results" MODIFIED="1517233736048" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+>>>>>>> Stashed changes
     <SUITE FILE_PATH="coverage/12306$haha.coverage" NAME="haha Coverage Results" MODIFIED="1515250987704" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/yixing" />
     <SUITE FILE_PATH="coverage/12306$12306.coverage" NAME="12306 Coverage Results" MODIFIED="1495722251078" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
@@ -48,8 +64,13 @@
       <file leaf-file-name="login.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/init/login.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
             <state relative-caret-position="-1994">
               <caret line="75" column="38" lean-forward="false" selection-start-line="75" selection-start-column="33" selection-end-line="75" selection-end-column="38" />
+=======
+            <state relative-caret-position="226">
+              <caret line="240" column="20" lean-forward="false" selection-start-line="240" selection-start-column="20" selection-end-line="240" selection-end-column="20" />
+>>>>>>> Stashed changes
               <folding>
                 <element signature="e#41#54#0" expanded="true" />
               </folding>
@@ -57,21 +78,19 @@
           </provider>
         </entry>
       </file>
+<<<<<<< Updated upstream
       <file leaf-file-name="cdn_list" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cdn_list">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="296">
               <caret line="566" column="12" lean-forward="true" selection-start-line="566" selection-start-column="12" selection-end-line="566" selection-end-column="12" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="httpUtils.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/myUrllib/httpUtils.py">
+=======
+      <file leaf-file-name="select_ticket_info.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/init/select_ticket_info.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="120" column="42" lean-forward="false" selection-start-line="120" selection-start-column="42" selection-end-line="120" selection-end-column="42" />
+            <state relative-caret-position="1226">
+              <caret line="743" column="23" lean-forward="false" selection-start-line="743" selection-start-column="23" selection-end-line="743" selection-end-column="23" />
               <folding>
                 <element signature="e#23#38#0" expanded="true" />
               </folding>
@@ -79,6 +98,35 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="2018-01-29.log" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tmp/log/2018-01-29.log">
+          <provider selected="true" editor-type-id="LogFileEditorProvider">
+            <state relative-caret-position="303">
+              <caret line="387" column="45" lean-forward="true" selection-start-line="387" selection-start-column="45" selection-end-line="387" selection-end-column="63" />
+>>>>>>> Stashed changes
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="httpUtils.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/myUrllib/httpUtils.py">
+          <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
+            <state relative-caret-position="120">
+              <caret line="120" column="42" lean-forward="false" selection-start-line="120" selection-start-column="42" selection-end-line="120" selection-end-column="42" />
+              <folding>
+                <element signature="e#23#38#0" expanded="true" />
+              </folding>
+=======
+            <state relative-caret-position="246">
+              <caret line="92" column="49" lean-forward="false" selection-start-line="92" selection-start-column="49" selection-end-line="92" selection-end-column="49" />
+              <folding />
+>>>>>>> Stashed changes
+            </state>
+          </provider>
+        </entry>
+      </file>
+<<<<<<< Updated upstream
       <file leaf-file-name="select_ticket_info.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/init/select_ticket_info.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -87,16 +135,38 @@
               <folding>
                 <element signature="e#23#34#0" expanded="true" />
               </folding>
+=======
+      <file leaf-file-name="myurllib2.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/myUrllib/myurllib2.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+>>>>>>> Stashed changes
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< Updated upstream
       <file leaf-file-name="cdn_list" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agency/cdn_list">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-10">
               <caret line="554" column="14" lean-forward="true" selection-start-line="554" selection-start-column="14" selection-end-line="554" selection-end-column="14" />
               <folding />
+=======
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="278">
+                <caret line="191" column="0" lean-forward="false" selection-start-line="191" selection-start-column="0" selection-end-line="191" selection-end-column="0" />
+                <folding />
+              </first_editor>
+              <second_editor>
+                <js_state />
+              </second_editor>
+>>>>>>> Stashed changes
             </state>
           </provider>
         </entry>
@@ -104,8 +174,13 @@
       <file leaf-file-name="ticket_config.yaml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/ticket_config.yaml">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
             <state relative-caret-position="302">
               <caret line="97" column="9" lean-forward="false" selection-start-line="97" selection-start-column="9" selection-end-line="97" selection-end-column="9" />
+=======
+            <state relative-caret-position="912">
+              <caret line="75" column="9" lean-forward="false" selection-start-line="75" selection-start-column="9" selection-end-line="75" selection-end-column="9" />
+>>>>>>> Stashed changes
               <folding />
             </state>
           </provider>
@@ -114,11 +189,17 @@
       <file leaf-file-name="cdn_utils.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agency/cdn_utils.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
             <state relative-caret-position="302">
               <caret line="110" column="22" lean-forward="true" selection-start-line="110" selection-start-column="22" selection-end-line="110" selection-end-column="22" />
               <folding>
                 <element signature="e#16#27#0" expanded="true" />
               </folding>
+=======
+            <state relative-caret-position="-320">
+              <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+              <folding />
+>>>>>>> Stashed changes
             </state>
           </provider>
         </entry>
@@ -126,8 +207,13 @@
       <file leaf-file-name="urlConf.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/urlConf.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
             <state relative-caret-position="213">
               <caret line="51" column="19" lean-forward="false" selection-start-line="51" selection-start-column="19" selection-end-line="51" selection-end-column="19" />
+=======
+            <state relative-caret-position="1483">
+              <caret line="106" column="15" lean-forward="false" selection-start-line="106" selection-start-column="5" selection-end-line="106" selection-end-column="15" />
+>>>>>>> Stashed changes
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -139,7 +225,11 @@
         <entry file="file://$PROJECT_DIR$/run.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="84">
+<<<<<<< Updated upstream
               <caret line="6" column="34" lean-forward="true" selection-start-line="6" selection-start-column="34" selection-end-line="6" selection-end-column="34" />
+=======
+              <caret line="6" column="34" lean-forward="false" selection-start-line="6" selection-start-column="34" selection-end-line="6" selection-end-column="34" />
+>>>>>>> Stashed changes
               <folding />
             </state>
           </provider>
@@ -156,6 +246,7 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
+<<<<<<< Updated upstream
       <find>该车次小于上次提交时间</find>
       <find>学生票</find>
       <find>checkRandCodeAnsyn</find>
@@ -186,6 +277,38 @@
       <find>checku</find>
       <find>{u'status': True, u'validateMessagesShowId': u'_validatorMessage', u'messages': [], u'httpstatus': 200, u'validateMessages': {}, u'data': {u'flag': False}}</find>
       <find>init</find>
+=======
+      <find>expect_refresh_interval</find>
+      <find>validateMessages</find>
+      <find>submitOrderRequest</find>
+      <find>initdc_url</find>
+      <find>confirmSingleForQueue</find>
+      <find>initDc</find>
+      <find>secretStr</find>
+      <find>time</find>
+      <find>state</find>
+      <find>autoSubmitOrderRequest</find>
+      <find>checkQueueOrderUrl</find>
+      <find>map</find>
+      <find>cdn_list</find>
+      <find>req_url</find>
+      <find>func</find>
+      <find>is_logger</find>
+      <find>is_logg</find>
+      <find>超时</find>
+      <find>118.180.15.113</find>
+      <find>checku</find>
+      <find>{u'status': True, u'validateMessagesShowId': u'_validatorMessage', u'messages': [], u'httpstatus': 200, u'validateMessages': {}, u'data': {u'flag': False}}</find>
+      <find>threading</find>
+      <find>init</find>
+      <find>下载验证码成功</find>
+      <find>正在获取cookie</find>
+      <find>获取</find>
+      <find>loginInit</find>
+      <find>check</find>
+      <find>checkRandCodeAnsyn</find>
+      <find>select_url</find>
+>>>>>>> Stashed changes
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -234,6 +357,7 @@
         <option value="$PROJECT_DIR$/config/configCommon.py" />
         <option value="$PROJECT_DIR$/tmp/log/2018-01-24.log" />
         <option value="$PROJECT_DIR$/.gitignore" />
+<<<<<<< Updated upstream
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/damatuCode/ruokuai.py" />
         <option value="$PROJECT_DIR$/tmp/log/2018-01-25.log" />
@@ -245,6 +369,19 @@
         <option value="$PROJECT_DIR$/config/urlConf.py" />
         <option value="$PROJECT_DIR$/myUrllib/httpUtils.py" />
         <option value="$PROJECT_DIR$/agency/cdn_utils.py" />
+=======
+        <option value="$PROJECT_DIR$/damatuCode/ruokuai.py" />
+        <option value="$PROJECT_DIR$/tmp/log/2018-01-25.log" />
+        <option value="$PROJECT_DIR$/agency/cdn_list" />
+        <option value="$PROJECT_DIR$/cdn_list" />
+        <option value="$PROJECT_DIR$/config/urlConf.py" />
+        <option value="$PROJECT_DIR$/init/select_ticket_info.py" />
+        <option value="$PROJECT_DIR$/init/login.py" />
+        <option value="$PROJECT_DIR$/myUrllib/httpUtils.py" />
+        <option value="$PROJECT_DIR$/agency/cdn_utils.py" />
+        <option value="$PROJECT_DIR$/config/ticket_config.yaml" />
+        <option value="$PROJECT_DIR$/README.md" />
+>>>>>>> Stashed changes
       </list>
     </option>
   </component>
@@ -254,7 +391,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
+  <component name="ProjectFrameBounds" fullScreen="true">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="2572" />
@@ -280,6 +417,7 @@
     <panes>
       <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -295,7 +433,11 @@
             <path>
               <item name="12306" type="b2602c69:ProjectViewProjectNode" />
               <item name="12306" type="462c0819:PsiDirectoryNode" />
+<<<<<<< Updated upstream
               <item name="config" type="462c0819:PsiDirectoryNode" />
+=======
+              <item name="init" type="462c0819:PsiDirectoryNode" />
+>>>>>>> Stashed changes
             </path>
           </expand>
           <select />
@@ -313,16 +455,26 @@
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://D:/my_work/12306/yixing/12306.py" />
   </component>
   <component name="RecentsManager">
+<<<<<<< Updated upstream
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/yixing/config" />
     </key>
+=======
+>>>>>>> Stashed changes
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/tmp/log" />
       <recent name="$PROJECT_DIR$/config" />
       <recent name="$PROJECT_DIR$/myException" />
       <recent name="$PROJECT_DIR$/yixing/myUrllib" />
+<<<<<<< Updated upstream
+=======
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/yixing/config" />
+>>>>>>> Stashed changes
     </key>
   </component>
   <component name="RunDashboard">
@@ -337,7 +489,11 @@
       </list>
     </option>
   </component>
+<<<<<<< Updated upstream
   <component name="RunManager" selected="Python.cdn_utils">
+=======
+  <component name="RunManager" selected="Python.run (1)">
+>>>>>>> Stashed changes
     <configuration name="12306 (3)" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -669,8 +825,13 @@
     </list>
     <recent_temporary>
       <list size="5">
+<<<<<<< Updated upstream
         <item index="0" class="java.lang.String" itemvalue="Python.cdn_utils" />
         <item index="1" class="java.lang.String" itemvalue="Python.run (1)" />
+=======
+        <item index="0" class="java.lang.String" itemvalue="Python.run (1)" />
+        <item index="1" class="java.lang.String" itemvalue="Python.cdn_utils" />
+>>>>>>> Stashed changes
         <item index="2" class="java.lang.String" itemvalue="Python.select_ticket_info (1)" />
         <item index="3" class="java.lang.String" itemvalue="Python.run" />
         <item index="4" class="java.lang.String" itemvalue="Python.select_ticket_info" />
@@ -926,6 +1087,7 @@
       <option name="project" value="LOCAL" />
       <updated>1516887559529</updated>
     </task>
+<<<<<<< Updated upstream
     <option name="localTasksCounter" value="35" />
     <servers />
   </component>
@@ -942,7 +1104,34 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="17" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39661428" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+=======
+    <task id="LOCAL-00035" summary="1、增加cdn轮训功能&#10;2、兼容Windows cmd命令乱码问题&#10;3、规范接口提交参数&#10;4、修改已知bug">
+      <created>1517234341941</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1517234341941</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5465538" sideWeight="0.50429183" order="14" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.48004836" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.48367593" sideWeight="0.49570817" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="17" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18669528" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+>>>>>>> Stashed changes
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297568" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39661428" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297568" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -950,7 +1139,10 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+<<<<<<< Updated upstream
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+=======
+>>>>>>> Stashed changes
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -1009,7 +1201,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="增加过滤车次配置" />
     <MESSAGE value="增加配置" />
     <MESSAGE value="增加预售车次订票休眠时间配置" />
     <MESSAGE value="修改不能提交订票的bug" />
@@ -1034,17 +1225,29 @@
     <MESSAGE value="更新" />
     <MESSAGE value="加速需要验证码订票的速度" />
     <MESSAGE value="修正下载验证码失败问题" />
+<<<<<<< Updated upstream
     <option name="LAST_COMMIT_MESSAGE" value="修正下载验证码失败问题" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <option name="time" value="34" />
+=======
+    <MESSAGE value="1、增加cdn轮训功能&#10;2、兼容Windows cmd命令乱码问题&#10;3、规范接口提交参数&#10;4、修改已知bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="1、增加cdn轮训功能&#10;2、兼容Windows cmd命令乱码问题&#10;3、规范接口提交参数&#10;4、修改已知bug" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="35" />
+>>>>>>> Stashed changes
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/yixing/damatuCode/damatuWeb.py" />
     <entry file="file://$PROJECT_DIR$/yixing/station_name.txt" />
+=======
+>>>>>>> Stashed changes
     <entry file="file:///System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/urllib2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="159">
@@ -1092,6 +1295,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/myUrllib/myurllib2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-262">
@@ -1117,6 +1321,25 @@
     </entry>
     <entry file="file:///Library/Python/2.7/site-packages/requests/exceptions.py">
       <provider selected="true" editor-type-id="text-editor">
+=======
+    <entry file="file:///Library/Python/2.7/site-packages/requests/adapters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="520" column="0" lean-forward="false" selection-start-line="520" selection-start-column="0" selection-end-line="520" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Python/2.7/site-packages/requests/sessions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="617" column="0" lean-forward="false" selection-start-line="617" selection-start-column="0" selection-end-line="617" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Python/2.7/site-packages/requests/exceptions.py">
+      <provider selected="true" editor-type-id="text-editor">
+>>>>>>> Stashed changes
         <state relative-caret-position="-1444">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
@@ -1215,6 +1438,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="49" column="16" lean-forward="false" selection-start-line="49" selection-start-column="16" selection-end-line="49" selection-end-column="17" />
+<<<<<<< Updated upstream
         </state>
       </provider>
     </entry>
@@ -1234,6 +1458,8 @@
         <state relative-caret-position="126">
           <caret line="9" column="38" lean-forward="false" selection-start-line="9" selection-start-column="38" selection-end-line="9" selection-end-column="38" />
           <folding />
+=======
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
@@ -1253,6 +1479,7 @@
       </provider>
     </entry>
     <entry file="file:///Library/Python/2.7/site-packages/urllib3/connection.py">
+<<<<<<< Updated upstream
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
           <caret line="343" column="0" lean-forward="false" selection-start-line="343" selection-start-column="0" selection-end-line="343" selection-end-column="0" />
@@ -1261,6 +1488,16 @@
     </entry>
     <entry file="file://$USER_HOME$/Library/Caches/PyCharm2017.2/python_stubs/-2125986627/__builtin__.py">
       <provider selected="true" editor-type-id="text-editor">
+=======
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="343" column="0" lean-forward="false" selection-start-line="343" selection-start-column="0" selection-end-line="343" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Caches/PyCharm2017.2/python_stubs/-2125986627/__builtin__.py">
+      <provider selected="true" editor-type-id="text-editor">
+>>>>>>> Stashed changes
         <state relative-caret-position="154">
           <caret line="1858" column="8" lean-forward="false" selection-start-line="1858" selection-start-column="8" selection-end-line="1858" selection-end-column="8" />
         </state>
@@ -1281,24 +1518,61 @@
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/config/ticket_config.yaml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="302">
           <caret line="97" column="9" lean-forward="false" selection-start-line="97" selection-start-column="9" selection-end-line="97" selection-end-column="9" />
           <folding />
+=======
+    <entry file="file://$PROJECT_DIR$/cdn_list">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="499">
+          <caret line="914" column="15" lean-forward="false" selection-start-line="914" selection-start-column="15" selection-end-line="914" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/proxy_list">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agency/cdn_list">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="568" column="13" lean-forward="true" selection-start-line="568" selection-start-column="13" selection-end-line="568" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tmp/log/2018-01-29.log">
+      <provider selected="true" editor-type-id="LogFileEditorProvider">
+        <state relative-caret-position="303">
+          <caret line="387" column="45" lean-forward="true" selection-start-line="387" selection-start-column="45" selection-end-line="387" selection-end-column="63" />
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/config/urlConf.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="213">
           <caret line="51" column="19" lean-forward="false" selection-start-line="51" selection-start-column="19" selection-end-line="51" selection-end-column="19" />
+=======
+        <state relative-caret-position="226">
+          <caret line="240" column="20" lean-forward="false" selection-start-line="240" selection-start-column="20" selection-end-line="240" selection-end-column="20" />
+>>>>>>> Stashed changes
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/agency/cdn_list">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-10">
@@ -1321,10 +1595,27 @@
           <caret line="120" column="42" lean-forward="false" selection-start-line="120" selection-start-column="42" selection-end-line="120" selection-end-column="42" />
           <folding>
             <element signature="e#23#38#0" expanded="true" />
+=======
+    <entry file="file://$PROJECT_DIR$/myUrllib/httpUtils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="92" column="49" lean-forward="false" selection-start-line="92" selection-start-column="49" selection-end-line="92" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/urlConf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1483">
+          <caret line="106" column="15" lean-forward="false" selection-start-line="106" selection-start-column="5" selection-end-line="106" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/init/login.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1994">
@@ -1332,23 +1623,78 @@
           <folding>
             <element signature="e#41#54#0" expanded="true" />
           </folding>
+=======
+    <entry file="file://$PROJECT_DIR$/run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="6" column="34" lean-forward="false" selection-start-line="6" selection-start-column="34" selection-end-line="6" selection-end-column="34" />
+          <folding />
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/agency/cdn_utils.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="302">
           <caret line="110" column="22" lean-forward="true" selection-start-line="110" selection-start-column="22" selection-end-line="110" selection-end-column="22" />
           <folding>
             <element signature="e#16#27#0" expanded="true" />
           </folding>
+=======
+        <state relative-caret-position="-320">
+          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/run.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="84">
           <caret line="6" column="34" lean-forward="true" selection-start-line="6" selection-start-column="34" selection-end-line="6" selection-end-column="34" />
+=======
+        <state relative-caret-position="912">
+          <caret line="75" column="9" lean-forward="false" selection-start-line="75" selection-start-column="9" selection-end-line="75" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myUrllib/myurllib2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/init/select_ticket_info.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1226">
+          <caret line="743" column="23" lean-forward="false" selection-start-line="743" selection-start-column="23" selection-end-line="743" selection-end-column="23" />
+          <folding>
+            <element signature="e#23#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="278">
+            <caret line="191" column="0" lean-forward="false" selection-start-line="191" selection-start-column="0" selection-end-line="191" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor>
+            <js_state />
+          </second_editor>
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="9" column="38" lean-forward="false" selection-start-line="9" selection-start-column="38" selection-end-line="9" selection-end-column="38" />
+>>>>>>> Stashed changes
           <folding />
         </state>
       </provider>

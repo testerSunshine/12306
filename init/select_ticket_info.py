@@ -670,8 +670,9 @@ class select:
             start_time = datetime.datetime.now()
             http.cdn = cdn[i].replace("\n", "")
             rep = http.send(urls)
-            if rep and "message" not in rep and (datetime.datetime.now() - start_time).microseconds / 1000 < 400:
+            if rep and "message" not in rep and (datetime.datetime.now() - start_time).microseconds / 1000 < 300:
                 self.cdn_list.append(cdn[i].replace("\n", ""))
+        print(u"所有cdn解析完成...")
 
     def cdn_certification(self):
         """

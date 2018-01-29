@@ -3,3 +3,5 @@
 *.yaml
 
 tkcode
+
+tmp/log/

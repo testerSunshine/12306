@@ -756,7 +756,7 @@ class select:
         # self.call_login()
 
     def main(self):
-         
+        
         self.call_login()
 
         from_station, to_station = self.station_table(
@@ -766,6 +766,9 @@ class select:
         while 1:
             try:
                 num += 1 
+                
+                if num % 20 == 0 :
+                    self.check_user() 
                 if "user_time" in self.is_check_user and (datetime.datetime.now() - self.is_check_user["user_time"]).seconds / 60 > 5:
                     # 十分钟调用一次检查用户是否登录
                     self.check_user()

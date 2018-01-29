@@ -192,7 +192,7 @@ class GoLogin:
                 else:
                     return False
             else:
-                self.s.post(uamauthclientUrl, data).json()
+                self.s.post(uamauthclientUrl, data)
                 url = self.urlConf["getUserInfo"]["req_url"]
                 self.s.get(url)
 
@@ -212,6 +212,7 @@ class GoLogin:
             raise UserPasswordException("温馨提示: 用户名或者密码为空，请仔细检查")
         login_num = 0
         while True:
+            print('Login')
             self.cookietp()
 
             cookies= dict(_jc_save_wfdc_flag="dc", _jc_save_fromStation="%u4E0A%u6D77%u8679%u6865%2CAOH", _jc_save_toStation="%u5170%u5DDE%u897F%2CLAJ", _jc_save_fromDate="2018-02-14", _jc_save_toDate="2018-01-16", RAIL_DEVICEID="EN_3_EGSe2GWGHXJeCkFQ52kHvNCrNlkz9n1GOqqQ1wR0i98WsD8Gj-a3YHZ-XYKeESWgCiJyyucgSwkFOzVHhHqfpidLPcm2vK9n83uzOPuShO3Pl4lCydAtQu4BdFqz-RVmiduNFixrcrN_Ny43135JiEtqLaI")
@@ -226,7 +227,9 @@ class GoLogin:
                 uamtk = self.baseLogin(user, passwd)
                 if uamtk:
                     self.getUserName(uamtk)
+                    print ('LoginFinish')
                     break
+        print('break')
 
     def logout(self):
         url = 'https://kyfw.12306.cn/otn/login/loginOut'

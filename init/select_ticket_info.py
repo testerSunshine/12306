@@ -44,7 +44,7 @@ class select:
         self.ticket_black_list = dict()
         self.is_check_user = dict()
         self.ticket_config = ticket_config
-        self.login =login.GoLogin(self.ticket_config).go_login()
+        self.login =login.GoLogin(self.ticket_config)
         self.s = SESS
 
     def get_ticket_info(self, ticket_config):
@@ -317,7 +317,7 @@ class select:
         # data = dict(_json_att=None)
         data = {"appid": "otn","t" : time.time()}
         # self.s.post(uamtk_url, data=uamtk_data, verify=False)
-        check_user = self.login.s.post(uamtk_url, data=data, verify=False)
+        check_user = self.s.post(uamtk_url, data=data, verify=False)
         print(check_user.text[:300])
         print(self.s.post(uamtk_url, data=data, verify=False).text)
         check_user = check_user.json()
@@ -752,7 +752,7 @@ class select:
     def call_login(self):
         """登录回调方法"""
         #login.go_login(self.ticket_config).go_login()
-        login.GoLogin(self.ticket_config).go_login()
+        self.login.go_login()
         # self.call_login()
 
     def main(self):

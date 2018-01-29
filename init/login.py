@@ -24,7 +24,7 @@ class GoLogin:
         self.aotu_code_type = aotu_code_type
 
     def cookietp(self):
-        print("正在获取cookie")
+        print(u"正在获取cookie")
         url = self.urlConf["loginInit"]["req_url"]
         self.httpClint.send(url)
         # Url = "https://kyfw.12306.cn/otn/login/init"
@@ -41,12 +41,12 @@ class GoLogin:
         3.控制台输入对应下标，按照英文逗号分开，即可手动完成打码，
         :return:
         """
-        print ("下载验证码...")
+        print (u"下载验证码...")
         codeimgUrl = code_url
         img_path = './tkcode'
         result = self.httpClint.send(codeimgUrl, is_logger=False)
         if "message" in result:
-            print("验证码下载失败，正在重试")
+            print(u"验证码下载失败，正在重试")
         else:
             try:
                 open(img_path, 'wb').write(result)
@@ -112,7 +112,7 @@ class GoLogin:
             post.append(offsetsX)
             post.append(offsetsY)
         randCode = str(post).replace(']', '').replace('[', '').replace("'", '').replace(' ', '')
-        print("验证码识别坐标为{0}".format(randCode))
+        print(u"验证码识别坐标为{0}".format(randCode))
         return randCode
 
     def auth(self):
@@ -135,7 +135,7 @@ class GoLogin:
         }
         fresult = self.httpClint.send(codeCheck, codeCheckData)
         if "result_code" in fresult and fresult["result_code"] == "4":
-            print ("验证码通过,开始登录..")
+            print (u"验证码通过,开始登录..")
             return True
         else:
             if "result_message" in fresult:
@@ -158,7 +158,7 @@ class GoLogin:
         }
         tresult = self.httpClint.send(logurl, logData)
         if 'result_code' in tresult and tresult["result_code"] == 0:
-            print ("登录成功")
+            print (u"登录成功")
             tk = self.auth()
             if "newapptk" in tk and tk["newapptk"]:
                 return tk["newapptk"]
@@ -169,8 +169,8 @@ class GoLogin:
             if messages.find("密码输入错误") is not -1:
                 raise UserPasswordException("{0}".format(messages))
             else:
-                print ("登录失败: {0}".format(messages))
-                print ("尝试重新登陆")
+                print (u"登录失败: {0}".format(messages))
+                print (u"尝试重新登陆")
                 return False
         else:
             return False
@@ -188,7 +188,7 @@ class GoLogin:
             uamauthclientResult = self.httpClint.send(uamauthclientUrl, data)
             if uamauthclientResult:
                 if "result_code" in uamauthclientResult and uamauthclientResult["result_code"] == 0:
-                    print("欢迎 {} 登录".format(uamauthclientResult["username"]))
+                    print(u"欢迎 {} 登录".format(uamauthclientResult["username"]))
                     return True
                 else:
                     return False
@@ -228,9 +228,9 @@ class GoLogin:
         url = 'https://kyfw.12306.cn/otn/login/loginOut'
         result = myurllib2.get(url)
         if result:
-            print ("已退出")
+            print (u"已退出")
         else:
-            print ("退出失败")
+            print (u"退出失败")
 
 
 # if __name__ == "__main__":

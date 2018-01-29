@@ -54,7 +54,7 @@ def Post(url, data):
             if result:
                 return result
             else:
-                print("返回结果为空，正在第{0}重试".format(i))
+                print(u"返回结果为空，正在第{0}重试".format(i))
     except httplib.error as e:
         return e
     except urllib2.URLError as e:

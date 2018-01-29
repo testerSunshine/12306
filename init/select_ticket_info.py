@@ -153,6 +153,8 @@ class select:
         initdc_url = 'https://kyfw.12306.cn/otn/confirmPassenger/initDc'
         initdc_result = self.s.send(
             initdc_url, verify=False)
+
+        print(initdc_result[:100])
         token_name = re.compile(r"var globalRepeatSubmitToken = '(\S+)'")
         ticketInfoForPassengerForm_name = re.compile(
             r'var ticketInfoForPassengerForm=(\{.+\})?')
@@ -203,19 +205,15 @@ class select:
                 raise PassengerUserException("未查找到常用联系人,请先添加联系人在试试")
 
     def submitOrderRequestFunc(self, from_station, to_station, station_date):
-        _status_code = 0
-        try:
-            select_url = 'https://kyfw.12306.cn/otn/leftTicket/queryZ?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT'.format(
-                station_date, from_station, to_station)
 
-            r  = self.s.send(select_url)
-            if type(r) == dict:
-                print(r)
-            station_ticket = json.loads(r)
-             
-            return station_ticket
-        except KeyboardInterrupt:
-            traceback.print_exc()
+        
+        select_url = 'https://kyfw.12306.cn/otn/leftTicket/queryZ?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT'.format(
+            station_date, from_station, to_station)
+        r  = self.s.send(select_url ,is_logger=False)
+        station_ticket = json.loads(r)
+           
+        return station_ticket
+      
            
 
     def submitOrderRequestImplement(self, from_station, to_station,):

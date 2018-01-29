@@ -230,9 +230,7 @@ class GoLogin:
                 uamtk = self.baseLogin(user, passwd)
                 if uamtk:
                     self.getUserName(uamtk)
-                    print ('LoginFinish')
                     break
-        print('break')
 
     def logout(self):
         url = 'https://kyfw.12306.cn/otn/login/loginOut'

@@ -74,7 +74,7 @@ set:
   12306count:
 #    - uesr: ""
 #    - pwd: "apple1995"
-    - uesr: "@qq.com"
+    - uesr: "931128603@qq.com"
     - pwd: "QWERTY"
 
 select_refresh_interval: 0.4
@@ -84,18 +84,18 @@ aotu_code_type: 2
 #enable_proxy: False
 
 damatu:
-  uesr: ""
+  uesr: "931128603"
   pwd: "qazWSX1995"
 
 email_conf:
   is_email: True
-  email: "@qq.com "
+  email: "931128603@qq.com "
   notice_email_list: "61995120@qq.com"
-  username: ""
+  username: "931128603"
   password: "xwopwxbkupbqbfgb"
   host: "smtp.qq.com"
 
-is_cdn: 1
+is_cdn: 2
 
 
 

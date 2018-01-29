@@ -1,11 +1,9 @@
 # -*- coding: utf8 -*-
-import datetime
 import json
 import socket
 from time import sleep
 
 import requests
-import sys
 
 from config import logger
 
@@ -102,22 +100,23 @@ class HTTPClient(object):
         if is_logger:
             logger.log(
                 u"url: {0}\n入参: {1}\n请求方式: {2}\n".format(urls["req_url"],data,method,))
+        self.setHeadersHost(urls["Host"])
         if self.cdn:
-            self.setHeadersHost(urls["Host"])
             url_host = self.cdn
         else:
-            self.setHeadersHost("")
             url_host = urls["Host"]
         for i in range(urls["re_try"]):
             try:
+                print("https://" + url_host + urls["req_url"])
                 requests.packages.urllib3.disable_warnings()
                 response = self._s.request(method=method,
-                                           timeout=10,
+                                           timeout=2,
                                            url="https://" + url_host + urls["req_url"],
                                            data=data,
                                            allow_redirects=allow_redirects,
                                            verify=False,
                                            **kwargs)
+                print(response.status_code)
                 if response.status_code == 200:
                     if response.content:
                         if is_logger:

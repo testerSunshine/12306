@@ -1,20 +1,19 @@
 # -*- coding=utf-8 -*-
-import json
 import datetime
-import random
+import json
 import re
 import socket
-import urllib
 import sys
+import threading
 import time
+import urllib
 from collections import OrderedDict
 
 from agency.cdn_utils import CDNProxy
 from config import urlConf
-from init import login
 from config.emailConf import sendEmail
 from config.ticketConf import _get_yaml
-from damatuCode.damatuWeb import DamatuApi
+from init import login
 from init.login import GoLogin
 from myException.PassengerUserException import PassengerUserException
 from myException.UserPasswordException import UserPasswordException
@@ -22,8 +21,6 @@ from myException.ticketConfigException import ticketConfigException
 from myException.ticketIsExitsException import ticketIsExitsException
 from myException.ticketNumOutException import ticketNumOutException
 from myUrllib.httpUtils import HTTPClient
-import threading
-
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -648,7 +645,8 @@ class select:
         设置cdn
         :return:
         """
-        self.httpClint.cdn = eval(self.cdn_list[random.randint(0, len(self.cdn_list)-1)])["result"].replace("'", "")
+        # self.httpClint.cdn = eval(self.cdn_list[random.randint(0, len(self.cdn_list)-1)])["result"].replace("'", "")
+        self.httpClint.cdn = self.cdn_list
 
     def call_login(self, auth=False):
         """
@@ -689,8 +687,9 @@ class select:
                     self.call_login()
                 start_time = datetime.datetime.now()
                 self.submitOrderRequestImplement(from_station, to_station)
-                print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  cdn查询ip {4}  总耗时{3}ms".format(num, ",".join(self.station_dates), ",".join(self.station_trains), (datetime.datetime.now()-start_time).microseconds/1000, self.httpClint.cdn)
-                self.set_cdn()
+                print "正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  cdn轮询IP {4}  总耗时{3}ms".format(num, ",".join(self.station_dates), ",".join(self.station_trains), (datetime.datetime.now()-start_time).microseconds/1000, self.httpClint.cdn)
+                if is_cdn == 1:
+                    self.set_cdn()
             except PassengerUserException as e:
                 print e.message
                 break
@@ -713,8 +712,8 @@ class select:
                     print(e.message)
             except KeyError as e:
                 print(e.message)
-            # except TypeError as e:
-            #     print("12306接口无响应，正在重试 {0}".format(e.message))
+            except TypeError as e:
+                print("12306接口无响应，正在重试 {0}".format(e.message))
             except socket.error as e:
                 print(e.message)
 

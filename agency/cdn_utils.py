@@ -1,11 +1,15 @@
 # encoding=utf8
+import collections
+import datetime
 import json
 import re
-import collections
+import sys
+
 import requests
 
 from config import urlConf
-import sys
+from myUrllib.httpUtils import HTTPClient
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -92,9 +96,21 @@ class CDNProxy:
             cdn = f.readlines()
             return cdn
 
+    def cdn_par(self):
+        with open('./cdn_list', 'r') as f:
+            cdn = f.readlines()
+            print cdn
+            for i in cdn:
+                http = HTTPClient()
+                check_user_url = self.urlConf["loginInit"]
+                http.cdn = i.replace("\n", "")
+                start_time = datetime.datetime.now()
+                http.send(check_user_url)
+                print (datetime.datetime.now() - start_time).microseconds / 1000
+
 
 if __name__ == '__main__':
     cdn = CDNProxy("kyfw.12306.cn")
     cdn.get_city_id()
-    cdn.get_cdn_list()
-    # print cdn.all_cdn()
+    # cdn.get_cdn_list()
+    cdn.cdn_par()

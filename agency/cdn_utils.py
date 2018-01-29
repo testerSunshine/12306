@@ -1,15 +1,11 @@
 # encoding=utf8
 import collections
-import datetime
 import json
 import re
 import sys
-
+import csv
 import requests
-
 from config import urlConf
-from myUrllib.httpUtils import HTTPClient
-
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -88,7 +84,7 @@ class CDNProxy:
                             num += 1
             except Exception as e:
                 print(e.message)
-        print("本次cdn获取完成，总个数{0}".format(num))
+        print(u"本次cdn获取完成，总个数{0}".format(num))
 
     def all_cdn(self):
         """获取cdn列表"""
@@ -96,21 +92,17 @@ class CDNProxy:
             cdn = f.readlines()
             return cdn
 
-    def cdn_par(self):
-        with open('./cdn_list', 'r') as f:
-            cdn = f.readlines()
-            print cdn
-            for i in cdn:
-                http = HTTPClient()
-                check_user_url = self.urlConf["loginInit"]
-                http.cdn = i.replace("\n", "")
-                start_time = datetime.datetime.now()
-                http.send(check_user_url)
-                print (datetime.datetime.now() - start_time).microseconds / 1000
+    def par_csv(self):
+        cdn_csv = csv.reader(open("../cdn1.csv", "r"))
+        for c in cdn_csv:
+            cdn_re = re.compile(r'https://(\S+)/otn/index/init')
+            cdn_ip = re.findall(cdn_re, c[0])
+            if cdn_ip and c[2] == "200":
+                print(cdn_ip[0])
 
 
 if __name__ == '__main__':
-    cdn = CDNProxy("kyfw.12306.cn")
+    cdn = CDNProxy()
     cdn.get_city_id()
     # cdn.get_cdn_list()
-    cdn.cdn_par()
+    cdn.par_csv()

@@ -24,6 +24,7 @@
 #is_aotu_code是否自动打码，如果选择Ture,则调用打码兔打码，默认不使用打码兔
 #aotu_code_type 1为打码兔，2为若快
 #is_email: 是否需要邮件通知 ex: True or False 切记，邮箱加完一定到config目录下测试emailConf功能是否正常
+#is_cdn: 1为需要，2位本机ip查询
 
 #邮箱配置 列举163
 #  email: "xxx@163.com"
@@ -41,29 +42,17 @@
 
 set:
   station_dates:
-#    - "2018-01-27"
-#    - "2018-01-28"
-#    - "2018-02-22"
-    - "2018-02-24"
+    - "2018-02-02"
   station_trains:
-    - "D2879"
+    - "G2366"
     - "D1813"
     - "D2975"
     - "D1825"
     - "D1829"
     - "D2841"
     - "D1833"
-#    - "K4300"
-#    - "K5226"
-#    - "K7772"
-#    - "G1329"
-#    - "G1359"
-#    - "G1361"
-#    - "G1373"
-#    - "G1363"
-#    - "G4933"
-  from_station: "三江南"
-  to_station: "广州南"
+  from_station: "邵阳"
+  to_station: "上海"
   set_type:
     - "一等座"
     - "二等座"
@@ -74,7 +63,7 @@ set:
   12306count:
 #    - uesr: ""
 #    - pwd: "apple1995"
-    - uesr: "931128603@qq.com"
+    - uesr: "@qq.com"
     - pwd: "QWERTY"
 
 select_refresh_interval: 0.4
@@ -84,14 +73,14 @@ aotu_code_type: 2
 #enable_proxy: False
 
 damatu:
-  uesr: "931128603"
+  uesr: ""
   pwd: "qazWSX1995"
 
 email_conf:
   is_email: True
-  email: "931128603@qq.com "
+  email: "@qq.com "
   notice_email_list: "61995120@qq.com"
-  username: "931128603"
+  username: ""
   password: "xwopwxbkupbqbfgb"
   host: "smtp.qq.com"
 

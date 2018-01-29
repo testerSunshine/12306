@@ -90,7 +90,8 @@ class HTTPClient(object):
         """send request to url.If response 200,return response, else return None."""
         allow_redirects = False
         is_logger = urls["is_logger"]
-        error_data = {"code": 99999, "message": "重试次数达到上限"}
+        error_data = {"code": 99999, "message": u"重试次数达到上限"}
+        self.setHeadersReferer(urls["Referer"])
         if data:
             method = "post"
             self.setHeaders({"Content-Length": "{0}".format(len(data))})
@@ -107,7 +108,6 @@ class HTTPClient(object):
             url_host = urls["Host"]
         for i in range(urls["re_try"]):
             try:
-                print("https://" + url_host + urls["req_url"])
                 requests.packages.urllib3.disable_warnings()
                 response = self._s.request(method=method,
                                            timeout=2,
@@ -116,7 +116,6 @@ class HTTPClient(object):
                                            allow_redirects=allow_redirects,
                                            verify=False,
                                            **kwargs)
-                print(response.status_code)
                 if response.status_code == 200:
                     if response.content:
                         if is_logger:

@@ -30,7 +30,7 @@ class go_login:
         global login_cookies,randCode
         init_url = "https://kyfw.12306.cn/otn/login/init"
         uamtk_data = {'appid': 'otn'}
-        httpZF_url = "https://kyfw.12306.cn/otn/HttpZF/logdevice?algID=i8UYSfDgWt&hashCode=td9I6c9a9k73Jv8Nc2ie0FGZWit-S-0MQJfASXNUQmk&FMQw=0&q4f3=zh-CN&VySQ=FGFKKeD8kVn5VC6vc-6l42-GJzul0oeM&VPIf=1&custID=133&VEek=unknown&dzuS=0&yD16=0&EOQP=c227b88b01f5c513710d4b9f16a5ce52&lEnu=2886927661&jp76=e237f9703f53d448d77c858b634154a5&hAqN=MacIntel&platform=WEB&ks0Q=b9a555dce60346a48de933b3e16ebd6e&TeRS=877x1440&tOHY=24xx900x1440&Fvje=i1l1o1s1&q5aJ=-8&wNLf=99115dfb07133750ba677d055874de87&0aew=Mozilla/5.0%20(Macintosh;%20Intel%20Mac%20OS%20X%2010_13_2)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/63.0.3239.132%20Safari/537.36&E3gR=ea438f8fd5bf8a3ac1fe9bd188f2c823&timestamp=1516195328849"
+        #httpZF_url = "https://kyfw.12306.cn/otn/HttpZF/logdevice?algID=i8UYSfDgWt&hashCode=td9I6c9a9k73Jv8Nc2ie0FGZWit-S-0MQJfASXNUQmk&FMQw=0&q4f3=zh-CN&VySQ=FGFKKeD8kVn5VC6vc-6l42-GJzul0oeM&VPIf=1&custID=133&VEek=unknown&dzuS=0&yD16=0&EOQP=c227b88b01f5c513710d4b9f16a5ce52&lEnu=2886927661&jp76=e237f9703f53d448d77c858b634154a5&hAqN=MacIntel&platform=WEB&ks0Q=b9a555dce60346a48de933b3e16ebd6e&TeRS=877x1440&tOHY=24xx900x1440&Fvje=i1l1o1s1&q5aJ=-8&wNLf=99115dfb07133750ba677d055874de87&0aew=Mozilla/5.0%20(Macintosh;%20Intel%20Mac%20OS%20X%2010_13_2)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/63.0.3239.132%20Safari/537.36&E3gR=ea438f8fd5bf8a3ac1fe9bd188f2c823&timestamp=1516195328849"
         captcha_check_url = "https://kyfw.12306.cn/passport/captcha/captcha-check"
         uamtk_url = "https://kyfw.12306.cn/passport/web/auth/uamtk"
         login_url = "https://kyfw.12306.cn/passport/web/login"
@@ -39,12 +39,12 @@ class go_login:
         uamauthclient = "https://kyfw.12306.cn/otn/uamauthclient"
         self.s.get(init_url,verify=False)
         self.s.post(uamtk_url,data=uamtk_data,verify=False)
-        content = self.s.get(httpZF_url, verify=False).content
-        content = content.decode(encoding='utf-8').split("'")[1]
-        d = json.loads(content)
-        requests.utils.add_dict_to_cookiejar(self.s.cookies, {"RAIL_DEVICEID" : d['dfp']})
+        #content = self.s.get(httpZF_url, verify=False).content
+        #content = content.decode(encoding='utf-8').split("'")[1]
+        #d = json.loads(content)
+        #requests.utils.add_dict_to_cookiejar(self.s.cookies, {"RAIL_DEVICEID" : d['dfp']})
         #requests.utils.add_dict_to_cookiejar(self.s.cookies, {"RAIL_DEVICEID": 'XHe6FfHQKdYj65DI8SswKR16VuCcV5nT8G62Uyj0uiGpChNOindm0SNWaPvgL2_obrOdD22vuuZf1WmTDAERbW1IRBdpJVAaKYA8Ks9FOVufsrLZ2ccVy3g5XdNQIyXrjmk-psvlj7TSvHrcpUVcvlQd2cn5qEp7'})
-        requests.utils.add_dict_to_cookiejar(self.s.cookies, {"RAIL_EXPIRATION" : d['exp']})
+        #requests.utils.add_dict_to_cookiejar(self.s.cookies, {"RAIL_EXPIRATION" : d['exp']})
         requests.utils.add_dict_to_cookiejar(self.s.cookies, {"_jc_save_fromDate": '2018-01-27'})
         requests.utils.add_dict_to_cookiejar(self.s.cookies, {"_jc_save_toStation": '%u5170%u5DDE%u897F%2CLAJ'})
         requests.utils.add_dict_to_cookiejar(self.s.cookies, {"_jc_save_toDate": '2018-01-22'})

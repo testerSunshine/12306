@@ -1,0 +1,2 @@
+class UserPasswordException(Exception):
+    pass

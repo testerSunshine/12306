@@ -3,151 +3,35 @@
 import random
 import json
 import re
+import socket
 from time import sleep
 
 from config.ticketConf import _get_yaml
 from PIL import Image
 from damatuCode.damatuWeb import DamatuApi
 from damatuCode.ruokuai import RClient
-import requests
-import traceback
-from http.client import RemoteDisconnected
-import time
+from myException.UserPasswordException import UserPasswordException
+from myException.balanceException import balanceException
 from myUrllib.httpUtils import session as SESS
+from config.urlConf import urls
 
-class go_login:
-    def __init__(self,  ticket_config=""):
-        self.config_data = _get_yaml(ticket_config)
-        self.captcha_url = 'https://kyfw.12306.cn/passport/captcha/captcha-image?login_site=E&module=login&rand=sjrand&%s' % random.random()
-        self.text = ""
-        self.user = self.config_data["set"]["12306count"][0]["uesr"]
-        self.passwd = self.config_data["set"]["12306count"][1]["pwd"]
-        self.auto_code_type = self.config_data['auto_code_type']
+class GoLogin:
+    #def __init__(self,  httpClint, urlConf, is_aotu_code, aotu_code_type):
+    def __init__(self, sys_config):
+        self.sys_config =  _get_yaml( sys_config)
+        self.urlConf = urls
+        self.s = SESS 
 
-        self.s = SESS
-
-    def get_logincookies(self):
-        global login_cookies, randCode
-        init_url = "https://kyfw.12306.cn/otn/login/init"
-        uamtk_data = {'appid': 'otn'}
-        httpZF_url = "https://kyfw.12306.cn/otn/HttpZF/logdevice?algID=i8UYSfDgWt&hashCode=td9I6c9a9k73Jv8Nc2ie0FGZWit-S-0MQJfASXNUQmk&FMQw=0&q4f3=zh-CN&VySQ=FGFKKeD8kVn5VC6vc-6l42-GJzul0oeM&VPIf=1&custID=133&VEek=unknown&dzuS=0&yD16=0&EOQP=c227b88b01f5c513710d4b9f16a5ce52&lEnu=2886927661&jp76=e237f9703f53d448d77c858b634154a5&hAqN=MacIntel&platform=WEB&ks0Q=b9a555dce60346a48de933b3e16ebd6e&TeRS=877x1440&tOHY=24xx900x1440&Fvje=i1l1o1s1&q5aJ=-8&wNLf=99115dfb07133750ba677d055874de87&0aew=Mozilla/5.0%20(Macintosh;%20Intel%20Mac%20OS%20X%2010_13_2)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/63.0.3239.132%20Safari/537.36&E3gR=ea438f8fd5bf8a3ac1fe9bd188f2c823&timestamp=1516195328849"
-        captcha_check_url = "https://kyfw.12306.cn/passport/captcha/captcha-check"
-        uamtk_url = "https://kyfw.12306.cn/passport/web/auth/uamtk"
-        login_url = "https://kyfw.12306.cn/passport/web/login"
-        login_userLogin = "https://kyfw.12306.cn/otn/login/userLogin"
-        #userLogin = "https://kyfw.12306.cn/otn/passport?redirect=/otn/login/userLogin"
-        uamauthclient = "https://kyfw.12306.cn/otn/uamauthclient"
-
-        self.s.get(init_url, verify=False)
-        self.s.post(uamtk_url, data=uamtk_data, verify=False)
-        content = self.s.get(httpZF_url, verify=False).content
-        print(content[:100])
-        content = content.decode(encoding='utf-8').split("'")[1]
-        d = json.loads(content)
-
-        requests.utils.add_dict_to_cookiejar(
-            self.s.cookies, {"RAIL_DEVICEID": d['dfp']})
-        #requests.utils.add_dict_to_cookiejar(self.s.cookies, {"RAIL_DEVICEID": 'XHe6FfHQKdYj65DI8SswKR16VuCcV5nT8G62Uyj0uiGpChNOindm0SNWaPvgL2_obrOdD22vuuZf1WmTDAERbW1IRBdpJVAaKYA8Ks9FOVufsrLZ2ccVy3g5XdNQIyXrjmk-psvlj7TSvHrcpUVcvlQd2cn5qEp7'})
-        requests.utils.add_dict_to_cookiejar(
-            self.s.cookies, {"RAIL_EXPIRATION": d['exp']})
-        requests.utils.add_dict_to_cookiejar(
-            self.s.cookies, {"_jc_save_fromDate": '2018-01-27'})
-        requests.utils.add_dict_to_cookiejar(
-            self.s.cookies, {"_jc_save_toStation": '%u5170%u5DDE%u897F%2CLAJ'})
-        requests.utils.add_dict_to_cookiejar(
-            self.s.cookies, {"_jc_save_toDate": '2018-01-22'})
-        requests.utils.add_dict_to_cookiejar(
-            self.s.cookies, {"_jc_save_wfdc_flag": 'dc'})
-        requests.utils.add_dict_to_cookiejar(
-            self.s.cookies, {"_jc_save_fromStation": '%u4E0A%u6D77%u8679%u6865%2CAOH'})
-        randCode = self.readImg(self.captcha_url)
-        randdata = {"answer": randCode,
-                    "login_site": "E",
-                    "rand": "sjrand"}
-        login_data = {"username": self.user,
-                      "password": self.passwd,
-                      "appid": "otn"}
-        rand_result = self.s.post(
-            captcha_check_url, data=randdata, verify=False).json()
-        print(rand_result)
-        while rand_result['result_code'] is not '4':
-            randCode = self.readImg( self.captcha_url)
-            randdata = {"answer": randCode,
-                        "login_site": "E",
-                        "rand": "sjrand"}
-            rand_result = self.s.post(
-                captcha_check_url, data=randdata, verify=False).json()
-            print(rand_result)
-
-        login_result = self.s.post(
-            login_url, allow_redirects=False, data=login_data, verify=False)
-        login_code = login_result.status_code
-        print(login_code)
-        # 解决登录接口302重定向问题
-        while login_code == 302:
-            login_result = self.s.post(
-                login_url, allow_redirects=False, data=login_data, verify=False)
-            login_code = login_result.status_code
-            print('Login redirect...')
-            if login_code == 200:
-                print('登录成功', login_result.json())
-        login_userLogin_data = {'_json_att': ''}
-        self.s.post(login_userLogin, data=login_userLogin_data, verify=False)
-        uamtk_result = self.s.post(
-            uamtk_url, data=uamtk_data, verify=False).json()
-        print(uamtk_result)
-        uamauthclient_data = {'tk': uamtk_result['newapptk']}
-        uamauthclient_result = self.s.post(
-            uamauthclient, data=uamauthclient_data, verify=False).json()
-        print('uamauthclient_data' , uamauthclient_result)
-        login_cookies = self.s.cookies.get_dict()
-        print('Get Login Cookie Finish.')
-        return login_cookies
-
-    def get_randcode(self):
-        print("下载验证码...")
-        img_path = './tkcode'
-        r = self.s.get(self.captcha_url,  verify=False)
-        result = r.content
-        # print(result)
-        randCode = ''
-        try:
-            open(img_path, 'wb').write(result)
-            if self.config_data["is_aotu_code"]:
-                randCode = DamatuApi(self.config_data["damatu"]["uesr"],
-                                     self.config_data["damatu"]["pwd"], img_path).main()
-
-            else:
-                img = Image.open('./tkcode')
-                img.show()
-                randCode = self.codexy()
-        except OSError as e:
-            traceback.print_exc()
-        return randCode
-    # def cookietp(self):
-    #     global initcookies
-    #     self.stoidinput("获取Cookie")
-    #     Url = "https://kyfw.12306.cn/otn/login/init"
-    #     initcookies1 = myurllib2.myrequests(cookies=None).get(Url).cookies
-    #     initcookies1 = initcookies1.get_dict()
-    #     #initcookies['current_captcha_type'] = "Z"
-    #     print(initcookies1)
-    #     uamtk_url = "https://kyfw.12306.cn/passport/web/auth/uamtk"
-    #     uamtk_data = {'appid':'otn'}
-    #     initcookies2 = myurllib2.myrequests(cookies=initcookies1).post(uamtk_url,data=uamtk_data).cookies
-    #     initcookies2 = initcookies2.get_dict()
-    #     print(initcookies2)
-    #     captcha_url = 'https://kyfw.12306.cn/passport/captcha/captcha-image?login_site=E&module=login&rand=sjrand&%s' % random.random()
-    #     initcookies3 = myurllib2.myrequests(cookies=None).get(captcha_url).cookies
-    #     initcookies3 = initcookies3.get_dict()
-    #     initcookies = dict(initcookies3, **initcookies2,**initcookies1)
-    #     print(initcookies3)
-    #     print(initcookies)
-    #     return initcookies
+    def cookietp(self):
+        print("正在获取cookie")
+        url = self.urlConf["loginInit"]["req_url"]
+        self.s.get(url)
+        # Url = "https://kyfw.12306.cn/otn/login/init"
+        # myurllib2.get(Url)
         # for index, c in enumerate(myurllib2.cookiejar):
         #     stoidinput(c)
 
-    def readImg(self, code_url ,method = 'get'):
+    def readImg(self, code_url):
         """
         增加手动打码，只是登录接口，完全不用担心提交订单效率
         思路
@@ -156,61 +40,44 @@ class go_login:
         3.控制台输入对应下标，按照英文逗号分开，即可手动完成打码，
         :return:
         """
-        print (f"下载验证码... {code_url} ,{method}")
-
-        img_code = ''
+        print ("下载验证码...")
         codeimgUrl = code_url
         img_path = './tkcode'
-
-        login_cookies = self.s.cookies.get_dict()
-        if method=='post':
-            r = self.s.post(codeimgUrl,  verify=False)
+        result = self.s.get(codeimgUrl)
+        if "message" in result:
+            print("验证码下载失败，正在重试")
         else:
-            r = self.s.get(codeimgUrl,  verify=False)
-        result = r.content
-        print(result[:100])
-        if len(result) == 0:
-            print("可能需要重新登陆下...")
-            return img_code
-        # if "message" in result:
-        #     print("验证码下载失败，正在重试")
-        # else:
-
-        try:
-            open(img_path, 'wb').write(result)
-            if self.auto_code_type == 1:
-                img_code =  DamatuApi(self.config_data["damatu"]["uesr"], self.config_data["damatu"]["pwd"], img_path).main()
-
-            elif self.auto_code_type == 2:
-                rc = RClient(
-                    self.config_data["ruokuai"]["uesr"], self.config_data["ruokuai"]["pwd"])
-                im = open('./tkcode', 'rb').read()
-                Result = rc.rk_create(im, 6113)
-                if "Result" in Result:
-                    img_code = self.codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
+            try:
+                open(img_path, 'wb').write(result.content)
+                if self.sys_config['is_aotu_code']:
+                    if self.sys_config['auto_code_type'] == 1:
+                        return DamatuApi(self.sys_config["damatu"]["uesr"], self.sys_config["damatu"]["pwd"], img_path).main()
+                    elif self.sys_config['auto_code_type']== 2:
+                        rc = RClient(self.sys_config["ruokuai"]["uesr"], self.sys_config["ruokuai"]["pwd"])
+                        im = open('./tkcode', 'rb').read()
+                        Result = rc.rk_create(im, 6113)
+                        if "Result" in Result:
+                            return self.codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
+                        else:
+                            if "Error" in Result and Result["Error"]:
+                                print (Result["Error"])
+                                return ""
                 else:
-                    if "Error" in Result and Result["Error"]:
-                        print('若快' ,Result["Error"])
-                        img_code = ""
-            else:
-                img = Image.open('./tkcode')
-                img.show()
-                img_code = self.codexy()
-        except OSError as e:
-            print (e)
-            img_code =  ""
-        print('img_code' , img_code)
-        return img_code
+                    img = Image.open('./tkcode')
+                    img.show()
+                    return self.codexy()
+            except OSError as e:
+                print (e)
+                return ""
 
-    def codexy(self, Ofset = None, is_raw_input=True):
+    def codexy(self, Ofset=None, is_raw_input=True):
         """
         获取验证码
         :return: str
         """
-        if is_raw_input :
-            Ofset = input("请输入验证码: ")
+        if is_raw_input:
+            Ofset = raw_input("请输入验证码: ")
         select = Ofset.split(',')
-        #global randCode
         post = []
         offsetsX = 0  # 选择的答案的left值,通过浏览器点击8个小图的中点得到的,这样基本没问题
         offsetsY = 0  # 选择的答案的top值
@@ -243,51 +110,133 @@ class go_login:
                 pass
             post.append(offsetsX)
             post.append(offsetsY)
-        randCode = str(post).replace(']', '').replace(
-            '[', '').replace("'", '').replace(' ', '')
-
+        randCode = str(post).replace(']', '').replace('[', '').replace("'", '').replace(' ', '')
         print("验证码识别坐标为{0}".format(randCode))
         return randCode
 
-    def login(self):
-        while True:
-            try:
-                self.get_logincookies()
-                break
-            except (requests.exceptions.ConnectionError, RemoteDisconnected) as e:
-                traceback.print_exc()
-                sleep_interval = 60 * 5
-                print(f'IP可能被封掉，打算睡一觉 {sleep_interval}ms')
-                time.sleep(60 * 5)
+    def auth(self):
+        """认证"""
+        authUrl = self.urlConf["auth"]["req_url"]
+        authData = {"appid": "otn"}
+        tk = self.s.post(authUrl, authData).json()
+        return tk
 
-            except IndexError as e:
-                traceback.print_exc()
-    #
-    # def getUserinfo(self):
-    #     """
-    #     登录成功后,显示用户名
-    #     :return:
-    #     """
-    #     url = 'https://kyfw.12306.cn/otn/modifyUser/initQueryUserInfo'
-    #     data = dict(_json_att=None)
-    #     #result = myurllib2.myrequests().post(url, data).decode('utf-8')
-    #     result = self.s.post(url,data=data,verify=False).content
-    #     userinfo = result
-    #     name = r'<input name="userDTO.loginUserDTO.user_name" style="display:none;" type="text" value="(\S+)" />'
-    #     try:
-    #         self.stoidinput("欢迎 %s 登录" % re.search(name, result).group(1))
-    #     except AttributeError:
-    #         pass
+    def codeCheck(self):
+        """
+        验证码校验
+        :return:
+        """
+        codeCheck = self.urlConf["codeCheck"]["req_url"]
+        codeCheckData = {
+            "answer": self.randCode,
+            "rand": "sjrand",
+            "login_site": "E"
+        }
+        fresult = self.s.post(codeCheck, codeCheckData).json()
+        if "result_code" in fresult and fresult["result_code"] == "4":
+            print ("验证码通过,开始登录..")
+            return True
+        else:
+            if "result_message" in fresult:
+                print(fresult["result_message"])
+            sleep(1)
+            self.s.cookies.clear()
+
+    def baseLogin(self, user, passwd):
+        """
+        登录过程
+        :param user:
+        :param passwd:
+        :return: 权限校验码
+        """
+        logurl = self.urlConf["login"]["req_url"]
+        logData = {
+            "username": user,
+            "password": passwd,
+            "appid": "otn"
+        }
+        tresult = self.s.post(logurl, logData).json()
+        if 'result_code' in tresult and tresult["result_code"] == 0:
+            print ("登录成功")
+            tk = self.auth()
+            if "newapptk" in tk and tk["newapptk"]:
+                return tk["newapptk"]
+            else:
+                return False
+        elif 'result_message' in tresult and tresult['result_message']:
+            messages = tresult['result_message']
+            if messages.find("密码输入错误") is not -1:
+                raise UserPasswordException("{0}".format(messages))
+            else:
+                print ("登录失败: {0}".format(messages))
+                print ("尝试重新登陆")
+                return False
+        else:
+            return False
+
+    def getUserName(self, uamtk):
+        """
+        登录成功后,显示用户名
+        :return:
+        """
+        if not uamtk:
+            return "权限校验码不能为空"
+        else:
+            uamauthclientUrl = self.urlConf["uamauthclient"]["req_url"]
+            data = {"tk": uamtk}
+            uamauthclientResult = self.s.post(uamauthclientUrl, data).json()
+            if uamauthclientResult:
+                if "result_code" in uamauthclientResult and uamauthclientResult["result_code"] == 0:
+                    print("欢迎 {} 登录".format(uamauthclientResult["username"]))
+                    return True
+                else:
+                    return False
+            else:
+                self.s.post(uamauthclientUrl, data).json()
+                url = self.urlConf["getUserInfo"]["req_url"]
+                self.s.get(url)
+
+    def go_login(self):
+        """
+        登陆
+        :param user: 账户名
+        :param passwd: 密码
+        :return:
+        """
+        if self.sys_config['is_aotu_code'] and self.sys_config['auto_code_type'] == 1:
+            balance = DamatuApi(self.sys_config["damatu"]["uesr"], self.sys_config["damatu"]["pwd"]).getBalance()
+            if int(balance) < 40:
+                raise balanceException('余额不足，当前余额为: {}'.format(balance))
+        user, passwd = self.sys_config["set"]["12306count"][0]["uesr"], self.sys_config["set"]["12306count"][1]["pwd"]
+        if not user or not passwd:
+            raise UserPasswordException("温馨提示: 用户名或者密码为空，请仔细检查")
+        login_num = 0
+        while True:
+            self.cookietp()
+
+            cookies= dict(_jc_save_wfdc_flag="dc", _jc_save_fromStation="%u4E0A%u6D77%u8679%u6865%2CAOH", _jc_save_toStation="%u5170%u5DDE%u897F%2CLAJ", _jc_save_fromDate="2018-02-14", _jc_save_toDate="2018-01-16", RAIL_DEVICEID="EN_3_EGSe2GWGHXJeCkFQ52kHvNCrNlkz9n1GOqqQ1wR0i98WsD8Gj-a3YHZ-XYKeESWgCiJyyucgSwkFOzVHhHqfpidLPcm2vK9n83uzOPuShO3Pl4lCydAtQu4BdFqz-RVmiduNFixrcrN_Ny43135JiEtqLaI")
+           
+            for k, v in cookies.items():
+                self.s.cookies.set(k, v) 
+            self.randCode = self.readImg(self.urlConf["getCodeImg"]["req_url"])
+            
+            login_num += 1
+            self.auth()
+            if self.codeCheck():
+                uamtk = self.baseLogin(user, passwd)
+                if uamtk:
+                    self.getUserName(uamtk)
+                    break
 
     def logout(self):
         url = 'https://kyfw.12306.cn/otn/login/loginOut'
-        result = self.s.get(url, verify=False).json()
+        result = myurllib2.get(url)
         if result:
-            self.stoidinput("已退出")
+            print ("已退出")
         else:
-            self.errorinput("退出失败")
+            print ("退出失败")
 
 
-if __name__ == "__main__":
-    go_login.login()
-    # logout()
+# if __name__ == "__main__":
+#     # main()
+#     # logout()

@@ -23,8 +23,8 @@ from myException.ticketIsExitsException import ticketIsExitsException
 from myException.ticketNumOutException import ticketNumOutException
 from json import JSONDecodeError 
 import codecs
-from init.login import go_login
 import traceback
+from init import login
 
 class select:
 
@@ -44,7 +44,7 @@ class select:
         self.ticket_black_list = dict()
         self.is_check_user = dict()
         self.ticket_config = ticket_config
-        self.login = go_login(self.ticket_config)
+        self.login =login.GoLogin(self.ticket_config).go_login()
         self.s = SESS
 
     def get_ticket_info(self, ticket_config):
@@ -751,7 +751,8 @@ class select:
 
     def call_login(self):
         """登录回调方法"""
-        login.go_login(self.ticket_config).login()
+        #login.go_login(self.ticket_config).go_login()
+        login.GoLogin(self.ticket_config).go_login()
         # self.call_login()
 
     def main(self):

@@ -3,6 +3,7 @@ import datetime
 import requests
 import random
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
@@ -76,4 +77,8 @@ class HTTPClient(object):
     #     if response.status_code == 200:
     #         return response.content
     #     else:
-    #         print(("请求失败。{0}".format(response)))
+    #         print(("请求失败。{0}".format(response)))i
+
+
+client = HTTPClient()
+session = client.session

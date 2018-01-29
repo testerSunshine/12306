@@ -10,12 +10,10 @@ from PIL import Image
 from damatuCode.damatuWeb import DamatuApi
 from damatuCode.ruokuai import RClient
 import requests
-from init import gol
 import traceback
 from http.client import RemoteDisconnected
 import time
-from myUrllib.httpUtils import HTTPClient
-
+from myUrllib.httpUtils import session as SESS
 
 class go_login:
     def __init__(self,  ticket_config=""):
@@ -26,11 +24,7 @@ class go_login:
         self.passwd = self.config_data["set"]["12306count"][1]["pwd"]
         self.auto_code_type = self.config_data['auto_code_type']
 
-        self.s = self.create_session()
-
-    def create_session(self):
-        s = HTTPClient()
-        return s.session
+        self.s = SESS
 
     def get_logincookies(self):
         global login_cookies, randCode
@@ -47,6 +41,7 @@ class go_login:
         self.s.get(init_url, verify=False)
         self.s.post(uamtk_url, data=uamtk_data, verify=False)
         content = self.s.get(httpZF_url, verify=False).content
+        print(content[:100])
         content = content.decode(encoding='utf-8').split("'")[1]
         d = json.loads(content)
 
@@ -76,7 +71,7 @@ class go_login:
             captcha_check_url, data=randdata, verify=False).json()
         print(rand_result)
         while rand_result['result_code'] is not '4':
-            randCode = self.readImg(self.captcha_url)
+            randCode = self.readImg( self.captcha_url)
             randdata = {"answer": randCode,
                         "login_site": "E",
                         "rand": "sjrand"}
@@ -90,7 +85,6 @@ class go_login:
         print(login_code)
         # 解决登录接口302重定向问题
         while login_code == 302:
-
             login_result = self.s.post(
                 login_url, allow_redirects=False, data=login_data, verify=False)
             login_code = login_result.status_code
@@ -101,11 +95,11 @@ class go_login:
         self.s.post(login_userLogin, data=login_userLogin_data, verify=False)
         uamtk_result = self.s.post(
             uamtk_url, data=uamtk_data, verify=False).json()
-        # print(uamtk_result)
+        print(uamtk_result)
         uamauthclient_data = {'tk': uamtk_result['newapptk']}
         uamauthclient_result = self.s.post(
             uamauthclient, data=uamauthclient_data, verify=False).json()
-        # print(uamauthclient_result)
+        print('uamauthclient_data' , uamauthclient_result)
         login_cookies = self.s.cookies.get_dict()
         print('Get Login Cookie Finish.')
         return login_cookies
@@ -153,7 +147,7 @@ class go_login:
         # for index, c in enumerate(myurllib2.cookiejar):
         #     stoidinput(c)
 
-    def readImg(self, code_url):
+    def readImg(self, code_url ,method = 'get'):
         """
         增加手动打码，只是登录接口，完全不用担心提交订单效率
         思路
@@ -162,18 +156,30 @@ class go_login:
         3.控制台输入对应下标，按照英文逗号分开，即可手动完成打码，
         :return:
         """
-        print ("下载验证码...")
+        print (f"下载验证码... {code_url} ,{method}")
+
+        img_code = ''
         codeimgUrl = code_url
         img_path = './tkcode'
-        r = self.s.get(codeimgUrl,  verify=False)
+
+        login_cookies = self.s.cookies.get_dict()
+        if method=='post':
+            r = self.s.post(codeimgUrl,  verify=False)
+        else:
+            r = self.s.get(codeimgUrl,  verify=False)
         result = r.content
+        print(result[:100])
+        if len(result) == 0:
+            print("可能需要重新登陆下...")
+            return img_code
         # if "message" in result:
         #     print("验证码下载失败，正在重试")
         # else:
+
         try:
             open(img_path, 'wb').write(result)
             if self.auto_code_type == 1:
-                return DamatuApi(self.config_data["damatu"]["uesr"], self.config_data["damatu"]["pwd"], img_path).main()
+                img_code =  DamatuApi(self.config_data["damatu"]["uesr"], self.config_data["damatu"]["pwd"], img_path).main()
 
             elif self.auto_code_type == 2:
                 rc = RClient(
@@ -181,18 +187,20 @@ class go_login:
                 im = open('./tkcode', 'rb').read()
                 Result = rc.rk_create(im, 6113)
                 if "Result" in Result:
-                    return self.codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
+                    img_code = self.codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
                 else:
                     if "Error" in Result and Result["Error"]:
-                        print(Result["Error"])
-                        return ""
+                        print('若快' ,Result["Error"])
+                        img_code = ""
             else:
                 img = Image.open('./tkcode')
                 img.show()
-                return self.codexy()
+                img_code = self.codexy()
         except OSError as e:
             print (e)
-            return ""
+            img_code =  ""
+        print('img_code' , img_code)
+        return img_code
 
     def codexy(self, Ofset = None, is_raw_input=True):
         """
@@ -245,8 +253,6 @@ class go_login:
         while True:
             try:
                 self.get_logincookies()
-                gol._init()
-                gol.set_value('s', self.s)
                 break
             except (requests.exceptions.ConnectionError, RemoteDisconnected) as e:
                 traceback.print_exc()

@@ -12,6 +12,7 @@ import sys
 import time
 from collections import OrderedDict
 from init import login
+from myUrllib.httpUtils import session as SESS
 
 from config.emailConf import email
 from config.ticketConf import _get_yaml
@@ -22,9 +23,8 @@ from myException.ticketIsExitsException import ticketIsExitsException
 from myException.ticketNumOutException import ticketNumOutException
 from json import JSONDecodeError 
 import codecs
-from init import gol
+from init.login import go_login
 import traceback
-
 
 class select:
 
@@ -44,6 +44,8 @@ class select:
         self.ticket_black_list = dict()
         self.is_check_user = dict()
         self.ticket_config = ticket_config
+        self.login = go_login(self.ticket_config)
+        self.s = SESS
 
     def get_ticket_info(self, ticket_config):
         """
@@ -309,25 +311,30 @@ class select:
         检查用户是否达到订票条件
         :return:
         """
-        check_user_url = 'https://kyfw.12306.cn/otn/login/checkUser'
-        data = dict(_json_att=None)
-        check_user = self.s.post(
-            check_user_url, data=data, verify=False).json()
-        check_user_flag = check_user['data']['flag']
-        if check_user_flag is True:
-            return True
-        else:
-            if check_user['messages']:
+        # check_user_url = 'https://kyfw.12306.cn/otn/login/checkUser'
+        # data = dict(_json_att=None)
+        uamtk_url = 'https://kyfw.12306.cn/passport/web/auth/uamtk'
+        # data = dict(_json_att=None)
+        data = {"appid": "otn","t" : time.time()}
+        # self.s.post(uamtk_url, data=uamtk_data, verify=False)
+        check_user = self.login.s.post(uamtk_url, data=data, verify=False)
+        print(check_user.text[:300])
+        print(self.s.post(uamtk_url, data=data, verify=False).text)
+        check_user = check_user.json()
+        # check_user_flag = check_user['data']['flag']
+        if check_user['result_code'] != 0:
+                # self.login.logout()
+            # if check_user['messages']:
                 print ('用户检查失败：%s，可能未登录，可能session已经失效' %
-                       check_user['messages'][0])
+                       check_user['result_message'])
                 print ('正在尝试重新登录')
                 self.call_login()
                 self.is_check_user["user_time"] = datetime.datetime.now()
-            else:
-                print ('用户检查失败： %s，可能未登录，可能session已经失效' % check_user)
-                print ('正在尝试重新登录')
-                self.call_login()
-                self.is_check_user["user_time"] = datetime.datetime.now()
+            # else:
+            #     print ('用户检查失败： %s，可能未登录，可能session已经失效' % check_user)
+            #     print ('正在尝试重新登录')
+            #     self.call_login()
+            #     self.is_check_user["user_time"] = datetime.datetime.now()
 
     def submit_station(self):
         """
@@ -352,7 +359,10 @@ class select:
 
         submitResult = self.s.post(
             submit_station_url, allow_redirects=False, data=data, verify=False)
-        while submitResult.status_code is not 200:
+        _max_try = 0
+        while submitResult.status_code is not 200 and _max_try < 20:
+            _max_try += 1
+            print(f'submigResult.status_code {submitResult.status_code}' )
             submitResult = self.s.post(
                 submit_station_url, allow_redirects=False, data=data, verify=False)
         submitResult = submitResult.json()
@@ -365,10 +375,12 @@ class select:
         elif 'messages' in submitResult and submitResult['messages']:
             msg = submitResult['messages'][0]
             print(msg)
-            
             if '未完成订单' in  msg :
                 mail_content = f'也许您有未完成订单，请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！{msg} \n 12306 Account  { _get_yaml(self.ticket_config)["set"]["12306count"] } '
                 email(mail_content, self.ticket_config).sendEmail()
+            elif '未登陆' in msg:
+                self.call_login()
+                raise lostLoginInfomationException()
             raise ticketIsExitsException(submitResult['messages'][0])
 
     def getPassengerTicketStr(self, set_type):
@@ -524,6 +536,7 @@ class select:
                         print(f"当前余票数小于乘车人数，放弃订票 {ticket_split}  ")
                     else:
                         print("排队成功, 当前余票还剩余: {0} 张".format(ticket_split))
+                        
                         if self.checkQueueOrder(is_need_code):
                             return True
                 else:
@@ -567,17 +580,16 @@ class select:
             "REPEAT_SUBMIT_TOKEN": self.get_token(),
         }
         try:
-            for i in range(3):
+            for i in range(5):
                 if is_node_code:
                     print("正在使用自动识别验证码功能")
                     randurl = 'https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn'
+                    # codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=passenger&rand=randp&%s' % random.random()
+                    # result = self.s.get(codeimg, verify=False)
+                    # result = result.content
+                    # self.check_user()
                     codeimg = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=passenger&rand=randp&%s' % random.random()
-                    result = self.s.get(codeimg, verify=False)
-                    result = result.content
-
-                    img_path = './tkcode'
-                    open(img_path, 'wb').write(result)
-                    randCode = login.go_login.readImg(img_path)
+                    randCode = self.login.readImg(code_url=codeimg , method='post')
                     randData = {
                         "randCode": randCode,
                         "rand": "randp",
@@ -593,6 +605,7 @@ class select:
                         break
                     else:
                         print("验证码有误, 接口返回{0} 第{1}次尝试重试".format(fresult, i))
+                        time.sleep(0.5)
                 else:
                     print("不需要验证码")
                     break
@@ -739,20 +752,20 @@ class select:
     def call_login(self):
         """登录回调方法"""
         login.go_login(self.ticket_config).login()
+        # self.call_login()
 
     def main(self):
          
         self.call_login()
-        self.s = gol.get_value('s')
-        # print(self.s.cookies)
+
         from_station, to_station = self.station_table(
             self.from_station, self.to_station)
         # if self.leftTicketLog(from_station, to_station):
         num = 1
         while 1:
             try:
-                num += 1
-                if "user_time" in self.is_check_user and (datetime.datetime.now() - self.is_check_user["user_time"]).seconds / 60 > 10:
+                num += 1 
+                if "user_time" in self.is_check_user and (datetime.datetime.now() - self.is_check_user["user_time"]).seconds / 60 > 5:
                     # 十分钟调用一次检查用户是否登录
                     self.check_user()
                 print('begin' ,end=' ')
@@ -763,6 +776,7 @@ class select:
                     self.call_login()
                 start_time = datetime.datetime.now()
                 self.submitOrderRequestImplement(from_station, to_station)
+
                 print(f"执行时间 {datetime.datetime.now()}  正在第{num}次查询  乘车日期: {self.station_dates}  车次{self.station_trains} 查询无票  代理设置 无  总耗时{ (datetime.datetime.now() - start_time).microseconds / 1000}ms")
             except PassengerUserException as e:
                 traceback.print_exc()
@@ -789,6 +803,9 @@ class select:
                 traceback.print_exc()
             except socket.error as e:
                 traceback.print_exc()
+            except lostLoginInfomationException as e:
+                self.call_login()
+
 
 
 if __name__ == '__main__':

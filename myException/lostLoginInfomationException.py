@@ -1,0 +1,2 @@
+class lostLoginInfomationException(Exception):
+    pass

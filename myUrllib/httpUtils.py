@@ -1,13 +1,12 @@
 # -*- coding: utf8 -*-
-import datetime
 import json
 import socket
 from time import sleep
 
 import requests
-import sys
 
 from config import logger
+
 
 class HTTPClient(object):
 
@@ -17,6 +16,7 @@ class HTTPClient(object):
         :param headers: Must be a dict. Such as headers={'Content_Type':'text/html'}
         """
         self.initS()
+        self._cdn = None
 
     def initS(self):
         self._s = requests.Session()
@@ -78,10 +78,20 @@ class HTTPClient(object):
         self._s.headers.update({"Referer": referer})
         return self
 
-    def send(self, url, data=None, is_logger=True, **kwargs):
+    @property
+    def cdn(self):
+        return self._cdn
+
+    @cdn.setter
+    def cdn(self, cdn):
+        self._cdn = cdn
+
+    def send(self, urls, data=None, **kwargs):
         """send request to url.If response 200,return response, else return None."""
         allow_redirects = False
-        error_data = {"code": 99999, "message": "重试次数达到上限"}
+        is_logger = urls["is_logger"]
+        error_data = {"code": 99999, "message": u"重试次数达到上限"}
+        self.setHeadersReferer(urls["Referer"])
         if data:
             method = "post"
             self.setHeaders({"Content-Length": "{0}".format(len(data))})
@@ -90,14 +100,21 @@ class HTTPClient(object):
             self.resetHeaders()
         if is_logger:
             logger.log(
-                u"url: {0}\n入参: {1}\n请求方式: {2}\n".format(url,data,method,))
-        for i in range(10):
+                u"url: {0}\n入参: {1}\n请求方式: {2}\n".format(urls["req_url"],data,method,))
+        self.setHeadersHost(urls["Host"])
+        if self.cdn:
+            url_host = self.cdn
+        else:
+            url_host = urls["Host"]
+        for i in range(urls["re_try"]):
             try:
+                requests.packages.urllib3.disable_warnings()
                 response = self._s.request(method=method,
-                                           timeout=10,
-                                           url=url,
+                                           timeout=2,
+                                           url="https://" + url_host + urls["req_url"],
                                            data=data,
                                            allow_redirects=allow_redirects,
+                                           verify=False,
                                            **kwargs)
                 if response.status_code == 200:
                     if response.content:
@@ -107,10 +124,10 @@ class HTTPClient(object):
                         return json.loads(response.content) if method == "post" else response.content
                     else:
                         logger.log(
-                            u"url: {} 返回参数为空".format(url))
+                            u"url: {} 返回参数为空".format(urls["req_url"]))
                         return error_data
                 else:
-                    sleep(0.1)
+                    sleep(urls["re_time"])
             except (requests.exceptions.Timeout, requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
                 pass
             except socket.error:

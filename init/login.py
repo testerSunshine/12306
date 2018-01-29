@@ -31,7 +31,7 @@ class GoLogin:
         # for index, c in enumerate(myurllib2.cookiejar):
         #     stoidinput(c)
 
-    def readImg(self, code_url):
+    def readImg(self, code_url, method='get'):
         """
         增加手动打码，只是登录接口，完全不用担心提交订单效率
         思路
@@ -43,7 +43,10 @@ class GoLogin:
         print ("下载验证码...")
         codeimgUrl = code_url
         img_path = './tkcode'
-        result = self.s.get(codeimgUrl)
+        if method == 'get':
+            result = self.s.get(codeimgUrl)
+        else:
+            result = self.s.post(codeimgUrl)
         if "message" in result:
             print("验证码下载失败，正在重试")
         else:

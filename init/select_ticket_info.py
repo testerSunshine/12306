@@ -10,6 +10,8 @@ import time
 import urllib
 from collections import OrderedDict
 
+import collections
+
 from agency.cdn_utils import CDNProxy
 from config import urlConf
 from config.emailConf import sendEmail
@@ -48,6 +50,7 @@ class select:
         self.is_download_img = False
         self.randCode = ""
         self.cdn_list = []
+        self.buy_ticket_time = ""
 
     def get_ticket_info(self):
         """
@@ -64,7 +67,8 @@ class select:
         select_refresh_interval = ticket_info_config["select_refresh_interval"]
         station_trains = ticket_info_config["set"]["station_trains"]
         ticket_black_list_time = ticket_info_config["ticket_black_list_time"]
-        print "*"*20
+        print u"*"*20
+        print u"12306刷票小助手，最后更新于2018.2.28，请勿作为商业用途，交流群号：286271084\n"
         print u"当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}\n候选购买车次：{7}\n僵尸票关小黑屋时长：{8}\n".format\
                                                                                       (
                                                                                       from_station,
@@ -77,7 +81,7 @@ class select:
                                                                                       ",".join(station_trains),
                                                                                       ticket_black_list_time,
             )
-        print "*"*20
+        print u"*"*20
         return from_station, to_station, station_dates, set_type, is_more_ticket, ticke_peoples, select_refresh_interval, station_trains, ticket_black_list_time
 
     def get_order_request_params(self):
@@ -138,8 +142,8 @@ class select:
         :return:
         """
         today = datetime.date.today()
-        tomorrow = today+datetime.timedelta(1)
-        return tomorrow.strftime('%Y-%m-%d')
+        # tomorrow = today+datetime.timedelta(1)
+        return today.strftime('%Y-%m-%d')
 
     def callReadImg(self, code_url):
         """
@@ -147,7 +151,6 @@ class select:
         :param code_url: 验证码url
         :return:
         """
-        print(code_url)
         self.login.readImg(code_url=code_url)
         self.is_aotu_code = True
 
@@ -182,6 +185,12 @@ class select:
             self.order_request_params = json.loads(re_orp[0].replace("'", '"'))
         else:
             pass
+
+    def GetJS(self):
+        getJSUrl = self.confUrl["GetJS"]
+        self.httpClint.send(getJSUrl)
+        odxmfwgUrl = self.confUrl["odxmfwg"]
+        self.httpClint.send(odxmfwgUrl)
 
     def getPassengerDTOs(self):
         """
@@ -253,15 +262,17 @@ class select:
                                         break
                                     else:
                                         print (u'正在尝试提交订票...')
-
+                                        self.buy_ticket_time = datetime.datetime.now()
                                         # self.submitOrderRequestFunc(from_station, to_station, self.time())
                                         self.submit_station()
                                         self.getPassengerTicketStr(self._station_seat[j].encode("utf8"))
                                         self.getRepeatSubmitToken()
                                         if not self.user_info:  # 修改每次都调用用户接口导致用户接口不能用
                                             self.user_info = self.getPassengerDTOs()
+                                        codeImgByOrder = self.confUrl["codeImgByOrder"]
+                                        self.login.readImg(codeImgByOrder)
                                         if self.checkOrderInfo(train_no, self._station_seat[j].encode("utf8")):
-                                                break
+                                            break
                                 else:
                                     pass
                         else:
@@ -305,7 +316,7 @@ class select:
         """
         submit_station_url = self.confUrl["submit_station_url"]
         data = [('secretStr', urllib.unquote(self.secretStr)),  # 字符串加密
-                ('train_date', self.time()),  # 出发时间
+                ('train_date', self.station_dates[0]),  # 出发时间
                 ('back_train_date', self.time()),  # 返程时间
                 ('tour_flag', 'dc'),  # 旅途类型
                 ('purpose_codes', 'ADULT'),  # 成人票还是学生票
@@ -384,7 +395,7 @@ class select:
         """
         passengerTicketStrList, oldPassengerStr = self.getPassengerTicketStrListAndOldPassengerStr()
         checkOrderInfoUrl = self.confUrl["checkOrderInfoUrl"]
-        data = OrderedDict()
+        data = collections.OrderedDict()
         data['cancel_flag'] = 2
         data['bed_level_order_num'] = "000000000000000000000000000000"
         data['passengerTicketStr'] = self.set_type + "," + ",".join(passengerTicketStrList).rstrip("_{0}".format(self.set_type))
@@ -422,18 +433,17 @@ class select:
         l_time = time.localtime(time.time())
         new_train_date = time.strftime("%a %b %d %Y", l_time)
         getQueueCountUrl = self.confUrl["getQueueCountUrl"]
-        data = {
-            'train_date': str(new_train_date) + " 00:00:00 GMT+0800 (中国标准时间)",
-            'train_no': self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['train_no'],
-            'stationTrainCode':	self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['station_train_code'],
-            'seatType':	self.set_type,
-            'fromStationTelecode': self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['from_station'],
-            'toStationTelecode': self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['to_station'],
-            'leftTicket': self.get_ticketInfoForPassengerForm()['leftTicketStr'],
-            'purpose_codes': self.get_ticketInfoForPassengerForm()['purpose_codes'],
-            'train_location': self.get_ticketInfoForPassengerForm()['train_location'],
-            'REPEAT_SUBMIT_TOKEN': self.get_token(),
-        }
+        data = collections.OrderedDict()
+        data['train_date'] = str(new_train_date) + " 00:00:00 GMT+0800 (中国标准时间)",
+        data['train_no'] = self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['train_no'],
+        data['stationTrainCode'] = self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['station_train_code'],
+        data['seatType'] = self.set_type,
+        data['fromStationTelecode'] = self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['from_station'],
+        data['toStationTelecode'] = self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['to_station'],
+        data['leftTicket'] = self.get_ticketInfoForPassengerForm()['leftTicketStr'],
+        data['purpose_codes'] = self.get_ticketInfoForPassengerForm()['purpose_codes'],
+        data['train_location'] = self.get_ticketInfoForPassengerForm()['train_location'],
+        data['REPEAT_SUBMIT_TOKEN'] = self.get_token(),
         getQueueCountResult = self.httpClint.send(getQueueCountUrl, data)
         if "status" in getQueueCountResult and getQueueCountResult["status"] is True:
             if "countT" in getQueueCountResult["data"]:
@@ -497,15 +507,14 @@ class select:
             "dwAll": "N",
             "whatsSelect": 1,
             "_json_at": "",
+            "randCode": "",
+            "choose_seats": "",
             "REPEAT_SUBMIT_TOKEN": self.get_token(),
         }
-
         try:
             if is_node_code:
                 print(u"正在使用自动识别验证码功能")
                 for i in range(3):
-                    codeImgByOrder = self.confUrl["codeImgByOrder"]
-                    self.login.readImg(codeImgByOrder)
                     randCode = self.login.getRandCode()
                     checkcode = self.checkRandCodeAnsyn(randCode)
                     if checkcode == 'TRUE':
@@ -517,7 +526,9 @@ class select:
                 print(u"验证码超过限定次数3次，放弃此次订票机会!")
             else:
                 print(u"不需要验证码")
-            time.sleep(0.5)
+            buy_end_time = (datetime.datetime.now() - self.buy_ticket_time).seconds
+            print("总共花费时长{0}S".format(buy_end_time))
+            time.sleep(8-buy_end_time if buy_end_time<8 else 0)
             checkQueueOrderResult = self.httpClint.send(checkQueueOrderUrl, data)
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
@@ -670,7 +681,7 @@ class select:
             start_time = datetime.datetime.now()
             http.cdn = cdn[i].replace("\n", "")
             rep = http.send(urls)
-            if rep and "message" not in rep and (datetime.datetime.now() - start_time).microseconds / 1000 < 300:
+            if rep and "message" not in rep and (datetime.datetime.now() - start_time).microseconds / 1000 < 200:
                 self.cdn_list.append(cdn[i].replace("\n", ""))
         print(u"所有cdn解析完成...")
 
@@ -707,10 +718,14 @@ class select:
                     # 5分钟检查一次用户是否登录
                     self.check_user()
                 time.sleep(self.select_refresh_interval)
-                if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00":
-                    print u"12306休息时间，本程序自动停止,明天早上6点将自动运行"
-                    time.sleep(60 * 60 * 7)
-                    self.call_login()
+                if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00" or time.strftime('%H:%M:%S', time.localtime(time.time())) < "06:00:00":
+                    print(u"12306休息时间，本程序自动停止,明天早上6点将自动运行")
+                    while 1:
+                        time.sleep(1)
+                        if time.strftime('%H:%M:%S', time.localtime(time.time())) > "06:00:00":
+                            print(u"休息时间已过，重新开启检票功能")
+                            self.call_login()
+                            break
                 start_time = datetime.datetime.now()
                 self.submitOrderRequestImplement(from_station, to_station)
                 print u"正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  cdn轮询IP {4} 当前cdn总数{5} 总耗时{3}ms".format(num,

@@ -50,10 +50,14 @@ class HTTPClient(object):
         """设置header"""
         return {
             "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
-            "X-Requested-With": "xmlHttpRequest",
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
+            "X-Requested-With": "application/json, text/javascript, */*; q=0.01",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/604.3.5 (KHTML, like Gecko) Version/11.0.1 Safari/604.3.5",
             "Referer": "https://kyfw.12306.cn/otn/login/init",
             "Accept": "*/*",
+            "Accept-Encoding": "br, gzip, deflate",
+            "Origin": "https://kyfw.12306.cn",
+            "Accept-Language": "zh-cn",
+            "Connection": "keep-alive",
         }
 
     def setHeaders(self, headers):
@@ -86,6 +90,14 @@ class HTTPClient(object):
     def cdn(self, cdn):
         self._cdn = cdn
 
+    # def send_socket(self, urls, data=None, **kwargs):
+    #     data = """
+    #         POST {0} HTTP/1.1
+    #         {0}
+    #         """.format(urls["req_url"], self._set_header())
+    #     fack = socket.create_connection(urls["Host"], 443)
+    #     fack.send()
+
     def send(self, urls, data=None, **kwargs):
         """send request to url.If response 200,return response, else return None."""
         allow_redirects = False
@@ -108,6 +120,7 @@ class HTTPClient(object):
             url_host = urls["Host"]
         for i in range(urls["re_try"]):
             try:
+                sleep(urls["s_time"]) if "s_time" in urls else sleep(0.001)
                 requests.packages.urllib3.disable_warnings()
                 response = self._s.request(method=method,
                                            timeout=2,

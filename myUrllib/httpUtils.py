@@ -120,7 +120,8 @@ class HTTPClient(object):
             url_host = urls["Host"]
         for i in range(urls["re_try"]):
             try:
-                sleep(urls["s_time"]) if "s_time" in urls else sleep(0.001)
+                # sleep(urls["s_time"]) if "s_time" in urls else sleep(0.001)
+                sleep(urls.get("s_time", 0.001))
                 requests.packages.urllib3.disable_warnings()
                 response = self._s.request(method=method,
                                            timeout=2,

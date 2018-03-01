@@ -68,8 +68,9 @@ class select:
         station_trains = ticket_info_config["set"]["station_trains"]
         ticket_black_list_time = ticket_info_config["ticket_black_list_time"]
         print u"*"*20
-        print u"12306刷票小助手，最后更新于2018.2.28，请勿作为商业用途，交流群号：286271084\n"
-        print u"当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}\n候选购买车次：{7}\n僵尸票关小黑屋时长：{8}\n".format\
+        print u"12306刷票小助手，最后更新于2018.2.28，请勿作为商业用途，交流群号：286271084"
+        print u"如果有好的margin，请联系作者，表示非常感激\n"
+        print u"当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}s(如果想随机刷新，请自行修改)\n候选购买车次：{7}\n僵尸票关小黑屋时长：{8}\n".format\
                                                                                       (
                                                                                       from_station,
                                                                                       to_station,

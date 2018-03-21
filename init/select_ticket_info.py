@@ -528,7 +528,7 @@ class select:
             else:
                 print(u"不需要验证码")
             buy_end_time = (datetime.datetime.now() - self.buy_ticket_time).seconds
-            print("总共花费时长{0}S".format(buy_end_time))
+            print(u"总共花费时长{0}S".format(buy_end_time))
             time.sleep(8-buy_end_time if buy_end_time<8 else 0)
             checkQueueOrderResult = self.httpClint.send(checkQueueOrderUrl, data)
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:

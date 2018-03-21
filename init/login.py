@@ -27,10 +27,6 @@ class GoLogin:
         print(u"正在获取cookie")
         url = self.urlConf["loginInit"]
         self.httpClint.send(url)
-        # Url = "https://kyfw.12306.cn/otn/login/init"
-        # myurllib2.get(Url)
-        # for index, c in enumerate(myurllib2.cookiejar):
-        #     stoidinput(c)
 
     def getRandCode(self):
         """

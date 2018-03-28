@@ -41,20 +41,18 @@
 
 set:
   station_dates:
-    - "2018-01-27"
+    - "2018-03-19"
+#    - "2018-02-21"
 
   station_trains:
-    - "G4741"
-    - "G2365"
-    - "G1371"
-    - "G1337"
-    - "G1377"
-    - "G1329"
+    - "G4831"
 
   from_station: "上海"
-  to_station: "邵阳"
+  to_station: "长沙"
   set_type:
     - "二等座"
+    - "商务座"
+    - "一等座"
   is_more_ticket: True
   ticke_peoples:
     - "文贤平"
@@ -66,8 +64,8 @@ set:
     - pwd: "QWERTY"
 
 select_refresh_interval: 1
-ticket_black_list_time: 3
-is_aotu_code: True
+ticket_black_list_time: 5
+is_aotu_code: False
 aotu_code_type: 2
 #enable_proxy: False
 
@@ -78,12 +76,12 @@ damatu:
 email_conf:
   is_email: True
   email: "@qq.com "
-  notice_email_list: "61995120@qq.com"
+  notice_email_list: "@qq.com"
   username: ""
-  password: "xwopwxbkupbqbfgb"
+  password: ""
   host: "smtp.qq.com"
 
-is_cdn: 1
+is_cdn: 2
 
 
 

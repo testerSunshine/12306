@@ -14,6 +14,7 @@ import collections
 
 from agency.cdn_utils import CDNProxy
 from config import urlConf
+from config.TicketEnmu import ticket
 from config.emailConf import sendEmail
 from config.ticketConf import _get_yaml
 from init import login
@@ -53,7 +54,6 @@ class selectFast:
         self.cdn_list = []
         self.is_check_user = dict()
         self.ticket_black_list = dict()
-        self.black_train_no = ""
         self.passengerTicketStrList = ""
         self.oldPassengerStr = ""
 
@@ -176,10 +176,8 @@ class selectFast:
                           to_station_h=self.to_station,
                           _station_seat=self._station_seat,
                           station_trains=self.station_trains,
-                          station_dates=self.station_dates,
-                          black_train_no=self.black_train_no)
+                          station_dates=self.station_dates,)
                 queryResult = q.sendQuery()
-                self.black_train_no = ""  # 重置小黑屋名单
                 # 查询接口
                 if queryResult.get("status", False):
                     secretStr = queryResult.get("secretStr", "")
@@ -193,7 +191,7 @@ class selectFast:
                     if self.ticket_black_list.has_key(train_no) and (
                             datetime.datetime.now() - self.ticket_black_list[train_no]).seconds / 60 < int(
                             self.ticket_black_list_time):
-                        print(u"该车次{} 正在被关小黑屋，跳过此车次".format(train_no))
+                        print(ticket.QUEUE_WARNING_MSG.format(train_no))
                     else:
                         # 获取联系人
                         if not self.passengerTicketStrList and not self.oldPassengerStr:
@@ -229,7 +227,8 @@ class selectFast:
                             getQueueCountAsyncResult = g.sendGetQueueCountAsync()
                             time.sleep(submitResult.get("ifShowPassCodeTime", 1))
                             if getQueueCountAsyncResult.get("is_black", False):
-                                self.black_train_no = getQueueCountAsyncResult.get("train_no", "")
+                                black_train_no = getQueueCountAsyncResult.get("train_no", "")
+                                self.ticket_black_list[black_train_no] = datetime.datetime.now()
                             if getQueueCountAsyncResult.get("status", False):
                                 # 请求订单快读接口
                                 c = confirmSingleForQueueAsys(session=self,

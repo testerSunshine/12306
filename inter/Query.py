@@ -13,7 +13,7 @@ class query:
     """
 
     def __init__(self, session, from_station, to_station, from_station_h, to_station_h, _station_seat, station_trains,
-                 black_train_no, station_dates=None, ):
+                 station_dates=None, ):
         self.session = session
         self.from_station = from_station
         self.to_station = to_station
@@ -23,7 +23,6 @@ class query:
         self._station_seat = _station_seat if isinstance(_station_seat, list) else list(_station_seat)
         self.station_dates = station_dates if isinstance(station_dates, list) else list(station_dates)
         self.ticket_black_list = dict()
-        self.black_train_no = black_train_no
 
     def station_seat(self, index):
         """
@@ -46,8 +45,7 @@ class query:
         查询
         :return:
         """
-        if self.black_train_no:
-            self.ticket_black_list[self.black_train_no] = datetime.datetime.now()
+
         for station_date in self.station_dates:
             select_url = copy.copy(self.session.urls["select_url"])
             select_url["req_url"] = select_url["req_url"].format(

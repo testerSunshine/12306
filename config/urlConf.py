@@ -1,24 +1,27 @@
+# coding=utf-8
 import random
 
 import time
 
 urls = {
-    "auth": {
+    "auth": {  # 登录接口
         "req_url": "/passport/web/auth/uamtk",
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/passport?redirect=/otn/login/userLogin",
         "Host": "kyfw.12306.cn",
+        "Content-Type": 1,
         "re_try": 10,
         "re_time": 0.1,
         "s_time": 0.1,
         "is_logger": True,
         "is_json": True,
     },
-    "login": {
+    "login": {   # 登录接口
         "req_url": "/passport/web/login",
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/login/init",
         "Host": "kyfw.12306.cn",
+        "Content-Type": 1,
         "re_try": 10,
         "re_time": 0.1,
         "s_time": 0.1,
@@ -26,29 +29,44 @@ urls = {
         "is_json": True,
 
     },
-    "getCodeImg": {
+    "left_ticket_init": {   # 登录接口
+        "req_url": "/otn/leftTicket/init",
+        "req_type": "post",
+        "Referer": "https://kyfw.12306.cn/otn/login/init",
+        "Host": "kyfw.12306.cn",
+        "Content-Type": 1,
+        "re_try": 10,
+        "re_time": 0.1,
+        "s_time": 0.1,
+        "is_logger": False,
+        "is_json": False,
+
+    },
+    "getCodeImg": {  # 登录验证码
         "req_url": "/passport/captcha/captcha-image?login_site=E&module=login&rand=sjrand&{0}",
         "req_type": "get",
         "Referer": "https://kyfw.12306.cn/otn/login/init",
         "Host": "kyfw.12306.cn",
+        "Content-Type": 1,
         "re_try": 10,
         "re_time": 0.1,
         "s_time": 0.1,
         "is_logger": False,
         "is_json": False,
     },
-    "codeCheck": {
+    "codeCheck": {  # 验证码校验
         "req_url": "/passport/captcha/captcha-check",
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/login/init",
         "Host": "kyfw.12306.cn",
+        "Content-Type": 1,
         "re_try": 10,
         "re_time": 0.1,
         "s_time": 0.1,
         "is_logger": True,
         "is_json": True,
     },
-    "loginInit": {
+    "loginInit": {  # 登录页面
         "req_url": "/otn/login/init",
         "req_type": "get",
         "Referer": "https://kyfw.12306.cn/otn/index/init",
@@ -59,7 +77,7 @@ urls = {
         "is_logger": False,
         "is_json": False,
     },
-    "getUserInfo": {
+    "getUserInfo": {  # 获取用户信息
         "req_url": "/otn/index/initMy12306",
         "req_type": "get",
         "Referer": "https://kyfw.12306.cn/otn/passport?redirect=/otn/login/userLogin",
@@ -70,7 +88,7 @@ urls = {
         "is_logger": False,
         "is_json": False,
     },
-    "userLogin": {
+    "userLogin": {  # 用户登录
         "req_url": "/otn/login/userLogin",
         "req_type": "get",
         "Referer": "https://kyfw.12306.cn/otn/passport?redirect=/otn/login/userLogin",
@@ -81,18 +99,19 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
-    "uamauthclient": {
+    "uamauthclient": {  # 登录
         "req_url": "/otn/uamauthclient",
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/passport?redirect=/otn/login/userLogin",
         "Host": "kyfw.12306.cn",
+        "Content-Type": 1,
         "re_try": 10,
         "re_time": 0.1,
         "s_time": 0.1,
         "is_logger": True,
         "is_json": True,
     },
-    "initdc_url": {
+    "initdc_url": {  # 生成订单页面
         "req_url": "/otn/confirmPassenger/initDc",
         "req_type": "get",
         "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
@@ -103,7 +122,7 @@ urls = {
         "is_logger": False,
         "is_json": False,
     },
-    "GetJS": {
+    "GetJS": {   # 订单页面js
         "req_url": "/otn/HttpZF/GetJS",
         "req_type": "get",
         "Referer": "https://kyfw.12306.cn/otn/confirmPassenger/initDc",
@@ -114,7 +133,7 @@ urls = {
         "is_logger": False,
         "is_json": False,
     },
-    "odxmfwg": {
+    "odxmfwg": {  # 订单页面js
         "req_url": "/otn/dynamicJs/odxmfwg",
         "req_type": "get",
         "Referer": "https://kyfw.12306.cn/otn/confirmPassenger/initDc",
@@ -125,7 +144,7 @@ urls = {
         "is_logger": False,
         "is_json": False,
     },
-    "get_passengerDTOs": {
+    "get_passengerDTOs": {  # 获取乘车人
         "req_url": "/otn/confirmPassenger/getPassengerDTOs",
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/confirmPassenger/initDc",
@@ -136,8 +155,8 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
-    "select_url": {
-        "req_url": "/otn/leftTicket/queryO?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT",
+    "select_url": {  # 查询余票
+        "req_url": "/otn/leftTicket/query?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT",
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
         "Host": "kyfw.12306.cn",
@@ -147,7 +166,7 @@ urls = {
         "is_logger": False,
         "is_json": True,
     },
-    "check_user_url": {
+    "check_user_url": {  # 检查用户登录
         "req_url": "/otn/login/checkUser",
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
@@ -158,7 +177,7 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
-    "submit_station_url": {
+    "submit_station_url": {  # 提交订单
         "req_url": "/otn/leftTicket/submitOrderRequest",
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
@@ -169,7 +188,7 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
-    "checkOrderInfoUrl": {
+    "checkOrderInfoUrl": {  # 检查订单信息规范
         "req_url": "/otn/confirmPassenger/checkOrderInfo",
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/confirmPassenger/initDc",
@@ -180,7 +199,7 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
-    "getQueueCountUrl": {
+    "getQueueCountUrl": {  # 剩余余票数
         "req_url": "/otn/confirmPassenger/getQueueCount",
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/confirmPassenger/initDc",
@@ -191,7 +210,7 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
-    "checkQueueOrderUrl": {
+    "checkQueueOrderUrl": {  # 订单队列排队
         "req_url": "/otn/confirmPassenger/confirmSingleForQueue",
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/confirmPassenger/initDc",
@@ -202,7 +221,7 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
-    "checkRandCodeAnsyn": {
+    "checkRandCodeAnsyn": {  # 暂时没用到
         "req_url": "/otn/passcodeNew/checkRandCodeAnsyn",
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/confirmPassenger/initDc",
@@ -213,7 +232,7 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
-    "codeImgByOrder": {
+    "codeImgByOrder": {  # 订单页面验证码
         "req_url": "/otn/passcodeNew/getPassCodeNew?module=passenger&rand=randp&%s" % random.random(),
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/confirmPassenger/initDc",
@@ -224,9 +243,9 @@ urls = {
         "is_logger": False,
         "is_json": False,
     },
-    "queryOrderWaitTimeUrl": {
-        "req_url": "/otn/confirmPassenger/queryOrderWaitTime",
-        "req_type": "post",
+    "queryOrderWaitTimeUrl": {  # 订单等待页面
+        "req_url": "/otn/confirmPassenger/queryOrderWaitTime?random={0}&tourFlag=dc&_json_att=",
+        "req_type": "get",
         "Referer": "https://kyfw.12306.cn/otn/confirmPassenger/initDc",
         "Host": "kyfw.12306.cn",
         "re_try": 10,
@@ -235,7 +254,7 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
-    "queryMyOrderNoCompleteUrl": {
+    "queryMyOrderNoCompleteUrl": {  # 订单查询页面
         "req_url": "/otn/queryOrder/queryMyOrderNoComplete",
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/queryOrder/initNoComplete",
@@ -246,7 +265,7 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
-    "initNoCompleteUrl": {
+    "initNoCompleteUrl": {  # 获取订单列表
         "req_url": "/otn/queryOrder/initNoComplete",
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/queryOrder/initNoComplete",
@@ -257,7 +276,7 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
-    "cancelNoCompleteMyOrder": {
+    "cancelNoCompleteMyOrder": {  # 取消订单
         "req_url": "/otn/queryOrder/cancelNoCompleteMyOrder",
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/queryOrder/initNoComplete",
@@ -268,32 +287,35 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
-    "autoSubmitOrderRequest": {
+    "autoSubmitOrderRequest": {  # 快速自动提交订单
         "req_url": "/otn/confirmPassenger/autoSubmitOrderRequest",
         "req_type": "post",
-        "Referer": "https://kyfw.12306.cn/otn/queryOrder/initNoComplete",
+        "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
         "Host": "kyfw.12306.cn",
+        "Content-Type": 1,
         "re_try": 10,
         "re_time": 0.1,
         "s_time": 0.1,
         "is_logger": True,
         "is_json": True,
     },
-    "getQueueCountAsync": {
+    "getQueueCountAsync": {  # 快速获取订单数据
         "req_url": "/otn/confirmPassenger/getQueueCountAsync",
         "req_type": "post",
-        "Referer": "https://kyfw.12306.cn/otn/queryOrder/initNoComplete",
+        "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
         "Host": "kyfw.12306.cn",
+        "Content-Type": 1,
         "re_try": 10,
         "re_time": 0.1,
         "s_time": 0.1,
         "is_logger": True,
         "is_json": True,
     },
-    "confirmSingleForQueueAsys": {
+    "confirmSingleForQueueAsys": {  # 快速订单排队
         "req_url": "/otn/confirmPassenger/confirmSingleForQueueAsys",
         "req_type": "post",
-        "Referer": "https://kyfw.12306.cn/otn/queryOrder/initNoComplete",
+        "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
+        "Content-Type": 1,
         "Host": "kyfw.12306.cn",
         "re_try": 10,
         "re_time": 0.1,

@@ -43,6 +43,7 @@ class select:
         self.user_info = ""
         self.secretStr = ""
         self.ticket_black_list = dict()
+        self.ticket_black_list_time = dict()
         self.is_check_user = dict()
         self.httpClint = HTTPClient()
         self.confUrl = urlConf.urls
@@ -204,7 +205,7 @@ class select:
             'REPEAT_SUBMIT_TOKEN': self.token
         }
         jsonData = self.httpClint.send(get_passengerDTOs, get_data)
-        if 'data' in jsonData and jsonData['data'] and 'normal_passengers' in jsonData['data'] and jsonData['data'][
+        if 'data' in jsonData and jsonData['data'] and 'l' in jsonData['data'] and jsonData['data'][
             'normal_passengers']:
             normal_passengers = jsonData['data']['normal_passengers']
             _normal_passenger = [normal_passengers[i] for i in range(len(normal_passengers))if normal_passengers[i]["passenger_name"] in self.ticke_peoples]
@@ -337,7 +338,7 @@ class select:
         """
         获取getPassengerTicketStr 提交对应的代号码
         :param str: 坐席
-        :return: 
+        :return:
         """
         passengerTicketStr = {
             '一等座': 'M',
@@ -581,7 +582,7 @@ class select:
                     elif "waitTime"in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["waitTime"]:
                         print(u"排队等待时间预计还剩 {0} ms".format(0-queryOrderWaitTimeResult["data"]["waitTime"]))
                     else:
-                        print ("正在等待中")
+                        print (u"正在等待中")
                 elif "messages" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["messages"]:
                     print(u"排队等待失败： " + queryOrderWaitTimeResult["messages"])
                 else:
@@ -732,7 +733,8 @@ class select:
                 print u"正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  cdn轮询IP {4} 当前cdn总数{5} 总耗时{3}ms".format(num,
                                                                                                  ",".join(self.station_dates),
                                                                                                  ",".join(self.station_trains),
-                                                                                                 (datetime.datetime.now()-start_time).microseconds/1000, self.httpClint.cdn,
+                                                                                                 (datetime.datetime.now()-start_time).microseconds/1000,
+                                                                                                 self.httpClint.cdn,
                                                                                                  len(self.cdn_list))
                 self.set_cdn()
             except PassengerUserException as e:

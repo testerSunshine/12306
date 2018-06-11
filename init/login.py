@@ -216,10 +216,14 @@ class GoLogin:
         login_num = 0
         while True:
             self.cookietp()
-            self.httpClint.set_cookies(_jc_save_showIns="true",
-                                       _jc_save_wfdc_flag="dc",
-                                       _jc_save_fromDate=_get_yaml()["set"]["station_dates"][0],
-                                       _jc_save_toDate=_get_yaml()["set"]["station_dates"][0])
+            # self.httpClint.set_cookies(_jc_save_showIns="true",
+            #                            _jc_save_wfdc_flag="dc",
+            #                            _jc_save_toDate="2018-06-06",
+            #                            _jc_save_fromDate=_get_yaml()["set"]["station_dates"][0],
+            #                            RAIL_EXPIRATION="1528337042724",
+            #                            RAIL_DEVICEID="O6DFHLmFChFrZUI7QyY9xcqj94eZG9JH_kD3zSZt53tkCUq0uqdvlo1fm_CmNxr_QAnMOU79JmHI8jbtj2vaNUnOZKCqcsMNbhCaoDIB3vxgsyzMMGOZF-CknXKEFaCLPGyDNXEknPDs7xgSbanwKqsiSRT41xti",
+            #
+            # )
             self.urlConf["getCodeImg"]["req_url"] = self.urlConf["getCodeImg"]["req_url"].format(random.random())
             self.readImg(self.urlConf["getCodeImg"])
             self.randCode = self.getRandCode()

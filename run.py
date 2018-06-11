@@ -1,10 +1,11 @@
 # -*- coding=utf-8 -*-
-from init import login, select_ticket_info
+from init import login, select_ticket_info, SelectTicketInfoFast
 
 
 def run():
     # login.main()
-    select_ticket_info.select().main()
+    SelectTicketInfoFast.selectFast().main()
+    # select_ticket_info.select().main()
 
 
 if __name__ == '__main__':

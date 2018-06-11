@@ -41,11 +41,11 @@
 
 set:
   station_dates:
-    - "2018-03-19"
-#    - "2018-02-21"
+    - "2018-06-21"
+    - "2018-06-22"
 
   station_trains:
-    - "G4831"
+    - "G1321"
 
   from_station: "上海"
   to_station: "长沙"
@@ -60,7 +60,7 @@ set:
   12306count:
 #    - uesr: ""
 #    - pwd: "apple1995"
-    - uesr: "@qq.com"
+    - uesr: "931128603@qq.com"
     - pwd: "QWERTY"
 
 select_refresh_interval: 1

@@ -79,10 +79,8 @@ set:
   ticke_peoples:
     - "文贤平"
   12306count:
-#    - uesr: "qqxin1011"
-#    - pwd: "quxm19861011"
-    - uesr: "931128603@qq.com"
-    - pwd: "QWERTY"
+    - uesr: "@qq.com"
+    - pwd: ""
 
 select_refresh_interval: 1
 ticket_black_list_time: 5
@@ -96,10 +94,10 @@ damatu:
 
 email_conf:
   is_email: True
-  email: "931128603@qq.com "
-  notice_email_list: "931128603@qq.com"
-  username: "931128603"
-  password: "xrvenridfpnnbehh"
+  email: "@qq.com "
+  notice_email_list: "@qq.com"
+  username: ""
+  password: ""
   host: "smtp.qq.com"
 
 is_cdn: 2

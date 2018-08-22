@@ -67,22 +67,22 @@ class select:
         select_refresh_interval = ticket_info_config["select_refresh_interval"]
         station_trains = ticket_info_config["set"]["station_trains"]
         ticket_black_list_time = ticket_info_config["ticket_black_list_time"]
-        print u"*"*20
+        print u"*" * 20
         print u"12306刷票小助手，最后更新于2018.2.28，请勿作为商业用途，交流群号：286271084"
         print u"如果有好的margin，请联系作者，表示非常感激\n"
-        print u"当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}s(如果想随机刷新，请自行修改)\n候选购买车次：{7}\n僵尸票关小黑屋时长：{8}\n".format\
-                                                                                      (
-                                                                                      from_station,
-                                                                                      to_station,
-                                                                                      station_dates,
-                                                                                      ",".join(set_type),
-                                                                                      is_more_ticket,
-                                                                                      ",".join(ticke_peoples),
-                                                                                      select_refresh_interval,
-                                                                                      ",".join(station_trains),
-                                                                                      ticket_black_list_time,
+        print u"当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n刷新间隔：{6}s(如果想随机刷新，请自行修改)\n候选购买车次：{7}\n僵尸票关小黑屋时长：{8}\n".format \
+                (
+                from_station,
+                to_station,
+                station_dates,
+                ",".join(set_type),
+                is_more_ticket,
+                ",".join(ticke_peoples),
+                select_refresh_interval,
+                ",".join(station_trains),
+                ticket_black_list_time,
             )
-        print u"*"*20
+        print u"*" * 20
         return from_station, to_station, station_dates, set_type, is_more_ticket, ticke_peoples, select_refresh_interval, station_trains, ticket_black_list_time
 
     def get_order_request_params(self):
@@ -171,7 +171,7 @@ class select:
         :return: token
         """
         initdc_url = self.confUrl["initdc_url"]
-        initdc_result = self.httpClint.send(initdc_url,)
+        initdc_result = self.httpClint.send(initdc_url, )
         token_name = re.compile(r"var globalRepeatSubmitToken = '(\S+)'")
         ticketInfoForPassengerForm_name = re.compile(r'var ticketInfoForPassengerForm=(\{.+\})?')
         order_request_params_name = re.compile(r'var orderRequestDTO=(\{.+\})?')
@@ -207,7 +207,8 @@ class select:
         if 'data' in jsonData and jsonData['data'] and 'normal_passengers' in jsonData['data'] and jsonData['data'][
             'normal_passengers']:
             normal_passengers = jsonData['data']['normal_passengers']
-            _normal_passenger = [normal_passengers[i] for i in range(len(normal_passengers))if normal_passengers[i]["passenger_name"] in self.ticke_peoples]
+            _normal_passenger = [normal_passengers[i] for i in range(len(normal_passengers)) if
+                                 normal_passengers[i]["passenger_name"] in self.ticke_peoples]
             return _normal_passenger if _normal_passenger else [normal_passengers[0]]  # 如果配置乘车人没有在账号，则默认返回第一个用户
         else:
             if 'data' in jsonData and 'exMsg' in jsonData['data'] and jsonData['data']['exMsg']:
@@ -224,7 +225,7 @@ class select:
         station_ticket = self.httpClint.send(self.confUrl["select_url"])
         return json.loads(station_ticket)
 
-    def submitOrderRequestImplement(self, from_station, to_station,):
+    def submitOrderRequestImplement(self, from_station, to_station, ):
         """
         提交车次信息
         车次对应字典
@@ -239,7 +240,8 @@ class select:
         } 参照station_seat()方法
         :return:
         """
-        station_tickets = [self.submitOrderRequestFunc(from_station, to_station, station_date) for station_date in self.station_dates]
+        station_tickets = [self.submitOrderRequestFunc(from_station, to_station, station_date) for station_date in
+                           self.station_dates]
         for station_ticket in station_tickets:
             value = station_ticket['data']
             if not value:
@@ -252,13 +254,17 @@ class select:
                             for j in range(len(self._station_seat)):
                                 is_ticket_pass = ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))]
                                 # print self._station_seat[j]
-                                if is_ticket_pass != '' and is_ticket_pass != '无' and ticket_info[3] in self.station_trains and is_ticket_pass != '*':  # 过滤有效目标车次
+                                if is_ticket_pass != '' and is_ticket_pass != '无' and ticket_info[
+                                    3] in self.station_trains and is_ticket_pass != '*':  # 过滤有效目标车次
                                     # tiket_values = [k for k in value['map'].values()]
                                     self.secretStr = ticket_info[0]
                                     train_no = ticket_info[3]
                                     print (u'车次: ' + train_no + ' 始发车站: ' + self.from_station + ' 终点站: ' +
-                                           self.to_station + ' ' + self._station_seat[j].encode("utf8") + ':' + ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))])
-                                    if self.ticket_black_list.has_key(train_no) and (datetime.datetime.now() - self.ticket_black_list[train_no]).seconds/60 < int(self.ticket_black_list_time):
+                                           self.to_station + ' ' + self._station_seat[j].encode("utf8") + ':' +
+                                           ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))])
+                                    if self.ticket_black_list.has_key(train_no) and (
+                                            datetime.datetime.now() - self.ticket_black_list[
+                                            train_no]).seconds / 60 < int(self.ticket_black_list_time):
                                         print(u"该车次{} 正在被关小黑屋，跳过此车次".format(train_no))
                                         break
                                     else:
@@ -375,7 +381,7 @@ class select:
                 self.user_info[0]['mobile_no'] + ',N')
             oldPassengerStr.append(
                 self.user_info[0]['passenger_name'] + "," + self.user_info[0]['passenger_id_type_code'] + "," +
-                self.user_info[0]['passenger_id_no'] + "," + self.user_info[0]['passenger_type'] + '_')
+                self.user_info[0]['passenger_id_no'] + "," + self.user_info[0]['passenger_type'])
         else:
             for i in range(len(self.user_info)):
                 passengerTicketStrList.append(
@@ -397,24 +403,27 @@ class select:
         passengerTicketStrList, oldPassengerStr = self.getPassengerTicketStrListAndOldPassengerStr()
         checkOrderInfoUrl = self.confUrl["checkOrderInfoUrl"]
         data = collections.OrderedDict()
+        data['passengerTicketStr'] = self.set_type + "," + ",".join(passengerTicketStrList).rstrip(
+            "_{0}".format(self.set_type))
+        data['oldPassengerStr'] = "".join(oldPassengerStr)
+        data['REPEAT_SUBMIT_TOKEN'] = self.token
+        data['randCode'] = ""
         data['cancel_flag'] = 2
         data['bed_level_order_num'] = "000000000000000000000000000000"
-        data['passengerTicketStr'] = self.set_type + "," + ",".join(passengerTicketStrList).rstrip("_{0}".format(self.set_type))
-        data['oldPassengerStr'] = "".join(oldPassengerStr)
         data['tour_flag'] = 'dc'
-        data['whatsSelect'] = 1
-        data['REPEAT_SUBMIT_TOKEN'] = self.token
+        data['_json_att'] = ""
         checkOrderInfo = self.httpClint.send(checkOrderInfoUrl, data)
         if 'data' in checkOrderInfo:
+            ifShowPassCodeTime = int(checkOrderInfo["data"]["ifShowPassCodeTime"]) / float(1000)
             if "ifShowPassCode" in checkOrderInfo["data"] and checkOrderInfo["data"]["ifShowPassCode"] == "Y":
                 is_need_code = True
-                if self.getQueueCount(train_no, set_type, is_need_code):
+                if self.getQueueCount(train_no, set_type, is_need_code, ifShowPassCodeTime):
                     return True
             if "ifShowPassCode" in checkOrderInfo["data"] and checkOrderInfo['data']['submitStatus'] is True:
-                    print (u'车票提交通过，正在尝试排队')
-                    is_need_code = False
-                    if self.getQueueCount(train_no, set_type, is_need_code):
-                        return True
+                print (u'车票提交通过，正在尝试排队')
+                is_need_code = False
+                if self.getQueueCount(train_no, set_type, is_need_code, ifShowPassCodeTime):
+                    return True
             else:
                 if "errMsg" in checkOrderInfo['data'] and checkOrderInfo['data']["errMsg"]:
                     print checkOrderInfo['data']["errMsg"]
@@ -424,24 +433,31 @@ class select:
         elif 'messages' in checkOrderInfo and checkOrderInfo['messages']:
             print (checkOrderInfo['messages'][0])
 
-    def getQueueCount(self, train_no, set_type, is_need_code):
+    def getQueueCount(self, train_no, set_type, is_need_code, ifShowPassCodeTime):
         """
         # 模拟查询当前的列车排队人数的方法
         # 返回信息组成的提示字符串
         :param token:
         :return:
         """
-        l_time = time.localtime(time.time())
-        new_train_date = time.strftime("%a %b %d %Y", l_time)
+        new_train_date = str(time.asctime(time.strptime(self.station_dates[0], "%Y-%m-%d"))).split(" ")
         getQueueCountUrl = self.confUrl["getQueueCountUrl"]
         data = collections.OrderedDict()
-        data['train_date'] = str(new_train_date) + " 00:00:00 GMT+0800 (中国标准时间)",
+        data['train_date'] = "{0} {1} {2} {3} {4} GMT+0800 (CST)".format(
+            new_train_date[0],
+            new_train_date[1],
+            new_train_date[3],
+            new_train_date[5],
+            time.strftime("%H:%M:%S", time.localtime(time.time()))
+        ),
         data['train_no'] = self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['train_no'],
-        data['stationTrainCode'] = self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['station_train_code'],
+        data['stationTrainCode'] = self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO'][
+                                       'station_train_code'],
         data['seatType'] = self.set_type,
-        data['fromStationTelecode'] = self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['from_station'],
+        data['fromStationTelecode'] = self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO'][
+                                          'from_station'],
         data['toStationTelecode'] = self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['to_station'],
-        data['leftTicket'] = self.get_ticketInfoForPassengerForm()['leftTicketStr'],
+        data['leftTicket'] = urllib.unquote(self.get_ticketInfoForPassengerForm()['leftTicketStr']),
         data['purpose_codes'] = self.get_ticketInfoForPassengerForm()['purpose_codes'],
         data['train_location'] = self.get_ticketInfoForPassengerForm()['train_location'],
         data['REPEAT_SUBMIT_TOKEN'] = self.get_token(),
@@ -456,7 +472,7 @@ class select:
                         print(u"当前余票数小于乘车人数，放弃订票")
                     else:
                         print(u"排队成功, 当前余票还剩余: {0} 张".format(ticket_split))
-                        if self.checkQueueOrder(is_need_code):
+                        if self.checkQueueOrder(ifShowPassCodeTime, is_need_code):
                             return True
                 else:
                     print(u"当前排队人数: {1} 当前余票还剩余:{0} 张，继续排队中".format(ticket_split, countT))
@@ -488,7 +504,7 @@ class select:
         fresult = self.httpClint.send(checkRandCodeAnsyn, randData)  # 校验验证码是否正确
         return fresult['data']['msg']
 
-    def checkQueueOrder(self, is_node_code=False):
+    def checkQueueOrder(self, ifShowPassCodeTime, is_node_code=False):
         """
         模拟提交订单是确认按钮，参数获取方法还是get_ticketInfoForPassengerForm 中获取
         :return: 
@@ -497,13 +513,14 @@ class select:
         passengerTicketStrList, oldPassengerStr = self.getPassengerTicketStrListAndOldPassengerStr()
         checkQueueOrderUrl = self.confUrl["checkQueueOrderUrl"]
         data = {
-            "passengerTicketStr": self.set_type + "," + ",".join(passengerTicketStrList).rstrip("_{0}".format(self.set_type)),
+            "passengerTicketStr": self.set_type + "," + ",".join(passengerTicketStrList).rstrip(
+                "_{0}".format(self.set_type)),
             "oldPassengerStr": "".join(oldPassengerStr),
             "purpose_codes": self.get_ticketInfoForPassengerForm()["purpose_codes"],
-            "key_check_isChange": self.get_ticketInfoForPassengerForm()["key_check_isChange"],
-            "leftTicketStr": self.get_ticketInfoForPassengerForm()["leftTicketStr"],
+            "key_check_isChange": urllib.unquote(self.get_ticketInfoForPassengerForm()["key_check_isChange"]),
+            "leftTicketStr": urllib.unquote(self.get_ticketInfoForPassengerForm()["leftTicketStr"]),
             "train_location": self.get_ticketInfoForPassengerForm()["train_location"],
-            "seatDetailType": "000",   # 开始需要选择座位，但是目前12306不支持自动选择作为，那这个参数为默认
+            "seatDetailType": "",  # 开始需要选择座位，但是目前12306不支持自动选择作为，那这个参数为默认
             "roomType": "00",  # 好像是根据一个id来判断选中的，两种 第一种是00，第二种是10，但是我在12306的页面没找到该id，目前写死是00，不知道会出什么错
             "dwAll": "N",
             "whatsSelect": 1,
@@ -523,13 +540,14 @@ class select:
                         data['randCode'] = randCode
                         break
                     else:
-                        print (u"验证码有误, {0}次尝试重试".format(i+1))
+                        print (u"验证码有误, {0}次尝试重试".format(i + 1))
                 print(u"验证码超过限定次数3次，放弃此次订票机会!")
             else:
                 print(u"不需要验证码")
             buy_end_time = (datetime.datetime.now() - self.buy_ticket_time).seconds
             print(u"总共花费时长{0}S".format(buy_end_time))
-            time.sleep(8-buy_end_time if buy_end_time<8 else 0)
+            print(ifShowPassCodeTime)
+            time.sleep(ifShowPassCodeTime)
             checkQueueOrderResult = self.httpClint.send(checkQueueOrderUrl, data)
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
@@ -572,20 +590,24 @@ class select:
                 queryOrderWaitTimeResult = {}
             if queryOrderWaitTimeResult:
                 if "status" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["status"]:
-                    if "orderId" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["orderId"] is not None:
-                        sendEmail(u"恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(queryOrderWaitTimeResult["data"]["orderId"]))
-                        raise ticketIsExitsException(u"恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(queryOrderWaitTimeResult["data"]["orderId"]))
+                    if "orderId" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"][
+                        "orderId"] is not None:
+                        sendEmail(u"恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(
+                            queryOrderWaitTimeResult["data"]["orderId"]))
+                        raise ticketIsExitsException(u"恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！".format(
+                            queryOrderWaitTimeResult["data"]["orderId"]))
                     elif "msg" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["msg"]:
                         print queryOrderWaitTimeResult["data"]["msg"]
                         break
-                    elif "waitTime"in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"]["waitTime"]:
-                        print(u"排队等待时间预计还剩 {0} ms".format(0-queryOrderWaitTimeResult["data"]["waitTime"]))
+                    elif "waitTime" in queryOrderWaitTimeResult["data"] and queryOrderWaitTimeResult["data"][
+                        "waitTime"]:
+                        print(u"排队等待时间预计还剩 {0} ms".format(0 - queryOrderWaitTimeResult["data"]["waitTime"]))
                     else:
                         print ("正在等待中")
                 elif "messages" in queryOrderWaitTimeResult and queryOrderWaitTimeResult["messages"]:
                     print(u"排队等待失败： " + queryOrderWaitTimeResult["messages"])
                 else:
-                    print(u"第{}次排队中,请耐心等待".format(num+1))
+                    print(u"第{}次排队中,请耐心等待".format(num + 1))
             else:
                 print(u"排队中")
             time.sleep(2)
@@ -606,13 +628,17 @@ class select:
         except ValueError:
             queryMyOrderNoCompleteResult = {}
         if queryMyOrderNoCompleteResult:
-            if "data" in queryMyOrderNoCompleteResult and queryMyOrderNoCompleteResult["data"] and "orderDBList" in queryMyOrderNoCompleteResult["data"] and queryMyOrderNoCompleteResult["data"]["orderDBList"]:
+            if "data" in queryMyOrderNoCompleteResult and queryMyOrderNoCompleteResult["data"] and "orderDBList" in \
+                    queryMyOrderNoCompleteResult["data"] and queryMyOrderNoCompleteResult["data"]["orderDBList"]:
                 orderId = queryMyOrderNoCompleteResult["data"]["orderDBList"][0]["sequence_no"]
                 return orderId
-            elif "data" in queryMyOrderNoCompleteResult and "orderCacheDTO" in queryMyOrderNoCompleteResult["data"] and queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]:
-                if "message" in queryMyOrderNoCompleteResult["data"]["orderCacheDTO"] and queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]:
+            elif "data" in queryMyOrderNoCompleteResult and "orderCacheDTO" in queryMyOrderNoCompleteResult["data"] and \
+                    queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]:
+                if "message" in queryMyOrderNoCompleteResult["data"]["orderCacheDTO"] and \
+                        queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]:
                     print(queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]["message"])
-                    raise ticketNumOutException(queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]["message"])
+                    raise ticketNumOutException(
+                        queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]["message"])
             else:
                 if "message" in queryMyOrderNoCompleteResult and queryMyOrderNoCompleteResult["message"]:
                     print queryMyOrderNoCompleteResult["message"]
@@ -645,7 +671,8 @@ class select:
             "_json_att": ""
         }
         cancelNoCompleteMyOrderResult = self.httpClint.send(cancelNoCompleteMyOrderUrl, cancelNoCompleteMyOrderData)
-        if "data" in cancelNoCompleteMyOrderResult and "existError" in cancelNoCompleteMyOrderResult["data"] and cancelNoCompleteMyOrderResult["data"]["existError"] == "N":
+        if "data" in cancelNoCompleteMyOrderResult and "existError" in cancelNoCompleteMyOrderResult["data"] and \
+                cancelNoCompleteMyOrderResult["data"]["existError"] == "N":
             print(u"排队超时，已为您自动取消订单，订单编号: {0}".format(sequence_no))
             time.sleep(2)
             return True
@@ -660,7 +687,7 @@ class select:
         if self.is_cdn == 1:
             while True:
                 if self.cdn_list:
-                    self.httpClint.cdn = self.cdn_list[random.randint(0, len(self.cdn_list)-1)]
+                    self.httpClint.cdn = self.cdn_list[random.randint(0, len(self.cdn_list) - 1)]
                     break
                 else:
                     pass
@@ -676,7 +703,7 @@ class select:
             self.login.go_login()
 
     def cdn_req(self, cdn):
-        for i in range(len(cdn)-1):
+        for i in range(len(cdn) - 1):
             http = HTTPClient()
             urls = self.confUrl["loginInit"]
             start_time = datetime.datetime.now()
@@ -715,11 +742,14 @@ class select:
         while 1:
             try:
                 num += 1
-                if "user_time" in self.is_check_user and (datetime.datetime.now() - self.is_check_user["user_time"]).seconds/60 > 5:
+                if "user_time" in self.is_check_user and (
+                        datetime.datetime.now() - self.is_check_user["user_time"]).seconds / 60 > 5:
                     # 5分钟检查一次用户是否登录
                     self.check_user()
                 time.sleep(self.select_refresh_interval)
-                if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00" or time.strftime('%H:%M:%S', time.localtime(time.time())) < "06:00:00":
+                if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00" or time.strftime('%H:%M:%S',
+                                                                                                        time.localtime(
+                                                                                                                time.time())) < "06:00:00":
                     print(u"12306休息时间，本程序自动停止,明天早上6点将自动运行")
                     while 1:
                         time.sleep(1)
@@ -730,10 +760,14 @@ class select:
                 start_time = datetime.datetime.now()
                 self.submitOrderRequestImplement(from_station, to_station)
                 print u"正在第{0}次查询  乘车日期: {1}  车次{2} 查询无票  cdn轮询IP {4} 当前cdn总数{5} 总耗时{3}ms".format(num,
-                                                                                                 ",".join(self.station_dates),
-                                                                                                 ",".join(self.station_trains),
-                                                                                                 (datetime.datetime.now()-start_time).microseconds/1000, self.httpClint.cdn,
-                                                                                                 len(self.cdn_list))
+                                                                                                  ",".join(
+                                                                                                      self.station_dates),
+                                                                                                  ",".join(
+                                                                                                      self.station_trains),
+                                                                                                  (
+                                                                                                              datetime.datetime.now() - start_time).microseconds / 1000,
+                                                                                                  self.httpClint.cdn,
+                                                                                                  len(self.cdn_list))
                 self.set_cdn()
             except PassengerUserException as e:
                 print e.message
@@ -757,8 +791,8 @@ class select:
                     print(e.message)
             except KeyError as e:
                 print(e.message)
-            except TypeError as e:
-                print(u"12306接口无响应，正在重试 {0}".format(e.message))
+            # except TypeError as e:
+            #     print(u"12306接口无响应，正在重试 {0}".format(e.message))
             except socket.error as e:
                 print(e.message)
 

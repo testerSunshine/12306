@@ -216,10 +216,6 @@ class GoLogin:
         login_num = 0
         while True:
             self.cookietp()
-            self.httpClint.set_cookies(_jc_save_showIns="true",
-                                       _jc_save_wfdc_flag="dc",
-                                       _jc_save_fromDate=_get_yaml()["set"]["station_dates"][0],
-                                       _jc_save_toDate=_get_yaml()["set"]["station_dates"][0])
             self.urlConf["getCodeImg"]["req_url"] = self.urlConf["getCodeImg"]["req_url"].format(random.random())
             self.readImg(self.urlConf["getCodeImg"])
             self.randCode = self.getRandCode()

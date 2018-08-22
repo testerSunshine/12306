@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 import json
 import socket
+from collections import OrderedDict
 from time import sleep
 
 import requests
@@ -48,17 +49,16 @@ class HTTPClient(object):
 
     def _set_header(self):
         """设置header"""
-        return {
-            "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
-            "X-Requested-With": "application/json, text/javascript, */*; q=0.01",
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/604.3.5 (KHTML, like Gecko) Version/11.0.1 Safari/604.3.5",
-            "Referer": "https://kyfw.12306.cn/otn/login/init",
-            "Accept": "*/*",
-            "Accept-Encoding": "br, gzip, deflate",
-            "Origin": "https://kyfw.12306.cn",
-            "Accept-Language": "zh-cn",
-            "Connection": "keep-alive",
-        }
+        header_dict = OrderedDict()
+        header_dict["Host"] = "kyfw.12306.cn"
+        header_dict["keep-alive"] = "keep-alive"
+        header_dict["Accept"] = "application/json, text/plain, */*"
+        header_dict[
+            "User-Agent"] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) 12306-electron/1.0.1 Chrome/59.0.3071.115 Electron/1.8.4 Safari/537.36"
+        header_dict["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
+        header_dict["Accept-Encoding"] = "gzip, deflate"
+        header_dict["Accept-Language"] = "zh-CN"
+        return header_dict
 
     def setHeaders(self, headers):
         self._s.headers.update(headers)
@@ -103,7 +103,6 @@ class HTTPClient(object):
         allow_redirects = False
         is_logger = urls["is_logger"]
         error_data = {"code": 99999, "message": u"重试次数达到上限"}
-        self.setHeadersReferer(urls["Referer"])
         if data:
             method = "post"
             self.setHeaders({"Content-Length": "{0}".format(len(data))})

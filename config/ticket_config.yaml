@@ -41,26 +41,47 @@
 
 set:
   station_dates:
-    - "2018-03-19"
-#    - "2018-02-21"
+    - "2018-09-05"
 
   station_trains:
-    - "G4831"
+    - "G6504"
+    - "G6224"
+    - "G6032"
+    - "G6346"
+    - "G6218"
+    - "G6030"
+    - "G1006"
+    - "G818"
+    - "G532"
+    - "G6552"
+    - "G6208"
+    - "G822"
+    - "G6506"
+    - "G1008"
+    - "G6508"
+    - "G9710"
+    - "G6214"
+    - "G6234"
+    - "G6510"
+    - "G6016"
+    - "G6514"
+    - "G6512"
+    - "G1010"
+    - "G2904"
+    - "G6204"
+    - "G6034"
 
-  from_station: "上海"
-  to_station: "长沙"
+  from_station: "深圳"
+  to_station: "广州"
   set_type:
     - "二等座"
-    - "商务座"
-    - "一等座"
   is_more_ticket: True
   ticke_peoples:
     - "文贤平"
-#    - "彭淑杰"
   12306count:
-#    - uesr: ""
-#    - pwd: "apple1995"
-    - uesr: "@qq.com"
+#    - uesr: "qqxin1011"
+#    - pwd: "quxm19861011"
+    - uesr: "931128603@qq.com"
     - pwd: "QWERTY"
 
 select_refresh_interval: 1
@@ -75,14 +96,10 @@ damatu:
 
 email_conf:
   is_email: True
-  email: "@qq.com "
-  notice_email_list: "@qq.com"
-  username: ""
-  password: ""
+  email: "931128603@qq.com "
+  notice_email_list: "931128603@qq.com"
+  username: "931128603"
+  password: "xrvenridfpnnbehh"
   host: "smtp.qq.com"
 
 is_cdn: 2
-
-
-
-

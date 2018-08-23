@@ -440,14 +440,14 @@ class select:
         :param token:
         :return:
         """
-        new_train_date = str(time.asctime(time.strptime(self.station_dates[0], "%Y-%m-%d"))).split(" ")
+        new_train_date = filter(None, str(time.asctime(time.strptime(self.station_dates[0], "%Y-%m-%d"))).split(" "))
         getQueueCountUrl = self.confUrl["getQueueCountUrl"]
         data = collections.OrderedDict()
         data['train_date'] = "{0} {1} {2} {3} {4} GMT+0800 (CST)".format(
             new_train_date[0],
             new_train_date[1],
-            new_train_date[3],
-            new_train_date[5],
+            new_train_date[2],
+            new_train_date[4],
             time.strftime("%H:%M:%S", time.localtime(time.time()))
         ),
         data['train_no'] = self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['train_no'],

@@ -381,7 +381,7 @@ class select:
                 self.user_info[0]['mobile_no'] + ',N')
             oldPassengerStr.append(
                 self.user_info[0]['passenger_name'] + "," + self.user_info[0]['passenger_id_type_code'] + "," +
-                self.user_info[0]['passenger_id_no'] + "," + self.user_info[0]['passenger_type'])
+                self.user_info[0]['passenger_id_no'] + "," + self.user_info[0]['passenger_type'] + '_')
         else:
             for i in range(len(self.user_info)):
                 passengerTicketStrList.append(
@@ -443,7 +443,7 @@ class select:
         new_train_date = filter(None, str(time.asctime(time.strptime(self.station_dates[0], "%Y-%m-%d"))).split(" "))
         getQueueCountUrl = self.confUrl["getQueueCountUrl"]
         data = collections.OrderedDict()
-        data['train_date'] = "{0} {1} {2} {3} {4} GMT+0800 (CST)".format(
+        data['train_date'] = "{0} {1} 0{2} {3} 00:00:00 GMT+0800 (中国标准时间)".format(
             new_train_date[0],
             new_train_date[1],
             new_train_date[2],
@@ -457,7 +457,7 @@ class select:
         data['fromStationTelecode'] = self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO'][
                                           'from_station'],
         data['toStationTelecode'] = self.get_ticketInfoForPassengerForm()['queryLeftTicketRequestDTO']['to_station'],
-        data['leftTicket'] = urllib.unquote(self.get_ticketInfoForPassengerForm()['leftTicketStr']),
+        data['leftTicket'] = self.get_ticketInfoForPassengerForm()['leftTicketStr'],
         data['purpose_codes'] = self.get_ticketInfoForPassengerForm()['purpose_codes'],
         data['train_location'] = self.get_ticketInfoForPassengerForm()['train_location'],
         data['REPEAT_SUBMIT_TOKEN'] = self.get_token(),
@@ -517,8 +517,8 @@ class select:
                 "_{0}".format(self.set_type)),
             "oldPassengerStr": "".join(oldPassengerStr),
             "purpose_codes": self.get_ticketInfoForPassengerForm()["purpose_codes"],
-            "key_check_isChange": urllib.unquote(self.get_ticketInfoForPassengerForm()["key_check_isChange"]),
-            "leftTicketStr": urllib.unquote(self.get_ticketInfoForPassengerForm()["leftTicketStr"]),
+            "key_check_isChange": self.get_ticketInfoForPassengerForm()["key_check_isChange"],
+            "leftTicketStr": self.get_ticketInfoForPassengerForm()["leftTicketStr"],
             "train_location": self.get_ticketInfoForPassengerForm()["train_location"],
             "seatDetailType": "",  # 开始需要选择座位，但是目前12306不支持自动选择作为，那这个参数为默认
             "roomType": "00",  # 好像是根据一个id来判断选中的，两种 第一种是00，第二种是10，但是我在12306的页面没找到该id，目前写死是00，不知道会出什么错

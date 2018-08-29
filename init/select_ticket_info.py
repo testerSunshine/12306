@@ -4,9 +4,7 @@ import random
 import socket
 import sys
 import time
-
 import wrapcache
-
 from config import urlConf
 from config.TicketEnmu import ticket
 from config.ticketConf import _get_yaml
@@ -121,7 +119,6 @@ class select:
             try:
                 num += 1
                 checkUser(self).sendCheckUser()
-                time.sleep(self.select_refresh_interval)
                 if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00" or time.strftime('%H:%M:%S',
                                                                                                         time.localtime(
                                                                                                             time.time())) < "06:00:00":
@@ -187,8 +184,8 @@ class select:
 
 
                 else:
-                    s_time = random.randint(0, 4)
-                    time.sleep(s_time)
+                    random_time = random.uniform(1, 4)
+                    time.sleep(round(random_time, 2))
                     print u"正在第{0}次查询 随机停留时长：{6} 乘车日期: {1} 车次：{2} 查询无票 cdn轮询IP：{4}当前cdn总数：{5} 总耗时：{3}ms".format(num,
                                                                                                                 ",".join(
                                                                                                                     self.station_dates),
@@ -199,7 +196,7 @@ class select:
                                                                                                                 self.httpClint.cdn,
                                                                                                                 len(
                                                                                                                     self.cdn_list),
-                                                                                                                s_time)
+                                                                                                                random_time)
             except PassengerUserException as e:
                 print e.message
                 break

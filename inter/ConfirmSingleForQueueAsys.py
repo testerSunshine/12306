@@ -3,6 +3,8 @@ import json
 import urllib
 from collections import OrderedDict
 
+from inter.QueryOrderWaitTime import queryOrderWaitTime
+
 
 class confirmSingleForQueueAsys:
     """
@@ -64,15 +66,7 @@ class confirmSingleForQueueAsys:
         if confirmSingleForQueueAsysResult.get("status", False) and confirmSingleForQueueAsysResult.get("data", False):
             queueData = confirmSingleForQueueAsysResult.get("data", {})
             if queueData.get("submitStatus", False):
-                return {
-                    "status": True
-                }
+                qwt = queryOrderWaitTime(session=self.session)
+                qwt.sendQueryOrderWaitTime()
             else:
                 print(queueData.get("errMsg", ""))
-                return {
-                    "status": False
-                }
-        else:
-            return {
-                "status": False
-            }

@@ -89,7 +89,7 @@ class queryOrderWaitTime:
                 else:
                     return False
         else:
-            print(u"接口 {} 无响应".format(queryMyOrderNoCompleteUrl))
+            return False
 
     def initNoComplete(self):
         """
@@ -121,3 +121,4 @@ class queryOrderWaitTime:
             return True
         else:
             print(ticket.CANCEL_ORDER_FAIL.format(sequence_no))
+            return False

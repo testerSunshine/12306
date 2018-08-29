@@ -33,3 +33,8 @@ class ticket(object):
     CANCEL_ORDER_SUCCESS = u"排队超时，已为您自动取消订单，订单编号: {0}"
     CANCEL_ORDER_FAIL = u"排队超时，取消订单失败， 订单号{0}"
 
+    REST_TIME = u"12306休息时间，本程序自动停止,明天早上6点将自动运行"
+    REST_TIME_PAST = u"休息时间已过，重新开启检票功能"
+
+    LOGIN_SESSION_FAIL = u"用户检查失败：{0}，可能未登录，可能session已经失效, 正在重新登录中"
+

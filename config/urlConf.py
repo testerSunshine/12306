@@ -71,7 +71,7 @@ urls = {
         "req_type": "get",
         "Referer": "https://kyfw.12306.cn/otn/index/init",
         "Host": "kyfw.12306.cn",
-        "re_try": 10,
+        "re_try": 1,
         "re_time": 0.1,
         "s_time": 0.1,
         "is_logger": False,
@@ -157,7 +157,7 @@ urls = {
     },
     "select_url": {  # 查询余票
         "req_url": "/otn/leftTicket/query?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT",
-        "req_type": "post",
+        "req_type": "get",
         "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
         "Host": "kyfw.12306.cn",
         "re_try": 10,

@@ -1,12 +1,16 @@
 # -*- coding=utf-8 -*-
-from init import login, select_ticket_info, SelectTicketInfoFast
+from config.emailConf import sendEmail
+from init import select_ticket_info
 
 
 def run():
-    # login.main()
-    SelectTicketInfoFast.selectFast().main()
-    # select_ticket_info.select().main()
+    select_ticket_info.select().main()
+
+
+def testEmail():
+    sendEmail(u"订票小助手测试一下")
 
 
 if __name__ == '__main__':
     run()
+    # testEmail()

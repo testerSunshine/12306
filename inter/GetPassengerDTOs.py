@@ -56,7 +56,7 @@ class getPassengerDTOs:
         """
         获取提交车次人内容格式
         passengerTicketStr	O,0,1,文贤平,1,43052419950223XXXX,15618715583,N_O,0,1,梁敏,1,43052719920118XXXX,,N
-        oldPassengerStr	文贤平,1,43052719920118XXXX,1_梁敏,1,43052719920118XXXX,1_
+        oldPassengerStr	文贤平,1,43052719920118XXXX,1_梁敏,1,43052719920118XXXX,1
         :return:
         """
         passengerTicketStrList = []
@@ -89,4 +89,5 @@ class getPassengerDTOs:
             "code": ticket.SUCCESS_CODE,
             "set_type": set_type,
             "status": True,
+            "user_info": user_info,
         }

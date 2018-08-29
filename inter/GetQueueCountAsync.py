@@ -1,8 +1,13 @@
 # coding=utf-8
+import datetime
 import time
 from collections import OrderedDict
 
+import wrapcache
+
 from config.TicketEnmu import ticket
+from config.ticketConf import _get_yaml
+from inter.ConfirmSingleForQueueAsys import confirmSingleForQueueAsys
 
 
 class getQueueCountAsync:
@@ -17,7 +22,12 @@ class getQueueCountAsync:
                  toStationTelecode,
                  leftTicket,
                  set_type,
-                 users,):
+                 users,
+                 station_dates,
+                 passengerTicketStr,
+                 oldPassengerStr,
+                 result,
+                 ifShowPassCodeTime):
         self.train_no = train_no
         self.session = session
         self.stationTrainCode = stationTrainCode
@@ -26,6 +36,11 @@ class getQueueCountAsync:
         self.set_type = set_type
         self.leftTicket = leftTicket
         self.users = users
+        self.station_dates = station_dates
+        self.passengerTicketStr = passengerTicketStr
+        self.oldPassengerStr = oldPassengerStr
+        self.result = result
+        self.ifShowPassCodeTime=ifShowPassCodeTime
 
     def data_par(self):
         """
@@ -41,11 +56,15 @@ class getQueueCountAsync:
             - _json_att 没啥卵用，还是带上吧
         :return:
         """
-        l_time = time.localtime(time.time())
-        new_train_date = time.strftime("%b %d %Y %H:%M:%S", l_time)
+        new_train_date = filter(None, str(time.asctime(time.strptime(self.station_dates, "%Y-%m-%d"))).split(" "))
         data = OrderedDict()
-        # data["train_date"] = "Fri " + str(new_train_date) + " GMT+0800 (CST)"
-        data["train_date"] = "Fri Jun 21 2018 18:23:54 GMT+0800 (CST)"
+        data['train_date'] = "{0} {1} {2} {3} 00:00:00 GMT+0800 (中国标准时间)".format(
+            new_train_date[0],
+            new_train_date[1],
+            new_train_date[2],
+            new_train_date[4],
+            time.strftime("%H:%M:%S", time.localtime(time.time()))
+        ),
         data["train_no"] = self.train_no
         data["stationTrainCode"] = self.stationTrainCode
         data["seatType"] = self.set_type
@@ -76,27 +95,27 @@ class getQueueCountAsync:
                     countT = getQueueCountAsyncResult["data"]["countT"]
                     if int(countT) is 0:
                         if int(ticket_split) < self.users:
-                            print(ticket.QUEUE_TICKET_SHORT)
-                            return {"status": False, "is_black": False}
+                            print(u"当前余票数小于乘车人数，放弃订票")
                         else:
-                            print(ticket.QUEUE_TICKET_SUCCESS.format(ticket_split))
-                            return {"status": True, "is_black": False}
-                    else:
-                        return {"status": False, "is_black": True}
+                            print(u"排队成功, 当前余票还剩余: {0} 张".format(ticket_split))
+                            c = confirmSingleForQueueAsys(session=self.session,
+                                                          passengerTicketStr=self.passengerTicketStr,
+                                                          oldPassengerStr=self.oldPassengerStr,
+                                                          result=self.result,)
+                            print(u"验证码提交安全期，等待{}MS".format(self.ifShowPassCodeTime))
+                            time.sleep(self.ifShowPassCodeTime)
+                            c.sendConfirmSingleForQueueAsys()
                 else:
-                    print(ticket.QUEUE_JOIN_BLACK.format(getQueueCountAsyncResult, self.train_no))
-                    return {"status": False, "is_black": True, "train_no": self.train_no}
+                    print(u"排队发现未知错误{0}，将此列车 {1}加入小黑屋".format(getQueueCountAsyncResult, self.train_no))
+                    wrapcache.set(key=self.train_no, value=datetime.datetime.now(),
+                                  timeout=int(_get_yaml()["ticket_black_list_time"]) * 60)
             elif "messages" in getQueueCountAsyncResult and getQueueCountAsyncResult["messages"]:
-                print(ticket.QUEUE_WARNING_MSG.format(getQueueCountAsyncResult["messages"][0], self.train_no))
-                return {"status": False, "is_black": True, "train_no": self.train_no}
+                print(u"排队异常，错误信息：{0}, 将此列车 {1}加入小黑屋".format(getQueueCountAsyncResult["messages"][0], self.train_no))
+                wrapcache.set(key=self.train_no, value=datetime.datetime.now(),
+                              timeout=int(_get_yaml()["ticket_black_list_time"]) * 60)
             else:
                 if "validateMessages" in getQueueCountAsyncResult and getQueueCountAsyncResult["validateMessages"]:
                     print(str(getQueueCountAsyncResult["validateMessages"]))
-                    return {"status": False, "is_black": False}
-                else:
-                    return {"status": False, "is_black": False}
-        else:
-            return {"status": False, "is_black": False}
 
 
 

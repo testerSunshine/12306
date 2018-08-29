@@ -3,6 +3,10 @@ import urllib
 from collections import OrderedDict
 
 from config.TicketEnmu import ticket
+from config.ticketConf import _get_yaml
+from inter.CheckRandCodeAnsyn import checkRandCodeAnsyn
+from inter.GetQueueCountAsync import getQueueCountAsync
+from inter.GetRandCode import getRandCode
 
 
 class autoSubmitOrderRequest:
@@ -15,7 +19,11 @@ class autoSubmitOrderRequest:
                  query_from_station_name,
                  query_to_station_name,
                  passengerTicketStr,
-                 oldPassengerStr):
+                 oldPassengerStr,
+                 train_no,
+                 stationTrainCode,
+                 leftTicket,
+                 set_type,):
         self.secretStr = urllib.unquote(secretStr)
         self.train_date = train_date
         self.query_from_station_name = query_from_station_name
@@ -23,6 +31,10 @@ class autoSubmitOrderRequest:
         self.passengerTicketStr = passengerTicketStr
         self.oldPassengerStr = oldPassengerStr
         self.session = session
+        self.train_no = train_no
+        self.stationTrainCode = stationTrainCode
+        self.leftTicket = leftTicket
+        self.set_type = set_type
 
     def data_par(self):
         """
@@ -46,8 +58,8 @@ class autoSubmitOrderRequest:
         data["train_date"] = self.train_date
         data["tour_flag"] = "dc"
         data["purpose_codes"] = "ADULT"
-        data["query_from_station_name"] = self.query_from_station_name
-        data["query_to_station_name"] = self.query_to_station_name
+        data["query_from_station_name"] = self.session.from_station
+        data["query_to_station_name"] = self.session.to_station
         data["cancel_flag"] = 2
         data["bed_level_order_num"] = "000000000000000000000000000000"
         data["passengerTicketStr"] = self.passengerTicketStr
@@ -69,40 +81,42 @@ class autoSubmitOrderRequest:
             if requestResultData:
                 result = requestResultData.get("result", "")
                 ifShowPassCode = requestResultData.get("ifShowPassCode", "N")
+                ifShowPassCodeTime = int(requestResultData.get("ifShowPassCodeTime", "1000")) / float(1000)
                 print(ticket.AUTO_SUBMIT_ORDER_REQUEST_C)
+                g = getQueueCountAsync(session=self.session,
+                                       train_no=self.train_no,
+                                       stationTrainCode=self.stationTrainCode,
+                                       fromStationTelecode=self.query_from_station_name,
+                                       toStationTelecode=self.query_to_station_name,
+                                       leftTicket=self.leftTicket,
+                                       set_type=self.set_type,
+                                       users=len(self.session.ticke_peoples),
+                                       station_dates=self.train_date,
+                                       passengerTicketStr=self.passengerTicketStr,
+                                       oldPassengerStr=self.oldPassengerStr,
+                                       result=result,
+                                       ifShowPassCodeTime=ifShowPassCodeTime,
+                                       )
+                g.sendGetQueueCountAsync()
                 if ifShowPassCode == "Y":  # 如果需要验证码
-                    print(ticket.AUTO_SUBMIT_NEED_CODE)
-                    return {
-                        "result": result,
-                        "ifShowPassCode": ifShowPassCode,
-                        "code": ticket.SUCCESS_CODE,
-                        "ifShowPassCodeTime": requestResultData.get("requestResultData", 2000) / float(1000),
-                        "status": True,
-                    }
-                else:
-                    print(ticket.AUTO_SUBMIT_NOT_NEED_CODE)
-                    return {
-                        "result": result,
-                        "ifShowPassCode": ifShowPassCode,
-                        "code": ticket.SUCCESS_CODE,
-                        "ifShowPassCodeTime": requestResultData.get("requestResultData", 2000) / float(1000),
-                        "status": True,
-                    }
+                    print(u"需要验证码")
+                    print(u"正在使用自动识别验证码功能")
+                    for i in range(3):
+                        randCode = getRandCode(is_auto_code=True, auto_code_type=_get_yaml()["auto_code_type"])
+                        checkcode = checkRandCodeAnsyn(self.session, randCode, "")
+                        if checkcode == 'TRUE':
+                            print(u"验证码通过,正在提交订单")
+                            data['randCode'] = randCode
+                            break
+                        else:
+                            print (u"验证码有误, {0}次尝试重试".format(i + 1))
+                    print(u"验证码超过限定次数3次，放弃此次订票机会!")
+                g.sendGetQueueCountAsync()
         else:
             print(ticket.AUTO_SUBMIT_ORDER_REQUEST_F)
             if autoSubmitOrderRequestResult.get("messages", ""):
                 print(autoSubmitOrderRequestResult.get("messages", ""))
-                return {
-                    "code": ticket.FAIL_CODE,
-                    "status": False,
-                }
             elif autoSubmitOrderRequestResult.get("validateMessages", ""):
                 print(autoSubmitOrderRequestResult.get("validateMessages", ""))
-                return {
-                    "code": ticket.FAIL_CODE,
-                    "status": False,
-                }
-
-
 
 

@@ -88,7 +88,7 @@ class CDNProxy:
 
     def all_cdn(self):
         """获取cdn列表"""
-        with open('./cdn_list', 'r') as f:
+        with open('../cdn_list', 'r') as f:
             cdn = f.readlines()
             return cdn
 
@@ -103,6 +103,4 @@ class CDNProxy:
 
 if __name__ == '__main__':
     cdn = CDNProxy()
-    cdn.get_city_id()
-    # cdn.get_cdn_list()
-    cdn.par_csv()
+    cdn.get_cdn_list()

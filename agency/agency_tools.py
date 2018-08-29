@@ -1,7 +1,6 @@
 #encoding=utf8
 import socket
-import urllib
-import urllib2
+import requests
 from bs4 import BeautifulSoup
 
 
@@ -16,13 +15,12 @@ class proxy:
         :return: 
         """
         User_Agent = 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0'
-        header = {}
+        header = dict()
         header['User-Agent'] = User_Agent
 
         for i in range(1, 5):
             url = 'http://www.xicidaili.com/nn/'+str(i)
-            req = urllib2.Request(url, headers=header)
-            res = urllib2.urlopen(req).read()
+            res = requests.get(url=url, headers=header).content
 
             soup = BeautifulSoup(res, "html.parser")
             ips = soup.findAll('tr')
@@ -45,7 +43,7 @@ class proxy:
         for proxy in self.proxy_list:
             proxy_temp = {"http://": proxy}
             try:
-                urllib.urlopen(url, proxies=proxy_temp).read()
+                req = requests.get(url, proxies=proxy_temp).content
                 write_proxy = proxy+"\n"
                 f.write(write_proxy)
                 proxy_num += 1
@@ -74,4 +72,4 @@ class proxy:
 
 if __name__ == "__main__":
     a = proxy()
-    a.get_filter_proxy()
+    a.main()

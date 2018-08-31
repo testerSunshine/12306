@@ -23,7 +23,7 @@ def getRandCode(is_auto_code, auto_code_type):
                     return codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
                 else:
                     if "Error" in Result and Result["Error"]:
-                        print Result["Error"]
+                        print u"打码平台错误: {0}, 请登录打码平台查看-http://www.ruokuai.com/client/index?6726".format(Result["Error"])
                         return ""
         else:
             img = Image.open('./tkcode')
@@ -39,7 +39,14 @@ def codexy(Ofset=None, is_raw_input=True):
     :return: str
     """
     if is_raw_input:
-        Ofset = raw_input(u"请输入验证码: ")
+        print(u"""
+            *****************
+            | 0 | 1 | 2 | 3 |
+            *****************
+            | 4 | 5 | 6 | 7 |
+            *****************
+            """)
+        Ofset = raw_input(u"按照上图提示输入对应的验证码: ")
     Ofset = Ofset.replace("，", ",")
     select = Ofset.split(',')
     post = []

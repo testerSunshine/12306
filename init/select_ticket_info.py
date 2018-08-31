@@ -3,8 +3,11 @@ import datetime
 import random
 import socket
 import sys
+import threading
 import time
 import wrapcache
+
+from agency.cdn_utils import CDNProxy
 from config import urlConf
 from config.TicketEnmu import ticket
 from config.ticketConf import _get_yaml
@@ -33,7 +36,7 @@ class select:
 
     def __init__(self):
         self.from_station, self.to_station, self.station_dates, self._station_seat, self.is_more_ticket, \
-        self.ticke_peoples, self.select_refresh_interval, self.station_trains, self.ticket_black_list_time, \
+        self.ticke_peoples, self.station_trains, self.ticket_black_list_time, \
         self.order_type = self.get_ticket_info()
         self.is_auto_code = _get_yaml()["is_auto_code"]
         self.auto_code_type = _get_yaml()["auto_code_type"]
@@ -57,12 +60,11 @@ class select:
         set_type = ticket_info_config["set"]["set_type"]
         is_more_ticket = ticket_info_config["set"]["is_more_ticket"]
         ticke_peoples = ticket_info_config["set"]["ticke_peoples"]
-        select_refresh_interval = ticket_info_config["select_refresh_interval"]
         station_trains = ticket_info_config["set"]["station_trains"]
         ticket_black_list_time = ticket_info_config["ticket_black_list_time"]
         order_type = ticket_info_config["order_type"]
         print u"*" * 20
-        print u"12306刷票小助手，最后更新于2018.2.28，请勿作为商业用途，交流群号：286271084"
+        print u"12306刷票小助手，最后更新于2018.8.31，请勿作为商业用途，交流群号：286271084"
         print u"如果有好的margin，请联系作者，表示非常感激\n"
         print u"当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n" \
               u"刷新间隔：随机(1-4S)\n候选购买车次：{7}\n僵尸票关小黑屋时长：{8}\n 下单接口：{9}\n".format \
@@ -73,13 +75,12 @@ class select:
                 ",".join(set_type),
                 is_more_ticket,
                 ",".join(ticke_peoples),
-                select_refresh_interval,
                 ",".join(station_trains),
                 ticket_black_list_time,
                 order_type,
             )
         print u"*" * 20
-        return from_station, to_station, station_dates, set_type, is_more_ticket, ticke_peoples, select_refresh_interval, station_trains, ticket_black_list_time, order_type
+        return from_station, to_station, station_dates, set_type, is_more_ticket, ticke_peoples, station_trains, ticket_black_list_time, order_type
 
     def station_table(self, from_station, to_station):
         """
@@ -108,13 +109,56 @@ class select:
         else:
             self.login.go_login()
 
+    def set_cdn(self):
+        """
+        设置cdn
+        :return:
+        """
+        if self.is_cdn == 1:
+            while True:
+                if self.cdn_list:
+                    self.httpClint.cdn = self.cdn_list[random.randint(0, len(self.cdn_list) - 1)]
+
+    def cdn_req(self, cdn):
+        for i in range(len(cdn) - 1):
+            http = HTTPClient()
+            urls = self.urls["loginInit"]
+            start_time = datetime.datetime.now()
+            http.cdn = cdn[i].replace("\n", "")
+            rep = http.send(urls)
+            if rep and "message" not in rep and (datetime.datetime.now() - start_time).microseconds / 1000 < 500:
+                print("加入cdn {0}".format(cdn[i].replace("\n", "")))
+                self.cdn_list.append(cdn[i].replace("\n", ""))
+        print(u"所有cdn解析完成...")
+
+    def cdn_certification(self):
+        """
+        cdn 认证
+        :return:
+        """
+        if self.is_cdn == 1:
+            CDN = CDNProxy()
+            all_cdn = CDN.all_cdn()
+            if all_cdn:
+                print(u"开启cdn查询")
+                print(u"本次待筛选cdn总数为{}".format(len(all_cdn)))
+                t = threading.Thread(target=self.cdn_req, args=(all_cdn,))
+                t2 = threading.Thread(target=self.set_cdn, args=())
+                t.start()
+                t2.start()
+            else:
+                raise ticketConfigException(u"cdn列表为空，请先加载cdn")
+        else:
+            pass
+
     def main(self):
+        self.cdn_certification()
         l = liftTicketInit(session=self)
         l.reqLiftTicketInit()
         self.call_login()
         checkUser(self).sendCheckUser()
         from_station, to_station = self.station_table(self.from_station, self.to_station)
-        num = 1
+        num = 0
         while 1:
             try:
                 num += 1
@@ -184,18 +228,16 @@ class select:
 
 
                 else:
-                    random_time = random.uniform(1, 4)
-                    time.sleep(round(random_time, 2))
+                    random_time = round(random.uniform(1, 4), 2)
+                    time.sleep(random_time)
                     print u"正在第{0}次查询 随机停留时长：{6} 乘车日期: {1} 车次：{2} 查询无票 cdn轮询IP：{4}当前cdn总数：{5} 总耗时：{3}ms".format(num,
                                                                                                                 ",".join(
                                                                                                                     self.station_dates),
                                                                                                                 ",".join(
                                                                                                                     self.station_trains),
-                                                                                                                (
-                                                                                                                        datetime.datetime.now() - start_time).microseconds / 1000,
+                                                                                                                (datetime.datetime.now() - start_time).microseconds / 1000,
                                                                                                                 self.httpClint.cdn,
-                                                                                                                len(
-                                                                                                                    self.cdn_list),
+                                                                                                                len(self.cdn_list),
                                                                                                                 random_time)
             except PassengerUserException as e:
                 print e.message

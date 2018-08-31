@@ -88,7 +88,7 @@ class CDNProxy:
 
     def all_cdn(self):
         """获取cdn列表"""
-        with open('../cdn_list', 'r') as f:
+        with open('cdn_list', 'r') as f:
             cdn = f.readlines()
             return cdn
 
@@ -99,6 +99,9 @@ class CDNProxy:
             cdn_ip = re.findall(cdn_re, c[0])
             if cdn_ip and c[2] == "200":
                 print(cdn_ip[0])
+
+
+
 
 
 if __name__ == '__main__':

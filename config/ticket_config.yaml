@@ -1,10 +1,11 @@
 ---
+# 配置文件请严格遵循yaml语法格式，yaml学习地址 https://ansible-tran.readthedocs.io/en/latest/docs/YAMLSyntax.html
 set:
-  # 出发日期，格式ex：2018-01-06
+  # 出发日期(list)，格式ex：2018-01-06
   station_dates:
     - "2018-09-05"
 
-  # 过滤车次，格式ex：- "G1353" - "G1329"
+  # 过滤车次(list)，格式ex：- "G1353" - "G1329"
   station_trains:
     - "G6504"
 
@@ -14,22 +15,20 @@ set:
   # 到达城市 比如深圳北，就填深圳就搜得到
   to_station: "广州"
 
-  # 座位 多个座位ex: - "二等座" - "一等座"
+  # 座位(list) 多个座位ex: - "二等座" - "一等座"
   set_type:
     - "二等座"
 
   # 余票不足是否自动提交，目前应该没什么卵用
   is_more_ticket: True
 
-  # 乘车人 多个乘车人ex: - "张三" - "李四"
+  # 乘车人(list) 多个乘车人ex: - "张三" - "李四"
   ticke_peoples:
     - ""
-  # 12306登录账号
+  # 12306登录账号(list)
   12306account:
     - user: ""
     - pwd: ""
-
-select_refresh_interval: 1
 
 # 加入小黑屋时间，此功能为了防止僵尸票导致一直下单不成功错过正常的票
 ticket_black_list_time: 5
@@ -66,11 +65,11 @@ email_conf:
   password: ""
   host: "smtp.qq.com"
 
-# 是否开启cdn查询，可以更快的检测飘飘 1为开启，2为关闭
+# 是否开启cdn查询，可以更快的检测票票 1为开启，2为关闭
 is_cdn: 2
 
 # 下单接口分为两种，1 为快速下单，2 是普通下单
-order_type: 1
+order_type: 2
 
 
 

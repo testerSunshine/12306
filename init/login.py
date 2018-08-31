@@ -1,16 +1,8 @@
-#!/bin/env python
 # -*- coding=utf-8 -*-
-import copy
-import random
-import json
-import re
-import socket
 from time import sleep
 
 from config.ticketConf import _get_yaml
-from PIL import Image
 from damatuCode.damatuWeb import DamatuApi
-from damatuCode.ruokuai import RClient
 from inter.GetPassCodeNewOrderAndLogin import getPassCodeNewOrderAndLogin
 from inter.GetRandCode import getRandCode
 from myException.UserPasswordException import UserPasswordException

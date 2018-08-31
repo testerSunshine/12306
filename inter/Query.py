@@ -49,7 +49,7 @@ class query:
             station_ticket = self.session.httpClint.send(select_url)
             value = station_ticket.get("data", "")
             if not value:
-                print (u'{0}-{1} 车次坐席查询为空'.format(self.from_station, self.to_station))
+                print (u'{0}-{1} 车次坐席查询为空'.format(self.from_station_h, self.to_station_h))
             else:
                 result = value.get('result', [])
                 if result:
@@ -67,15 +67,12 @@ class query:
                                     stationTrainCode = ticket_info[3]
                                     leftTicket = ticket_info[12]
                                     set_type = self._station_seat[j]
-                                    print (u'车次: {0} 始发车站: {1} 终点站: {2} {3}: {4}'.format(train_no,
+                                    print (u'车次: {0} 始发车站: {1} 终点站: {2} {3}: {4}'.format(ticket_info[3],
                                                                                              self.from_station_h,
                                                                                              self.to_station_h,
                                                                                              self._station_seat[j].encode(
                                                                                                  "utf8"),
-                                                                                             ticket_info[self.station_seat(
-                                                                                                 self._station_seat[
-                                                                                                     j].encode("utf8"))]
-                                                                                             ))
+                                                                                             ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))]))
                                     if wrapcache.get(train_no):
                                         print(ticket.QUERY_IN_BLACK_LIST.format(train_no))
                                         break

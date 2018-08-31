@@ -113,7 +113,7 @@ class HTTPClient(object):
         if is_logger:
             logger.log(
                 u"url: {0}\n入参: {1}\n请求方式: {2}\n".format(req_url, data, method, ))
-        # self.setHeadersHost(urls["Host"])
+        self.setHeadersHost(urls["Host"])
         if self.cdn:
             url_host = self.cdn
         else:

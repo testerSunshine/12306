@@ -26,7 +26,7 @@ set:
     - ""
   # 12306登录账号
   12306account:
-    - uesr: ""
+    - user: ""
     - pwd: ""
 
 select_refresh_interval: 1
@@ -42,7 +42,7 @@ auto_code_type: 2
 
 # 打码平台账号
 auto_code_account:
-  uesr: ""
+  user: ""
   pwd: ""
 
 #  邮箱配置，如果抢票成功，将通过邮件配置通知给您

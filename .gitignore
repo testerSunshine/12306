@@ -2,4 +2,4 @@
 *.pyc
 *.yaml
 *.log
-idea/
+.idea/

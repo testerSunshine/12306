@@ -7,10 +7,10 @@ def run():
     select_ticket_info.select().main()
 
 
-def testEmail():
+def Email():
     sendEmail(u"订票小助手测试一下")
 
 
 if __name__ == '__main__':
     run()
-    # testEmail()
+    # Email()

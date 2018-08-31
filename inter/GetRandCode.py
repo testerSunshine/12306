@@ -16,7 +16,7 @@ def getRandCode(is_auto_code, auto_code_type):
                 print(u"打码兔已关闭, 如需使用自动识别，请使用如果平台 auto_code_type == 2")
                 return
             if auto_code_type == 2:
-                rc = RClient(_get_yaml()["auto_code_account"]["uesr"], _get_yaml()["auto_code_account"]["pwd"])
+                rc = RClient(_get_yaml()["auto_code_account"]["user"], _get_yaml()["auto_code_account"]["pwd"])
                 im = open('./tkcode', 'rb').read()
                 Result = rc.rk_create(im, 6113)
                 if "Result" in Result:

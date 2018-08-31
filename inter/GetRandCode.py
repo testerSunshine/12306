@@ -41,12 +41,13 @@ def codexy(Ofset=None, is_raw_input=True):
     if is_raw_input:
         print(u"""
             *****************
-            | 0 | 1 | 2 | 3 |
+            | 1 | 2 | 3 | 4 |
             *****************
-            | 4 | 5 | 6 | 7 |
+            | 5 | 6 | 7 | 8 |
             *****************
             """)
-        Ofset = raw_input(u"按照上图提示输入对应的验证码: ")
+        print(u"验证码分为8个，对应上面数字，例如第一和第二张，输入1, 2")
+        Ofset = raw_input(u"输入对应的验证码: ")
     Ofset = Ofset.replace("，", ",")
     select = Ofset.split(',')
     post = []

@@ -90,7 +90,7 @@
 
 - 2018.1.23更新
     - 增加若快平台打码，yaml新增字段auto_code_type，1=打码兔，2=若快 若快注册地址：http://www.ruokuai.com/client/index?6726
-    - 修改is_auto_code字段为全部是否自动打码字段，也就是说字段为rue，则全部自动打码，为False全部手动打码，包括提交订单，注意centOs不可设置手动打码
+    - 修改is_auto_code字段为全部是否自动打码字段，也就是说字段为True，则全部自动打码，为False全部手动打码，包括提交订单，注意centOs不可设置手动打码
     - 修复bug
     - 优化抢票功能
 

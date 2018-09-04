@@ -235,9 +235,11 @@ class select:
                                                                                                                     self.station_dates),
                                                                                                                 ",".join(
                                                                                                                     self.station_trains),
-                                                                                                                (datetime.datetime.now() - start_time).microseconds / 1000,
+                                                                                                                (
+                                                                                                                            datetime.datetime.now() - start_time).microseconds / 1000,
                                                                                                                 self.httpClint.cdn,
-                                                                                                                len(self.cdn_list),
+                                                                                                                len(
+                                                                                                                    self.cdn_list),
                                                                                                                 random_time)
             except PassengerUserException as e:
                 print e.message

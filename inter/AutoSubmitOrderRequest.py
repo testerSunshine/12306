@@ -115,8 +115,8 @@ class autoSubmitOrderRequest:
         else:
             print(ticket.AUTO_SUBMIT_ORDER_REQUEST_F)
             if autoSubmitOrderRequestResult.get("messages", ""):
-                print(autoSubmitOrderRequestResult.get("messages", ""))
+                print("".join(autoSubmitOrderRequestResult.get("messages", "")))
             elif autoSubmitOrderRequestResult.get("validateMessages", ""):
-                print(autoSubmitOrderRequestResult.get("validateMessages", ""))
+                print("".join(autoSubmitOrderRequestResult.get("validateMessages", "")))
 
 

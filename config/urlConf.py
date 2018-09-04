@@ -233,7 +233,7 @@ urls = {
         "is_json": True,
     },
     "codeImgByOrder": {  # 订单页面验证码
-        "req_url": "/otn/passcodeNew/getPassCodeNew?module=passenger&rand=randp&%s" % random.random(),
+        "req_url": "/otn/passcodeNew/getPassCodeNew?module=passenger&rand=randp&{}",
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/confirmPassenger/initDc",
         "Host": "kyfw.12306.cn",

@@ -1,4 +1,7 @@
 # coding=utf-8
+import copy
+import random
+import time
 
 
 def getPassCodeNewOrderAndLogin(session, imgType):
@@ -9,14 +12,21 @@ def getPassCodeNewOrderAndLogin(session, imgType):
     :return:
     """
     if imgType == "login":
-        codeImgUrl = session.urls["getCodeImg"]
+        codeImgUrl = copy.deepcopy(session.urls["getCodeImg"])
+        codeImgUrl["req_url"] = codeImgUrl["req_url"].format(random.random())
     else:
-        codeImgUrl = session.urls["codeImgByOrder"]
+        codeImgUrl = copy.deepcopy(session.urls["codeImgByOrder"])
+        codeImgUrl["req_url"] = codeImgUrl["req_url"].format(random.random())
     print (u"下载验证码...")
     img_path = './tkcode'
     result = session.httpClint.send(codeImgUrl)
     try:
-        print(u"下载验证码成功")
-        open(img_path, 'wb').write(result)
+        if isinstance(result, dict):
+            print(u"下载验证码失败, 请手动检查是否ip被封，或者重试，请求地址：{}".format(codeImgUrl))
+            return False
+        else:
+            print(u"下载验证码成功")
+            open(img_path, 'wb').write(result)
+            return True
     except OSError:
         print (u"验证码下载失败，可能ip被封，确认请手动请求: {0}".format(codeImgUrl))

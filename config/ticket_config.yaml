@@ -1,28 +1,36 @@
 ---
 # 配置文件请严格遵循yaml语法格式，yaml学习地址 https://ansible-tran.readthedocs.io/en/latest/docs/YAMLSyntax.html
 set:
-  # 出发日期(list)，格式ex：2018-01-06
+  # 出发日期(list)，格式ex：
+  # - 2018-01-06
+  # - 2018-01-07
   station_dates:
     - "2018-09-05"
 
-  # 过滤车次(list)，格式ex：- "G1353" - "G1329"
+  # 过滤车次(list)，格式ex：
+  # - "G1353"
+  # - "G1329"
   station_trains:
-    - "G6504"
+    - "D2304"
 
   # 出发城市，比如深圳北，就填深圳就搜得到
   from_station: "深圳"
 
   # 到达城市 比如深圳北，就填深圳就搜得到
-  to_station: "广州"
+  to_station: "上饶"
 
-  # 座位(list) 多个座位ex: - "二等座" - "一等座"
+  # 座位(list) 多个座位ex:
+  # - "二等座"
+  # - "一等座"
   set_type:
     - "二等座"
 
   # 余票不足是否自动提交，目前应该没什么卵用
   is_more_ticket: True
 
-  # 乘车人(list) 多个乘车人ex: - "张三" - "李四"
+  # 乘车人(list) 多个乘车人ex:
+  # - "张三"
+  # - "李四"
   ticke_peoples:
     - ""
   # 12306登录账号(list)

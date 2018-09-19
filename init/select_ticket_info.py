@@ -47,6 +47,7 @@ class select:
         self.cdn_list = []
         self.passengerTicketStrList = ""
         self.oldPassengerStr = ""
+        self.set_type = ""
 
     def get_ticket_info(self):
         """
@@ -189,8 +190,8 @@ class select:
                     train_no = queryResult.get("train_no", "")
                     train_date = queryResult.get("train_date", "")
                     stationTrainCode = queryResult.get("stationTrainCode", "")
-                    set_type = queryResult.get("set_type", "")
                     secretStr = queryResult.get("secretStr", "")
+                    seat = queryResult.get("seat", "")
                     leftTicket = queryResult.get("leftTicket", "")
                     query_from_station_name = queryResult.get("query_from_station_name", "")
                     query_to_station_name = queryResult.get("query_to_station_name", "")
@@ -199,12 +200,12 @@ class select:
                     else:
                         # 获取联系人
                         if not self.passengerTicketStrList and not self.oldPassengerStr:
-                            s = getPassengerDTOs(session=self, ticket_peoples=self.ticke_peoples, set_type=set_type)
+                            s = getPassengerDTOs(session=self, ticket_peoples=self.ticke_peoples, set_type=seat)
                             getPassengerDTOsResult = s.getPassengerTicketStrListAndOldPassengerStr()
                             if getPassengerDTOsResult.get("status", False):
                                 self.passengerTicketStrList = getPassengerDTOsResult.get("passengerTicketStrList", "")
                                 self.oldPassengerStr = getPassengerDTOsResult.get("oldPassengerStr", "")
-                                set_type = getPassengerDTOsResult.get("set_type", "")
+                                self.set_type = getPassengerDTOsResult.get("set_type", "")
                         # 提交订单
                         if self.order_type == 1:  # 快读下单
                             a = autoSubmitOrderRequest(session=self,
@@ -215,13 +216,13 @@ class select:
                                                        train_no=train_no,
                                                        stationTrainCode=stationTrainCode,
                                                        leftTicket=leftTicket,
-                                                       set_type=set_type,
+                                                       set_type=self.set_type,
                                                        query_from_station_name=query_from_station_name,
                                                        query_to_station_name=query_to_station_name,
                                                        )
                             a.sendAutoSubmitOrderRequest()
                         elif self.order_type == 2:  # 普通下单
-                            sor = submitOrderRequest(self, secretStr, from_station, to_station, train_no, set_type,
+                            sor = submitOrderRequest(self, secretStr, from_station, to_station, train_no, self.set_type,
                                                      self.passengerTicketStrList, self.oldPassengerStr, train_date,
                                                      self.ticke_peoples)
                             sor.sendSubmitOrderRequest()

@@ -66,12 +66,11 @@ class query:
                                     train_location = ticket_info[15]
                                     stationTrainCode = ticket_info[3]
                                     leftTicket = ticket_info[12]
-                                    set_type = self._station_seat[j]
+                                    seat = self._station_seat[j].encode("utf8")
                                     print (u'车次: {0} 始发车站: {1} 终点站: {2} {3}: {4}'.format(ticket_info[3],
                                                                                              self.from_station_h,
                                                                                              self.to_station_h,
-                                                                                             self._station_seat[j].encode(
-                                                                                                 "utf8"),
+                                                                                             self._station_seat[j].encode("utf8"),
                                                                                              ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))]))
                                     if wrapcache.get(train_no):
                                         print(ticket.QUERY_IN_BLACK_LIST.format(train_no))
@@ -85,7 +84,7 @@ class query:
                                             "train_date": station_date,
                                             "query_from_station_name": query_from_station_name,
                                             "query_to_station_name": query_to_station_name,
-                                            "set_type": set_type,
+                                            "seat": seat,
                                             "leftTicket": leftTicket,
                                             "train_location": train_location,
                                             "code": ticket.SUCCESS_CODE,

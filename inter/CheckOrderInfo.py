@@ -45,7 +45,8 @@ class checkOrderInfo:
         CheckOrderInfoUrls = self.session.urls["checkOrderInfoUrl"]
         data = self.data_par()
         checkOrderInfoRep = self.session.httpClint.send(CheckOrderInfoUrls, data)
-        if 'data' in checkOrderInfoRep:
+        data = checkOrderInfoRep.get("data", {})
+        if data and data.get("submitStatus", False):
             print (u'车票提交通过，正在尝试排队')
             ifShowPassCodeTime = int(checkOrderInfoRep["data"]["ifShowPassCodeTime"]) / float(1000)
             if "ifShowPassCode" in checkOrderInfoRep["data"] and checkOrderInfoRep["data"]["ifShowPassCode"] == "Y":

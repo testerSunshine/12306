@@ -11,7 +11,7 @@ class query:
     """
 
     def __init__(self, session, from_station, to_station, from_station_h, to_station_h, _station_seat, station_trains,
-                 station_dates=None, ):
+                 ticke_peoples_num, station_dates=None,):
         self.session = session
         self.from_station = from_station
         self.to_station = to_station
@@ -21,6 +21,7 @@ class query:
         self._station_seat = _station_seat if isinstance(_station_seat, list) else list(_station_seat)
         self.station_dates = station_dates if isinstance(station_dates, list) else list(station_dates)
         self.ticket_black_list = dict()
+        self.ticke_peoples_num = ticke_peoples_num
 
     def station_seat(self, index):
         """
@@ -74,7 +75,10 @@ class query:
                                                                                              ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))]))
                                     if wrapcache.get(train_no):
                                         print(ticket.QUERY_IN_BLACK_LIST.format(train_no))
-                                        break
+                                        continue
+                                    if self.ticke_peoples_num < int(ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))]):
+                                        # 小于乘车人数则无视此次乘车机会, 以后可以扩展为有票优先提交
+                                        continue
                                     else:
                                         print (ticket.QUERY_C)
                                         return {

@@ -184,7 +184,8 @@ class select:
                           _station_seat=self._station_seat,
                           station_trains=self.station_trains,
                           station_dates=self.station_dates,
-                          ticke_peoples_num=len(from_station),)
+                          ticke_peoples_num=len(self.ticke_peoples),
+                          )
                 queryResult = q.sendQuery()
                 # 查询接口
                 if queryResult.get("status", False):

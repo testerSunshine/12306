@@ -68,15 +68,16 @@ class query:
                                     stationTrainCode = ticket_info[3]
                                     leftTicket = ticket_info[12]
                                     seat = self._station_seat[j].encode("utf8")
+                                    ticket_num = ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))]
                                     print (u'车次: {0} 始发车站: {1} 终点站: {2} {3}: {4}'.format(ticket_info[3],
                                                                                              self.from_station_h,
                                                                                              self.to_station_h,
                                                                                              self._station_seat[j].encode("utf8"),
-                                                                                             ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))]))
+                                                                                             ticket_num))
                                     if wrapcache.get(train_no):
                                         print(ticket.QUERY_IN_BLACK_LIST.format(train_no))
                                         continue
-                                    if self.ticke_peoples_num < int(ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))]):
+                                    if ticket_num != "有" and self.ticke_peoples_num < ticket_num:
                                         # 小于乘车人数则无视此次乘车机会, 以后可以扩展为有票优先提交
                                         continue
                                     else:

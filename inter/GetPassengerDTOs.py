@@ -1,6 +1,7 @@
 # coding=utf-8
 from config.TicketEnmu import ticket
 from myException.PassengerUserException import PassengerUserException
+import wrapcache
 
 
 class getPassengerDTOs:
@@ -8,7 +9,7 @@ class getPassengerDTOs:
     获取乘客信息
     :return:
     """
-    def __init__(self, session, ticket_peoples, set_type):
+    def __init__(self, session, ticket_peoples, set_type, is_more_ticket_num):
         """
         :param session: 登录实例
         :param ticket_peoples: 乘客
@@ -16,6 +17,7 @@ class getPassengerDTOs:
         """
         self.session = session
         self.ticket_peoples = ticket_peoples
+        self.is_more_ticket_num = is_more_ticket_num
         self.set_type = set_type.encode("utf8")
 
     def sendGetPassengerDTOs(self):
@@ -57,15 +59,23 @@ class getPassengerDTOs:
         获取提交车次人内容格式
         passengerTicketStr	O,0,1,文贤平,1,43052419950223XXXX,15618715583,N_O,0,1,梁敏,1,43052719920118XXXX,,N
         oldPassengerStr	文贤平,1,43052719920118XXXX,1_梁敏,1,43052719920118XXXX,1
+        ps: 如果is_more_ticket打开了的话，那就是读取联系人列表里面前符合车次数量的前几个联系人
         :return:
         """
         passengerTicketStrList = []
         oldPassengerStr = []
-        user_info = self.sendGetPassengerDTOs()
+        if wrapcache.get("user_info"):  # 如果缓存中有联系人方式，则读取缓存中的联系人
+            user_info = wrapcache.get("user_info")
+            print(u"缓存中找到联系人信息: {0}".format(user_info))
+        else:
+            user_info = self.sendGetPassengerDTOs()
+            wrapcache.set("user_info", user_info, timeout=9999999)
         set_type = self.getPassengerTicketStr(self.set_type)
         if not user_info:
             raise PassengerUserException(ticket.DTO_NOT_IN_LIST)
-        if len(user_info) is 1:
+        if len(user_info) < self.is_more_ticket_num:  # 如果乘车人填错了导致没有这个乘车人的话，可能乘车人数会小于自动乘车人
+            self.is_more_ticket_num = len(user_info)
+        if self.is_more_ticket_num is 1:
             passengerTicketStrList.append(
                 '0,' + user_info[0]['passenger_type'] + "," + user_info[0][
                     "passenger_name"] + "," +
@@ -75,7 +85,7 @@ class getPassengerDTOs:
                 user_info[0]['passenger_name'] + "," + user_info[0]['passenger_id_type_code'] + "," +
                 user_info[0]['passenger_id_no'] + "," + user_info[0]['passenger_type'] + '_')
         else:
-            for i in xrange(len(user_info)):
+            for i in xrange(self.is_more_ticket_num):
                 passengerTicketStrList.append(
                     '0,' + user_info[i]['passenger_type'] + "," + user_info[i][
                         "passenger_name"] + "," + user_info[i]['passenger_id_type_code'] + "," + user_info[i][

@@ -94,17 +94,14 @@ class getQueueCountAsync:
                         ",") != -1 else ticket_data
                     countT = getQueueCountAsyncResult["data"]["countT"]
                     if int(countT) is 0:
-                        if int(ticket_split) < self.users:
-                            print(u"当前余票数小于乘车人数，放弃订票")
-                        else:
-                            print(u"排队成功, 当前余票还剩余: {0} 张".format(ticket_split))
-                            c = confirmSingleForQueueAsys(session=self.session,
-                                                          passengerTicketStr=self.passengerTicketStr,
-                                                          oldPassengerStr=self.oldPassengerStr,
-                                                          result=self.result,)
-                            print(u"验证码提交安全期，等待{}MS".format(self.ifShowPassCodeTime))
-                            time.sleep(self.ifShowPassCodeTime)
-                            c.sendConfirmSingleForQueueAsys()
+                        print(u"排队成功, 当前余票还剩余: {0} 张".format(ticket_split))
+                        c = confirmSingleForQueueAsys(session=self.session,
+                                                      passengerTicketStr=self.passengerTicketStr,
+                                                      oldPassengerStr=self.oldPassengerStr,
+                                                      result=self.result,)
+                        print(u"验证码提交安全期，等待{}MS".format(self.ifShowPassCodeTime))
+                        time.sleep(self.ifShowPassCodeTime)
+                        c.sendConfirmSingleForQueueAsys()
                 else:
                     print(u"排队发现未知错误{0}，将此列车 {1}加入小黑屋".format(getQueueCountAsyncResult, self.train_no))
                     wrapcache.set(key=self.train_no, value=datetime.datetime.now(),

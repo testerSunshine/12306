@@ -68,7 +68,10 @@ class query:
                                     stationTrainCode = ticket_info[3]
                                     leftTicket = ticket_info[12]
                                     seat = self._station_seat[j].encode("utf8")
-                                    ticket_num = ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))]
+                                    try:
+                                        ticket_num = int(ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))])
+                                    except ValueError:
+                                        ticket_num = "有"
                                     print (u'车次: {0} 始发车站: {1} 终点站: {2} {3}: {4}'.format(ticket_info[3],
                                                                                              self.from_station_h,
                                                                                              self.to_station_h,
@@ -77,10 +80,16 @@ class query:
                                     if wrapcache.get(train_no):
                                         print(ticket.QUERY_IN_BLACK_LIST.format(train_no))
                                         continue
-                                    if ticket_num != "有" and self.ticke_peoples_num < ticket_num:
-                                        # 小于乘车人数则无视此次乘车机会, 以后可以扩展为有票优先提交
-                                        continue
+
                                     else:
+                                        if ticket_num != "有" and self.ticke_peoples_num > ticket_num:
+                                            if self.session.is_more_ticket:
+                                                print(u"余票数小于乘车人数，当前余票数: {}, 删减人车人数到: {}".format(ticket_num, ticket_num))
+                                                is_more_ticket_num = ticket_num
+                                            else:
+                                                continue
+                                        else:
+                                            is_more_ticket_num = self.ticke_peoples_num
                                         print (ticket.QUERY_C)
                                         return {
                                             "secretStr": secretStr,
@@ -93,6 +102,7 @@ class query:
                                             "leftTicket": leftTicket,
                                             "train_location": train_location,
                                             "code": ticket.SUCCESS_CODE,
+                                            "is_more_ticket_num": is_more_ticket_num,
                                             "status": True,
                                         }
                 else:

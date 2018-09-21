@@ -50,7 +50,6 @@ class submitOrderRequest:
         预定的请求参数，注意参数顺序
         注意这里为了防止secretStr被urllib.parse过度编码，在这里进行一次解码
         否则调用HttpTester类的post方法将会将secretStr编码成为无效码,造成提交预定请求失败
-        :param self:
         :param secretStr: 提交车次加密
         :return:
         """

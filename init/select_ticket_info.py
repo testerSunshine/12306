@@ -65,10 +65,9 @@ class select:
         ticket_black_list_time = ticket_info_config["ticket_black_list_time"]
         order_type = ticket_info_config["order_type"]
         print u"*" * 20
-        print u"12306刷票小助手，最后更新于2018.8.31，请勿作为商业用途，交流群号：286271084"
-        print u"如果有好的margin，请联系作者，表示非常感激\n"
-        print u"当前配置：出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票自动提交：{4}\n乘车人：{5}\n" \
-              u"刷新间隔：随机(1-4S)\n候选购买车次：{6}\n僵尸票关小黑屋时长：{7}\n 下单接口：{8}\n".format \
+        print u"12306刷票小助手，最后更新于2018.9.21，请勿作为商业用途，交流群号：286271084"
+        print u"当前配置：\n出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票优先提交：{4}\n乘车人：{5}\n" \
+              u"刷新间隔：随机(1-3S)\n候选购买车次：{6}\n僵尸票关小黑屋时长：{7}\n 下单接口：{8}\n".format \
                 (
                 from_station,
                 to_station,
@@ -197,17 +196,17 @@ class select:
                     leftTicket = queryResult.get("leftTicket", "")
                     query_from_station_name = queryResult.get("query_from_station_name", "")
                     query_to_station_name = queryResult.get("query_to_station_name", "")
+                    is_more_ticket_num = queryResult.get("is_more_ticket_num", len(self.ticke_peoples))
                     if wrapcache.get(train_no):
                         print(ticket.QUEUE_WARNING_MSG.format(train_no))
                     else:
                         # 获取联系人
-                        if not self.passengerTicketStrList and not self.oldPassengerStr:
-                            s = getPassengerDTOs(session=self, ticket_peoples=self.ticke_peoples, set_type=seat)
-                            getPassengerDTOsResult = s.getPassengerTicketStrListAndOldPassengerStr()
-                            if getPassengerDTOsResult.get("status", False):
-                                self.passengerTicketStrList = getPassengerDTOsResult.get("passengerTicketStrList", "")
-                                self.oldPassengerStr = getPassengerDTOsResult.get("oldPassengerStr", "")
-                                self.set_type = getPassengerDTOsResult.get("set_type", "")
+                        s = getPassengerDTOs(session=self, ticket_peoples=self.ticke_peoples, set_type=seat, is_more_ticket_num=is_more_ticket_num)
+                        getPassengerDTOsResult = s.getPassengerTicketStrListAndOldPassengerStr()
+                        if getPassengerDTOsResult.get("status", False):
+                            self.passengerTicketStrList = getPassengerDTOsResult.get("passengerTicketStrList", "")
+                            self.oldPassengerStr = getPassengerDTOsResult.get("oldPassengerStr", "")
+                            self.set_type = getPassengerDTOsResult.get("set_type", "")
                         # 提交订单
                         if self.order_type == 1:  # 快读下单
                             a = autoSubmitOrderRequest(session=self,
@@ -228,10 +227,8 @@ class select:
                                                      self.passengerTicketStrList, self.oldPassengerStr, train_date,
                                                      self.ticke_peoples)
                             sor.sendSubmitOrderRequest()
-
-
                 else:
-                    random_time = round(random.uniform(1, 4), 2)
+                    random_time = round(random.uniform(1, 3), 2)
                     time.sleep(random_time)
                     print u"正在第{0}次查询 随机停留时长：{6} 乘车日期: {1} 车次：{2} 查询无票 cdn轮询IP：{4}当前cdn总数：{5} 总耗时：{3}ms".format(num,
                                                                                                                 ",".join(

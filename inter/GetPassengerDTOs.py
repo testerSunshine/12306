@@ -22,7 +22,6 @@ class getPassengerDTOs:
 
     def sendGetPassengerDTOs(self):
         getPassengerDTOsResult = self.session.httpClint.send(self.session.urls["get_passengerDTOs"], {})
-        getPassengerDTOsResult["data"].get("normal_passengers", False)
         if getPassengerDTOsResult.get("data", False) and getPassengerDTOsResult["data"].get("normal_passengers", False):
             normal_passengers = getPassengerDTOsResult['data']['normal_passengers']
             _normal_passenger = [normal_passengers[i] for i in range(len(normal_passengers)) if

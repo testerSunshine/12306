@@ -24,17 +24,17 @@ class autoSubmitOrderRequest:
                  stationTrainCode,
                  leftTicket,
                  set_type,):
+        self.set_type = set_type
         self.secretStr = urllib.unquote(secretStr)
         self.train_date = train_date
         self.query_from_station_name = query_from_station_name
         self.query_to_station_name = query_to_station_name
-        self.passengerTicketStr = passengerTicketStr
+        self.passengerTicketStr = passengerTicketStr.rstrip("_{0}".format(self.set_type))
         self.oldPassengerStr = oldPassengerStr
         self.session = session
         self.train_no = train_no
         self.stationTrainCode = stationTrainCode
         self.leftTicket = leftTicket
-        self.set_type = set_type
 
     def data_par(self):
         """

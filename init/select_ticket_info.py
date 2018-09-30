@@ -123,8 +123,8 @@ class select:
         for i in range(len(cdn) - 1):
             http = HTTPClient()
             urls = self.urls["loginInit"]
-            start_time = datetime.datetime.now()
             http.cdn = cdn[i].replace("\n", "")
+            start_time = datetime.datetime.now()
             rep = http.send(urls)
             if rep and "message" not in rep and (datetime.datetime.now() - start_time).microseconds / 1000 < 500:
                 print("加入cdn {0}".format(cdn[i].replace("\n", "")))
@@ -140,20 +140,19 @@ class select:
             CDN = CDNProxy()
             all_cdn = CDN.all_cdn()
             if all_cdn:
-                print(u"开启cdn查询")
-                print(u"本次待筛选cdn总数为{}".format(len(all_cdn)))
-                t = threading.Thread(target=self.cdn_req, args=(all_cdn,))
-                t2 = threading.Thread(target=self.set_cdn, args=())
-                t.start()
-                t2.start()
+                print(u"由于12306网站策略调整，cdn功能暂时关闭。")
+                # print(u"开启cdn查询")
+                # print(u"本次待筛选cdn总数为{}, 筛选时间大约为5-10min".format(len(all_cdn)))
+                # t = threading.Thread(target=self.cdn_req, args=(all_cdn,))
+                # t2 = threading.Thread(target=self.set_cdn, args=())
+                # t.start()
+                # t2.start()
             else:
                 raise ticketConfigException(u"cdn列表为空，请先加载cdn")
-        else:
-            pass
 
     def main(self):
         self.cdn_certification()
-        l = liftTicketInit(session=self)
+        l = liftTicketInit(self)
         l.reqLiftTicketInit()
         self.call_login()
         checkUser(self).sendCheckUser()
@@ -237,7 +236,7 @@ class select:
                                                                                                                     self.station_trains),
                                                                                                                 (
                                                                                                                             datetime.datetime.now() - start_time).microseconds / 1000,
-                                                                                                                self.httpClint.cdn,
+                                                                                                                wrapcache.get("cdn"),
                                                                                                                 len(
                                                                                                                     self.cdn_list),
                                                                                                                 random_time)

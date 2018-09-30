@@ -1,8 +1,13 @@
 # coding=utf-8
 import copy
 import datetime
+import random
+
 import wrapcache
+
+from config import urlConf
 from config.TicketEnmu import ticket
+from myUrllib.httpUtils import HTTPClient
 
 
 class query:
@@ -13,6 +18,8 @@ class query:
     def __init__(self, session, from_station, to_station, from_station_h, to_station_h, _station_seat, station_trains,
                  ticke_peoples_num, station_dates=None,):
         self.session = session
+        self.httpClint = HTTPClient()
+        self.urls = urlConf.urls
         self.from_station = from_station
         self.to_station = to_station
         self.from_station_h = from_station_h
@@ -45,9 +52,9 @@ class query:
         :return:
         """
         for station_date in self.station_dates:
-            select_url = copy.copy(self.session.urls["select_url"])
+            select_url = copy.copy(self.urls["select_url"])
             select_url["req_url"] = select_url["req_url"].format(station_date, self.from_station, self.to_station)
-            station_ticket = self.session.httpClint.send(select_url)
+            station_ticket = self.httpClint.send(select_url)
             value = station_ticket.get("data", "")
             if not value:
                 print (u'{0}-{1} 车次坐席查询为空'.format(self.from_station_h, self.to_station_h))
@@ -80,15 +87,16 @@ class query:
                                     if wrapcache.get(train_no):
                                         print(ticket.QUERY_IN_BLACK_LIST.format(train_no))
                                         continue
-
                                     else:
                                         if ticket_num != "有" and self.ticke_peoples_num > ticket_num:
                                             if self.session.is_more_ticket:
                                                 print(u"余票数小于乘车人数，当前余票数: {}, 删减人车人数到: {}".format(ticket_num, ticket_num))
                                                 is_more_ticket_num = ticket_num
                                             else:
+                                                print(u"余票数小于乘车人数，当前设置不提交，放弃此次提交机会")
                                                 continue
                                         else:
+                                            print(u"设置乘车人数为: {}".format(self.ticke_peoples_num))
                                             is_more_ticket_num = self.ticke_peoples_num
                                         print (ticket.QUERY_C)
                                         return {

@@ -7,6 +7,25 @@ set:
   station_dates:
     - "2018-09-28"
 
+  # 是否根据时间范围 和 乘车类型 购票
+  # 否则将需要手动填写车次
+  is_by_time: False
+
+  # 列车类型: 高铁 G 动车 D 其它火车 O
+  train_types: [G,D,O]
+
+  # 可接受最早出发时间 格式ex：
+  # departure_time: "8:00"
+  departure_time: "00:00"
+
+  # 可接受最晚抵达时间 格式ex：
+  # arrival_time: "16:00"
+  arrival_time: "24:00"
+
+  # 可接受最长旅途时间 格式ex：
+  # take_time: "24:00"
+  take_time: "24:00"
+
   # 过滤车次(list)，格式ex：
   # - "G1353"
   # - "G1329"

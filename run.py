@@ -13,8 +13,8 @@ def Email():
     sendEmail(u"订票小助手测试一下")
 
 
-def sendWeChat():
-    os.system("cd notice & python notice.py")
+# def sendWeChat():
+#     os.system("cd notice & python notice.py")
 
 
 if __name__ == '__main__':

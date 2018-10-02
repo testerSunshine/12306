@@ -56,9 +56,6 @@ class query:
         return seat[index]
 
     def check_time_interval(self,ticket_info):
-        a=time_to_minutes(ticket_info[8])
-        b=time_to_minutes(ticket_info[9])
-        c=time_to_minutes(ticket_info[10])
         return self.departure_time <= time_to_minutes(ticket_info[8]) and \
                time_to_minutes(ticket_info[9]) <= self.arrival_time and \
                time_to_minutes(ticket_info[10]) <= self.take_time

@@ -3,13 +3,15 @@ import datetime
 import random
 import socket
 import sys
-import threading
 import time
+
 import wrapcache
 
 from agency.cdn_utils import CDNProxy
 from config import urlConf
 from config.TicketEnmu import ticket
+from config.configCommon import seat_conf
+from config.configCommon import seat_conf_2
 from config.ticketConf import _get_yaml
 from init.login import GoLogin
 from inter.AutoSubmitOrderRequest import autoSubmitOrderRequest
@@ -24,6 +26,7 @@ from myException.ticketConfigException import ticketConfigException
 from myException.ticketIsExitsException import ticketIsExitsException
 from myException.ticketNumOutException import ticketNumOutException
 from myUrllib.httpUtils import HTTPClient
+from utils.timeUtil import time_to_minutes,minutes_to_time
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -37,7 +40,9 @@ class select:
     def __init__(self):
         self.from_station, self.to_station, self.station_dates, self._station_seat, self.is_more_ticket, \
         self.ticke_peoples, self.station_trains, self.ticket_black_list_time, \
-        self.order_type = self.get_ticket_info()
+        self.order_type, self.is_by_time, self.train_types, self.departure_time, \
+        self.arrival_time, self.take_time = self.get_ticket_info()
+
         self.is_auto_code = _get_yaml()["is_auto_code"]
         self.auto_code_type = _get_yaml()["auto_code_type"]
         self.is_cdn = _get_yaml()["is_cdn"]
@@ -58,29 +63,43 @@ class select:
         from_station = ticket_info_config["set"]["from_station"].encode("utf8")
         to_station = ticket_info_config["set"]["to_station"].encode("utf8")
         station_dates = ticket_info_config["set"]["station_dates"]
-        set_type = ticket_info_config["set"]["set_type"]
+        set_names = ticket_info_config["set"]["set_type"]
+        set_type = [seat_conf[x.encode("utf8")] for x in ticket_info_config["set"]["set_type"]]
         is_more_ticket = ticket_info_config["set"]["is_more_ticket"]
         ticke_peoples = ticket_info_config["set"]["ticke_peoples"]
         station_trains = ticket_info_config["set"]["station_trains"]
         ticket_black_list_time = ticket_info_config["ticket_black_list_time"]
         order_type = ticket_info_config["order_type"]
+
+        # by time
+        is_by_time = ticket_info_config["set"]["is_by_time"]
+        train_types = ticket_info_config["set"]["train_types"]
+        departure_time = time_to_minutes(ticket_info_config["set"]["departure_time"])
+        arrival_time = time_to_minutes(ticket_info_config["set"]["arrival_time"])
+        take_time = time_to_minutes(ticket_info_config["set"]["take_time"])
+
         print u"*" * 20
         print u"12306刷票小助手，最后更新于2018.9.21，请勿作为商业用途，交流群号：286271084"
+        if is_by_time:
+            method_notie="购票方式：根据时间区间购票\n可接受最早出发时间：{0}\n可接受最晚抵达时间：{1}\n可接受最长旅途时间：{2}\n可接受列车类型：{3}\n"\
+            .format(minutes_to_time(departure_time),minutes_to_time(arrival_time),minutes_to_time(take_time)," , ".join(train_types))
+        else:
+            method_notie="购票方式：根据候选车次购买\n候选购买车次：{0}".format(",".join(station_trains))
         print u"当前配置：\n出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票优先提交：{4}\n乘车人：{5}\n" \
-              u"刷新间隔：随机(1-3S)\n候选购买车次：{6}\n僵尸票关小黑屋时长：{7}\n 下单接口：{8}\n".format \
+              u"刷新间隔：随机(1-3S)\n{6}\n僵尸票关小黑屋时长：{7}\n 下单接口：{8}\n".format \
                 (
                 from_station,
                 to_station,
                 station_dates,
-                ",".join(set_type),
+                ",".join(set_names),
                 is_more_ticket,
                 ",".join(ticke_peoples),
-                ",".join(station_trains),
+                method_notie,
                 ticket_black_list_time,
                 order_type,
             )
         print u"*" * 20
-        return from_station, to_station, station_dates, set_type, is_more_ticket, ticke_peoples, station_trains, ticket_black_list_time, order_type
+        return from_station, to_station, station_dates, set_type, is_more_ticket, ticke_peoples, station_trains, ticket_black_list_time, order_type, is_by_time, train_types, departure_time, arrival_time, take_time
 
     def station_table(self, from_station, to_station):
         """
@@ -155,13 +174,14 @@ class select:
         l = liftTicketInit(self)
         l.reqLiftTicketInit()
         self.call_login()
-        checkUser(self).sendCheckUser()
+        check_user =  checkUser(self)
+        check_user.sendCheckUser()
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         num = 0
         while 1:
             try:
                 num += 1
-                checkUser(self).sendCheckUser()
+                check_user.sendCheckUser()
                 if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00" or time.strftime('%H:%M:%S',
                                                                                                         time.localtime(
                                                                                                             time.time())) < "06:00:00":
@@ -200,7 +220,8 @@ class select:
                         print(ticket.QUEUE_WARNING_MSG.format(train_no))
                     else:
                         # 获取联系人
-                        s = getPassengerDTOs(session=self, ticket_peoples=self.ticke_peoples, set_type=seat, is_more_ticket_num=is_more_ticket_num)
+                        s = getPassengerDTOs(session=self, ticket_peoples=self.ticke_peoples, set_type=seat_conf_2[seat],
+                                             is_more_ticket_num=is_more_ticket_num)
                         getPassengerDTOsResult = s.getPassengerTicketStrListAndOldPassengerStr()
                         if getPassengerDTOsResult.get("status", False):
                             self.passengerTicketStrList = getPassengerDTOsResult.get("passengerTicketStrList", "")

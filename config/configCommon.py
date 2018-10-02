@@ -16,6 +16,16 @@ RS_TIMEOUT = 1
 RS_JSON_ERROR = 2
 RS_OTHER_ERROR = 3
 
+seat_conf = {'商务座': 32,
+        '一等座': 31,
+        '二等座': 30,
+        '特等座': 25,
+        '软卧': 23,
+        '硬卧': 28,
+        '硬座': 29,
+        '无座': 26,
+        }
+seat_conf_2 = dict([(v,k) for (k,v) in seat_conf.iteritems()])
 
 def getNowTimestamp():
     return time.time()

@@ -8,7 +8,8 @@ import wrapcache
 from config import urlConf
 from config.TicketEnmu import ticket
 from myUrllib.httpUtils import HTTPClient
-
+from config.configCommon import seat_conf_2
+from utils.timeUtil import time_to_minutes
 
 class query:
     """
@@ -30,6 +31,14 @@ class query:
         self.ticket_black_list = dict()
         self.ticke_peoples_num = ticke_peoples_num
 
+        #by time
+        self.is_by_time = session.is_by_time
+        self.train_types = session.train_types
+        self.departure_time = session.departure_time
+        self.arrival_time = session.arrival_time
+        self.take_time = session.take_time
+
+    @classmethod
     def station_seat(self, index):
         """
         获取车票对应坐席
@@ -45,6 +54,25 @@ class query:
                 '无座': 26,
                 }
         return seat[index]
+
+    def check_time_interval(self,ticket_info):
+        return self.departure_time <= time_to_minutes(ticket_info[8]) and \
+               time_to_minutes(ticket_info[9]) <= self.arrival_time and \
+               time_to_minutes(ticket_info[10]) <= self.take_time
+
+    def check_train_types(self,train):
+        train_type = train[0]
+        if train_type!="G" and train_type!="D":train_type="O"
+        if train_type in self.train_types:
+            return True
+        else:
+            return False
+
+    def check_is_need_train(self,ticket_info):
+        if self.is_by_time:
+            return self.check_train_types(ticket_info[3]) and self.check_time_interval(ticket_info)
+        else:
+            return ticket_info[3] in self.station_trains
 
     def sendQuery(self):
         """
@@ -64,9 +92,9 @@ class query:
                     for i in value['result']:
                         ticket_info = i.split('|')
                         if ticket_info[11] == "Y" and ticket_info[1].encode("utf8") == "预订":  # 筛选未在开始时间内的车次
-                            for j in xrange(len(self._station_seat)):
-                                is_ticket_pass = ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))]
-                                if is_ticket_pass != '' and is_ticket_pass != '无' and ticket_info[3] in self.station_trains and is_ticket_pass != '*':  # 过滤有效目标车次
+                            for j in self._station_seat:
+                                is_ticket_pass = ticket_info[j]
+                                if is_ticket_pass != '' and is_ticket_pass != '无' and is_ticket_pass != '*' and self.check_is_need_train(ticket_info):  # 过滤有效目标车次
                                     secretStr = ticket_info[0]
                                     train_no = ticket_info[2]
                                     query_from_station_name = ticket_info[6]
@@ -74,15 +102,19 @@ class query:
                                     train_location = ticket_info[15]
                                     stationTrainCode = ticket_info[3]
                                     leftTicket = ticket_info[12]
-                                    seat = self._station_seat[j].encode("utf8")
+                                    start_time=ticket_info[8]
+                                    arrival_time=ticket_info[9]
+                                    distance_time=ticket_info[10]
+                                    print  start_time,arrival_time,distance_time
+                                    seat = j
                                     try:
-                                        ticket_num = int(ticket_info[self.station_seat(self._station_seat[j].encode("utf8"))])
+                                        ticket_num = int(ticket_info[j])
                                     except ValueError:
                                         ticket_num = "有"
                                     print (u'车次: {0} 始发车站: {1} 终点站: {2} {3}: {4}'.format(ticket_info[3],
                                                                                              self.from_station_h,
                                                                                              self.to_station_h,
-                                                                                             self._station_seat[j].encode("utf8"),
+                                                                                            seat_conf_2[j],
                                                                                              ticket_num))
                                     if wrapcache.get(train_no):
                                         print(ticket.QUERY_IN_BLACK_LIST.format(train_no))

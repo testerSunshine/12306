@@ -97,7 +97,6 @@ class autoSubmitOrderRequest:
                                        result=result,
                                        ifShowPassCodeTime=ifShowPassCodeTime,
                                        )
-                g.sendGetQueueCountAsync()
                 if ifShowPassCode == "Y":  # 如果需要验证码
                     print(u"需要验证码")
                     print(u"正在使用自动识别验证码功能")

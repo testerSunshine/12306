@@ -69,8 +69,8 @@ set:
     - "梁敏"
   # 12306登录账号(list)
   12306account:
-    - user: "931128603@qq.com"
-    - pwd: "QWERTY"
+    - user: "@qq.com"
+    - pwd: ""
 
 # 加入小黑屋时间，此功能为了防止僵尸票导致一直下单不成功错过正常的票
 ticket_black_list_time: 5
@@ -83,8 +83,8 @@ auto_code_type: 2
 
 # 打码平台账号
 auto_code_account:
-  user: "931128603"
-  pwd: "wen1995"
+  user: ""
+  pwd: ""
 
 #  邮箱配置，如果抢票成功，将通过邮件配置通知给您
 #  列举163
@@ -104,7 +104,7 @@ email_conf:
   email: "931128603@qq.com "
   notice_email_list: "931128603@qq.com"
   username: "931128603"
-  password: "xrvenridfpnnbehh"
+  password: ""
   host: "smtp.qq.com"
 
 # 是否开启cdn查询，可以更快的检测票票 1为开启，2为关闭

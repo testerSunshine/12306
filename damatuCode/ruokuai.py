@@ -34,6 +34,7 @@ class RClient(object):
         params.update(self.base_params)
         files = {'image': ('a.jpg', im)}
         r = requests.post('http://api.ruokuai.com/create.json', data=params, files=files, headers=self.headers)
+        print(r)
         return r.json()
 
     def rk_report_error(self, im_id):

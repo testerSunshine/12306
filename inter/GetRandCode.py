@@ -29,8 +29,8 @@ def getRandCode(is_auto_code, auto_code_type, result):
             img = Image.open('./tkcode')
             img.show()
             return codexy()
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
 
 def codexy(Ofset=None, is_raw_input=True):

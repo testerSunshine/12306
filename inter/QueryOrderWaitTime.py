@@ -75,8 +75,7 @@ class queryOrderWaitTime:
             queryMyOrderNoCompleteResult = {}
         if queryMyOrderNoCompleteResult:
             if queryMyOrderNoCompleteResult.get("data", False) and queryMyOrderNoCompleteResult["data"].get("orderDBList", False):
-                orderId = queryMyOrderNoCompleteResult["data"]["orderDBList"][0]["sequence_no"]
-                return orderId
+                return queryMyOrderNoCompleteResult["data"]
             elif queryMyOrderNoCompleteResult.get("data", False) and queryMyOrderNoCompleteResult["data"].get("orderCacheDTO", False):
                 if queryMyOrderNoCompleteResult["data"]["orderCacheDTO"].get("message", False):
                     print(queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]["message"])
@@ -96,7 +95,6 @@ class queryOrderWaitTime:
         获取订单前需要进入订单列表页，获取订单列表页session
         :return:
         """
-        self.session.httpClint.set_cookies(acw_tc="AQAAAEnFJnekLwwAtGHjZZCr79B6dpXk", current_captcha_type="Z")
         initNoCompleteUrl = self.session.urls["initNoCompleteUrl"]
         data = {"_json_att": ""}
         self.session.httpClint.send(initNoCompleteUrl, data)

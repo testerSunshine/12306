@@ -13,8 +13,13 @@
   - 配置yaml文件的时候，需注意空格和遵循yaml语法格式
 
 - 项目开始
-  - 修改config/ticket_config.yaml文件，按照提示更改自己想要的信息
-  - 运行根目录run.py，即可开始
+  - 服务器启动:
+      - 修改config/ticket_config.yaml文件，按照提示更改自己想要的信息
+      - 运行根目录run.py，即可开始
+  - 如果你的服务器安装了docker，那么就可以docker启动
+      - 1、docker build -t dockerautosign .
+      - 2、docker run dockerautosign  python start.py &
+      - 3、本来是可以直接Dockerfile启动的，不知道为毛启动不了，如果有大佬看到问题所在，欢迎提出
 
 - 目录对应说明
   - agency - cdn代理

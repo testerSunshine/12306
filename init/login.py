@@ -115,9 +115,10 @@ class GoLogin:
             raise UserPasswordException(u"温馨提示: 用户名或者密码为空，请仔细检查")
         login_num = 0
         while True:
-            if not getPassCodeNewOrderAndLogin(session=self.session, imgType="login"):
+            result = getPassCodeNewOrderAndLogin(session=self.session, imgType="login")
+            if not result:
                 continue
-            self.randCode = getRandCode(self.is_auto_code, self.auto_code_type)
+            self.randCode = getRandCode(self.is_auto_code, self.auto_code_type, result)
             login_num += 1
             self.auth()
             if self.codeCheck():

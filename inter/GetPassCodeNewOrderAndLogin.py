@@ -27,6 +27,6 @@ def getPassCodeNewOrderAndLogin(session, imgType):
         else:
             print(u"下载验证码成功")
             open(img_path, 'wb').write(result)
-            return True
+            return result
     except OSError:
         print (u"验证码下载失败，可能ip被封，确认请手动请求: {0}".format(codeImgUrl))

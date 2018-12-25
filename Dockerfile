@@ -1,6 +1,6 @@
 FROM python:2.7.15
 WORKDIR /usr/src/app
-COPY Docker .
+ADD . /usr/src/app
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV TZ Asia/Shanghai

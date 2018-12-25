@@ -5,7 +5,7 @@ from config.ticketConf import _get_yaml
 from damatuCode.ruokuai import RClient
 
 
-def getRandCode(is_auto_code, auto_code_type):
+def getRandCode(is_auto_code, auto_code_type, result):
     """
     识别验证码
     :return: 坐标
@@ -17,8 +17,9 @@ def getRandCode(is_auto_code, auto_code_type):
                 return
             if auto_code_type == 2:
                 rc = RClient(_get_yaml()["auto_code_account"]["user"], _get_yaml()["auto_code_account"]["pwd"])
-                im = open('./tkcode', 'rb').read()
-                Result = rc.rk_create(im, 6113)
+                print(result)
+                # im = open('./tkcode', 'rb').read()
+                Result = rc.rk_create(result, 6113)
                 if "Result" in Result:
                     return codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
                 else:

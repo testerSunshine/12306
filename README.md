@@ -65,5 +65,5 @@
 
 - 如果觉得项目还不错，可怀疑考虑打赏一波，哈哈
     -
-    ![image](https://github.com/testerSunshine/12306/blob/master/uml/wx.jpg?imageMogr2/auto-orient/strip)
-    ![image](https://github.com/testerSunshine/12306/blob/master/uml/zfb.jpg?imageMogr2/auto-orient/strip)
+    ![image](https://github.com/testerSunshine/12306/blob/master/uml/wx.jpeg?imageMogr2/auto-orient/strip)
+    ![image](https://github.com/testerSunshine/12306/blob/master/uml/zfb.jpeg?imageMogr2/auto-orient/strip)

@@ -81,6 +81,7 @@ class query:
         :return:
         """
         t1 = threading.Thread(target=self.set_cdn, args=())
+        t1.setDaemon(True)
         t1.start()
         for station_date in self.station_dates:
             select_url = copy.copy(self.urls["select_url"])

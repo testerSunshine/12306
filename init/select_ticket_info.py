@@ -156,6 +156,7 @@ class select:
                 print(u"开启cdn查询")
                 print(u"本次待筛选cdn总数为{}, 筛选时间大约为5-10min".format(len(all_cdn)))
                 t = threading.Thread(target=self.cdn_req, args=(all_cdn,))
+                t.setDaemon(True)
                 # t2 = threading.Thread(target=self.set_cdn, args=())
                 t.start()
                 # t2.start()

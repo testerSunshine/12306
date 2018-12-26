@@ -85,7 +85,8 @@ class query:
         t1.start()
         for station_date in self.station_dates:
             select_url = copy.copy(self.urls["select_url"])
-            select_url["req_url"] = select_url["req_url"].format(station_date, self.from_station, self.to_station, self.session.queryUrl)
+            select_url["req_url"] = select_url["req_url"].format(station_date, self.from_station, self.to_station,
+                                                                 self.session.queryUrl)
             station_ticket = self.httpClint.send(select_url)
             if station_ticket.get("c_url", ""):
                 print(station_ticket.get("c_url", ""))
@@ -93,7 +94,9 @@ class query:
                 continue
             value = station_ticket.get("data", "")
             if not value:
-                print (u'{0}-{1} 车次坐席查询为空, 查询url: https://kyfw.12306.cn{2}, 可以手动查询是否有票'.format(self.from_station_h, self.to_station_h, select_url["req_url"]))
+                print (u'{0}-{1} 车次坐席查询为空, 查询url: https://kyfw.12306.cn{2}, 可以手动查询是否有票'.format(self.from_station_h,
+                                                                                               self.to_station_h,
+                                                                                               select_url["req_url"]))
             else:
                 result = value.get('result', [])
                 if result:
@@ -153,7 +156,7 @@ class query:
                                             "train_location": train_location,
                                             "code": ticket.SUCCESS_CODE,
                                             "is_more_ticket_num": is_more_ticket_num,
-                                            "cdn":  self.httpClint.cdn,
+                                            "cdn": self.httpClint.cdn,
                                             "status": True,
                                         }
                 else:

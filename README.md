@@ -63,4 +63,6 @@
     - @才
 - [更新日志](Update.md)
 
-
+- 如果觉得项目还不错，可怀疑考虑打赏一波，哈哈
+    ![image](https://github.com/testerSunshine/12306/blob/master/uml/WechatIMG67.jpeg)
+    ![image](https://github.com/testerSunshine/12306/blob/master/uml/WechatIMG68.jpeg)

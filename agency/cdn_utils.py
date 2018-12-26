@@ -50,8 +50,15 @@ class CDNProxy:
             pass
 
     def open_cdn_file(self):
-        f = open("./cdn_list", "a+")
-        return f
+        cdn = []
+        cdn_re = re.compile("CONNECT (\S+) HTTP/1.1")
+        with open("./cdn_list", "r") as f:
+            for i in f.readlines():
+                # print(i.replace("\n", ""))
+                cdn_list = re.findall(cdn_re, i)
+                if cdn_list and "kyfw.12306.cn:443" not in cdn_list:
+                    cdn.append(cdn_list[0].split(":")[0])
+            return cdn
 
     def get_cdn_list(self):
         """
@@ -101,9 +108,6 @@ class CDNProxy:
                 print(cdn_ip[0])
 
 
-
-
-
 if __name__ == '__main__':
     cdn = CDNProxy()
-    cdn.get_cdn_list()
+    cdn.open_cdn_file()

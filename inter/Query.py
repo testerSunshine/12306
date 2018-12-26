@@ -1,5 +1,10 @@
 # coding=utf-8
 import copy
+import threading
+import time
+
+import random
+
 import wrapcache
 from config import urlConf
 from config.TicketEnmu import ticket
@@ -27,7 +32,6 @@ class query:
         self.station_dates = station_dates if isinstance(station_dates, list) else list(station_dates)
         self.ticket_black_list = dict()
         self.ticke_peoples_num = ticke_peoples_num
-
         # by time
         self.is_by_time = session.is_by_time
         self.train_types = session.train_types
@@ -76,13 +80,19 @@ class query:
         查询
         :return:
         """
+        t1 = threading.Thread(target=self.set_cdn, args=())
+        t1.start()
         for station_date in self.station_dates:
             select_url = copy.copy(self.urls["select_url"])
-            select_url["req_url"] = select_url["req_url"].format(station_date, self.from_station, self.to_station)
+            select_url["req_url"] = select_url["req_url"].format(station_date, self.from_station, self.to_station, self.session.queryUrl)
             station_ticket = self.httpClint.send(select_url)
+            if station_ticket.get("c_url", ""):
+                print(station_ticket.get("c_url", ""))
+                self.session.queryUrl = station_ticket.get("c_url", "")  # 重设查询接口
+                continue
             value = station_ticket.get("data", "")
             if not value:
-                print (u'{0}-{1} 车次坐席查询为空'.format(self.from_station_h, self.to_station_h))
+                print (u'{0}-{1} 车次坐席查询为空, 查询url: https://kyfw.12306.cn{2}, 可以手动查询是否有票'.format(self.from_station_h, self.to_station_h, select_url["req_url"]))
             else:
                 result = value.get('result', [])
                 if result:
@@ -142,11 +152,24 @@ class query:
                                             "train_location": train_location,
                                             "code": ticket.SUCCESS_CODE,
                                             "is_more_ticket_num": is_more_ticket_num,
+                                            "cdn":  self.httpClint.cdn,
                                             "status": True,
                                         }
                 else:
                     print u"车次配置信息有误，或者返回数据异常，请检查 {}".format(station_ticket)
         return {"code": ticket.FAIL_CODE, "status": False}
+
+    def set_cdn(self):
+        """
+        设置cdn
+        :return:
+        """
+        if self.session.is_cdn == 1:
+            while True:
+                if self.session.cdn_list:
+                    self.httpClint.cdn = self.session.cdn_list[random.randint(0, len(self.session.cdn_list) - 1)]
+                else:
+                    time.sleep(0.05)
 
 
 if __name__ == "__main__":

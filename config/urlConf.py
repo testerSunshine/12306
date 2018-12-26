@@ -77,6 +77,18 @@ urls = {
         "is_logger": False,
         "is_json": False,
     },
+    "loginInitCdn": {  # 登录页面
+        "req_url": "/otn/login/init",
+        "req_type": "get",
+        "Referer": "https://kyfw.12306.cn/otn/index/init",
+        "Host": "kyfw.12306.cn",
+        "re_try": 1,
+        "re_time": 0.1,
+        "s_time": 0.1,
+        "is_logger": False,
+        "is_test_cdn": True,
+        "is_json": False,
+    },
     "getUserInfo": {  # 获取用户信息
         "req_url": "/otn/index/initMy12306",
         "req_type": "get",
@@ -156,7 +168,7 @@ urls = {
         "is_json": True,
     },
     "select_url": {  # 查询余票
-        "req_url": "/otn/leftTicket/queryX?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT",
+        "req_url": "/otn/{3}?leftTicketDTO.train_date={0}&leftTicketDTO.from_station={1}&leftTicketDTO.to_station={2}&purpose_codes=ADULT",
         "req_type": "get",
         "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
         "Host": "kyfw.12306.cn",

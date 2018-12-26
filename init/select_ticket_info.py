@@ -3,6 +3,7 @@ import datetime
 import random
 import socket
 import sys
+import threading
 import time
 
 import wrapcache
@@ -26,7 +27,7 @@ from myException.ticketConfigException import ticketConfigException
 from myException.ticketIsExitsException import ticketIsExitsException
 from myException.ticketNumOutException import ticketNumOutException
 from myUrllib.httpUtils import HTTPClient
-from utils.timeUtil import time_to_minutes,minutes_to_time
+from utils.timeUtil import time_to_minutes, minutes_to_time
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -42,7 +43,6 @@ class select:
         self.ticke_peoples, self.station_trains, self.ticket_black_list_time, \
         self.order_type, self.is_by_time, self.train_types, self.departure_time, \
         self.arrival_time, self.take_time = self.get_ticket_info()
-
         self.is_auto_code = _get_yaml()["is_auto_code"]
         self.auto_code_type = _get_yaml()["auto_code_type"]
         self.is_cdn = _get_yaml()["is_cdn"]
@@ -50,6 +50,7 @@ class select:
         self.urls = urlConf.urls
         self.login = GoLogin(self, self.is_auto_code, self.auto_code_type)
         self.cdn_list = []
+        self.queryUrl = "leftTicket/queryX"
         self.passengerTicketStrList = ""
         self.oldPassengerStr = ""
         self.set_type = ""
@@ -79,12 +80,13 @@ class select:
         take_time = time_to_minutes(ticket_info_config["set"]["take_time"])
 
         print u"*" * 20
-        print u"12306刷票小助手，最后更新于2018.9.21，请勿作为商业用途，交流群号：286271084"
+        print u"12306刷票小助手，最后更新于2018.12.26，请勿作为商业用途，交流群号：286271084"
         if is_by_time:
-            method_notie="购票方式：根据时间区间购票\n可接受最早出发时间：{0}\n可接受最晚抵达时间：{1}\n可接受最长旅途时间：{2}\n可接受列车类型：{3}\n"\
-            .format(minutes_to_time(departure_time),minutes_to_time(arrival_time),minutes_to_time(take_time)," , ".join(train_types))
+            method_notie = "购票方式：根据时间区间购票\n可接受最早出发时间：{0}\n可接受最晚抵达时间：{1}\n可接受最长旅途时间：{2}\n可接受列车类型：{3}\n" \
+                .format(minutes_to_time(departure_time), minutes_to_time(arrival_time), minutes_to_time(take_time),
+                        " , ".join(train_types))
         else:
-            method_notie="购票方式：根据候选车次购买\n候选购买车次：{0}".format(",".join(station_trains))
+            method_notie = "购票方式：根据候选车次购买\n候选购买车次：{0}".format(",".join(station_trains))
         print u"当前配置：\n出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票优先提交：{4}\n乘车人：{5}\n" \
               u"刷新间隔：随机(1-3S)\n{6}\n僵尸票关小黑屋时长：{7}\n 下单接口：{8}\n".format \
                 (
@@ -128,26 +130,17 @@ class select:
         else:
             self.login.go_login()
 
-    def set_cdn(self):
-        """
-        设置cdn
-        :return:
-        """
-        if self.is_cdn == 1:
-            while True:
-                if self.cdn_list:
-                    self.httpClint.cdn = self.cdn_list[random.randint(0, len(self.cdn_list) - 1)]
-
     def cdn_req(self, cdn):
         for i in range(len(cdn) - 1):
             http = HTTPClient()
-            urls = self.urls["loginInit"]
-            http.cdn = cdn[i].replace("\n", "")
+            urls = self.urls["loginInitCdn"]
+            http._cdn = cdn[i].replace("\n", "")
             start_time = datetime.datetime.now()
             rep = http.send(urls)
             if rep and "message" not in rep and (datetime.datetime.now() - start_time).microseconds / 1000 < 500:
-                print("加入cdn {0}".format(cdn[i].replace("\n", "")))
-                self.cdn_list.append(cdn[i].replace("\n", ""))
+                if cdn[i].replace("\n", "") not in self.cdn_list:  # 如果有重复的cdn，则放弃加入
+                    print("加入cdn {0}".format(cdn[i].replace("\n", "")))
+                    self.cdn_list.append(cdn[i].replace("\n", ""))
         print(u"所有cdn解析完成...")
 
     def cdn_certification(self):
@@ -157,14 +150,14 @@ class select:
         """
         if self.is_cdn == 1:
             CDN = CDNProxy()
-            all_cdn = CDN.all_cdn()
+            all_cdn = CDN.open_cdn_file()
             if all_cdn:
-                print(u"由于12306网站策略调整，cdn功能暂时关闭。")
-                # print(u"开启cdn查询")
-                # print(u"本次待筛选cdn总数为{}, 筛选时间大约为5-10min".format(len(all_cdn)))
-                # t = threading.Thread(target=self.cdn_req, args=(all_cdn,))
+                # print(u"由于12306网站策略调整，cdn功能暂时关闭。")
+                print(u"开启cdn查询")
+                print(u"本次待筛选cdn总数为{}, 筛选时间大约为5-10min".format(len(all_cdn)))
+                t = threading.Thread(target=self.cdn_req, args=(all_cdn,))
                 # t2 = threading.Thread(target=self.set_cdn, args=())
-                # t.start()
+                t.start()
                 # t2.start()
             else:
                 raise ticketConfigException(u"cdn列表为空，请先加载cdn")
@@ -174,7 +167,7 @@ class select:
         l = liftTicketInit(self)
         l.reqLiftTicketInit()
         self.call_login()
-        check_user =  checkUser(self)
+        check_user = checkUser(self)
         check_user.sendCheckUser()
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         num = 0
@@ -220,7 +213,8 @@ class select:
                         print(ticket.QUEUE_WARNING_MSG.format(train_no))
                     else:
                         # 获取联系人
-                        s = getPassengerDTOs(session=self, ticket_peoples=self.ticke_peoples, set_type=seat_conf_2[seat],
+                        s = getPassengerDTOs(session=self, ticket_peoples=self.ticke_peoples,
+                                             set_type=seat_conf_2[seat],
                                              is_more_ticket_num=is_more_ticket_num)
                         getPassengerDTOsResult = s.getPassengerTicketStrListAndOldPassengerStr()
                         if getPassengerDTOsResult.get("status", False):
@@ -256,8 +250,8 @@ class select:
                                                                                                                 ",".join(
                                                                                                                     self.station_trains),
                                                                                                                 (
-                                                                                                                            datetime.datetime.now() - start_time).microseconds / 1000,
-                                                                                                                wrapcache.get("cdn"),
+                                                                                                                        datetime.datetime.now() - start_time).microseconds / 1000,
+                                                                                                                queryResult.get("cdn", None),
                                                                                                                 len(
                                                                                                                     self.cdn_list),
                                                                                                                 random_time)
@@ -290,4 +284,6 @@ class select:
 
 
 if __name__ == '__main__':
-    pass
+    s = select()
+    cdn = CDNProxy().open_cdn_file()
+    s.cdn_req(cdn)

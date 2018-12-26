@@ -117,9 +117,8 @@ class HTTPClient(object):
         if is_test_cdn:
             url_host = self._cdn
         elif is_cdn:
-            cdn = wrapcache.get("cdn")
-            if cdn:
-                url_host = cdn
+            if self._cdn:
+                url_host = self._cdn
             else:
                 url_host = urls["Host"]
         else:
@@ -136,7 +135,7 @@ class HTTPClient(object):
                                            allow_redirects=allow_redirects,
                                            verify=False,
                                            **kwargs)
-                if response.status_code == 200:
+                if response.status_code == 200 or response.status_code == 302:
                     if response.content:
                         if is_logger:
                             logger.log(

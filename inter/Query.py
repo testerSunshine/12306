@@ -171,9 +171,10 @@ class query:
         if self.session.is_cdn == 1:
             while True:
                 if self.session.cdn_list:
+                    time.sleep(0.1)
                     self.httpClint.cdn = self.session.cdn_list[random.randint(0, len(self.session.cdn_list) - 1)]
                 else:
-                    time.sleep(0.05)
+                    time.sleep(0.1)
 
 
 if __name__ == "__main__":

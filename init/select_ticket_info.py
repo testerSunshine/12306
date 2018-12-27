@@ -243,7 +243,7 @@ class select:
                                                      self.ticke_peoples)
                             sor.sendSubmitOrderRequest()
                 else:
-                    random_time = round(random.uniform(1, 3), 2)
+                    random_time = round(random.uniform(0.5, 0.5), 2)
                     time.sleep(random_time)
                     print u"正在第{0}次查询 随机停留时长：{6} 乘车日期: {1} 车次：{2} 查询无票 cdn轮询IP：{4}当前cdn总数：{5} 总耗时：{3}ms".format(num,
                                                                                                                 ",".join(

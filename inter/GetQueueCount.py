@@ -78,22 +78,23 @@ class getQueueCount:
             if "countT" in getQueueCountResult["data"]:
                 ticket = getQueueCountResult["data"]["ticket"]
                 ticket_split = sum(map(conversion_int, ticket.split(","))) if ticket.find(",") != -1 else ticket
-                countT = getQueueCountResult["data"]["countT"]
-                if int(countT) is 0:
-                    print(u"排队成功, 当前余票还剩余: {0} 张".format(ticket_split))
-                    csf = confirmSingleForQueue(self.session, self.ifShowPassCodeTime, self.is_need_code, self.token,
-                                                self.set_type, self.ticket_peoples, self.ticketInfoForPassengerForm,
-                                                self.oldPassengerStr, self.passengerTicketStrList)
-                    csf.sendConfirmSingleForQueue()
-                else:
-                    print(u"当前排队人数: {1} 当前余票还剩余:{0} 张，继续排队中".format(ticket_split, countT))
+                # countT = getQueueCountResult["data"]["countT"]
+                # if int(countT) is 0:
+                print(u"排队成功, 当前余票还剩余: {0} 张".format(ticket_split))
+                csf = confirmSingleForQueue(self.session, self.ifShowPassCodeTime, self.is_need_code, self.token,
+                                            self.set_type, self.ticket_peoples, self.ticketInfoForPassengerForm,
+                                            self.oldPassengerStr, self.passengerTicketStrList)
+                csf.sendConfirmSingleForQueue()
+            #     else:
+            #         print(u"当前排队人数: {1} 当前余票还剩余:{0} 张，继续排队中".format(ticket_split, countT))
             else:
                 print(u"排队发现未知错误{0}，将此列车 {1}加入小黑屋".format(getQueueCountResult, self.train_no))
                 wrapcache.set(key=self.train_no, value=datetime.datetime.now(),
                               timeout=int(_get_yaml()["ticket_black_list_time"]) * 60)
         elif "messages" in getQueueCountResult and getQueueCountResult["messages"]:
             print(u"排队异常，错误信息：{0}, 将此列车 {1}加入小黑屋".format(getQueueCountResult["messages"][0], self.train_no))
-            wrapcache.set(key=self.train_no, value=datetime.datetime.now(), timeout=int(_get_yaml()["ticket_black_list_time"]) * 60)
+            wrapcache.set(key=self.train_no, value=datetime.datetime.now(),
+                          timeout=int(_get_yaml()["ticket_black_list_time"]) * 60)
         else:
             if "validateMessages" in getQueueCountResult and getQueueCountResult["validateMessages"]:
                 print(str(getQueueCountResult["validateMessages"]))
@@ -101,6 +102,3 @@ class getQueueCount:
                               timeout=int(_get_yaml()["ticket_black_list_time"]) * 60)
             else:
                 print(u"未知错误 {0}".format("".join(getQueueCountResult)))
-
-
-

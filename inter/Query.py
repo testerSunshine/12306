@@ -39,6 +39,7 @@ class query:
         self.arrival_time = session.arrival_time
         self.take_time = session.take_time
 
+
     @classmethod
     def station_seat(self, index):
         """
@@ -80,9 +81,9 @@ class query:
         查询
         :return:
         """
-        t1 = threading.Thread(target=self.set_cdn, args=())
-        t1.setDaemon(True)
-        t1.start()
+        if self.session.is_cdn == 1:
+            if self.session.cdn_list:
+                self.httpClint.cdn = self.session.cdn_list[random.randint(0, len(self.session.cdn_list) - 1)]
         for station_date in self.station_dates:
             select_url = copy.copy(self.urls["select_url"])
             select_url["req_url"] = select_url["req_url"].format(station_date, self.from_station, self.to_station,
@@ -162,19 +163,6 @@ class query:
                 else:
                     print u"车次配置信息有误，或者返回数据异常，请检查 {}".format(station_ticket)
         return {"code": ticket.FAIL_CODE, "status": False}
-
-    def set_cdn(self):
-        """
-        设置cdn
-        :return:
-        """
-        if self.session.is_cdn == 1:
-            while True:
-                if self.session.cdn_list:
-                    time.sleep(0.1)
-                    self.httpClint.cdn = self.session.cdn_list[random.randint(0, len(self.session.cdn_list) - 1)]
-                else:
-                    time.sleep(0.1)
 
 
 if __name__ == "__main__":

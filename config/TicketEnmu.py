@@ -22,7 +22,7 @@ class ticket(object):
     QUEUE_JOIN_BLACK = u"排队发现未知错误{0}，将此列车 {1}加入小黑屋"
     QUEUE_WARNING_MSG = u"排队异常，错误信息：{0}, 将此列车 {1}加入小黑屋"
 
-    OUT_NUM = 30  # 排队请求12306的次数
+    OUT_NUM = 120  # 排队请求12306的次数
     WAIT_OUT_NUM = u"超出排队时间，自动放弃，正在重新刷票"
     WAIT_ORDER_SUCCESS = u"恭喜您订票成功，订单号为：{0}, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付!"
     WAIT_ORDER_CONTINUE = u"排队等待时间预计还剩 {0} ms"

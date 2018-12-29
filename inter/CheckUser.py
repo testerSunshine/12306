@@ -14,7 +14,7 @@ class checkUser:
         检查用户登录, 检查间隔为2分钟
         :return:
         """
-        CHENK_TIME = 2
+        CHENK_TIME = 1
         if wrapcache.get("user_time") is None:
             check_user_url = self.session.urls["check_user_url"]
             data = {"_json_att": ""}

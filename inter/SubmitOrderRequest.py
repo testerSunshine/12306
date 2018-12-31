@@ -57,7 +57,6 @@ class submitOrderRequest:
         submitResult = self.session.httpClint.send(submit_station_url, self.data_apr())
         if 'data' in submitResult and submitResult['data']:
             if submitResult['data'] == 'N':
-                print (u'出票成功')
                 coi = checkOrderInfo(self.session, self.train_no, self.set_type, self.passengerTicketStrList,
                                      self.oldPassengerStr,
                                      self.train_date, self.ticke_peoples)

@@ -39,7 +39,6 @@ class query:
         self.arrival_time = session.arrival_time
         self.take_time = session.take_time
 
-
     @classmethod
     def station_seat(self, index):
         """
@@ -90,7 +89,7 @@ class query:
                                                                  self.session.queryUrl)
             station_ticket = self.httpClint.send(select_url)
             if station_ticket.get("c_url", ""):
-                print(station_ticket.get("c_url", ""))
+                print(u"设置当前查询url为: {}".format(station_ticket.get("c_url", "")))
                 self.session.queryUrl = station_ticket.get("c_url", "")  # 重设查询接口
                 continue
             value = station_ticket.get("data", "")

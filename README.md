@@ -15,7 +15,8 @@
 - 项目开始
   - 服务器启动:
       - 修改config/ticket_config.yaml文件，按照提示更改自己想要的信息
-      - 运行根目录run.py，即可开始
+      - 运行根目录sudo python run.py，即可开始
+        - 由于新增对时功能，请务必用sudo，sudo，sudo 执行，否则会报权限错误，windows打开ide或者cmd请用管理员身份执行python run.py，不需要加sudo
   - 如果你的服务器安装了docker，那么就可以docker启动
       - 1、docker build -t dockerticket .
       - 2、docker run dockerticket  python run.py &
@@ -59,11 +60,11 @@
     - 测试下单接口是否可用，有两个下单接口，随便用哪个都ok
     - 如果下载验证码过期或者下载失败的问题，应该是12306封ip的策略，多重试几次，12306现在封服务器(阿里云和腾讯云)ip比较严重，尽量不要放在服务器里面
 - 感谢一下小伙伴对本项目提供的帮助
-    - @读，◢
+    - @ sun7127@126.com
     - @才
 - [更新日志](Update.md)
 
-- 如果觉得项目还不错，可怀疑考虑打赏一波，哈哈
+- 如果觉得项目还不错，可以考虑打赏一波，哈哈
     -
     ![image](https://github.com/testerSunshine/12306/blob/master/uml/wx.jpeg?imageMogr2/auto-orient/strip)
     ![image](https://github.com/testerSunshine/12306/blob/master/uml/zfb.jpeg?imageMogr2/auto-orient/strip)

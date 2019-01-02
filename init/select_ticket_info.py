@@ -10,6 +10,7 @@ import wrapcache
 
 from agency.cdn_utils import CDNProxy
 from config import urlConf
+from config.AutoSynchroTime import autoSynchroTime
 from config.TicketEnmu import ticket
 from config.configCommon import seat_conf
 from config.configCommon import seat_conf_2
@@ -42,7 +43,7 @@ class select:
         self.from_station, self.to_station, self.station_dates, self._station_seat, self.is_more_ticket, \
         self.ticke_peoples, self.station_trains, self.ticket_black_list_time, \
         self.order_type, self.is_by_time, self.train_types, self.departure_time, \
-        self.arrival_time, self.take_time = self.get_ticket_info()
+        self.arrival_time, self.take_time, self.order_model = self.get_ticket_info()
         self.is_auto_code = _get_yaml()["is_auto_code"]
         self.auto_code_type = _get_yaml()["auto_code_type"]
         self.is_cdn = _get_yaml()["is_cdn"]
@@ -79,16 +80,19 @@ class select:
         arrival_time = time_to_minutes(ticket_info_config["set"]["arrival_time"])
         take_time = time_to_minutes(ticket_info_config["set"]["take_time"])
 
+        # 下单模式
+        order_model = ticket_info_config["order_model"]
+
         print u"*" * 20
-        print u"12306刷票小助手，最后更新于2018.12.26，请勿作为商业用途，交流群号：286271084(已满)， 请加2群：649992274"
+        print u"12306刷票小助手，最后更新于2019.01.02，请勿作为商业用途，交流群号：286271084(已满)， 请加2群：649992274"
         if is_by_time:
-            method_notie = "购票方式：根据时间区间购票\n可接受最早出发时间：{0}\n可接受最晚抵达时间：{1}\n可接受最长旅途时间：{2}\n可接受列车类型：{3}\n" \
+            method_notie = u"购票方式：根据时间区间购票\n可接受最早出发时间：{0}\n可接受最晚抵达时间：{1}\n可接受最长旅途时间：{2}\n可接受列车类型：{3}\n" \
                 .format(minutes_to_time(departure_time), minutes_to_time(arrival_time), minutes_to_time(take_time),
                         " , ".join(train_types))
         else:
-            method_notie = "购票方式：根据候选车次购买\n候选购买车次：{0}".format(",".join(station_trains))
+            method_notie = u"购票方式：根据候选车次购买\n候选购买车次：{0}".format(",".join(station_trains))
         print u"当前配置：\n出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票优先提交：{4}\n乘车人：{5}\n" \
-              u"刷新间隔：随机(1-3S)\n{6}\n僵尸票关小黑屋时长：{7}\n 下单接口：{8}\n".format \
+              u"刷新间隔：随机(1-3S)\n{6}\n僵尸票关小黑屋时长：{7}\n 下单接口：{8}\n 下单模式：{9}\n".format \
                 (
                 from_station,
                 to_station,
@@ -99,9 +103,12 @@ class select:
                 method_notie,
                 ticket_black_list_time,
                 order_type,
+                order_model
             )
         print u"*" * 20
-        return from_station, to_station, station_dates, set_type, is_more_ticket, ticke_peoples, station_trains, ticket_black_list_time, order_type, is_by_time, train_types, departure_time, arrival_time, take_time
+        return from_station, to_station, station_dates, set_type, is_more_ticket, ticke_peoples, station_trains, \
+               ticket_black_list_time, order_type, is_by_time, train_types, departure_time, arrival_time, take_time, \
+               order_model
 
     def station_table(self, from_station, to_station):
         """
@@ -187,7 +194,18 @@ class select:
                             self.call_login()
                             break
                 start_time = datetime.datetime.now()
-
+                if self.order_model is 1:
+                    autoSynchroTime()
+                    sleep_time_s = 0.1
+                    sleep_time_t = 0.5
+                    # 测试了一下有微妙级的误差，应该不影响，测试结果：2019-01-02 22:30:00.004555
+                    if start_time.strftime("%M:%S") == "29:55" or start_time.strftime("%M:%S") == "59:55":
+                        print(u"预售整点模式卡点中")
+                        time.sleep(5)
+                        print(u"预售模式执行")
+                else:
+                    sleep_time_s = 0.5
+                    sleep_time_t = 3
                 q = query(session=self,
                           from_station=from_station,
                           to_station=to_station,
@@ -243,7 +261,7 @@ class select:
                                                      self.ticke_peoples)
                             sor.sendSubmitOrderRequest()
                 else:
-                    random_time = round(random.uniform(0.5, 0.5), 2)
+                    random_time = round(random.uniform(sleep_time_s, sleep_time_t), 2)
                     print(u"正在第{0}次查询 随机停留时长：{6} 乘车日期: {1} 车次：{2} 查询无票 cdn轮询IP：{4}当前cdn总数：{5} 总耗时：{3}ms".format(num,
                                                                                                                 ",".join(
                                                                                                                     self.station_dates),
@@ -251,7 +269,9 @@ class select:
                                                                                                                     self.station_trains),
                                                                                                                 (
                                                                                                                         datetime.datetime.now() - start_time).microseconds / 1000,
-                                                                                                                queryResult.get("cdn", None),
+                                                                                                                queryResult.get(
+                                                                                                                    "cdn",
+                                                                                                                    None),
                                                                                                                 len(
                                                                                                                     self.cdn_list),
                                                                                                                 random_time))

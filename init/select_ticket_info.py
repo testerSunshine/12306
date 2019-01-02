@@ -80,7 +80,7 @@ class select:
         take_time = time_to_minutes(ticket_info_config["set"]["take_time"])
 
         print u"*" * 20
-        print u"12306刷票小助手，最后更新于2018.12.26，请勿作为商业用途，交流群号：286271084"
+        print u"12306刷票小助手，最后更新于2018.12.26，请勿作为商业用途，交流群号：286271084(已满)， 请加2群：649992274"
         if is_by_time:
             method_notie = "购票方式：根据时间区间购票\n可接受最早出发时间：{0}\n可接受最晚抵达时间：{1}\n可接受最长旅途时间：{2}\n可接受列车类型：{3}\n" \
                 .format(minutes_to_time(departure_time), minutes_to_time(arrival_time), minutes_to_time(take_time),

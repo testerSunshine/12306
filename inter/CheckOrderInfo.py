@@ -68,7 +68,7 @@ class checkOrderInfo:
                                        self.passengerTicketStrList,
                                        )
             QueueCount.sendGetQueueCount()
-        elif "errMsg" in checkOrderInfoRep['data'] and checkOrderInfoRep['data']["errMsg"]:
-            print checkOrderInfoRep['data']["errMsg"]
+        elif "errMsg" in data and data["errMsg"]:
+            print(checkOrderInfoRep['data']["errMsg"])
         elif 'messages' in checkOrderInfoRep and checkOrderInfoRep['messages']:
             print (checkOrderInfoRep['messages'][0])

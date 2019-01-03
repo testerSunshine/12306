@@ -45,7 +45,7 @@ class queryOrderWaitTime:
                         raise ticketIsExitsException(ticket.WAIT_ORDER_SUCCESS.format(
                             data.get("orderId")))
                     elif data.get("msg", False):
-                        print data.get("msg", "")
+                        print(data.get("msg", ""))
                         break
                     elif data.get("waitTime", False):
                         print(ticket.WAIT_ORDER_CONTINUE.format(0 - data.get("waitTime", False)))
@@ -83,7 +83,7 @@ class queryOrderWaitTime:
                         queryMyOrderNoCompleteResult["data"]["orderCacheDTO"]["message"]["message"])
             else:
                 if queryMyOrderNoCompleteResult.get("message", False):
-                    print queryMyOrderNoCompleteResult.get("message", False)
+                    print(queryMyOrderNoCompleteResult.get("message", False))
                     return False
                 else:
                     return False

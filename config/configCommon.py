@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import time
 
 saleMinDelayDay = 0
@@ -25,7 +26,11 @@ seat_conf = {'商务座': 32,
         '硬座': 29,
         '无座': 26,
         }
-seat_conf_2 = dict([(v,k) for (k,v) in seat_conf.iteritems()])
+if sys.version_info.major == 2:
+    seat_conf_2 = dict([(v,k) for (k,v) in seat_conf.iteritems()])
+else:
+    seat_conf_2 = dict([(v, k) for (k, v) in seat_conf.items()])
+
 
 def getNowTimestamp():
     return time.time()

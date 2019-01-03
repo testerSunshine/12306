@@ -23,7 +23,7 @@ def getRandCode(is_auto_code, auto_code_type, result):
                     return codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
                 else:
                     if "Error" in Result and Result["Error"]:
-                        print u"打码平台错误: {0}, 请登录打码平台查看-http://www.ruokuai.com/client/index?6726".format(Result["Error"])
+                        print(u"打码平台错误: {0}, 请登录打码平台查看-http://www.ruokuai.com/client/index?6726".format(Result["Error"]))
                         return ""
         else:
             img = Image.open('./tkcode')

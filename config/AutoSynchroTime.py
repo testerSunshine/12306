@@ -19,29 +19,30 @@ def autoSynchroTime():
     print(u"系统当前时间{}".format(str(datetime.datetime.now())[:22]))
     system = platform.system()
     if system == "Windows":  # windows 同步时间未测试过，参考地址：https://www.jianshu.com/p/92ec15da6cc3
-        for host in hosts:
-
-            try:
-
-                response = c.request(host)
-
-                if response:
-                    break
-
-            except Exception as e:
-                print(u"时区获取异常：{0}".format(e))
-        current_time = response.tx_time
-
-        _date, _time = str(datetime.datetime.fromtimestamp(current_time))[:22].split(' ')
-        print(u"北京标准时间", _date, _time)
-
-        a, b, c = _time.split(':')
-
-        c = float(c) + 0.5
-
-        _time = "%s:%s:%s" % (a, b, c)
-
-        os.system('date %s && time %s' % (_date, _time))
+        print(u"windeos系统暂时不提供自动对时功能，请手动同步北京时间")
+        # for host in hosts:
+        #
+        #     try:
+        #
+        #         response = c.request(host)
+        #
+        #         if response:
+        #             break
+        #
+        #     except Exception as e:
+        #         print(u"时区获取异常：{0}".format(e))
+        # current_time = response.tx_time
+        #
+        # _date, _time = str(datetime.datetime.fromtimestamp(current_time))[:22].split(' ')
+        # print(u"北京标准时间", _date, _time)
+        #
+        # a, b, c = _time.split(':')
+        #
+        # c = float(c) + 0.5
+        #
+        # _time = "%s:%s:%s" % (a, b, c)
+        #
+        # os.system('date %s && time %s' % (_date, _time))
     else:  # mac同步地址，如果ntpdate未安装，brew install ntpdate    linux 安装 yum install -y ntpdate
         for host in hosts:
             sin = os.system('ntpdate {}'.format(host))

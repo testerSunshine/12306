@@ -1,9 +1,12 @@
 version: "3"
 
-service: 
-    12306: 
+services:
+    12306ticket:
+        # image: 
         build: .
-        volumes: 
-            - ./:/usr/src/app/
+        # ports:
+        volumes:
+            - ./:/usr/src/app
         container_name: 12306ticket
-                    
+
+

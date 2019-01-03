@@ -171,6 +171,7 @@ class select:
                 raise ticketConfigException(u"cdn列表为空，请先加载cdn")
 
     def main(self):
+        autoSynchroTime()  # 同步时间
         self.cdn_certification()
         l = liftTicketInit(self)
         l.reqLiftTicketInit()
@@ -179,11 +180,12 @@ class select:
         check_user.sendCheckUser()
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         num = 0
+        # isAutoSynchroTime = False
         while 1:
             try:
                 num += 1
                 check_user.sendCheckUser()
-                now = datetime.datetime.now()
+                now = datetime.datetime.now()  # 感谢群里大佬提供整点代码
                 if now.hour >= 23 or now.hour < 6:
                     print(u"12306休息时间，本程序自动停止,明天早上七点将自动运行")
                     open_time = datetime.datetime(now.year, now.month, now.day, 6)
@@ -192,10 +194,9 @@ class select:
                     time.sleep((open_time - now).seconds)
                     self.call_login()
                 if self.order_model is 1:
-                    autoSynchroTime()
                     sleep_time_s = 0.1
                     sleep_time_t = 0.5
-                    # 测试了一下有微妙级的误差，应该不影响，测试结果：2019-01-02 22:30:00.004555
+                    # 测试了一下有微妙级的误差，应该不影响，测试结果：2019-01-02 22:30:00.004555，预售还是会受到前一次刷新的时间影响，暂时没想到好的解决方案
                     if now.strftime("%M:%S") == "29:55" or now.strftime("%M:%S") == "59:55":
                         print(u"预售整点模式卡点中")
                         time.sleep(5)
@@ -265,7 +266,7 @@ class select:
                                                                                                                 ",".join(
                                                                                                                     self.station_trains),
                                                                                                                 (
-                                                                                                                        datetime.datetime.now() - start_time).microseconds / 1000,
+                                                                                                                        datetime.datetime.now() - now).microseconds / 1000,
                                                                                                                 queryResult.get(
                                                                                                                     "cdn",
                                                                                                                     None),

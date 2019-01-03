@@ -22,7 +22,7 @@ def getPassCodeNewOrderAndLogin(session, imgType):
     result = session.httpClint.send(codeImgUrl)
     try:
         if isinstance(result, dict):
-            print(u"下载验证码失败, 请手动检查是否ip被封，或者重试，请求地址：{}".format(codeImgUrl))
+            print(u"下载验证码失败, 请手动检查是否ip被封，或者重试，请求地址：{}".format(codeImgUrl.get("req_url")))
             return False
         else:
             print(u"下载验证码成功")

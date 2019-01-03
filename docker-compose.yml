@@ -2,7 +2,7 @@ version: "3"
 
 services:
     12306ticket:
-        # image: 
+        #image: 12306_12306ticket
         build: .
         # ports:
         volumes:

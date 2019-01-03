@@ -183,23 +183,20 @@ class select:
             try:
                 num += 1
                 check_user.sendCheckUser()
-                if time.strftime('%H:%M:%S', time.localtime(time.time())) > "23:00:00" or time.strftime('%H:%M:%S',
-                                                                                                        time.localtime(
-                                                                                                            time.time())) < "06:00:00":
-                    print(ticket.REST_TIME)
-                    while 1:
-                        time.sleep(1)
-                        if "06:00:00" < time.strftime('%H:%M:%S', time.localtime(time.time())) < "23:00:00":
-                            print(ticket.REST_TIME_PAST)
-                            self.call_login()
-                            break
-                start_time = datetime.datetime.now()
+                now = datetime.datetime.now()
+                if now.hour >= 23 or now.hour < 6:
+                    print(u"12306休息时间，本程序自动停止,明天早上七点将自动运行")
+                    open_time = datetime.datetime(now.year, now.month, now.day, 6)
+                    if open_time < now:
+                        open_time += datetime.timedelta(1)
+                    time.sleep((open_time - now).seconds)
+                    self.call_login()
                 if self.order_model is 1:
                     autoSynchroTime()
                     sleep_time_s = 0.1
                     sleep_time_t = 0.5
                     # 测试了一下有微妙级的误差，应该不影响，测试结果：2019-01-02 22:30:00.004555
-                    if start_time.strftime("%M:%S") == "29:55" or start_time.strftime("%M:%S") == "59:55":
+                    if now.strftime("%M:%S") == "29:55" or now.strftime("%M:%S") == "59:55":
                         print(u"预售整点模式卡点中")
                         time.sleep(5)
                         print(u"预售模式执行")

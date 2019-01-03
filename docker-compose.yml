@@ -1,0 +1,9 @@
+version: "3"
+
+service: 
+    12306: 
+        build: .
+        volumes: 
+            - ./:/usr/src/app/
+        container_name: 12306ticket
+                    

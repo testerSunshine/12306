@@ -5,19 +5,20 @@ set:
   # - 2018-01-06
   # - 2018-01-07
   station_dates:
-    - "2019-01-27"
-    - "2019-01-26"
+    - "2019-01-30"
+    - "2019-01-31"
+#    - "2019-02-1"
 
   # 是否根据时间范围 和 乘车类型 购票
   # 否则将需要手动填写车次
-  is_by_time: False
+  is_by_time: True
 
   # 列车类型: 高铁 G 动车 D 其它火车 O
-  train_types: [G,D,O]
+  train_types: [O]
 
   # 可接受最早出发时间 格式ex：
   # departure_time: "8:00"
-  departure_time: "00:00"
+  departure_time: "08:00"
 
   # 可接受最晚抵达时间 格式ex：
   # arrival_time: "16:00"
@@ -25,7 +26,7 @@ set:
 
   # 可接受最长旅途时间 格式ex：
   # take_time: "24:00"
-  take_time: "24:00"
+  take_time: "48:00"
 
   # 填入需要购买的车次(list)，格式ex：
   # - "G1353"
@@ -46,21 +47,21 @@ set:
 #    - "G1021"
 #    - "G99"
 #    - "G6011"
-    - "D2972"
-    - "D1874"
-    - "D2834"
+    - "Z111"
+    - "K511"
 
   # 出发城市，比如深圳北，就填深圳就搜得到
-  from_station: "广州南"
+  from_station: "广州"
 
   # 到达城市 比如深圳北，就填深圳就搜得到
-  to_station: "三江南"
+  to_station: "海口"
 
   # 座位(list) 多个座位ex:
   # - "二等座"
   # - "一等座"
   set_type:
-  - "二等座"
+  - "硬卧"
+  - "软卧"
 
   # 当余票小于乘车人，如果选择优先提交，则删减联系人和余票数一致在提交
   is_more_ticket: True
@@ -70,11 +71,11 @@ set:
   # - "李四"
   ticke_peoples:
 #    - "文贤平"
-    - "梁敏"
+    - "谭齐宁"
   # 12306登录账号(list)
   12306account:
-    - user: "931128603@qq.com"
-    - pwd: ""
+    - user: "13518885579"
+    - pwd: "Woshiyazi1"
 
 # 加入小黑屋时间，此功能为了防止僵尸票导致一直下单不成功错过正常的票
 ticket_black_list_time: 5
@@ -87,8 +88,8 @@ auto_code_type: 2
 
 # 打码平台账号
 auto_code_account:
-  user: "931128603"
-  pwd: ""
+  user: "447542994"
+  pwd: "Woshiyazi1"
 
 #  邮箱配置，如果抢票成功，将通过邮件配置通知给您
 #  列举163
@@ -105,10 +106,10 @@ auto_code_account:
 #  host: "smtp.qq.com"
 email_conf:
   is_email: True
-  email: "931128603@qq.com "
-  notice_email_list: "931128603@qq.com"
-  username: "931128603"
-  password: ""
+  email: "447542994@qq.com "
+  notice_email_list: "447542994@qq.com"
+  username: "447542994"
+  password: "qtvhujlpylnhbhjc"
   host: "smtp.qq.com"
 
 # 是否开启cdn查询，可以更快的检测票票 1为开启，2为关闭
@@ -119,7 +120,7 @@ order_type: 2
 
 # 下单模式 1 为预售，整点刷新，刷新间隔0.1-0.5S, 然后会校验时间，比如12点的预售，那脚本就会在12.00整检票，刷新订单
 #         2 是捡漏，捡漏的刷新间隔时间为0.5-3秒，时间间隔长，不容易封ip
-order_model: 1
+order_model: 2
 
 
 

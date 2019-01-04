@@ -62,11 +62,11 @@ class select:
         :return:
         """
         ticket_info_config = _get_yaml()
-        from_station = ticket_info_config["set"]["from_station"].encode("utf8")
-        to_station = ticket_info_config["set"]["to_station"].encode("utf8")
+        from_station = ticket_info_config["set"]["from_station"]
+        to_station = ticket_info_config["set"]["to_station"]
         station_dates = ticket_info_config["set"]["station_dates"]
         set_names = ticket_info_config["set"]["set_type"]
-        set_type = [seat_conf[x.encode("utf8")] for x in ticket_info_config["set"]["set_type"]]
+        set_type = [seat_conf[x.encode("utf-8")] for x in ticket_info_config["set"]["set_type"]]
         is_more_ticket = ticket_info_config["set"]["is_more_ticket"]
         ticke_peoples = ticket_info_config["set"]["ticke_peoples"]
         station_trains = ticket_info_config["set"]["station_trains"]
@@ -179,13 +179,14 @@ class select:
         l.reqLiftTicketInit()
         self.call_login()
         check_user = checkUser(self)
-        check_user.sendCheckUser()
+        t = threading.Thread(target=check_user.sendCheckUser)
+        t.setDaemon(True)
+        t.start()
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         num = 0
         while 1:
             try:
                 num += 1
-                check_user.sendCheckUser()
                 now = datetime.datetime.now()  # 感谢群里大佬提供整点代码
                 if now.hour >= 23 or now.hour < 6:
                     print(u"12306休息时间，本程序自动停止,明天早上七点将自动运行")
@@ -277,31 +278,31 @@ class select:
                                                                                                                 random_time))
                     time.sleep(random_time)
             except PassengerUserException as e:
-                print(e.message)
+                print(e)
                 break
             except ticketConfigException as e:
-                print(e.message)
+                print(e)
                 break
             except ticketIsExitsException as e:
-                print(e.message)
+                print(e)
                 break
             except ticketNumOutException as e:
-                print(e.message)
+                print(e)
                 break
             except UserPasswordException as e:
-                print(e.message)
+                print(e)
                 break
             except ValueError as e:
-                if e.message == "No JSON object could be decoded":
+                if e == "No JSON object could be decoded":
                     print(u"12306接口无响应，正在重试")
                 else:
-                    print(e.message)
+                    print(e)
             except KeyError as e:
-                print(e.message)
+                print(e)
             except TypeError as e:
-                print(u"12306接口无响应，正在重试 {0}".format(e.message))
+                print(u"12306接口无响应，正在重试 {0}".format(e))
             except socket.error as e:
-                print(e.message)
+                print(e)
 
 
 if __name__ == '__main__':

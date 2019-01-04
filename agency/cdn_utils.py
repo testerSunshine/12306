@@ -91,7 +91,7 @@ class CDNProxy:
                             f.write(json.dumps(local_dict)+"\n")
                             num += 1
             except Exception as e:
-                print(e.message)
+                print(e)
         print(u"本次cdn获取完成，总个数{0}".format(num))
 
     def all_cdn(self):

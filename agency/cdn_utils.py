@@ -1,6 +1,7 @@
 # encoding=utf8
 import collections
 import json
+import os
 import re
 import sys
 import csv
@@ -53,7 +54,8 @@ class CDNProxy:
     def open_cdn_file(self):
         cdn = []
         cdn_re = re.compile("CONNECT (\S+) HTTP/1.1")
-        with open("./cdn_list", "r") as f:
+        path = os.path.join(os.path.dirname(__file__), '../cdn_list')
+        with open(path, "r") as f:
             for i in f.readlines():
                 # print(i.replace("\n", ""))
                 cdn_list = re.findall(cdn_re, i)

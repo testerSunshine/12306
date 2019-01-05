@@ -1,6 +1,7 @@
 # -*- coding=utf-8 -*-
 import datetime
 import random
+import os
 import socket
 import sys
 import threading
@@ -118,7 +119,8 @@ class select:
         :param station:
         :return:
         """
-        result = open('station_name.txt')
+        path = os.path.join(os.path.dirname(__file__), '../station_name.txt')
+        result = open(path)
         info = result.read().split('=')[1].strip("'").split('@')
         del info[0]
         station_name = {}

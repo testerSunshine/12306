@@ -19,8 +19,9 @@
         - 由于新增对时功能，请务必用sudo，sudo，sudo 执行，否则会报权限错误，windows打开ide或者cmd请用管理员身份执行python run.py，不需要加sudo
   - 如果你的服务器安装了docker，那么就可以docker启动
       - 1、docker build -t dockerticket .
-      - 2、docker run dockerticket  python run.py &
-      - 3、本来是可以直接Dockerfile启动的，不知道为毛启动不了，如果有大佬看到问题所在，欢迎提出
+      - 2、~~docker run dockerticket  python run.py &~~
+      - 3、~~本来是可以直接Dockerfile启动的，不知道为毛启动不了，如果有大佬看到问题所在，欢迎提出~~
+      - 4、docker run -d --name 12306-ticket dockerticket 
 
 - 目录对应说明
   - agency - cdn代理

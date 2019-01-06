@@ -2,6 +2,7 @@
 import datetime
 import wrapcache
 
+from config import configCommon
 from config.TicketEnmu import ticket
 
 
@@ -16,6 +17,7 @@ class checkUser:
         """
         CHENK_TIME = 0.3
         while 1:
+            configCommon.checkSleepTime(self.session)   # 修复晚上查询线程休眠时，检查登录线程为休眠，造成快豆迅速消耗
             if wrapcache.get("user_time") is None:
                 check_user_url = self.session.urls["check_user_url"]
                 data = {"_json_att": ""}

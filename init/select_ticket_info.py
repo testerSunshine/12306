@@ -10,7 +10,7 @@ import time
 import wrapcache
 
 from agency.cdn_utils import CDNProxy
-from config import urlConf
+from config import urlConf, configCommon
 from config.AutoSynchroTime import autoSynchroTime
 from config.TicketEnmu import ticket
 from config.configCommon import seat_conf
@@ -190,13 +190,7 @@ class select:
             try:
                 num += 1
                 now = datetime.datetime.now()  # 感谢群里大佬提供整点代码
-                if now.hour >= 23 or now.hour < 6:
-                    print(u"12306休息时间，本程序自动停止,明天早上七点将自动运行")
-                    open_time = datetime.datetime(now.year, now.month, now.day, 6)
-                    if open_time < now:
-                        open_time += datetime.timedelta(1)
-                    time.sleep((open_time - now).seconds)
-                    self.call_login()
+                configCommon.checkSleepTime(self)   # 晚上到点休眠
                 if self.order_model is 1:
                     sleep_time_s = 0.5
                     sleep_time_t = 0.6

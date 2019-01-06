@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import datetime
 import os
 import sys
 import time
@@ -23,6 +23,7 @@ seat_conf = {'商务座': 32,
         '特等座': 25,
         '软卧': 23,
         '硬卧': 28,
+        '软座': 24,
         '硬座': 29,
         '无座': 26,
         }
@@ -95,3 +96,14 @@ def getVCodeImageFile(imageName):
 
 def getCacheFile(cacheType):
     return os.path.join(getCacheDir(), cacheType + ".cache")
+
+
+def checkSleepTime(session):
+    now = datetime.datetime.now()
+    if now.hour >= 23 or now.hour < 6:
+        print(u"12306休息时间，本程序自动停止,明天早上七点将自动运行")
+        open_time = datetime.datetime(now.year, now.month, now.day, 6)
+        if open_time < now:
+            open_time += datetime.timedelta(1)
+        time.sleep((open_time - now).seconds)
+        session.call_login()

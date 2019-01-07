@@ -86,7 +86,7 @@ class select:
         open_time = ticket_info_config["open_time"]
 
         print(u"*" * 50)
-        print(u"12306刷票小助手，最后更新于2019.01.02，请勿作为商业用途，交流群号：286271084(已满)， 请加2群：649992274")
+        print(u"12306刷票小助手，最后更新于2019.01.07，请勿作为商业用途，交流群号：286271084(已满)， 2群：649992274(已满)，请加3群，群号：632501142")
         if is_by_time:
             method_notie = u"购票方式：根据时间区间购票\n可接受最早出发时间：{0}\n可接受最晚抵达时间：{1}\n可接受最长旅途时间：{2}\n可接受列车类型：{3}\n" \
                 .format(minutes_to_time(departure_time), minutes_to_time(arrival_time), minutes_to_time(take_time),

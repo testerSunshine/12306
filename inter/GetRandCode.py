@@ -6,7 +6,7 @@ from damatuCode.ruokuai import RClient
 
 try:
     raw_input      # Python 2
-excpet NameError:  # Python 3
+except NameError:  # Python 3
     raw_input = input  
 
 

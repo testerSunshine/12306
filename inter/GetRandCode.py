@@ -1,13 +1,11 @@
 # coding=utf-8
 from PIL import Image
+import subprocess
+import platform
+import os
 
 from config.ticketConf import _get_yaml
 from damatuCode.ruokuai import RClient
-
-try:
-    raw_input      # Python 2
-except NameError:  # Python 3
-    raw_input = input
 
 
 def getRandCode(is_auto_code, auto_code_type, result):
@@ -31,8 +29,13 @@ def getRandCode(is_auto_code, auto_code_type, result):
                         print(u"打码平台错误: {0}, 请登录打码平台查看-http://www.ruokuai.com/client/index?6726".format(Result["Error"]))
                         return ""
         else:
-            img = Image.open('./tkcode.png')
-            img.show()
+            system = platform.system()
+            if system == 'Darwin':
+                subprocess.call(['open', './tkcode.png'])
+            elif system == 'Windows':
+                os.startfile('./tkcode.png')
+            else:
+                subprocess.call(['xdg-open', './tkcode.png'])
             return codexy()
     except Exception as e:
         print(e)

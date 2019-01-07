@@ -17,14 +17,17 @@ if [ $# -eq 1 ];then
 
 	case $1 in 
 		"run")
-			echo "run";;
+			docker-compose up;;
 
 		"restart")
-			echo "restart";;
+			docker-compose up --no-recreate;;
 	
 		"rm")
-			echo "rm";;
-
+			docker-compose rm -f;;
+	
+		"drun")
+			docker-compose up -d;;
+		
 		*)
 			echo -e 'usage ./docker.sh {run|restart|rm}';;
 	esac

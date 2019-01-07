@@ -30,9 +30,12 @@ from myException.ticketIsExitsException import ticketIsExitsException
 from myException.ticketNumOutException import ticketNumOutException
 from myUrllib.httpUtils import HTTPClient
 from utils.timeUtil import time_to_minutes, minutes_to_time
-if sys.version_info.major == 2:
+
+try:
     reload(sys)
     sys.setdefaultencoding('utf-8')
+except NameError:
+    pass
 
 
 class select:

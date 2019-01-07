@@ -7,10 +7,12 @@ import sys
 import csv
 import requests
 from config import urlConf
-if sys.version_info.major == 2:
+
+try:
     reload(sys)
     sys.setdefaultencoding('utf-8')
-
+except NameError:
+    pass
 
 class CDNProxy:
     def __init__(self, host=None):

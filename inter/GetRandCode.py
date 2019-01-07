@@ -7,7 +7,7 @@ from damatuCode.ruokuai import RClient
 try:
     raw_input      # Python 2
 except NameError:  # Python 3
-    raw_input = input  
+    raw_input = input
 
 
 def getRandCode(is_auto_code, auto_code_type, result):

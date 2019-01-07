@@ -13,4 +13,4 @@ def _get_yaml():
     f = open(path)
     s = yaml.load(f)
     f.close()
-    return s
+    return s.decode() if isinstance(s, bytes) else s

@@ -23,7 +23,7 @@ def getRandCode(is_auto_code, auto_code_type, result):
                     return codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
                 else:
                     if "Error" in Result and Result["Error"]:
-                        print u"打码平台错误: {0}, 请登录打码平台查看-http://www.ruokuai.com/client/index?6726".format(Result["Error"])
+                        print(u"打码平台错误: {0}, 请登录打码平台查看-http://www.ruokuai.com/client/index?6726".format(Result["Error"]))
                         return ""
         else:
             img = Image.open('./tkcode')
@@ -55,29 +55,29 @@ def codexy(Ofset=None, is_raw_input=True):
     offsetsY = 0  # 选择的答案的top值
     for ofset in select:
         if ofset == '1':
-            offsetsY = 46
-            offsetsX = 42
+            offsetsY = 77
+            offsetsX = 40
         elif ofset == '2':
-            offsetsY = 46
-            offsetsX = 105
+            offsetsY = 77
+            offsetsX = 112
         elif ofset == '3':
-            offsetsY = 45
+            offsetsY = 77
             offsetsX = 184
         elif ofset == '4':
-            offsetsY = 48
+            offsetsY = 77
             offsetsX = 256
         elif ofset == '5':
-            offsetsY = 36
-            offsetsX = 117
+            offsetsY = 149
+            offsetsX = 40
         elif ofset == '6':
-            offsetsY = 112
-            offsetsX = 115
+            offsetsY = 149
+            offsetsX = 112
         elif ofset == '7':
-            offsetsY = 114
-            offsetsX = 181
+            offsetsY = 149
+            offsetsX = 184
         elif ofset == '8':
-            offsetsY = 111
-            offsetsX = 252
+            offsetsY = 149
+            offsetsX = 256
         else:
             pass
         post.append(offsetsX)

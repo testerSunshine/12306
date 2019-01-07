@@ -5,8 +5,6 @@ from collections import OrderedDict
 from time import sleep
 import requests
 from config import logger
-import wrapcache
-
 
 def _set_header_default():
     header_dict = OrderedDict()
@@ -137,11 +135,16 @@ class HTTPClient(object):
                                            verify=False,
                                            **kwargs)
                 if response.status_code == 200 or response.status_code == 302:
+                    if urls.get("not_decode", False):
+                        return response.content
                     if response.content:
                         if is_logger:
                             logger.log(
                                 u"出参：{0}".format(response.content))
-                        return json.loads(response.content) if urls["is_json"] else response.content
+                        if urls["is_json"]:
+                            return json.loads(response.content.decode() if isinstance(response.content, bytes) else response.content)
+                        else:
+                            return response.content.decode("utf8", "ignore") if isinstance(response.content, bytes) else response.content
                     else:
                         logger.log(
                             u"url: {} 返回参数为空".format(urls["req_url"]))

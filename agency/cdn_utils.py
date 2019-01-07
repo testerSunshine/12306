@@ -1,13 +1,15 @@
 # encoding=utf8
 import collections
 import json
+import os
 import re
 import sys
 import csv
 import requests
 from config import urlConf
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info.major == 2:
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class CDNProxy:
@@ -42,7 +44,7 @@ class CDNProxy:
                     city_re = re.compile(r"<li id=\"(\S+)\" class=\"PingListCent PingRLlist")
                     self.city_list = re.findall(city_re, rep.content)
                     if self.city_list:
-                        print self.city_list
+                        print(self.city_list)
                         break
             else:
                 pass
@@ -51,13 +53,23 @@ class CDNProxy:
 
     def open_cdn_file(self):
         cdn = []
-        cdn_re = re.compile("CONNECT (\S+) HTTP/1.1")
-        with open("./cdn_list", "r") as f:
+        # cdn_re = re.compile("CONNECT (\S+) HTTP/1.1")
+        # path = os.path.join(os.path.dirname(__file__), '../cdn_list')
+        # with open(path, "r") as f:
+        #     for i in f.readlines():
+        #         # print(i.replace("\n", ""))
+        #         cdn_list = re.findall(cdn_re, i)
+        #         if cdn_list and "kyfw.12306.cn:443" not in cdn_list:
+        #             print(cdn_list[0].split(":")[0])
+        #             cdn.append(cdn_list[0].split(":")[0])
+        #     return cdn
+        path = os.path.join(os.path.dirname(__file__), '../cdn_list')
+        with open(path, "r") as f:
             for i in f.readlines():
                 # print(i.replace("\n", ""))
-                cdn_list = re.findall(cdn_re, i)
-                if cdn_list and "kyfw.12306.cn:443" not in cdn_list:
-                    cdn.append(cdn_list[0].split(":")[0])
+                if i and "kyfw.12306.cn:443" not in i:
+                    cdn.append(i.replace("\n", ""))
+            print(cdn)
             return cdn
 
     def get_cdn_list(self):
@@ -90,7 +102,7 @@ class CDNProxy:
                             f.write(json.dumps(local_dict)+"\n")
                             num += 1
             except Exception as e:
-                print(e.message)
+                print(e)
         print(u"本次cdn获取完成，总个数{0}".format(num))
 
     def all_cdn(self):

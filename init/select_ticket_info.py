@@ -1,6 +1,7 @@
 # -*- coding=utf-8 -*-
 import datetime
 import random
+import os
 import socket
 import sys
 import threading
@@ -9,7 +10,7 @@ import time
 import wrapcache
 
 from agency.cdn_utils import CDNProxy
-from config import urlConf
+from config import urlConf, configCommon
 from config.AutoSynchroTime import autoSynchroTime
 from config.TicketEnmu import ticket
 from config.configCommon import seat_conf
@@ -29,9 +30,9 @@ from myException.ticketIsExitsException import ticketIsExitsException
 from myException.ticketNumOutException import ticketNumOutException
 from myUrllib.httpUtils import HTTPClient
 from utils.timeUtil import time_to_minutes, minutes_to_time
-
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info.major == 2:
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class select:
@@ -43,7 +44,7 @@ class select:
         self.from_station, self.to_station, self.station_dates, self._station_seat, self.is_more_ticket, \
         self.ticke_peoples, self.station_trains, self.ticket_black_list_time, \
         self.order_type, self.is_by_time, self.train_types, self.departure_time, \
-        self.arrival_time, self.take_time, self.order_model = self.get_ticket_info()
+        self.arrival_time, self.take_time, self.order_model, self.open_time = self.get_ticket_info()
         self.is_auto_code = _get_yaml()["is_auto_code"]
         self.auto_code_type = _get_yaml()["auto_code_type"]
         self.is_cdn = _get_yaml()["is_cdn"]
@@ -51,7 +52,7 @@ class select:
         self.urls = urlConf.urls
         self.login = GoLogin(self, self.is_auto_code, self.auto_code_type)
         self.cdn_list = []
-        self.queryUrl = "leftTicket/queryX"
+        self.queryUrl = "leftTicket/queryZ"
         self.passengerTicketStrList = ""
         self.oldPassengerStr = ""
         self.set_type = ""
@@ -62,11 +63,11 @@ class select:
         :return:
         """
         ticket_info_config = _get_yaml()
-        from_station = ticket_info_config["set"]["from_station"].encode("utf8")
-        to_station = ticket_info_config["set"]["to_station"].encode("utf8")
+        from_station = ticket_info_config["set"]["from_station"]
+        to_station = ticket_info_config["set"]["to_station"]
         station_dates = ticket_info_config["set"]["station_dates"]
         set_names = ticket_info_config["set"]["set_type"]
-        set_type = [seat_conf[x.encode("utf8")] for x in ticket_info_config["set"]["set_type"]]
+        set_type = [seat_conf[x.encode("utf-8")] for x in ticket_info_config["set"]["set_type"]]
         is_more_ticket = ticket_info_config["set"]["is_more_ticket"]
         ticke_peoples = ticket_info_config["set"]["ticke_peoples"]
         station_trains = ticket_info_config["set"]["station_trains"]
@@ -82,17 +83,18 @@ class select:
 
         # 下单模式
         order_model = ticket_info_config["order_model"]
+        open_time = ticket_info_config["open_time"]
 
-        print u"*" * 20
-        print u"12306刷票小助手，最后更新于2019.01.02，请勿作为商业用途，交流群号：286271084(已满)， 请加2群：649992274"
+        print(u"*" * 50)
+        print(u"12306刷票小助手，最后更新于2019.01.07，请勿作为商业用途，交流群号：286271084(已满)， 2群：649992274(已满)，请加3群，群号：632501142")
         if is_by_time:
             method_notie = u"购票方式：根据时间区间购票\n可接受最早出发时间：{0}\n可接受最晚抵达时间：{1}\n可接受最长旅途时间：{2}\n可接受列车类型：{3}\n" \
                 .format(minutes_to_time(departure_time), minutes_to_time(arrival_time), minutes_to_time(take_time),
                         " , ".join(train_types))
         else:
             method_notie = u"购票方式：根据候选车次购买\n候选购买车次：{0}".format(",".join(station_trains))
-        print u"当前配置：\n出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票优先提交：{4}\n乘车人：{5}\n" \
-              u"刷新间隔：随机(1-3S)\n{6}\n僵尸票关小黑屋时长：{7}\n 下单接口：{8}\n 下单模式：{9}\n".format \
+        print (u"当前配置：\n出发站：{0}\n到达站：{1}\n乘车日期：{2}\n坐席：{3}\n是否有票优先提交：{4}\n乘车人：{5}\n" \
+              u"刷新间隔: 随机(1-3S)\n{6}\n僵尸票关小黑屋时长: {7}\n下单接口: {8}\n下单模式: {9}\n预售踩点时间:{10} ".format \
                 (
                 from_station,
                 to_station,
@@ -103,12 +105,13 @@ class select:
                 method_notie,
                 ticket_black_list_time,
                 order_type,
-                order_model
-            )
-        print u"*" * 20
+                order_model,
+                open_time,
+            ))
+        print (u"*" * 50)
         return from_station, to_station, station_dates, set_type, is_more_ticket, ticke_peoples, station_trains, \
                ticket_black_list_time, order_type, is_by_time, train_types, departure_time, arrival_time, take_time, \
-               order_model
+               order_model, open_time
 
     def station_table(self, from_station, to_station):
         """
@@ -116,7 +119,8 @@ class select:
         :param station:
         :return:
         """
-        result = open('station_name.txt')
+        path = os.path.join(os.path.dirname(__file__), '../station_name.txt')
+        result = open(path)
         info = result.read().split('=')[1].strip("'").split('@')
         del info[0]
         station_name = {}
@@ -146,7 +150,7 @@ class select:
             rep = http.send(urls)
             if rep and "message" not in rep and (datetime.datetime.now() - start_time).microseconds / 1000 < 500:
                 if cdn[i].replace("\n", "") not in self.cdn_list:  # 如果有重复的cdn，则放弃加入
-                    print("加入cdn {0}".format(cdn[i].replace("\n", "")))
+                    print(u"加入cdn {0}".format(cdn[i].replace("\n", "")))
                     self.cdn_list.append(cdn[i].replace("\n", ""))
         print(u"所有cdn解析完成...")
 
@@ -177,30 +181,25 @@ class select:
         l.reqLiftTicketInit()
         self.call_login()
         check_user = checkUser(self)
-        check_user.sendCheckUser()
+        t = threading.Thread(target=check_user.sendCheckUser)
+        t.setDaemon(True)
+        t.start()
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         num = 0
-        # isAutoSynchroTime = False
         while 1:
             try:
                 num += 1
-                check_user.sendCheckUser()
                 now = datetime.datetime.now()  # 感谢群里大佬提供整点代码
-                if now.hour >= 23 or now.hour < 6:
-                    print(u"12306休息时间，本程序自动停止,明天早上七点将自动运行")
-                    open_time = datetime.datetime(now.year, now.month, now.day, 6)
-                    if open_time < now:
-                        open_time += datetime.timedelta(1)
-                    time.sleep((open_time - now).seconds)
-                    self.call_login()
+                configCommon.checkSleepTime(self)   # 晚上到点休眠
                 if self.order_model is 1:
-                    sleep_time_s = 0.1
-                    sleep_time_t = 0.5
+                    sleep_time_s = 0.5
+                    sleep_time_t = 0.6
                     # 测试了一下有微妙级的误差，应该不影响，测试结果：2019-01-02 22:30:00.004555，预售还是会受到前一次刷新的时间影响，暂时没想到好的解决方案
-                    if now.strftime("%M:%S") == "29:55" or now.strftime("%M:%S") == "59:55":
-                        print(u"预售整点模式卡点中")
-                        time.sleep(5)
-                        print(u"预售模式执行")
+                    while not now.strftime("%H:%M:%S") == self.open_time:
+                        now = datetime.datetime.now()
+                        if now.strftime("%H:%M:%S") > self.open_time:
+                            break
+                        time.sleep(0.0001)
                 else:
                     sleep_time_s = 0.5
                     sleep_time_t = 3
@@ -275,31 +274,31 @@ class select:
                                                                                                                 random_time))
                     time.sleep(random_time)
             except PassengerUserException as e:
-                print e.message
+                print(e)
                 break
             except ticketConfigException as e:
-                print e.message
+                print(e)
                 break
             except ticketIsExitsException as e:
-                print e.message
+                print(e)
                 break
             except ticketNumOutException as e:
-                print e.message
+                print(e)
                 break
             except UserPasswordException as e:
-                print e.message
+                print(e)
                 break
             except ValueError as e:
-                if e.message == "No JSON object could be decoded":
+                if e == "No JSON object could be decoded":
                     print(u"12306接口无响应，正在重试")
                 else:
-                    print(e.message)
+                    print(e)
             except KeyError as e:
-                print(e.message)
+                print(e)
             except TypeError as e:
-                print(u"12306接口无响应，正在重试 {0}".format(e.message))
+                print(u"12306接口无响应，正在重试 {0}".format(e))
             except socket.error as e:
-                print(e.message)
+                print(e)
 
 
 if __name__ == '__main__':

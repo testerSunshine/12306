@@ -26,7 +26,7 @@ def getRandCode(is_auto_code, auto_code_type, result):
                         print(u"打码平台错误: {0}, 请登录打码平台查看-http://www.ruokuai.com/client/index?6726".format(Result["Error"]))
                         return ""
         else:
-            img = Image.open('./tkcode')
+            img = Image.open('./tkcode.png')
             img.show()
             return codexy()
     except Exception as e:
@@ -46,7 +46,7 @@ def codexy(Ofset=None, is_raw_input=True):
             | 5 | 6 | 7 | 8 |
             *****************
             """)
-        print(u"验证码分为8个，对应上面数字，例如第一和第二张，输入1, 2")
+        print(u"验证码分为8个，对应上面数字，例如第一和第二张，输入1, 2  如果开启cdn查询的话，会冲掉提示，直接鼠标点击命令行获取焦点，输入即可，不要输入空格")
         Ofset = raw_input(u"输入对应的验证码: ")
     Ofset = Ofset.replace("，", ",")
     select = Ofset.split(',')

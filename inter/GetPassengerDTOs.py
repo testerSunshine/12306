@@ -3,6 +3,11 @@ from config.TicketEnmu import ticket
 from myException.PassengerUserException import PassengerUserException
 import wrapcache
 
+try:
+    xrange          # Python 2
+except NameError:
+    xrange = range  # Python 3
+
 
 class getPassengerDTOs:
     """

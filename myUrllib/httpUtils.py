@@ -116,7 +116,7 @@ class HTTPClient(object):
             url_host = self._cdn
         elif is_cdn:
             if self._cdn:
-                print(u"当前请求cdn为{}".format(self._cdn))
+                # print(u"当前请求cdn为{}".format(self._cdn))
                 url_host = self._cdn
             else:
                 url_host = urls["Host"]

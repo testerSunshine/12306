@@ -7,7 +7,6 @@ from inter.GetPassCodeNewOrderAndLogin import getPassCodeNewOrderAndLogin
 from inter.GetRandCode import getRandCode
 from myException.UserPasswordException import UserPasswordException
 from myException.balanceException import balanceException
-from myUrllib import myurllib2
 
 
 class GoLogin:
@@ -126,15 +125,6 @@ class GoLogin:
                 if uamtk:
                     self.getUserName(uamtk)
                     break
-
-    def logout(self):
-        url = 'https://kyfw.12306.cn/otn/login/loginOut'
-        result = myurllib2.get(url)
-        if result:
-            print (u"已退出")
-        else:
-            print (u"退出失败")
-
 
 # if __name__ == "__main__":
 #     # main()

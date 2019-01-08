@@ -117,7 +117,7 @@ class query:
                                     start_time = ticket_info[8]
                                     arrival_time = ticket_info[9]
                                     distance_time = ticket_info[10]
-                                    print start_time, arrival_time, distance_time
+                                    print(start_time, arrival_time, distance_time)
                                     seat = j
                                     try:
                                         ticket_num = int(ticket_info[j])
@@ -160,8 +160,8 @@ class query:
                                             "status": True,
                                         }
                 else:
-                    print u"车次配置信息有误，或者返回数据异常，请检查 {}".format(station_ticket)
-        return {"code": ticket.FAIL_CODE, "status": False}
+                    print(u"车次配置信息有误，或者返回数据异常，请检查 {}".format(station_ticket))
+        return {"code": ticket.FAIL_CODE, "status": False, "cdn": self.httpClint.cdn,}
 
 
 if __name__ == "__main__":

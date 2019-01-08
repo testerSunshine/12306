@@ -52,5 +52,5 @@ class RClient(object):
 if __name__ == '__main__':
     rc = RClient('931128603', '',)
     im = open('tkcode', 'rb').read()
-    print rc.rk_create(im, 6113)
+    print(rc.rk_create(im, 6113))
 

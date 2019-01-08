@@ -13,4 +13,8 @@ def _get_yaml():
     f = open(path)
     s = yaml.load(f)
     f.close()
-    return s
+    return s.decode() if isinstance(s, bytes) else s
+
+
+if __name__ == '__main__':
+    print(_get_yaml())

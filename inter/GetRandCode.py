@@ -52,6 +52,7 @@ def codexy(Ofset=None, is_raw_input=True):
             *****************
             """)
         print(u"验证码分为8个，对应上面数字，例如第一和第二张，输入1, 2  如果开启cdn查询的话，会冲掉提示，直接鼠标点击命令行获取焦点，输入即可，不要输入空格")
+        print(u"如果是linux无图形界面，请使用自动打码，is_auto_code: True")
         Ofset = raw_input(u"输入对应的验证码: ")
     Ofset = Ofset.replace("，", ",")
     select = Ofset.split(',')

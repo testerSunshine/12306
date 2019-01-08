@@ -60,8 +60,9 @@
 - 使用帮助：
     - 测试邮箱是否可用 [邮箱配置问题看issues](https://github.com/testerSunshine/12306/issues/107)
     - 学生票issues [学生票修改](https://github.com/testerSunshine/12306/issues/47)
-    - 依赖安装不对的问题 [requirements.txt问题](https://github.com/testerSunshine/12306/issues/91)
-    - 若快豆子疑问[点我](https://github.com/testerSunshine/12306/issues/67)
+    - 依赖安装不对的问题（ImportError）[requirements.txt问题](https://github.com/testerSunshine/12306/issues/91)
+    - 若快豆子疑问 [点我](https://github.com/testerSunshine/12306/issues/67)
+
     - 测试下单接口是否可用，有两个下单接口，随便用哪个都ok
     - 如果下载验证码过期或者下载失败的问题，应该是12306封ip的策略，多重试几次，12306现在封服务器(阿里云和腾讯云)ip比较严重，尽量不要放在服务器里面
 - 感谢一下小伙伴对本项目提供的帮助

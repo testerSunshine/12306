@@ -14,8 +14,8 @@ class ticket(object):
 
     TICKET_BLACK_LIST_TIME = 5  # 加入小黑屋的等待时间，默认5 min
 
-    DTO_NOT_FOUND = u"未查找到常用联系人"
-    DTO_NOT_IN_LIST = u"联系人不在列表中，请查证后添加"
+    DTO_NOT_FOUND = u"未查找到常用联系人, 请查证后添加!!"
+    DTO_NOT_IN_LIST = u"联系人不在列表中，请查证后添加!!"
 
     QUEUE_TICKET_SHORT = u"当前余票数小于乘车人数，放弃订票"
     QUEUE_TICKET_SUCCESS = u"排队成功, 当前余票还剩余: {0}张"

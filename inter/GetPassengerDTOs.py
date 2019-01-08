@@ -38,6 +38,7 @@ class getPassengerDTOs:
             elif getPassengerDTOsResult.get('messages', False):
                 print(getPassengerDTOsResult.get('messages', False))
             else:
+                print(getPassengerDTOsResult)
                 raise PassengerUserException(ticket.DTO_NOT_FOUND)
 
     def getPassengerTicketStr(self, set_type):

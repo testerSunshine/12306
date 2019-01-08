@@ -4,6 +4,8 @@ import socket
 from collections import OrderedDict
 from time import sleep
 import requests
+
+from agency.agency_tools import proxy
 from config import logger
 
 
@@ -19,7 +21,7 @@ def _set_header_default():
 
 class HTTPClient(object):
 
-    def __init__(self):
+    def __init__(self, is_proxy):
         """
         :param method:
         :param headers: Must be a dict. Such as headers={'Content_Type':'text/html'}
@@ -27,6 +29,10 @@ class HTTPClient(object):
         self.initS()
         self._cdn = None
         self._proxies = None
+        if is_proxy is 1:
+            self.proxy = proxy()
+            self._proxies = self.proxy.setProxy()
+            # print(u"设置当前代理ip为 {}, 请注意代理ip是否可用！！！！！请注意代理ip是否可用！！！！！请注意代理ip是否可用！！！！！".format(self._proxies))
 
     def initS(self):
         self._s = requests.Session()
@@ -134,6 +140,7 @@ class HTTPClient(object):
                     pass
                 response = self._s.request(method=method,
                                            timeout=2,
+                                           proxies=self._proxies,
                                            url="https://" + url_host + req_url,
                                            data=data,
                                            allow_redirects=allow_redirects,

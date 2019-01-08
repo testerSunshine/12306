@@ -133,3 +133,4 @@
     - ticket_config 配置文件增加order_model字段（下单模式）
     - mac和linux服务器自动对点
     - 增加预售踩点查询下单，经测试，误差在0.004s
+

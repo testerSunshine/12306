@@ -569,7 +569,7 @@
       <option name="project" value="LOCAL" />
       <updated>1537512046466</updated>
     </task>
-    <task id="LOCAL-00014" summary="1、优化查询策略&#10;2、快读下单修复&#10;3、关闭cdn功能">
+    <task id="LOCAL-00014" summary="1、优化查询策略&#10;2、快速下单修复&#10;3、关闭cdn功能">
       <created>1538289327514</created>
       <option name="number" value="00014" />
       <option name="presentableId" value="LOCAL-00014" />
@@ -671,7 +671,7 @@
     <MESSAGE value="修正余票小于乘客人数，则不提交" />
     <MESSAGE value="fix" />
     <MESSAGE value="增加余票不足优先提交功能" />
-    <MESSAGE value="1、优化查询策略&#10;2、快读下单修复&#10;3、关闭cdn功能" />
+    <MESSAGE value="1、优化查询策略&#10;2、快速下单修复&#10;3、关闭cdn功能" />
     <MESSAGE value="update readme" />
     <MESSAGE value="1、修改提交订单逻辑问题，感谢群里小伙伴发现&#10;2、查询接口修改" />
     <option name="LAST_COMMIT_MESSAGE" value="1、修改提交订单逻辑问题，感谢群里小伙伴发现&#10;2、查询接口修改" />

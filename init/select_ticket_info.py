@@ -241,7 +241,7 @@ class select:
                             self.oldPassengerStr = getPassengerDTOsResult.get("oldPassengerStr", "")
                             self.set_type = getPassengerDTOsResult.get("set_type", "")
                         # 提交订单
-                        if self.order_type == 1:  # 快读下单
+                        if self.order_type == 1:  # 快速下单
                             a = autoSubmitOrderRequest(session=self,
                                                        secretStr=secretStr,
                                                        train_date=train_date,

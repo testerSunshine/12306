@@ -6,6 +6,7 @@ from time import sleep
 import requests
 from config import logger
 
+
 def _set_header_default():
     header_dict = OrderedDict()
     header_dict["Accept"] = "application/json, text/plain, */*"
@@ -25,6 +26,7 @@ class HTTPClient(object):
         """
         self.initS()
         self._cdn = None
+        self._proxies = None
 
     def initS(self):
         self._s = requests.Session()
@@ -126,7 +128,10 @@ class HTTPClient(object):
             try:
                 # sleep(urls["s_time"]) if "s_time" in urls else sleep(0.001)
                 sleep(s_time)
-                requests.packages.urllib3.disable_warnings()
+                try:
+                    requests.packages.urllib3.disable_warnings()
+                except:
+                    pass
                 response = self._s.request(method=method,
                                            timeout=2,
                                            url="https://" + url_host + req_url,

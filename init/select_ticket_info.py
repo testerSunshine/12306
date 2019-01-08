@@ -153,7 +153,7 @@ class select:
             rep = http.send(urls)
             if rep and "message" not in rep and (datetime.datetime.now() - start_time).microseconds / 1000 < 500:
                 if cdn[i].replace("\n", "") not in self.cdn_list:  # 如果有重复的cdn，则放弃加入
-                    print(u"加入cdn {0}".format(cdn[i].replace("\n", "")))
+                    # print(u"加入cdn {0}".format(cdn[i].replace("\n", "")))
                     self.cdn_list.append(cdn[i].replace("\n", ""))
         print(u"所有cdn解析完成...")
 

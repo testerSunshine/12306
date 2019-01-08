@@ -1,5 +1,7 @@
 # coding=utf-8
 from PIL import Image
+import os
+import platform
 
 from config.ticketConf import _get_yaml
 from damatuCode.ruokuai import RClient
@@ -31,8 +33,11 @@ def getRandCode(is_auto_code, auto_code_type, result):
                         print(u"打码平台错误: {0}, 请登录打码平台查看-http://www.ruokuai.com/client/index?6726".format(Result["Error"]))
                         return ""
         else:
-            img = Image.open('./tkcode.png')
-            img.show()
+            if platform.system() == 'Darwin':
+                os.system('open ./tkcode.png')
+            else:
+                img = Image.open('./tkcode.png')
+                img.show()
             return codexy()
     except Exception as e:
         print(e)

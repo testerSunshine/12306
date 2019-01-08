@@ -21,7 +21,7 @@ class query:
     def __init__(self, session, from_station, to_station, from_station_h, to_station_h, _station_seat, station_trains,
                  ticke_peoples_num, station_dates=None, ):
         self.session = session
-        self.httpClint = HTTPClient()
+        self.httpClint = HTTPClient(session.is_proxy)
         self.urls = urlConf.urls
         self.from_station = from_station
         self.to_station = to_station
@@ -161,7 +161,7 @@ class query:
                                         }
                 else:
                     print(u"车次配置信息有误，或者返回数据异常，请检查 {}".format(station_ticket))
-        return {"code": ticket.FAIL_CODE, "status": False}
+        return {"code": ticket.FAIL_CODE, "status": False, "cdn": self.httpClint.cdn,}
 
 
 if __name__ == "__main__":

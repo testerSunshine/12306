@@ -4,8 +4,9 @@ import socket
 from collections import OrderedDict
 from time import sleep
 import requests
+
+from agency.agency_tools import proxy
 from config import logger
-import wrapcache
 
 
 def _set_header_default():
@@ -20,13 +21,18 @@ def _set_header_default():
 
 class HTTPClient(object):
 
-    def __init__(self):
+    def __init__(self, is_proxy):
         """
         :param method:
         :param headers: Must be a dict. Such as headers={'Content_Type':'text/html'}
         """
         self.initS()
         self._cdn = None
+        self._proxies = None
+        if is_proxy is 1:
+            self.proxy = proxy()
+            self._proxies = self.proxy.setProxy()
+            # print(u"设置当前代理ip为 {}, 请注意代理ip是否可用！！！！！请注意代理ip是否可用！！！！！请注意代理ip是否可用！！！！！".format(self._proxies))
 
     def initS(self):
         self._s = requests.Session()
@@ -118,7 +124,7 @@ class HTTPClient(object):
             url_host = self._cdn
         elif is_cdn:
             if self._cdn:
-                print(u"当前请求cdn为{}".format(self._cdn))
+                # print(u"当前请求cdn为{}".format(self._cdn))
                 url_host = self._cdn
             else:
                 url_host = urls["Host"]
@@ -128,20 +134,29 @@ class HTTPClient(object):
             try:
                 # sleep(urls["s_time"]) if "s_time" in urls else sleep(0.001)
                 sleep(s_time)
-                requests.packages.urllib3.disable_warnings()
+                try:
+                    requests.packages.urllib3.disable_warnings()
+                except:
+                    pass
                 response = self._s.request(method=method,
                                            timeout=2,
+                                           proxies=self._proxies,
                                            url="https://" + url_host + req_url,
                                            data=data,
                                            allow_redirects=allow_redirects,
                                            verify=False,
                                            **kwargs)
                 if response.status_code == 200 or response.status_code == 302:
+                    if urls.get("not_decode", False):
+                        return response.content
                     if response.content:
                         if is_logger:
                             logger.log(
                                 u"出参：{0}".format(response.content))
-                        return json.loads(response.content) if urls["is_json"] else response.content
+                        if urls["is_json"]:
+                            return json.loads(response.content.decode() if isinstance(response.content, bytes) else response.content)
+                        else:
+                            return response.content.decode("utf8", "ignore") if isinstance(response.content, bytes) else response.content
                     else:
                         logger.log(
                             u"url: {} 返回参数为空".format(urls["req_url"]))

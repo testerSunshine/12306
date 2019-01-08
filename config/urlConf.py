@@ -53,6 +53,7 @@ urls = {
         "s_time": 0.1,
         "is_logger": False,
         "is_json": False,
+        "not_decode": True,
     },
     "codeCheck": {  # 验证码校验
         "req_url": "/passport/captcha/captcha-check",

@@ -5,7 +5,10 @@
 - 依赖库
   - 依赖若快 若快注册地址：http://www.ruokuai.com/client/index?6726 推荐用若快，打码兔平台已经关闭
   - 项目依赖包 requirements.txt
-  - 安装方法 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+  - 安装方法-Windows: pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+  - 安装方法-Linux:
+      - root用户(避免多python环境产生问题): python2 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+      - 非root用户（避免安装和运行时使用了不同环境）: sudo python2 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 
 - 项目使用说明
   - 需要配置邮箱，可以配置可以不配置，配置邮箱的格式在yaml里面可以看到ex
@@ -35,7 +38,8 @@
      ![image](https://github.com/testerSunshine/12306/blob/master/uml/uml.png)
 
 - 项目声明：
-  - 本软件只供学习交流使用，务作为商业用途，交流群号：286271084(已满)， 2群：649992274(已满)，请加3群， 群号：632501142，
+  - 本软件只供学习交流使用，务作为商业用途，交流群号：286271084(已满)， 2群：649992274(已满)，请加3群(未满)， 群号：632501142、4群(未满)， 群号：606340519
+  - 请不要重复加群，一个群就可以了，把机会留给更多人
   - **进群先看公告！！！进群先看公告！！！进群先看公告！！！ 重要的事情说三遍**
   - 能为你抢到一张回家的票，是我最大的心愿
 

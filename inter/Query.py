@@ -21,7 +21,7 @@ class query:
     def __init__(self, session, from_station, to_station, from_station_h, to_station_h, _station_seat, station_trains,
                  ticke_peoples_num, station_dates=None, ):
         self.session = session
-        self.httpClint = HTTPClient()
+        self.httpClint = HTTPClient(session.is_proxy)
         self.urls = urlConf.urls
         self.from_station = from_station
         self.to_station = to_station

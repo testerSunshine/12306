@@ -36,7 +36,7 @@ def sendEmail(msg):
             smtp.quit()
             print(u"邮件已通知, 请查收")
         except Exception as e:
-            print(u"邮件配置有误", e)
+            print(u"邮件配置有误{}".format(e))
     else:
         pass
 

@@ -26,6 +26,7 @@ seat_conf = {'商务座': 32,
              '软座': 24,
              '硬座': 29,
              '无座': 26,
+             '动卧': 33,
              }
 if sys.version_info.major == 2:
     seat_conf_2 = dict([(v, k) for (k, v) in seat_conf.iteritems()])

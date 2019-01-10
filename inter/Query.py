@@ -53,6 +53,7 @@ class query:
                 '硬卧': 28,
                 '硬座': 29,
                 '无座': 26,
+                '动卧': 33,
                 }
         return seat[index]
 

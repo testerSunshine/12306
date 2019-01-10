@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+    ticket:
+        image: 12306_ticket 
+        build: .
+        # ports:
+        volumes:
+            - ./:/usr/src/app
+            - /etc/localtime:/etc/localtime:ro
+        container_name: 12306ticket
+
+

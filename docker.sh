@@ -6,7 +6,7 @@
 function checkSudo (){
 	if [ $UID -ne 0 ];then
         	echo -e 'it must be root!'
-		echo -e 'usage ./docker.sh {run|restart|rm}'
+		echo -e 'usage ./docker.sh {run|restart|rm|logs}'
         	exit 1
 	fi
 }
@@ -27,9 +27,11 @@ if [ $# -eq 1 ];then
 	
 		"drun")
 			docker-compose up -d;;
+		"logs")
+			docker-compose logs;;
 		
 		*)
-			echo -e 'usage ./docker.sh {run|restart|rm}';;
+			echo -e 'usage ./docker.sh {run|restart|rm|logs}';;
 	esac
 	
 fi

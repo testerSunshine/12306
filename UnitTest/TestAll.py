@@ -39,7 +39,7 @@ class testAll(unittest.TestCase):
         :return:
         """
         sendEmail("订票小助手测试一下")
-    
+  
     def testPushbear(self):
         """
         实测pushbear是否可用

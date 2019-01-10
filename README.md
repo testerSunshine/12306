@@ -24,7 +24,7 @@
       - 1、~~docker build -t dockerticket .~~
       - 2、~~docker run dockerticket  python run.py &~~
       - 3、~~本来是可以直接Dockerfile启动的，不知道为毛启动不了，如果有大佬看到问题所在，欢迎提出~~
-      - 4、~~docker run -d --name 12306-ticket dockerticket ~~
+      - 4、~~docker run -d --name 12306-ticket dockerticket~~
   - 如果你的服务器安装了docker与docker-compose, 那么就可以通过`docker-compose`进行启动,`docker.sh`脚本对此进行了封装，可以通过如下命令进行启动
       - 1、`sudo ./docker.sh run` #创建一个镜像并启动容器，如果镜像已经创建过了会直接启动容器。
       - 2、`sudo ./docker.sh reload` #修改配置文件后，通过此名命令可重新加载容器运行

@@ -9,6 +9,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 #EXPOSE 5010
 
-WORKDIR /usr/src/app/
-#CMD [ "python", "run.py" ]
-ENTRYPOINT [ "python", "run.py" ]
+#WORKDIR /usr/src/app/
+CMD [ "python", "run.py" ]

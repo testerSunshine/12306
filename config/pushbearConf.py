@@ -3,7 +3,7 @@ __author__ = 'kongkongyzt'
 import requests
 from config.ticketConf import _get_yaml
 
-PUSH_BEAR_API_PATH = "https://pushbear.ftqq.com/sub" 
+PUSH_BEAR_API_PATH = "https://pushbear.ftqq.com/sub"
 
 def sendPushBear(msg):
     """

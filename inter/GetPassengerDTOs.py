@@ -57,7 +57,7 @@ class getPassengerDTOs:
             '软座': 2,
             '软卧': 4,
             '硬卧': 3,
-            '动卧': 1,
+            '动卧': 'F',
         }
         return str(passengerTicketStr[set_type.replace(' ', '')])
 

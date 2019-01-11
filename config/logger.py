@@ -42,7 +42,7 @@ def log(msg, func = "info"):
 	todayStr = getTodayDateStr()
 	if isAnotherDay(todayStr):
 		setDateStr(todayStr)
-		logger.removeHandler(loggerHandler)
+		logger.handlers = []
 		
 		fh = logging.FileHandler(getLogFile())
 		fm = logging.Formatter(u'[%(asctime)s][%(levelname)8s] --- %(message)s (%(filename)s:%(lineno)s)')

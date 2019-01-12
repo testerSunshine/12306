@@ -1,0 +1,9 @@
+**/*.html
+**/*.pyc
+**/*.yaml
+**/*.log
+**/*~
+**/.DS_Store
+**/Thumbs.db
+.idea/
+.git/

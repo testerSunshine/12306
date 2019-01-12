@@ -49,8 +49,8 @@ ticke_peoples = ['xxxx']
 
 # 12306登录账号(list)
 account12306 = {
-  'user': 'xxxxxx',
-  'pwd': ''
+    'user': 'xxxxxx',
+    'pwd': ''
 }
 
 # 加入小黑屋时间默认为5分钟，此功能为了防止僵尸票导致一直下单不成功错过正常的票，
@@ -64,8 +64,8 @@ auto_code_type = 2
 
 # 打码平台账号
 auto_code_account = {
-  'user': '931128603',
-  'pwd': ''
+    'user': '931128603',
+    'pwd': ''
 }
 
 email_conf = {

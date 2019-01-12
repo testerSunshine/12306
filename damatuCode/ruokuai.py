@@ -7,7 +7,10 @@ class RClient(object):
 
     def __init__(self, username, password):
         self.username = username
-        self.password = md5(password).hexdigest()
+        try:
+            self.password = md5(password).hexdigest()
+        except TypeError:
+            self.password = md5(password.encode('utf-8')).hexdigest()
         self.soft_id = '96061'
         self.soft_key = '6facb9da7bb645ad9c4a229464b2cf89'
         self.base_params = {

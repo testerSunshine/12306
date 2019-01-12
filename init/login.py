@@ -1,7 +1,9 @@
-# -*- coding=utf-8 -*-
+# !/usr/bin/python3.6
+# -*- coding:utf-8 –*-
+
 from time import sleep
 
-from config.ticketConf import _get_yaml
+from config.ticketConf import configMap
 from damatuCode.damatuWeb import DamatuApi
 from inter.GetPassCodeNewOrderAndLogin import getPassCodeNewOrderAndLogin
 from inter.GetRandCode import getRandCode
@@ -106,10 +108,10 @@ class GoLogin:
         :return:
         """
         if self.is_auto_code and self.auto_code_type == 1:
-            balance = DamatuApi(_get_yaml()["auto_code_account"]["user"], _get_yaml()["auto_code_account"]["pwd"]).getBalance()
+            balance = DamatuApi(configMap["auto_code_account"]["user"], configMap["auto_code_account"]["pwd"]).getBalance()
             if int(balance) < 40:
                 raise balanceException(u'余额不足，当前余额为: {}'.format(balance))
-        user, passwd = _get_yaml()["set"]["12306account"][0]["user"], _get_yaml()["set"]["12306account"][1]["pwd"]
+        user, passwd = configMap["account12306"]["user"], configMap["account12306"]["pwd"]
         if not user or not passwd:
             raise UserPasswordException(u"温馨提示: 用户名或者密码为空，请仔细检查")
         login_num = 0
@@ -125,7 +127,3 @@ class GoLogin:
                 if uamtk:
                     self.getUserName(uamtk)
                     break
-
-# if __name__ == "__main__":
-#     # main()
-#     # logout()

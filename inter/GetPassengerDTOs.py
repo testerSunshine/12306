@@ -1,4 +1,6 @@
-# coding=utf-8
+# !/usr/bin/python3.6
+# -*- coding:utf-8 –*-
+
 from config.TicketEnmu import ticket
 from myException.PassengerUserException import PassengerUserException
 import wrapcache

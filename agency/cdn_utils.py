@@ -1,4 +1,6 @@
-# encoding=utf8
+# !/usr/bin/python3.6
+# -*- coding:utf-8 –*-
+
 import collections
 import json
 import os

@@ -1,4 +1,6 @@
-# coding=utf-8
+# !/usr/bin/python3.6
+# -*- coding:utf-8 –*-
+
 import copy
 import time
 

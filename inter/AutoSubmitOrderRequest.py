@@ -1,9 +1,11 @@
-# coding=utf-8
+# !/usr/bin/python3.6
+# -*- coding:utf-8 –*-
+
 import urllib
 from collections import OrderedDict
 
 from config.TicketEnmu import ticket
-from config.ticketConf import _get_yaml
+from config.ticketConf import configMap
 from inter.CheckRandCodeAnsyn import checkRandCodeAnsyn
 from inter.GetQueueCountAsync import getQueueCountAsync
 from inter.GetRandCode import getRandCode
@@ -101,7 +103,7 @@ class autoSubmitOrderRequest:
                     print(u"需要验证码")
                     print(u"正在使用自动识别验证码功能")
                     for i in range(3):
-                        randCode = getRandCode(is_auto_code=True, auto_code_type=_get_yaml()["auto_code_type"])
+                        randCode = getRandCode(is_auto_code=True, auto_code_type=configMap["auto_code_type"])
                         checkcode = checkRandCodeAnsyn(self.session, randCode, "")
                         if checkcode == 'TRUE':
                             print(u"验证码通过,正在提交订单")

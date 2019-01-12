@@ -1,4 +1,6 @@
-# -*- coding=utf-8 -*-
+# !/usr/bin/python3.6
+# -*- coding:utf-8 –*-
+
 import datetime
 import random
 import os
@@ -15,7 +17,7 @@ from config.AutoSynchroTime import autoSynchroTime
 from config.TicketEnmu import ticket
 from config.configCommon import seat_conf
 from config.configCommon import seat_conf_2
-from config.ticketConf import _get_yaml
+from config.ticketConf import configMap
 from init.login import GoLogin
 from inter.AutoSubmitOrderRequest import autoSubmitOrderRequest
 from inter.CheckUser import checkUser
@@ -48,9 +50,9 @@ class select:
         self.ticke_peoples, self.station_trains, self.ticket_black_list_time, \
         self.order_type, self.is_by_time, self.train_types, self.departure_time, \
         self.arrival_time, self.take_time, self.order_model, self.open_time, self.is_proxy = self.get_ticket_info()
-        self.is_auto_code = _get_yaml()["is_auto_code"]
-        self.auto_code_type = _get_yaml()["auto_code_type"]
-        self.is_cdn = _get_yaml()["is_cdn"]
+        self.is_auto_code = configMap["is_auto_code"]
+        self.auto_code_type = configMap["auto_code_type"]
+        self.is_cdn = configMap["is_cdn"]
         self.httpClint = HTTPClient(self.is_proxy)
         self.urls = urlConf.urls
         self.login = GoLogin(self, self.is_auto_code, self.auto_code_type)
@@ -65,35 +67,33 @@ class select:
         获取配置信息
         :return:
         """
-        ticket_info_config = _get_yaml()
-        from_station = ticket_info_config["set"]["from_station"]
-        to_station = ticket_info_config["set"]["to_station"]
-        station_dates = ticket_info_config["set"]["station_dates"]
-        set_names = ticket_info_config["set"]["set_type"]
-        set_type = [seat_conf[x.encode("utf-8")] for x in ticket_info_config["set"]["set_type"]]
-        is_more_ticket = ticket_info_config["set"]["is_more_ticket"]
-        ticke_peoples = ticket_info_config["set"]["ticke_peoples"]
-        station_trains = ticket_info_config["set"]["station_trains"]
-        ticket_black_list_time = ticket_info_config["ticket_black_list_time"]
-        order_type = ticket_info_config["order_type"]
+        from_station = configMap["from_station"]
+        to_station = configMap["to_station"]
+        station_dates = configMap["station_dates"]
+        set_names = configMap["set_type"]
+        set_type = [seat_conf[x] for x in configMap["set_type"]]
+        is_more_ticket = configMap["is_more_ticket"]
+        ticke_peoples = configMap["ticke_peoples"]
+        station_trains = configMap["station_trains"]
+        ticket_black_list_time = configMap["ticket_black_list_time"]
+        order_type = configMap["order_type"]
 
         # by time
-        is_by_time = ticket_info_config["set"]["is_by_time"]
-        train_types = ticket_info_config["set"]["train_types"]
-        departure_time = time_to_minutes(ticket_info_config["set"]["departure_time"])
-        arrival_time = time_to_minutes(ticket_info_config["set"]["arrival_time"])
-        take_time = time_to_minutes(ticket_info_config["set"]["take_time"])
+        is_by_time = configMap["is_by_time"]
+        train_types = configMap["train_types"]
+        departure_time = time_to_minutes(configMap["departure_time"])
+        arrival_time = time_to_minutes(configMap["arrival_time"])
+        take_time = time_to_minutes(configMap["take_time"])
 
         # 下单模式
-        order_model = ticket_info_config["order_model"]
-        open_time = ticket_info_config["open_time"]
+        order_model = configMap["order_model"]
+        open_time = configMap["open_time"]
 
         # 代理模式
-        is_proxy = ticket_info_config["is_proxy"]
+        is_proxy = configMap["is_proxy"]
 
         print(u"*" * 50)
-        print(u"检查当前python版本为：{}，目前版本只支持2.7.10-2.7.15".format(sys.version.split(" ")[0]))
-        print(u"12306刷票小助手，最后更新于2019.01.08，请勿作为商业用途，交流群号：286271084(已满)， 2群：649992274(已满)，请加3群(未满)， 群号：632501142、4群(未满)， 群号：606340519")
+        print(u"检查当前python版本为：{}，目前版本只支持3.6+".format(sys.version.split(" ")[0]))
         if is_by_time:
             method_notie = u"购票方式：根据时间区间购票\n可接受最早出发时间：{0}\n可接受最晚抵达时间：{1}\n可接受最长旅途时间：{2}\n可接受列车类型：{3}\n" \
                 .format(minutes_to_time(departure_time), minutes_to_time(arrival_time), minutes_to_time(take_time),

@@ -1,4 +1,6 @@
-# -*- coding: utf8 -*-
+# !/usr/bin/python3.6
+# -*- coding:utf-8 –*-
+
 import json
 import socket
 from collections import OrderedDict

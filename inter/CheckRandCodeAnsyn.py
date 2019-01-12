@@ -1,4 +1,6 @@
-# coding=utf-8
+# !/usr/bin/python3.6
+# -*- coding:utf-8 –*-
+
 class checkRandCodeAnsyn:
     def __init__(self, session, randCode, token):
         self.session = session

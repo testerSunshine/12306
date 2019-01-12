@@ -1,3 +1,6 @@
+# !/usr/bin/python3.6
+# -*- coding:utf-8 –*-
+
 def time_to_minutes(time_str):
     s = time_str.split(":")
     a = int(s[0]) * 60 + int(s[1])

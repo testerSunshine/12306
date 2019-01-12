@@ -1,4 +1,6 @@
-# -*- coding=utf-8 -*-
+# !/usr/bin/python3.6
+# -*- coding:utf-8 –*-
+
 from config.emailConf import sendEmail
 from init import select_ticket_info
 

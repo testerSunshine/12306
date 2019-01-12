@@ -1,7 +1,7 @@
 #### 12306 购票小助手
 
 - python版本支持
-  - 2.7.10 - 2.7.15
+  - 3.6.4
 - 依赖库
   - 依赖若快 若快注册地址：http://www.ruokuai.com/client/index?6726 推荐用若快，打码兔平台已经关闭
   - 项目依赖包 requirements.txt
@@ -11,13 +11,12 @@
       - 非root用户（避免安装和运行时使用了不同环境）: sudo python2 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 
 - 项目使用说明
-  - 需要配置邮箱，可以配置可以不配置，配置邮箱的格式在yaml里面可以看到ex
+  - 需要配置邮箱，可以配置可以不配置
   - 提交订单验证码哪里依赖打码兔，所以如果是订票遇到验证码的时候，没有打码兔是过不了的，不推荐手动，手动太慢
-  - 配置yaml文件的时候，需注意空格和遵循yaml语法格式
 
 - 项目开始
   - 服务器启动:
-      - 修改config/ticket_config.yaml文件，按照提示更改自己想要的信息
+      - 修改config/ticket_config.py文件，按照提示更改自己想要的信息
       - 运行根目录sudo python run.py，即可开始
         - 由于新增对时功能，请务必用sudo，sudo，sudo 执行，否则会报权限错误，windows打开ide或者cmd请用管理员身份执行python run.py，不需要加sudo
   - 如果你的服务器安装了docker与docker-compose, 那么就可以通过`docker-compose`进行启动,`docker.sh`脚本对此进行了封装，可以通过如下命令进行启动

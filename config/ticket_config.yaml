@@ -109,6 +109,19 @@ pushbear_conf:
   is_pushbear: False
   send_key: ""
 
+# 山东墨白语音服务
+# 试用地址: https://market.aliyun.com/products/56928004/cmapi027440.html
+# 开启试用，以免错过车票支付
+# is_call 为 True 时，订票下单成功后电话通知
+# appcode 购买服务成功后取得应用码
+# phone 下单成功后需要联系的电话
+# templateId 默认“TP18040815”，要自定义顺耳的通知的自己到平台申请审核去
+MBVoiceNotify:
+  is_call: False
+  appcode: ""
+  phone: "174XXXXXXXX"
+  templateId: "TP18040815"
+
 # 是否开启cdn查询，可以更快的检测票票 1为开启，2为关闭
 is_cdn: 1
 

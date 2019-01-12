@@ -7,6 +7,7 @@ import requests
 from agency.agency_tools import proxy
 from config.emailConf import sendEmail
 from config.pushbearConf import sendPushBear
+from config.MBVoiceNotify import voiceCall
 
 
 def _set_header_default():
@@ -46,6 +47,13 @@ class testAll(unittest.TestCase):
         :return:
         """
         sendPushBear("pushbear 微信通知测试一下")
+
+    def testPhone(self):
+        """
+        实测电话是否可用
+        :return:
+        """
+        voiceCall()
 
     # def testConfig(self):
     #     """

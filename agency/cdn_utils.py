@@ -78,4 +78,4 @@ class CDNProxy:
 
 if __name__ == '__main__':
     cdn = CDNProxy()
-    cdn.open_cdn_file()
+    print(cdn.open_cdn_file())

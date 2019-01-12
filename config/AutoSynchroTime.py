@@ -26,16 +26,21 @@ def autoSynchroTime():
     system = platform.system()
     if system == "Windows":
         for host in hosts:
-            os.system('w32tm /register')
-            os.system('net start w32time')
-            os.system(f'w32tm /config /manualpeerlist:"{host}" /syncfromflags:manual /reliable:yes /update')
-            os.system('ping -n 3 127.0.0.1 >nul')
-            sin = os.system('w32tm /resync')
+            os.popen('w32tm /register')
+            os.popen('net start w32time')
+            os.popen('w32tm /config /manualpeerlist:"{}" /syncfromflags:manual /reliable:yes /update'.format(host))
+            os.popen('ping -n 3 127.0.0.1 >nul')
+            sin = os.popen('w32tm /resync')
+            os.popen('w32tm /register')
+            os.popen('net start w32time')
+            os.popen(f'w32tm /config /manualpeerlist:"{host}" /syncfromflags:manual /reliable:yes /update')
+            os.popen('ping -n 3 127.0.0.1 >nul')
+            sin = os.popen('w32tm /resync')
             if sin is 0:
                 break
     else:  # mac同步地址，如果ntpdate未安装，brew install ntpdate    linux 安装 yum install -y ntpdate
         for host in hosts:
-            sin = os.system('ntpdate {}'.format(host))
+            sin = os.popen('ntpdate {}'.format(host))
             if sin is 0:
                 break
     print(f"同步后时间{now()}")

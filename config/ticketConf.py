@@ -10,7 +10,7 @@ def _get_yaml():
     :return: s  字典
     """
     path = os.path.join(os.path.dirname(__file__) + '/ticket_config.yaml')
-    f = open(path, encoding = "utf8")
+    f = open(path, encoding = 'utf-8')
     s = yaml.load(f)
     f.close()
     return s.decode() if isinstance(s, bytes) else s

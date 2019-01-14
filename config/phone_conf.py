@@ -1,18 +1,16 @@
 # -*- coding: utf8 -*-
 __author__ = 'Song'
 
-import urllib2
+import requests
 from config.ticketConf import _get_yaml
 from config.TicketEnmu import ticket
 
 def send_request(url):
     if not url:
-        return 'error'
-    req = urllib2.Request(url)
-    req.add_header('User-Agent',
-                   'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.16 (KHTML, like Gecko) Chrome/10.0.648.151 Safari/534.16')
+        raise ValueError('error')
+    headers = {'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.16 (KHTML, like Gecko) Chrome/10.0.648.151 Safari/534.16'}
     try:
-        response = urllib2.urlopen(req, timeout=3)
+        response = requests.get(url, headers=headers, timeout=3)
     except Exception as e:
         return e
     result = response.read()

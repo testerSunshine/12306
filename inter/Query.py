@@ -95,7 +95,7 @@ class query:
                 continue
             value = station_ticket.get("data", "")
             if not value:
-                print (u'{0}-{1} 车次坐席查询为空,ip网络异常，查询url: https://kyfw.12306.cn{2}, 可以手动查询是否有票'.format(self.from_station_h,
+                print(u'{0}-{1} 车次坐席查询为空,ip网络异常，查询url: https://kyfw.12306.cn{2}, 可以手动查询是否有票'.format(self.from_station_h,
                                                                                                self.to_station_h,
                                                                                                select_url["req_url"]))
             else:

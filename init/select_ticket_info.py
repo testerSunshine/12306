@@ -291,14 +291,19 @@ class select:
                     time.sleep(random_time)
             except PassengerUserException as e:
                 print(e)
+                break
             except ticketConfigException as e:
                 print(e)
+                break
             except ticketIsExitsException as e:
                 print(e)
+                break
             except ticketNumOutException as e:
                 print(e)
+                break
             except UserPasswordException as e:
                 print(e)
+                break
             except ValueError as e:
                 if e == "No JSON object could be decoded":
                     print(u"12306接口无响应，正在重试")

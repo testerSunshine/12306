@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import os
+import random
 import sys
 import time
 
@@ -102,9 +103,9 @@ def getCacheFile(cacheType):
 def checkSleepTime(session):
     now = datetime.datetime.now()
     if now.hour >= 23 or now.hour < 6:
-        print(u"12306休息时间，本程序自动停止,明天早上七点将自动运行")
+        print(u"12306休息时间，本程序自动停止,明天早上六点点将自动运行")
         open_time = datetime.datetime(now.year, now.month, now.day, 6)
         if open_time < now:
             open_time += datetime.timedelta(1)
-        time.sleep((open_time - now).seconds)
+        time.sleep((open_time - now).seconds + round(random.uniform(1, 10)))
         session.call_login()

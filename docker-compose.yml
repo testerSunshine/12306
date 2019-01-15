@@ -7,7 +7,8 @@ services:
         # ports:
         volumes:
             - ./:/usr/src/app
-            - /etc/localtime:/etc/localtime:ro
+              # - /etc/localtime:/etc/localtime:ro
         container_name: 12306ticket
+        privileged: true
 
 

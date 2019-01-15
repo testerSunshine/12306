@@ -6,6 +6,7 @@ import requests
 
 from agency.agency_tools import proxy
 from config.emailConf import sendEmail
+from config.pushbearConf import sendPushBear
 
 
 def _set_header_default():
@@ -38,6 +39,13 @@ class testAll(unittest.TestCase):
         :return:
         """
         sendEmail("订票小助手测试一下")
+  
+    def testPushbear(self):
+        """
+        实测pushbear是否可用
+        :return:
+        """
+        sendPushBear("pushbear 微信通知测试一下")
 
     # def testConfig(self):
     #     """

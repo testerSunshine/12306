@@ -19,7 +19,10 @@ class submitOrderRequest:
     def __init__(self, session, secretStr, from_station, to_station, train_no, set_type,
                  passengerTicketStrList, oldPassengerStr, train_date, ticke_peoples):
         self.session = session
-        self.secretStr = secretStr
+        try:
+            self.secretStr = urllib.unquote(secretStr)
+        except AttributeError:
+            self.secretStr = urllib.parse.unquote(secretStr)
         self.from_station = from_station
         self.to_station = to_station
         self.to_station = to_station
@@ -34,7 +37,7 @@ class submitOrderRequest:
         """
         :return:
         """
-        data = [('secretStr', urllib.unquote(self.secretStr)),  # 字符串加密
+        data = [('secretStr', self.secretStr),  # 字符串加密
                 ('train_date', self.train_date),  # 出发时间
                 ('back_train_date', time()),  # 返程时间
                 ('tour_flag', 'dc'),  # 旅途类型

@@ -95,7 +95,7 @@ class query:
                 continue
             value = station_ticket.get("data", "")
             if not value:
-                print (u'{0}-{1} 车次坐席查询为空,ip网络异常，查询url: https://kyfw.12306.cn{2}, 可以手动查询是否有票'.format(self.from_station_h,
+                print(u'{0}-{1} 车次坐席查询为空,ip网络异常，查询url: https://kyfw.12306.cn{2}, 可以手动查询是否有票'.format(self.from_station_h,
                                                                                                self.to_station_h,
                                                                                                select_url["req_url"]))
             else:
@@ -103,7 +103,7 @@ class query:
                 if result:
                     for i in value['result']:
                         ticket_info = i.split('|')
-                        if ticket_info[11] == "Y" and ticket_info[1].encode("utf8") == "预订":  # 筛选未在开始时间内的车次
+                        if ticket_info[11] == "Y" and ticket_info[1] == "预订":  # 筛选未在开始时间内的车次
                             for j in self._station_seat:
                                 is_ticket_pass = ticket_info[j]
                                 if is_ticket_pass != '' and is_ticket_pass != '无' and is_ticket_pass != '*' and self.check_is_need_train(

@@ -70,7 +70,10 @@ class select:
         to_station = ticket_info_config["set"]["to_station"]
         station_dates = ticket_info_config["set"]["station_dates"]
         set_names = ticket_info_config["set"]["set_type"]
-        set_type = [seat_conf[x.encode("utf-8")] for x in ticket_info_config["set"]["set_type"]]
+        try:
+            set_type = [seat_conf[x.encode("utf-8")] for x in ticket_info_config["set"]["set_type"]]
+        except KeyError:
+            set_type = [seat_conf[x] for x in ticket_info_config["set"]["set_type"]]
         is_more_ticket = ticket_info_config["set"]["is_more_ticket"]
         ticke_peoples = ticket_info_config["set"]["ticke_peoples"]
         station_trains = ticket_info_config["set"]["station_trains"]
@@ -93,7 +96,14 @@ class select:
 
         print(u"*" * 50)
         print(u"检查当前python版本为：{}，目前版本只支持2.7.10-2.7.15".format(sys.version.split(" ")[0]))
-        print(u"12306刷票小助手，最后更新于2019.01.08，请勿作为商业用途，交流群号：286271084(已满)， 2群：649992274(已满)，请加3群(未满)， 群号：632501142、4群(未满)， 群号：606340519")
+        print(u"12306刷票小助手，最后更新于2019.01.08，请勿作为商业用途，交流群号：286271084(已满)，"
+              u" 2群：649992274(已满)\n"
+              u" 3群：632501142(已满)\n"
+              u" 4群: 606340519(已满)\n"
+              u" 5群: 948526733(未满)\n"
+              u" 6群: 444101020(未满)\n"
+              u" 7群: 660689659(未满)\n"
+              )
         if is_by_time:
             method_notie = u"购票方式：根据时间区间购票\n可接受最早出发时间：{0}\n可接受最晚抵达时间：{1}\n可接受最长旅途时间：{2}\n可接受列车类型：{3}\n" \
                 .format(minutes_to_time(departure_time), minutes_to_time(arrival_time), minutes_to_time(take_time),
@@ -134,8 +144,12 @@ class select:
         for i in range(0, len(info)):
             n_info = info[i].split('|')
             station_name[n_info[1]] = n_info[2]
-        from_station = station_name[from_station.encode("utf8")]
-        to_station = station_name[to_station.encode("utf8")]
+        try:
+            from_station = station_name[from_station.encode("utf8")]
+            to_station = station_name[to_station.encode("utf8")]
+        except KeyError:
+            from_station = station_name[from_station]
+            to_station = station_name[to_station]
         return from_station, to_station
 
     def call_login(self, auth=False):
@@ -182,7 +196,7 @@ class select:
                 raise ticketConfigException(u"cdn列表为空，请先加载cdn")
 
     def main(self):
-        autoSynchroTime()  # 同步时间
+        # autoSynchroTime()  # 同步时间
         self.cdn_certification()
         l = liftTicketInit(self)
         l.reqLiftTicketInit()
@@ -193,6 +207,8 @@ class select:
         t.start()
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         num = 0
+        s = getPassengerDTOs(session=self, ticket_peoples=self.ticke_peoples)
+        s.sendGetPassengerDTOs()
         while 1:
             try:
                 num += 1

@@ -25,7 +25,10 @@ class autoSubmitOrderRequest:
                  leftTicket,
                  set_type,):
         self.set_type = set_type
-        self.secretStr = urllib.unquote(secretStr)
+        try:
+            self.secretStr = urllib.unquote(secretStr)
+        except AttributeError:
+            self.secretStr = urllib.parse.unquote(secretStr)
         self.train_date = train_date
         self.query_from_station_name = query_from_station_name
         self.query_to_station_name = query_to_station_name

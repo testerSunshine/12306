@@ -4,6 +4,7 @@ import time
 
 from config.TicketEnmu import ticket
 from config.emailConf import sendEmail
+from config.pushbearConf import sendPushBear
 from myException.ticketIsExitsException import ticketIsExitsException
 from myException.ticketNumOutException import ticketNumOutException
 
@@ -41,6 +42,8 @@ class queryOrderWaitTime:
                     data = queryOrderWaitTimeResult.get("data", False)
                     if data and data.get("orderId", ""):
                         sendEmail(ticket.WAIT_ORDER_SUCCESS.format(
+                            data.get("orderId", "")))
+                        sendPushBear(ticket.WAIT_ORDER_SUCCESS.format(
                             data.get("orderId", "")))
                         raise ticketIsExitsException(ticket.WAIT_ORDER_SUCCESS.format(
                             data.get("orderId")))

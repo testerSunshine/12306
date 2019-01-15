@@ -4,7 +4,7 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
-          <list size="11">
+          <list size="13">
             <item index="0" class="java.lang.String" itemvalue="nose" />
             <item index="1" class="java.lang.String" itemvalue="locust" />
             <item index="2" class="java.lang.String" itemvalue="selenium" />
@@ -16,6 +16,8 @@
             <item index="8" class="java.lang.String" itemvalue="MySQL-python" />
             <item index="9" class="java.lang.String" itemvalue="redis" />
             <item index="10" class="java.lang.String" itemvalue="redis_py_cluster" />
+            <item index="11" class="java.lang.String" itemvalue="requests" />
+            <item index="12" class="java.lang.String" itemvalue="APScheduler" />
           </list>
         </value>
       </option>

@@ -23,16 +23,14 @@
         - 由于新增对时功能，请务必用sudo，sudo，sudo 执行，否则会报权限错误，windows打开ide或者cmd请用管理员身份执行python run.py，不需要加sudo
   - 如果你的服务器安装了docker与docker-compose, 那么就可以通过`docker-compose`进行启动,`docker.sh`脚本对此进行了封装，可以通过如下命令进行启动
       - 1、`sudo ./docker.sh run` #创建一个镜像并启动容器，如果镜像已经创建过了会直接启动容器。
-      - 2、`sudo ./docker.sh reload` #修改配置文件后，通过此名命令可重新加载容器运行
+      - 2、`sudo ./docker.sh restart` #修改配置文件后，通过此名命令可重新加载容器运行
       - 3、`sudo ./docker.sh rm` #删除容器
       - 4、`sudo ./docker.sh drun` #后台运行容器
       - 5、`sudo ./docker.sh logs` #在后台运行时，通过此命令查看运行的内容
-      - 注: 若只有docker没有docker-compose. 可通过`pip install docker-compose`进行下载
-  - ~~如果你的服务器安装了docker，那么就可以docker启动~~
-      - 1、~~docker build -t dockerticket .~~
-      - 2、~~docker run dockerticket  python run.py &~~
-      - 3、~~本来是可以直接Dockerfile启动的，不知道为毛启动不了，如果有大佬看到问题所在，欢迎提出~~
-      - 4、~~docker run -d --name 12306-ticket dockerticket~~
+      - 注: 针对没有docker环境的同学提供了docker安装脚本(**<font color="red">centos7</font>**)
+            - `sudo ./docker_install_centos.sh`
+      - ~~注: 若只有docker没有docker-compose. 可通过`pip install docker-compose`进行下载~~
+
 
 	
 
@@ -92,7 +90,7 @@
 - 感谢一下小伙伴对本项目提供的帮助
     - @sun7127@126.com
     - @ 才
-    - @MonsterTan
+    - @[MonsterTan](https://github.com/MonsterTan)
     - 以及所有为此项目提供pr的同学
 - [更新日志](Update.md)
 

@@ -2,7 +2,6 @@
 from time import sleep
 
 from config.ticketConf import _get_yaml
-from damatuCode.damatuWeb import DamatuApi
 from inter.GetPassCodeNewOrderAndLogin import getPassCodeNewOrderAndLogin
 from inter.GetRandCode import getRandCode
 from myException.UserPasswordException import UserPasswordException

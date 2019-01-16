@@ -137,8 +137,12 @@ class select:
         :return:
         """
         path = os.path.join(os.path.dirname(__file__), '../station_name.txt')
-        result = open(path)
-        info = result.read().split('=')[1].strip("'").split('@')
+        try:
+            with open(path, encoding="utf-8") as result:
+                info = result.read().split('=')[1].strip("'").split('@')
+        except TypeError:
+            with open(path) as result:
+                info = result.read().split('=')[1].strip("'").split('@')
         del info[0]
         station_name = {}
         for i in range(0, len(info)):

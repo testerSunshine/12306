@@ -5,8 +5,7 @@ set:
   # - 2018-01-06
   # - 2018-01-07
   station_dates:
-    - "2019-02-10"
-    - "2019-02-11"
+    - "2019-01-18"
 
   # 是否根据时间范围 和 乘车类型 购票
   # 否则将需要手动填写车次
@@ -61,13 +60,12 @@ set:
   # - "张三"
   # - "李四"
   ticke_peoples:
-    - ""
-    - ""
+    - "屈兴明"
 
   # 12306登录账号(list)
   12306account:
-    - user: "931128603@qq.com"
-    - pwd: ""
+    - user: "qqxin1011"
+    - pwd: "quxm19861011"
 
 # 加入小黑屋时间默认为5分钟，此功能为了防止僵尸票导致一直下单不成功错过正常的票，
 ticket_black_list_time: 5
@@ -81,7 +79,7 @@ auto_code_type: 2
 # 打码平台账号
 auto_code_account:
   user: "931128603"
-  pwd: ""
+  pwd: "wen1995"
 
 #  邮箱配置，如果抢票成功，将通过邮件配置通知给您
 #  列举163
@@ -106,8 +104,8 @@ email_conf:
 
 # 是否开启 pushbear 微信提醒， 使用前需要前往 http://pushbear.ftqq.com 扫码绑定获取 send_key 并关注获得抢票结果通知的公众号
 pushbear_conf:
-  is_pushbear: False
-  send_key: ""
+  is_pushbear: True
+  send_key: "8635-2e509149e360806feca5b76621c7d219"
 
 # 是否开启cdn查询，可以更快的检测票票 1为开启，2为关闭
 is_cdn: 1

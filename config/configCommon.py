@@ -71,6 +71,21 @@ def decMakeDir(func):
 def getWorkDir():
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+#
+# def fileOpen(path):
+#     """
+#     文件读取兼容2和3
+#     :param path: 文件读取路径
+#     :return:
+#     """
+#     try:
+#         with open(path, "r", ) as f:
+#             return f
+#     except TypeError:
+#         with open(path, "r", ) as f:
+#             return f
+
+
 
 @decMakeDir
 def getTmpDir():

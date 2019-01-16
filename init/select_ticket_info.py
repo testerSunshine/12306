@@ -100,7 +100,7 @@ class select:
               u" 2群：649992274(已满)\n"
               u" 3群：632501142(已满)\n"
               u" 4群: 606340519(已满)\n"
-              u" 5群: 948526733(未满)\n"
+              u" 5群: 948526733(已满)\n"
               u" 6群: 444101020(未满)\n"
               u" 7群: 660689659(未满)\n"
               )
@@ -160,6 +160,7 @@ class select:
         if auth:
             return self.login.auth()
         else:
+            configCommon.checkSleepTime(self)  # 防止网上启动晚上到点休眠
             self.login.go_login()
 
     def cdn_req(self, cdn):
@@ -326,5 +327,4 @@ class select:
 
 if __name__ == '__main__':
     s = select()
-    cdn = CDNProxy().open_cdn_file()
-    s.cdn_req(cdn)
+    cdn = s.station_table("长沙", "深圳")

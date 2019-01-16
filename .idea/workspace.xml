@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4ff88715-dd0d-4e26-8ea7-b7b28038ca10" name="Default" comment="">
+    <list default="true" id="b0ca309c-231f-43f8-ba9d-0c954a15bfa7" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/12306.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/markdown-exported-files.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/markdown-navigator.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/markdown-navigator/profiles_settings.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTest/TestAll.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTest/TestAll.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agency/cdn_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/agency/cdn_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/emailConf.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/emailConf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/pushbearConf.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/pushbearConf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/ticket_config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/ticket_config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/urlConf.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/urlConf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/init/select_ticket_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/init/select_ticket_info.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inter/GetPassengerDTOs.py" beforeDir="false" afterPath="$PROJECT_DIR$/inter/GetPassengerDTOs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myUrllib/httpUtils.py" beforeDir="false" afterPath="$PROJECT_DIR$/myUrllib/httpUtils.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -20,7 +25,10 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/12306$select_ticket_info.coverage" NAME="select_ticket_info Coverage Results" MODIFIED="1538459782462" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/init" />
+    <SUITE FILE_PATH="coverage/12306$Nosetests_for_TestAll_testAll_testLogin.coverage" NAME="Nosetests for TestAll.testAll.testLogin Coverage Results" MODIFIED="1547517351085" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UnitTest" />
+    <SUITE FILE_PATH="coverage/12306$pushbearConf.coverage" NAME="pushbearConf Coverage Results" MODIFIED="1547607924184" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/config" />
+    <SUITE FILE_PATH="coverage/12306$cdn_utils.coverage" NAME="cdn_utils Coverage Results" MODIFIED="1547546064988" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/agency" />
+    <SUITE FILE_PATH="coverage/12306$select_ticket_info.coverage" NAME="select_ticket_info Coverage Results" MODIFIED="1547545588185" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/init" />
     <SUITE FILE_PATH="coverage/12306$run.coverage" NAME="run Coverage Results" MODIFIED="1540282009794" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
@@ -28,35 +36,35 @@
       <file leaf-file-name="select_ticket_info.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/init/select_ticket_info.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1184">
-              <caret line="104" column="36" selection-start-line="104" selection-start-column="36" selection-end-line="104" selection-end-column="36" />
+            <state relative-caret-position="247">
+              <caret line="142" selection-start-line="142" selection-end-line="142" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="QueryOrderWaitTime.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/inter/QueryOrderWaitTime.py">
+      <file leaf-file-name="cdn_utils.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/agency/cdn_utils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="48">
-              <caret line="34" column="122" selection-start-line="34" selection-start-column="122" selection-end-line="34" selection-end-column="122" />
+            <state relative-caret-position="-564">
+              <caret line="16" selection-start-line="16" selection-end-line="16" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
+      <file leaf-file-name="emailConf.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/emailConf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="64">
-              <caret line="4" column="1" selection-start-line="4" selection-start-column="1" selection-end-line="4" selection-end-column="1" />
+            <state relative-caret-position="442">
+              <caret line="36" column="22" lean-forward="true" selection-start-line="36" selection-start-column="22" selection-end-line="36" selection-end-column="22" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TicketEnmu.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config/TicketEnmu.py">
+      <file leaf-file-name="smtplib.py" pinned="false" current-in-tab="false">
+        <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/smtplib.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="416">
-              <caret line="26" column="4" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
+            <state relative-caret-position="274">
+              <caret line="1065" column="40" lean-forward="true" selection-start-line="1065" selection-start-column="40" selection-end-line="1065" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -64,17 +72,17 @@
       <file leaf-file-name="ticket_config.yaml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/ticket_config.yaml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="12" column="19" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
+            <state relative-caret-position="-499">
+              <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="requirements.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <file leaf-file-name="GetPassengerDTOs.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/inter/GetPassengerDTOs.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="6" column="16" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
+            <state relative-caret-position="459">
+              <caret line="87" column="44" selection-start-line="87" selection-start-column="44" selection-end-line="87" selection-end-column="44" />
             </state>
           </provider>
         </entry>
@@ -83,8 +91,8 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="848">
-                <caret line="53" column="4" selection-start-line="53" selection-start-column="4" selection-end-line="56" selection-end-column="23" />
+              <first_editor relative-caret-position="-952">
+                <caret line="14" column="69" selection-start-line="14" selection-start-column="69" selection-end-line="14" selection-end-column="69" />
               </first_editor>
               <second_editor>
                 <js_state />
@@ -93,17 +101,62 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="QueryOrderWaitTime.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/inter/QueryOrderWaitTime.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="157">
+              <caret line="45" column="32" selection-start-line="45" selection-start-column="32" selection-end-line="45" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pushbearConf.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/pushbearConf.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="492">
+              <caret line="38" column="26" lean-forward="true" selection-start-line="38" selection-start-column="26" selection-end-line="38" selection-end-column="26" />
+              <folding>
+                <element signature="e#23#34#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="urlConf.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/urlConf.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="332">
+              <caret line="351" column="13" selection-start-line="351" selection-start-column="5" selection-end-line="351" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>pushbear_conf</find>
+      <find>5群: 948526733</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/myUrllib/httpUtils.py" />
+        <option value="$PROJECT_DIR$/UnitTest/TestAll.py" />
+        <option value="$PROJECT_DIR$/agency/cdn_utils.py" />
+        <option value="$PROJECT_DIR$/config/emailConf.py" />
+        <option value="$PROJECT_DIR$/config/ticket_config.yaml" />
+        <option value="$PROJECT_DIR$/init/select_ticket_info.py" />
+        <option value="$PROJECT_DIR$/inter/GetPassengerDTOs.py" />
+        <option value="$PROJECT_DIR$/config/pushbearConf.py" />
+        <option value="$PROJECT_DIR$/config/urlConf.py" />
+        <option value="$PROJECT_DIR$/README.md" />
+      </list>
+    </option>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
   <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
@@ -131,6 +184,11 @@
               <item name="12306" type="b2602c69:ProjectViewProjectNode" />
               <item name="12306" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="12306" type="b2602c69:ProjectViewProjectNode" />
+              <item name="12306" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -139,6 +197,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SearchEverywhereHistoryKey" value="waittime&#9;FILE&#9;file:///usr/local/py_work/12306/inter/QueryOrderWaitTime.py&#10;url&#9;FILE&#9;file:///usr/local/py_work/12306/config/urlConf.py&#10;dto&#9;FILE&#9;file:///usr/local/py_work/12306/inter/GetPassengerDTOs.py&#10;wa&#9;FILE&#9;file:///usr/local/py_work/12306/inter/QueryOrderWaitTime.py&#10;email&#9;FILE&#9;file:///usr/local/py_work/12306/config/emailConf.py" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -154,23 +213,111 @@
       </list>
     </option>
   </component>
+  <component name="RunManager" selected="Python.pushbearConf">
+    <configuration name="cdn_utils" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="12306" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/agency" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/agency/cdn_utils.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="pushbearConf" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="12306" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/config" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/config/pushbearConf.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="select_ticket_info" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="12306" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/init" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/init/select_ticket_info.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="Nosetests for TestAll.testAll.testLogin" type="tests" factoryName="Nosetests" temporary="true" nameIsGenerated="true">
+      <module name="12306" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTest" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;TestAll.testAll.testLogin&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+    </configuration>
+    <list>
+      <item itemvalue="Python tests.Nosetests for TestAll.testAll.testLogin" />
+      <item itemvalue="Python.select_ticket_info" />
+      <item itemvalue="Python.cdn_utils" />
+      <item itemvalue="Python.pushbearConf" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.pushbearConf" />
+        <item itemvalue="Python.cdn_utils" />
+        <item itemvalue="Python.select_ticket_info" />
+        <item itemvalue="Python tests.Nosetests for TestAll.testAll.testLogin" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="4ff88715-dd0d-4e26-8ea7-b7b28038ca10" name="Default" comment="" />
+      <changelist id="b0ca309c-231f-43f8-ba9d-0c954a15bfa7" name="Default" comment="" />
       <created>1535103824843</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1535103824843</updated>
     </task>
-    <task id="LOCAL-00001" summary="优化代码结构&#10;新增双下单方法&#10;修复一直bug">
-      <created>1535541553246</created>
+    <task id="LOCAL-00001" summary="rm idea">
+      <created>1547461234453</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1535541553246</updated>
+      <updated>1547461234453</updated>
     </task>
     <task id="LOCAL-00002" summary="优化代码结构&#10;新增双下单方法&#10;修复一直bug">
       <created>1535541598180</created>
@@ -286,20 +433,50 @@
     </task>
     <servers />
   </component>
+  <component name="TestHistory">
+    <history-entry file="Nosetests_for_TestAll_testAll_testLogin - 2019.01.15 at 00h 14m 50s.xml">
+      <configuration name="Nosetests for TestAll.testAll.testLogin" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Nosetests_for_TestAll_testAll_testLogin - 2019.01.15 at 09h 45m 13s.xml">
+      <configuration name="Nosetests for TestAll.testAll.testLogin" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Nosetests_for_TestAll_testAll_testLogin - 2019.01.15 at 09h 46m 00s.xml">
+      <configuration name="Nosetests for TestAll.testAll.testLogin" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Nosetests_for_TestAll_testAll_testLogin - 2019.01.15 at 09h 46m 53s.xml">
+      <configuration name="Nosetests for TestAll.testAll.testLogin" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Nosetests_for_TestAll_testAll_testLogin - 2019.01.15 at 09h 47m 52s.xml">
+      <configuration name="Nosetests for TestAll.testAll.testLogin" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Nosetests_for_TestAll_testAll_testLogin - 2019.01.15 at 09h 54m 00s.xml">
+      <configuration name="Nosetests for TestAll.testAll.testLogin" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Nosetests_for_TestAll_testAll_testLogin - 2019.01.15 at 09h 54m 48s.xml">
+      <configuration name="Nosetests for TestAll.testAll.testLogin" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Nosetests_for_TestAll_testAll_testLogin - 2019.01.15 at 09h 55m 19s.xml">
+      <configuration name="Nosetests for TestAll.testAll.testLogin" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Nosetests_for_TestAll_testAll_testLogin - 2019.01.15 at 09h 55m 52s.xml">
+      <configuration name="Nosetests for TestAll.testAll.testLogin" configurationId="tests" />
+    </history-entry>
+  </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32969698" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5007153" side_tool="true" weight="0.32867134" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5007153" side_tool="true" weight="0.32363635" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.42303032" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32447553" />
-      <window_info anchor="bottom" id="Python Console" order="7" sideWeight="0.49928468" weight="0.32447553" />
-      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49928468" weight="0.32484847" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.33547926" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.26909092" />
+      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49928468" weight="0.32363635" />
+      <window_info anchor="bottom" id="Python Console" order="7" sideWeight="0.49928468" weight="0.32363635" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49785408" weight="0.32363635" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11802575" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49928468" weight="0.32848486" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.406993" />
@@ -310,11 +487,36 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32848486" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -333,20 +535,10 @@
     <MESSAGE value="update readme" />
     <MESSAGE value="1、修改提交订单逻辑问题，感谢群里小伙伴发现&#10;2、查询接口修改" />
     <MESSAGE value="更新群号" />
-    <option name="LAST_COMMIT_MESSAGE" value="更新群号" />
+    <MESSAGE value="rm idea" />
+    <option name="LAST_COMMIT_MESSAGE" value="rm idea" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tmp/log/2018-08-27.log" />
-    <entry file="file://$PROJECT_DIR$/tmp/log/2018-08-24.log" />
-    <entry file="file://$PROJECT_DIR$/init/SelectTicketInfoFast.py" />
-    <entry file="file://$PROJECT_DIR$/config/emailConf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="49">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tmp/log/2018-08-31.log" />
     <entry file="file://$PROJECT_DIR$/damatuCode/ruokuai.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="27">
@@ -355,22 +547,8 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/agency/CdnPar.py" />
-    <entry file="file://$PROJECT_DIR$/agency/cdn_utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="34" column="11" lean-forward="true" selection-start-line="34" selection-start-column="11" selection-end-line="34" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tmp/log/2018-09-02.log" />
     <entry file="file://$PROJECT_DIR$/tmp/log/2018-09-04.log" />
-    <entry file="file://$PROJECT_DIR$/init/login.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="117" column="32" selection-start-line="117" selection-start-column="32" selection-end-line="117" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tmp/log/2018-09-18.log" />
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2/typing.pyi">
       <provider selected="true" editor-type-id="text-editor">
@@ -451,18 +629,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="848">
-            <caret line="53" column="4" selection-start-line="53" selection-start-column="4" selection-end-line="56" selection-end-column="23" />
-          </first_editor>
-          <second_editor>
-            <js_state />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/inter/GetRepeatSubmitToken.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="112">
@@ -472,20 +638,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tmp/log/2018-09-30.log" />
     <entry file="file://$PROJECT_DIR$/tmp/log/2018-10-05.log" />
-    <entry file="file://$PROJECT_DIR$/myUrllib/httpUtils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="746">
-          <caret line="123" column="39" lean-forward="true" selection-start-line="123" selection-start-column="39" selection-end-line="123" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/inter/CheckUser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="33" column="67" selection-end-line="33" selection-end-column="100" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/inter/CheckRandCodeAnsyn.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="32">
@@ -509,20 +661,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/init/select_ticket_info.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1184">
-          <caret line="104" column="36" selection-start-line="104" selection-start-column="36" selection-end-line="104" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/urlConf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="276" column="26" selection-start-line="276" selection-start-column="26" selection-end-line="276" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tmp/log/2018-10-17.log" />
     <entry file="file://$PROJECT_DIR$/inter/GetQueueCountAsync.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -535,13 +673,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="384">
           <caret line="86" column="37" selection-start-line="86" selection-start-column="37" selection-end-line="86" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/inter/GetPassengerDTOs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="80">
-          <caret line="63" column="35" selection-start-line="63" selection-start-column="35" selection-end-line="63" selection-end-column="35" />
         </state>
       </provider>
     </entry>
@@ -573,31 +704,129 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/ticket_config.yaml">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="12" column="19" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
+        <state relative-caret-position="64">
+          <caret line="4" column="1" selection-start-line="4" selection-start-column="1" selection-end-line="4" selection-end-column="1" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/TicketEnmu.py">
+    <entry file="file://$PROJECT_DIR$/inter/CheckUser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="416">
-          <caret line="26" column="4" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
+        <state relative-caret-position="339">
+          <caret line="32" column="47" lean-forward="true" selection-start-line="32" selection-start-column="47" selection-end-line="32" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/timeUtil.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/init/login.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="469">
+          <caret line="100" column="8" selection-start-line="100" selection-start-column="8" selection-end-line="100" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UnitTest/TestAll.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="61" column="29" selection-start-line="61" selection-start-column="29" selection-end-line="61" selection-end-column="29" />
+          <folding>
+            <element signature="e#15#26#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/inter/QueryOrderWaitTime.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="48">
-          <caret line="34" column="122" selection-start-line="34" selection-start-column="122" selection-end-line="34" selection-end-column="122" />
+        <state relative-caret-position="157">
+          <caret line="45" column="32" selection-start-line="45" selection-start-column="32" selection-end-line="45" selection-end-column="32" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/smtplib.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="64">
-          <caret line="4" column="1" selection-start-line="4" selection-start-column="1" selection-end-line="4" selection-end-column="1" />
+        <state relative-caret-position="274">
+          <caret line="1065" column="40" lean-forward="true" selection-start-line="1065" selection-start-column="40" selection-end-line="1065" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/TicketEnmu.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="26" column="4" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myUrllib/httpUtils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="94">
+          <caret line="139" column="24" lean-forward="true" selection-start-line="136" selection-start-column="16" selection-end-line="139" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/emailConf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="36" column="22" lean-forward="true" selection-start-line="36" selection-start-column="22" selection-end-line="36" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/init/select_ticket_info.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="142" selection-start-line="142" selection-end-line="142" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/ticket_config.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-499">
+          <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/urlConf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="332">
+          <caret line="351" column="13" selection-start-line="351" selection-start-column="5" selection-end-line="351" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/pushbearConf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="492">
+          <caret line="38" column="26" lean-forward="true" selection-start-line="38" selection-start-column="26" selection-end-line="38" selection-end-column="26" />
+          <folding>
+            <element signature="e#23#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="-952">
+            <caret line="14" column="69" selection-start-line="14" selection-start-column="69" selection-end-line="14" selection-end-column="69" />
+          </first_editor>
+          <second_editor>
+            <js_state />
+          </second_editor>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agency/cdn_utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-564">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inter/GetPassengerDTOs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="87" column="44" selection-start-line="87" selection-start-column="44" selection-end-line="87" selection-end-column="44" />
         </state>
       </provider>
     </entry>

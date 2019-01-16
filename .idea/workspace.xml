@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b0ca309c-231f-43f8-ba9d-0c954a15bfa7" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/12306.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+    <list default="true" id="b0ca309c-231f-43f8-ba9d-0c954a15bfa7" name="Default" comment="fix">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UnitTest/TestAll.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTest/TestAll.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Update.md" beforeDir="false" afterPath="$PROJECT_DIR$/Update.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agency/cdn_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/agency/cdn_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/emailConf.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/emailConf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/pushbearConf.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/pushbearConf.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/ticket_config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/ticket_config.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/urlConf.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/urlConf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/init/select_ticket_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/init/select_ticket_info.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/damatuCode/damatuWeb.py" beforeDir="false" afterPath="$PROJECT_DIR$/damatuCode/damatuWeb.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inter/GetPassengerDTOs.py" beforeDir="false" afterPath="$PROJECT_DIR$/inter/GetPassengerDTOs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myUrllib/httpUtils.py" beforeDir="false" afterPath="$PROJECT_DIR$/myUrllib/httpUtils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inter/Query.py" beforeDir="false" afterPath="$PROJECT_DIR$/inter/Query.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -36,35 +32,35 @@
       <file leaf-file-name="select_ticket_info.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/init/select_ticket_info.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
+            <state relative-caret-position="-1235">
               <caret line="142" selection-start-line="142" selection-end-line="142" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="cdn_utils.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/agency/cdn_utils.py">
+      <file leaf-file-name="Query.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/inter/Query.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-564">
-              <caret line="16" selection-start-line="16" selection-end-line="16" />
+            <state relative-caret-position="542">
+              <caret line="132" column="65" selection-start-line="132" selection-start-column="65" selection-end-line="132" selection-end-column="65" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="emailConf.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config/emailConf.py">
+      <file leaf-file-name="QueryOrderWaitTime.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/inter/QueryOrderWaitTime.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="36" column="22" lean-forward="true" selection-start-line="36" selection-start-column="22" selection-end-line="36" selection-end-column="22" />
+            <state relative-caret-position="800">
+              <caret line="57" column="40" selection-start-line="57" selection-start-column="40" selection-end-line="57" selection-end-column="40" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="smtplib.py" pinned="false" current-in-tab="false">
-        <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/smtplib.py">
+      <file leaf-file-name="TicketEnmu.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/TicketEnmu.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="274">
-              <caret line="1065" column="40" lean-forward="true" selection-start-line="1065" selection-start-column="40" selection-end-line="1065" selection-end-column="40" />
+            <state relative-caret-position="448">
+              <caret line="28" column="4" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -72,27 +68,18 @@
       <file leaf-file-name="ticket_config.yaml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/ticket_config.yaml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-499">
-              <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
+            <state relative-caret-position="299">
+              <caret line="108" column="13" selection-start-line="108" selection-start-column="13" selection-end-line="108" selection-end-column="50" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GetPassengerDTOs.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/inter/GetPassengerDTOs.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="87" column="44" selection-start-line="87" selection-start-column="44" selection-end-line="87" selection-end-column="44" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="-952">
-                <caret line="14" column="69" selection-start-line="14" selection-start-column="69" selection-end-line="14" selection-end-column="69" />
+              <first_editor relative-caret-position="262">
+                <caret line="74" column="20" lean-forward="true" selection-start-line="74" selection-start-column="20" selection-end-line="74" selection-end-column="20" />
               </first_editor>
               <second_editor>
                 <js_state />
@@ -101,32 +88,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="QueryOrderWaitTime.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/inter/QueryOrderWaitTime.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="157">
-              <caret line="45" column="32" selection-start-line="45" selection-start-column="32" selection-end-line="45" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pushbearConf.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config/pushbearConf.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="492">
-              <caret line="38" column="26" lean-forward="true" selection-start-line="38" selection-start-column="26" selection-end-line="38" selection-end-column="26" />
-              <folding>
-                <element signature="e#23#34#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="urlConf.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config/urlConf.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="351" column="13" selection-start-line="351" selection-start-column="5" selection-end-line="351" selection-end-column="13" />
+      <file leaf-file-name="GuiHelp.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/GuiHelp.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+            <state split_layout="SPLIT">
+              <first_editor />
+              <second_editor>
+                <js_state />
+              </second_editor>
             </state>
           </provider>
         </entry>
@@ -150,11 +119,14 @@
         <option value="$PROJECT_DIR$/agency/cdn_utils.py" />
         <option value="$PROJECT_DIR$/config/emailConf.py" />
         <option value="$PROJECT_DIR$/config/ticket_config.yaml" />
-        <option value="$PROJECT_DIR$/init/select_ticket_info.py" />
         <option value="$PROJECT_DIR$/inter/GetPassengerDTOs.py" />
         <option value="$PROJECT_DIR$/config/pushbearConf.py" />
         <option value="$PROJECT_DIR$/config/urlConf.py" />
+        <option value="$PROJECT_DIR$/init/select_ticket_info.py" />
+        <option value="$PROJECT_DIR$/damatuCode/damatuWeb.py" />
+        <option value="$PROJECT_DIR$/inter/Query.py" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/Update.md" />
       </list>
     </option>
   </component>
@@ -167,7 +139,7 @@
   <component name="ProjectFrameBounds" fullScreen="true">
     <option name="y" value="23" />
     <option name="width" value="1440" />
-    <option name="height" value="829" />
+    <option name="height" value="812" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
@@ -187,7 +159,7 @@
             <path>
               <item name="12306" type="b2602c69:ProjectViewProjectNode" />
               <item name="12306" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
+              <item name="uml" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -200,6 +172,123 @@
     <property name="SearchEverywhereHistoryKey" value="waittime&#9;FILE&#9;file:///usr/local/py_work/12306/inter/QueryOrderWaitTime.py&#10;url&#9;FILE&#9;file:///usr/local/py_work/12306/config/urlConf.py&#10;dto&#9;FILE&#9;file:///usr/local/py_work/12306/inter/GetPassengerDTOs.py&#10;wa&#9;FILE&#9;file:///usr/local/py_work/12306/inter/QueryOrderWaitTime.py&#10;email&#9;FILE&#9;file:///usr/local/py_work/12306/config/emailConf.py" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RestoreUpdateTree" date="Moments ago" ActionInfo="_Update">
+    <UpdatedFiles>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Updated from server" />
+        <option name="myStatusName" value="Changed on server" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="CHANGED_ON_SERVER" />
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Updated" />
+          <option name="myStatusName" value="Changed" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/README.md</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/docker-compose.yml</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Created" />
+          <option name="myStatusName" value="Created" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="CREATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/docker_install_centos.sh</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Deleted" />
+          <option name="myStatusName" value="Deleted" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="true" />
+          <option name="myId" value="REMOVED_FROM_REPOSITORY" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Restored" />
+          <option name="myStatusName" value="Will be restored" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="RESTORED" />
+        </FILE-GROUP>
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Modified" />
+        <option name="myStatusName" value="Modified" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MODIFIED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Skipped" />
+        <option name="myStatusName" value="Skipped" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SKIPPED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with conflicts" />
+        <option name="myStatusName" value="Will be merged with conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_CONFLICTS" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with tree conflicts" />
+        <option name="myStatusName" value="Merged with tree conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with property conflicts" />
+        <option name="myStatusName" value="Will be merged with property conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged" />
+        <option name="myStatusName" value="Will be merged" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Not in repository" />
+        <option name="myStatusName" value="Not in repository" />
+        <option name="mySupportsDeletion" value="true" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="UNKNOWN" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally added" />
+        <option name="myStatusName" value="Locally added" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_ADDED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally removed" />
+        <option name="myStatusName" value="Locally removed" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_REMOVED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Switched" />
+        <option name="myStatusName" value="Switched" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SWITCHED" />
+      </FILE-GROUP>
+    </UpdatedFiles>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -312,12 +401,12 @@
       <option name="presentableId" value="Default" />
       <updated>1535103824843</updated>
     </task>
-    <task id="LOCAL-00001" summary="rm idea">
-      <created>1547461234453</created>
+    <task id="LOCAL-00001" summary="fix">
+      <created>1547608772227</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1547461234453</updated>
+      <updated>1547608772227</updated>
     </task>
     <task id="LOCAL-00002" summary="优化代码结构&#10;新增双下单方法&#10;修复一直bug">
       <created>1535541598180</created>
@@ -431,6 +520,7 @@
       <option name="project" value="LOCAL" />
       <updated>1547460780535</updated>
     </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -469,11 +559,11 @@
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32969698" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5007153" side_tool="true" weight="0.32363635" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.26909092" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.26909092" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49928468" weight="0.32363635" />
       <window_info anchor="bottom" id="Python Console" order="7" sideWeight="0.49928468" weight="0.32363635" />
       <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49785408" weight="0.32363635" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11802575" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18669528" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49928468" weight="0.32848486" />
@@ -529,26 +619,16 @@
     <MESSAGE value="优化配置文件说明" />
     <MESSAGE value="多人下单参数修正" />
     <MESSAGE value="修正余票小于乘客人数，则不提交" />
-    <MESSAGE value="fix" />
     <MESSAGE value="增加余票不足优先提交功能" />
     <MESSAGE value="1、优化查询策略&#10;2、快读下单修复&#10;3、关闭cdn功能" />
     <MESSAGE value="update readme" />
     <MESSAGE value="1、修改提交订单逻辑问题，感谢群里小伙伴发现&#10;2、查询接口修改" />
     <MESSAGE value="更新群号" />
     <MESSAGE value="rm idea" />
-    <option name="LAST_COMMIT_MESSAGE" value="rm idea" />
+    <MESSAGE value="fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/damatuCode/ruokuai.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="27">
-          <caret line="5" column="10" lean-forward="true" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agency/CdnPar.py" />
-    <entry file="file://$PROJECT_DIR$/tmp/log/2018-09-02.log" />
-    <entry file="file://$PROJECT_DIR$/tmp/log/2018-09-04.log" />
     <entry file="file://$PROJECT_DIR$/tmp/log/2018-09-18.log" />
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2/typing.pyi">
       <provider selected="true" editor-type-id="text-editor">
@@ -585,18 +665,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="96">
           <caret line="6" column="16" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Update.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="471">
-            <caret line="119" column="33" selection-start-line="119" selection-start-column="23" selection-end-line="119" selection-end-column="33" />
-          </first_editor>
-          <second_editor>
-            <js_state />
-          </second_editor>
         </state>
       </provider>
     </entry>
@@ -654,13 +722,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tmp/log/2018-10-06.log" />
     <entry file="file://$PROJECT_DIR$/tmp/log/2018-10-13.log" />
-    <entry file="file://$PROJECT_DIR$/inter/Query.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="784">
-          <caret line="49" column="40" selection-start-line="49" selection-start-column="40" selection-end-line="49" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tmp/log/2018-10-17.log" />
     <entry file="file://$PROJECT_DIR$/inter/GetQueueCountAsync.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -738,59 +799,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inter/QueryOrderWaitTime.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="45" column="32" selection-start-line="45" selection-start-column="32" selection-end-line="45" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/smtplib.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="1065" column="40" lean-forward="true" selection-start-line="1065" selection-start-column="40" selection-end-line="1065" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/TicketEnmu.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="26" column="4" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/myUrllib/httpUtils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="94">
           <caret line="139" column="24" lean-forward="true" selection-start-line="136" selection-start-column="16" selection-end-line="139" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/emailConf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="36" column="22" lean-forward="true" selection-start-line="36" selection-start-column="22" selection-end-line="36" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/init/select_ticket_info.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="142" selection-start-line="142" selection-end-line="142" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/ticket_config.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-499">
-          <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/urlConf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="351" column="13" selection-start-line="351" selection-start-column="5" selection-end-line="351" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -804,15 +816,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="-952">
-            <caret line="14" column="69" selection-start-line="14" selection-start-column="69" selection-end-line="14" selection-end-column="69" />
-          </first_editor>
-          <second_editor>
-            <js_state />
-          </second_editor>
+    <entry file="file://$PROJECT_DIR$/inter/GetPassengerDTOs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="87" column="44" selection-start-line="87" selection-start-column="44" selection-end-line="87" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/smtplib.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="1065" column="40" lean-forward="true" selection-start-line="1065" selection-start-column="40" selection-end-line="1065" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/emailConf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="36" column="22" lean-forward="true" selection-start-line="36" selection-start-column="22" selection-end-line="36" selection-end-column="22" />
         </state>
       </provider>
     </entry>
@@ -823,10 +844,94 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inter/GetPassengerDTOs.py">
+    <entry file="file://$PROJECT_DIR$/docker_install_centos.sh">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/damatuCode/ruokuai.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="87" column="44" selection-start-line="87" selection-start-column="44" selection-end-line="87" selection-end-column="44" />
+        <state relative-caret-position="-246" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/urlConf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="362">
+          <caret line="351" column="13" selection-start-line="351" selection-start-column="5" selection-end-line="351" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/damatuCode/damatuWeb.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="638">
+          <caret line="68" column="39" lean-forward="true" selection-start-line="68" selection-start-column="39" selection-end-line="68" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/init/select_ticket_info.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1235">
+          <caret line="142" selection-start-line="142" selection-end-line="142" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inter/Query.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="542">
+          <caret line="132" column="65" selection-start-line="132" selection-start-column="65" selection-end-line="132" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/TicketEnmu.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="448">
+          <caret line="28" column="4" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inter/QueryOrderWaitTime.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="800">
+          <caret line="57" column="40" selection-start-line="57" selection-start-column="40" selection-end-line="57" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/ticket_config.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="108" column="13" selection-start-line="108" selection-start-column="13" selection-end-line="108" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GuiHelp.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="SPLIT">
+          <first_editor />
+          <second_editor>
+            <js_state />
+          </second_editor>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Update.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="102">
+            <caret line="109" lean-forward="true" selection-start-line="109" selection-end-line="109" />
+          </first_editor>
+          <second_editor>
+            <js_state />
+          </second_editor>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="262">
+            <caret line="74" column="20" lean-forward="true" selection-start-line="74" selection-start-column="20" selection-end-line="74" selection-end-column="20" />
+          </first_editor>
+          <second_editor>
+            <js_state />
+          </second_editor>
         </state>
       </provider>
     </entry>

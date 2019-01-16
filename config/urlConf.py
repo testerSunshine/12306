@@ -349,6 +349,18 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
+    "Pushbear": {  # push通知
+        "req_url": "/sub",
+        "req_type": "post",
+        "Referer": "",
+        "Content-Type": 1,
+        "Host": "pushbear.ftqq.com",
+        "re_try": 10,
+        "re_time": 0.01,
+        "s_time": 0.1,
+        "is_logger": False,
+        "is_json": True,
+    },
     "cdn_host": {
         "req_url": "http://ping.chinaz.com/kyfw.12306.cn",
         "req_type": "post"

@@ -9,7 +9,9 @@ def _get_yaml():
     解析yaml
     :return: s  字典
     """
-    path = os.path.join(os.path.dirname(__file__) + '/ticket_config.yaml')
+    opts, args = getopt.getopt(sys.argv[1:], 'f:')
+    config_name = opts[0][1] if opts else 'ticket_config.yaml'
+    path = os.path.join(os.path.dirname(__file__) + '/' + config_name)
     f = open(path)
     s = yaml.load(f)
     f.close()

@@ -14,6 +14,7 @@
   - 可以配置邮箱，可以配置可以不配置，配置邮箱的格式在yaml里面可以看到ex
   - 可以配置server酱提醒（推荐）， [配置教程] (https://www.jianshu.com/p/8d10b5b9c4e3)
   - 提交订单验证码哪里依赖打码兔，所以如果是订票遇到验证码的时候，没有打码兔是过不了的，不推荐手动，手动太慢
+  - 拷贝 ticket_config.yaml.example 为 ticket_config.yaml，改为自己的信息
   - 配置yaml文件的时候，需注意空格和遵循yaml语法格式
 
 - 项目开始

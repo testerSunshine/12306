@@ -75,7 +75,7 @@ class proxy:
                 for i in lins:
                     p = i.strip("\n")
                     self.proxy_filter_list.append(p)
-        except TypeError:
+        except Exception:
             with open(path, "r", ) as f:
                 lins = f.readlines()
                 for i in lins:

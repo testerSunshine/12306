@@ -140,7 +140,7 @@ class select:
         try:
             with open(path, encoding="utf-8") as result:
                 info = result.read().split('=')[1].strip("'").split('@')
-        except TypeError:
+        except Exception:
             with open(path) as result:
                 info = result.read().split('=')[1].strip("'").split('@')
         del info[0]

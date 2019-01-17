@@ -15,7 +15,7 @@ def _get_yaml():
     try:  # 兼容2和3版本
         with open(path, encoding="utf-8") as f:
             s = yaml.load(f)
-    except TypeError:
+    except Exception:
         with open(path) as f:
             s = yaml.load(f)
     return s.decode() if isinstance(s, bytes) else s

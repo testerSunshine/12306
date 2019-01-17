@@ -29,7 +29,7 @@ def getPassCodeNewOrderAndLogin(session, imgType):
             try:
                 with open(img_path, 'wb', encoding="utf-8") as img:
                     img.write(result)
-            except TypeError:
+            except Exception:
                 with open(img_path, 'wb') as img:
                     img.write(result)
             return result

@@ -74,7 +74,7 @@ class CDNProxy:
                     if i and "kyfw.12306.cn:443" not in i:
                         cdn.append(i.replace("\n", ""))
                 return cdn
-        except TypeError:
+        except Exception:
             with open(path, "r") as f:
                 for i in f.readlines():
                     # print(i.replace("\n", ""))

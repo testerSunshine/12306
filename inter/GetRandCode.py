@@ -4,11 +4,12 @@ from PIL import Image
 from config.ticketConf import _get_yaml
 from damatuCode.ruokuai import RClient
 
+from littlebigluo.fuck12306 import fuck12306
+
 try:
     raw_input      # Python 2
 except NameError:  # Python 3
     raw_input = input
-
 
 def getRandCode(is_auto_code, auto_code_type, result):
     """
@@ -20,7 +21,7 @@ def getRandCode(is_auto_code, auto_code_type, result):
             if auto_code_type == 1:
                 print(u"打码兔已关闭, 如需使用自动识别，请使用如果平台 auto_code_type == 2")
                 return
-            if auto_code_type == 2:
+            elif auto_code_type == 2:
                 rc = RClient(_get_yaml()["auto_code_account"]["user"], _get_yaml()["auto_code_account"]["pwd"])
                 # im = open('./tkcode', 'rb').read()
                 Result = rc.rk_create(result, 6113)
@@ -30,6 +31,13 @@ def getRandCode(is_auto_code, auto_code_type, result):
                     if "Error" in Result and Result["Error"]:
                         print(u"打码平台错误: {0}, 请登录打码平台查看-http://www.ruokuai.com/client/index?6726".format(Result["Error"]))
                         return ""
+            elif auto_code_type == 3:
+                fuck = fuck12306()
+                result = fuck.fuck("./tkcode.png")
+                select = result.split(" ")
+                return pos2randCode(select)
+                pass
+
         else:
             img = Image.open('./tkcode.png')
             img.show()
@@ -57,6 +65,11 @@ def codexy(Ofset=None, is_raw_input=True):
         Ofset = raw_input(u"输入对应的验证码: ")
     Ofset = Ofset.replace("，", ",")
     select = Ofset.split(',')
+    randCode = pos2randCode(select)
+    return randCode
+
+
+def pos2randCode(select):
     post = []
     offsetsX = 0  # 选择的答案的left值,通过浏览器点击8个小图的中点得到的,这样基本没问题
     offsetsY = 0  # 选择的答案的top值

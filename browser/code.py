@@ -19,8 +19,8 @@ class Request_Web(BaseRequest):
     'Upgrade-Insecure-Requests':'1'
     }
 
-    def __init__(self, base64Str):
-        self._baseData = _baseData        
+    def __init__(self, baseData):
+        self._baseData = baseData        
     
     def getValidateCode(self):
         try:

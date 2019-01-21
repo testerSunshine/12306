@@ -40,7 +40,7 @@
   - damatuCode - 打码兔接口
   - init - 项目主运行目录
   - myException - 异常
-  - myUrllib - urllib库
+  - myUrllib - urllib库ordered_dict
 
 - 思路图
      ![image](https://github.com/testerSunshine/12306/blob/master/uml/uml.png)
@@ -90,6 +90,7 @@
         ```
         mac gui and windows gui 下载链接：https://pan.baidu.com/s/1SbVJWxiwP27yb8HUi1kzDQ  密码:41wp
         ```
+    - 自动更换ip软件目前已支持TPLINK和小米路由器，只限家庭网络[点我跳转](https://github.com/testerSunshine/AutoRouterIP)
 - 感谢一下小伙伴对本项目提供的帮助
     - @sun7127@126.com
     - @ 才

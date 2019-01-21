@@ -1,13 +1,12 @@
 #coding=utf-8
 from browser.baseEntity import BaseRequest, BaseResponse
 import requests
-import sys,re
-import os
+import re
 
 class Response_Web(BaseResponse):
     pass
 
-class Request_Web(BaseRequest):    
+class Request_Web(BaseRequest):   
 
     _URL='http://103.46.128.47:47720/'
     headers = {
@@ -29,21 +28,15 @@ class Request_Web(BaseRequest):
             }
 
             res=requests.post(self._URL,headers= self.headers,files=f)
-            print 'res.text',res.text
+            #print 'res.text',res.text
             tempRes=re.findall(r"<B>(.+?)</B>",res.text)
             
             if  len(tempRes)>0 :
-                print tempRes[0].split(" "),tuple(tempRes[0].split(" "))
+                #print tempRes[0].split(" "),tuple(tempRes[0].split(" "))
                 return Response_Web(tuple(tempRes[0].split(" ")),0)
             else:
                 return Response_Web(tuple(),1)
           
-        except Exception as e:
-            print e
-            return Response_Web(None,1,'360接口处理信息错误')
-        
-
-if __name__ == '__main__':
-   
-    Request_Web(a.read()).getValidateCode()
-    # Email()
+        except Exception :
+            #print e
+            return Response_Web(None,1,'网页接口处理信息错误')

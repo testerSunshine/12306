@@ -1,6 +1,5 @@
 # coding=utf-8
 from PIL import Image
-import base64
 from config.ticketConf import _get_yaml
 from damatuCode.ruokuai import RClient
 from browser.code import Request_Web

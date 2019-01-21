@@ -32,7 +32,7 @@ def getRandCode(is_auto_code, auto_code_type, result):
                         return ""
             if auto_code_type == 3: # 第三方接口
                 Result=Request_Web(result).getValidateCode()
-                if Result.code == 0:            
+                if Result.code == 0:
                     return codexy(Ofset=",".join(list(Result.res)), is_raw_input=False)
                 else:
                     print(Result.errorMsg)

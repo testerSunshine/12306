@@ -1,5 +1,6 @@
 # coding=utf-8
 import datetime
+import sys
 import time
 from collections import OrderedDict
 
@@ -56,7 +57,10 @@ class getQueueCountAsync:
             - _json_att 没啥卵用，还是带上吧
         :return:
         """
-        new_train_date = filter(None, str(time.asctime(time.strptime(self.station_dates, "%Y-%m-%d"))).split(" "))
+        if sys.version_info.major is 2:
+            new_train_date = filter(None, str(time.asctime(time.strptime(self.station_dates, "%Y-%m-%d"))).split(" "))
+        else:
+            new_train_date = list(filter(None, str(time.asctime(time.strptime(self.station_dates, "%Y-%m-%d"))).split(" ")))
         data = OrderedDict()
         data['train_date'] = "{0} {1} {2} {3} 00:00:00 GMT+0800 (中国标准时间)".format(
             new_train_date[0],

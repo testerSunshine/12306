@@ -11,7 +11,8 @@
       - 非root用户（避免安装和运行时使用了不同环境）: sudo python2 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 
 - 项目使用说明
-  - 需要配置邮箱，可以配置可以不配置，配置邮箱的格式在yaml里面可以看到ex
+  - 可以配置邮箱，可以配置可以不配置，配置邮箱的格式在yaml里面可以看到ex
+  - 可以配置server酱提醒（推荐）， [配置教程] (https://www.jianshu.com/p/8d10b5b9c4e3)
   - 提交订单验证码哪里依赖打码兔，所以如果是订票遇到验证码的时候，没有打码兔是过不了的，不推荐手动，手动太慢
   - 配置yaml文件的时候，需注意空格和遵循yaml语法格式
 
@@ -20,11 +21,18 @@
       - 修改config/ticket_config.yaml文件，按照提示更改自己想要的信息
       - 运行根目录sudo python run.py，即可开始
         - 由于新增对时功能，请务必用sudo，sudo，sudo 执行，否则会报权限错误，windows打开ide或者cmd请用管理员身份执行python run.py，不需要加sudo
-  - 如果你的服务器安装了docker，那么就可以docker启动
-      - 1、docker build -t dockerticket .
-      - 2、~~docker run dockerticket  python run.py &~~
-      - 3、~~本来是可以直接Dockerfile启动的，不知道为毛启动不了，如果有大佬看到问题所在，欢迎提出~~
-      - 4、docker run -d --name 12306-ticket dockerticket 
+  - 如果你的服务器安装了docker与docker-compose, 那么就可以通过`docker-compose`进行启动,`docker.sh`脚本对此进行了封装，可以通过如下命令进行启动
+      - 1、`sudo ./docker.sh run` #创建一个镜像并启动容器，如果镜像已经创建过了会直接启动容器。
+      - 2、`sudo ./docker.sh restart` #修改配置文件后，通过此名命令可重新加载容器运行
+      - 3、`sudo ./docker.sh rm` #删除容器
+      - 4、`sudo ./docker.sh drun` #后台运行容器
+      - 5、`sudo ./docker.sh logs` #在后台运行时，通过此命令查看运行的内容
+      - 注: 针对没有docker环境的同学提供了docker安装脚本(**<font color="red">centos7</font>**)
+            - `sudo ./docker_install_centos.sh`
+      - ~~注: 若只有docker没有docker-compose. 可通过`pip install docker-compose`进行下载~~
+
+
+	
 
 - 目录对应说明
   - agency - cdn代理
@@ -38,7 +46,14 @@
      ![image](https://github.com/testerSunshine/12306/blob/master/uml/uml.png)
 
 - 项目声明：
-  - 本软件只供学习交流使用，务作为商业用途，交流群号：286271084(已满)， 2群：649992274(已满)，请加3群(未满)， 群号：632501142、4群(未满)， 群号：606340519
+  - 本软件只供学习交流使用，勿作为商业用途，交流群号
+    - 1群：286271084(已满)
+    - 2群：649992274(已满)
+    - 3群：632501142(已满)
+    - 4群: 606340519(已满)
+    - 5群: 948526733(已满)
+    - 6群: 444101020(未满)
+    - 7群: 660689659(未满)
   - 请不要重复加群，一个群就可以了，把机会留给更多人
   - **进群先看公告！！！进群先看公告！！！进群先看公告！！！ 重要的事情说三遍**
   - 能为你抢到一张回家的票，是我最大的心愿
@@ -66,12 +81,19 @@
     - 学生票issues [学生票修改](https://github.com/testerSunshine/12306/issues/47)
     - 依赖安装不对的问题（ImportError）[requirements.txt问题](https://github.com/testerSunshine/12306/issues/91)
     - 若快豆子疑问 [点我](https://github.com/testerSunshine/12306/issues/67)
+    - IOError: 【Errno 0】 Error 问题 [点我](https://github.com/testerSunshine/12306/issues/159)
 
     - 测试下单接口是否可用，有两个下单接口，随便用哪个都ok
     - 如果下载验证码过期或者下载失败的问题，应该是12306封ip的策略，多重试几次，12306现在封服务器(阿里云和腾讯云)ip比较严重，尽量不要放在服务器里面
+    - 目前12306对服务器ip比较敏感，大家还是在自己家里挂着吧
+    - 如果想使用此项目的gui版本，请加群获取链接 [gui文档](GuiHelp.md) 或者，gui专用群：499098551
+        ```
+        mac gui and windows gui 下载链接：https://pan.baidu.com/s/1SbVJWxiwP27yb8HUi1kzDQ  密码:41wp
+        ```
 - 感谢一下小伙伴对本项目提供的帮助
-    - @ sun7127@126.com
-    - @才
+    - @sun7127@126.com
+    - @ 才
+    - @[MonsterTan](https://github.com/MonsterTan)
     - 以及所有为此项目提供pr的同学
 - [更新日志](Update.md)
 

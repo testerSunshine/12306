@@ -69,12 +69,19 @@ class proxy:
         :return: 可用ip文件list
         """
         path = os.path.join(os.path.dirname(__file__), './proxy_list')
-        with open(path, "r") as f:
-            lins = f.readlines()
-            for i in lins:
-                p = i.strip("\n")
-                self.proxy_filter_list.append(p)
-            return self.proxy_filter_list
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                lins = f.readlines()
+                for i in lins:
+                    p = i.strip("\n")
+                    self.proxy_filter_list.append(p)
+        except Exception:
+            with open(path, "r", ) as f:
+                lins = f.readlines()
+                for i in lins:
+                    p = i.strip("\n")
+                    self.proxy_filter_list.append(p)
+        return self.proxy_filter_list
 
     def main(self):
         # self.get_proxy()

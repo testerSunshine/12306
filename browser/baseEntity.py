@@ -2,7 +2,8 @@
 
 #-基础请求类
 class BaseRequest(object):
-    pass 
+    def __init__(self):
+        pass
 
 #-基础返回类
 class BaseResponse(object):

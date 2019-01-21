@@ -26,16 +26,14 @@ class Request_Web(BaseRequest):
             f = {
                 'pic_file':("filename2.png", self._baseData, "image/png")
             }
-
             res=requests.post(self._URL,headers= self.headers,files=f)
             #print 'res.text',res.text
-            tempRes=re.findall(r"<B>(.+?)</B>",res.text)
-            
+            tempRes=re.findall(r"<B>(.+?)</B>",res.text)            
             if  len(tempRes)>0 :
                 #print tempRes[0].split(" "),tuple(tempRes[0].split(" "))
                 return Response_Web(tuple(tempRes[0].split(" ")),0)
             else:
-                return Response_Web(tuple(),1)          
+                return Response_Web(tuple(),1)  
         except Exception :
             #print e
             return Response_Web(None,1,'网页接口处理信息错误')

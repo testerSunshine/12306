@@ -38,7 +38,7 @@ class testAll(unittest.TestCase):
         实测邮箱是否可用
         :return:
         """
-        sendEmail("订票小助手测试一下")
+        sendEmail(u"订票小助手测试一下")
   
     def testPushbear(self):
         """

@@ -16,12 +16,13 @@ def sendPushBear(msg):
     :return:
     """
     conf = _get_yaml()
+    user = _get_yaml()["set"]["12306account"][0]["user"]
     if conf["pushbear_conf"]["is_pushbear"] and conf["pushbear_conf"]["send_key"].strip() != "":
         try:
             sendPushBearUrls = urls.get("Pushbear")
             data = {
                 "sendkey": conf["pushbear_conf"]["send_key"].strip(),
-                "text": "易行购票成功通知",
+                "text": user+"购票成功通知",
                 "desp": msg
             }
             httpClint = HTTPClient(0)

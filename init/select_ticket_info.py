@@ -11,7 +11,6 @@ import wrapcache
 
 from agency.cdn_utils import CDNProxy
 from config import urlConf, configCommon
-from config.AutoSynchroTime import autoSynchroTime
 from config.TicketEnmu import ticket
 from config.configCommon import seat_conf
 from config.configCommon import seat_conf_2
@@ -213,7 +212,8 @@ class select:
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         num = 0
         s = getPassengerDTOs(session=self, ticket_peoples=self.ticke_peoples)
-        s.sendGetPassengerDTOs()
+        passenger = s.sendGetPassengerDTOs()
+        wrapcache.set("user_info", passenger, timeout=9999999)
         while 1:
             try:
                 num += 1

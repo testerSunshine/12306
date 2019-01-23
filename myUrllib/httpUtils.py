@@ -130,6 +130,7 @@ class HTTPClient(object):
                 url_host = urls["Host"]
         else:
             url_host = urls["Host"]
+        http = urls.get("httpType") or "https"
         for i in range(re_try):
             try:
                 # sleep(urls["s_time"]) if "s_time" in urls else sleep(0.001)
@@ -141,7 +142,7 @@ class HTTPClient(object):
                 response = self._s.request(method=method,
                                            timeout=2,
                                            proxies=self._proxies,
-                                           url="https://" + url_host + req_url,
+                                           url=http + "://" + url_host + req_url,
                                            data=data,
                                            allow_redirects=allow_redirects,
                                            verify=False,
@@ -160,7 +161,7 @@ class HTTPClient(object):
                     else:
                         logger.log(
                             u"url: {} 返回参数为空".format(urls["req_url"]))
-                        return error_data
+                        continue
                 else:
                     sleep(urls["re_time"])
             except (requests.exceptions.Timeout, requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):

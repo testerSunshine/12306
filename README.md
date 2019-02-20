@@ -5,9 +5,9 @@
 - 依赖库
   - 依赖若快 若快注册地址：http://www.ruokuai.com/client/index?6726 推荐用若快，打码兔平台已经关闭
   - 项目依赖包 requirements.txt
-  - 安装方法-Windows: pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+  - 安装方法-Windows:
   - 安装方法-Linux:
-      - root用户(避免多python环境产生问题): python2 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+      - root用户(避免多python环境产生问题): python2 -m pip install -i https://pypi.tuna.tsinghua.e pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txtdu.cn/simple -r requirements.txt
       - 非root用户（避免安装和运行时使用了不同环境）: sudo python2 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 
 - 项目使用说明

@@ -11,10 +11,8 @@ import wrapcache
 
 from agency.cdn_utils import CDNProxy
 from config import urlConf, configCommon
-from config.AutoSynchroTime import autoSynchroTime
 from config.TicketEnmu import ticket
-from config.configCommon import seat_conf
-from config.configCommon import seat_conf_2
+from config.configCommon import seat_conf, checkDate, seat_conf_2
 from config.ticketConf import _get_yaml
 from init.login import GoLogin
 from inter.AutoSubmitOrderRequest import autoSubmitOrderRequest
@@ -68,7 +66,8 @@ class select:
         ticket_info_config = _get_yaml()
         from_station = ticket_info_config["set"]["from_station"]
         to_station = ticket_info_config["set"]["to_station"]
-        station_dates = ticket_info_config["set"]["station_dates"]
+        station_dates = checkDate(ticket_info_config["set"]["station_dates"])
+
         set_names = ticket_info_config["set"]["set_type"]
         try:
             set_type = [seat_conf[x.encode("utf-8")] for x in ticket_info_config["set"]["set_type"]]
@@ -213,7 +212,8 @@ class select:
         from_station, to_station = self.station_table(self.from_station, self.to_station)
         num = 0
         s = getPassengerDTOs(session=self, ticket_peoples=self.ticke_peoples)
-        s.sendGetPassengerDTOs()
+        passenger = s.sendGetPassengerDTOs()
+        wrapcache.set("user_info", passenger, timeout=9999999)
         while 1:
             try:
                 num += 1

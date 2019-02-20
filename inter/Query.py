@@ -144,7 +144,7 @@ class query:
                                         else:
                                             print(u"设置乘车人数为: {}".format(self.ticke_peoples_num))
                                             is_more_ticket_num = self.ticke_peoples_num
-                                        print (ticket.QUERY_C)
+                                        print(ticket.QUERY_C)
                                         return {
                                             "secretStr": secretStr,
                                             "train_no": train_no,

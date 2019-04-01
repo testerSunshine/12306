@@ -337,18 +337,6 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
-    "loginAysnSuggest": {  # 快速订单排队
-        "req_url": "/otn/login/loginAysnSuggest",
-        "req_type": "post",
-        "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
-        "Content-Type": 1,
-        "Host": "kyfw.12306.cn",
-        "re_try": 10,
-        "re_time": 0.01,
-        "s_time": 0.1,
-        "is_logger": True,
-        "is_json": True,
-    },
     "Pushbear": {  # push通知
         "req_url": "/sub",
         "req_type": "post",
@@ -368,5 +356,93 @@ urls = {
     "cdn_list": {
         "req_url": "http://ping.chinaz.com/iframe.ashx?t=ping&callback=jQuery111304824429956769827_{}".format(int(round(time.time() * 1000))),
         "req_type": "post"
-    }
+    },
+
+    "TPLINK": {  # TPLINK请求地址
+        "req_url": "/",
+        "req_type": "post",
+        "Referer": "",
+        "Content-Type": 1,
+        "Host": "192.168.0.1",
+        "re_try": 10,
+        "re_time": 0.01,
+        "s_time": 0.1,
+        "is_logger": False,
+        "is_json": True,
+        "httpType": "http"
+    },
+    "TPds": {  # TPLINK路由器内部切换地址
+        "req_url": "/stok={}/ds",
+        "req_type": "post",
+        "Referer": "",
+        "Content-Type": 1,
+        "Host": "192.168.0.1",
+        "re_try": 10,
+        "re_time": 0.01,
+        "s_time": 0.1,
+        "is_logger": False,
+        "is_json": True,
+        "httpType": "http"
+    },
+    "xiaomiHome": {  # 小米路由器登录
+        "req_url": "/cgi-bin/luci/web",
+        "req_type": "get",
+        "Referer": "",
+        "Content-Type": 1,
+        "Host": "192.168.31.1",
+        "re_try": 10,
+        "re_time": 0.01,
+        "s_time": 0.1,
+        "is_logger": False,
+        "is_json": False,
+        "httpType": "http"
+    },
+    "xiaomi": {  # 小米路由器登录
+        "req_url": "/cgi-bin/luci/api/xqsystem/login",
+        "req_type": "post",
+        "Referer": "",
+        "Content-Type": 1,
+        "Host": "192.168.31.1",
+        "re_try": 10,
+        "re_time": 0.01,
+        "s_time": 0.1,
+        "is_logger": False,
+        "is_json": True,
+        "httpType": "http"
+    },
+    "loginHtml": {  # 登录接口2
+        "req_url": "/otn/resources/login.html",
+        "req_type": "get",
+        "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
+        "Host": "kyfw.12306.cn",
+        "re_try": 10,
+        "re_time": 0.3,
+        "s_time": 0.1,
+        "is_logger": True,
+        "is_json": True,
+    },
+    "loginConf": {  # 登录接口2
+        "req_url": "/otn/login/conf",
+        "req_type": "post",
+        "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
+        "Host": "kyfw.12306.cn",
+        "re_try": 10,
+        "re_time": 0.3,
+        "s_time": 0.1,
+        "is_logger": True,
+        "is_json": True,
+    },
+    "loginAysnSuggest": {  # 登录接口2
+        "req_url": "/otn/login/loginAysnSuggest",
+        "req_type": "post",
+        "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
+        "Host": "kyfw.12306.cn",
+        "re_try": 10,
+        "re_time": 0.3,
+        "s_time": 0.1,
+        "is_logger": True,
+        "is_json": True,
+    },
+
+
 }

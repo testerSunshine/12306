@@ -1,22 +1,27 @@
-#### 12306 购票小助手
+### 12306 购票小助手
+#### python版本
+  - [x] 2.7.10 - 2.7.15
+  - [x] 3.6
+  - [ ] 2.7.9
 
-- python版本支持
-  - 2.7.10 - 2.7.15
-- 依赖库
-  - 依赖若快 若快注册地址：http://www.ruokuai.com/client/index?6726 推荐用若快，打码兔平台已经关闭
+#### 依赖库
+  - 依赖若快 若快注册地址：http://www.ruokuai.com/client/index?6726 推荐用若快，请注册个人账号
+    ```
+      PS: 现在登录可以不不用验证码了，
+    ```
   - 项目依赖包 requirements.txt
   - 安装方法-Windows:
   - 安装方法-Linux:
-      - root用户(避免多python环境产生问题): python2 -m pip install -i https://pypi.tuna.tsinghua.e pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txtdu.cn/simple -r requirements.txt
+      - root用户(避免多python环境产生问题): python2 -m pip install -i https://pypi.tuna.tsinghua.e -r requirements.txt
       - 非root用户（避免安装和运行时使用了不同环境）: sudo python2 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 
-- 项目使用说明
+#### 项目使用说明
   - 可以配置邮箱，可以配置可以不配置，配置邮箱的格式在yaml里面可以看到ex
   - 可以配置server酱提醒（推荐）， [配置教程] (https://www.jianshu.com/p/8d10b5b9c4e3)
   - 提交订单验证码哪里依赖打码兔，所以如果是订票遇到验证码的时候，没有打码兔是过不了的，不推荐手动，手动太慢
   - 配置yaml文件的时候，需注意空格和遵循yaml语法格式
 
-- 项目开始
+#### 项目开始
   - 服务器启动:
       - 修改config/ticket_config.yaml文件，按照提示更改自己想要的信息
       - 运行根目录sudo python run.py，即可开始
@@ -34,18 +39,18 @@
 
 	
 
-- 目录对应说明
+#### 目录对应说明
   - agency - cdn代理
   - config - 项目配置
   - damatuCode - 打码兔接口
   - init - 项目主运行目录
   - myException - 异常
-  - myUrllib - urllib库ordered_dict
+  - myUrllib  request网络请求库
 
-- 思路图
+#### 思路图
      ![image](https://github.com/testerSunshine/12306/blob/master/uml/uml.png)
 
-- 项目声明：
+#### 项目声明：
   - 本软件只供学习交流使用，勿作为商业用途，交流群号
     - 1群：286271084(已满)
     - 2群：649992274(已满)
@@ -58,25 +63,26 @@
   - **进群先看公告！！！进群先看公告！！！进群先看公告！！！ 重要的事情说三遍**
   - 能为你抢到一张回家的票，是我最大的心愿
 
-- 成功log，如果是购票失败的，请带上失败的log给我，我尽力帮你调，也可加群一起交流，程序只是加速买票的过程，并不一定能买到票
-    ```
-    正在第355次查询  乘车日期: 2018-02-12  车次G4741,G2365,G1371,G1377,G1329 查询无票  代理设置 无  总耗时429ms
-    车次: G4741 始发车站: 上海 终点站: 邵阳 二等座:有
-    正在尝试提交订票...
-    尝试提交订单...
-    出票成功
-    排队成功, 当前余票还剩余: 359 张
-    正在使用自动识别验证码功能
-    验证码通过,正在提交订单
-    提交订单成功！
-    排队等待时间预计还剩 -12 ms
-    排队等待时间预计还剩 -6 ms
-    排队等待时间预计还剩 -7 ms
-    排队等待时间预计还剩 -4 ms
-    排队等待时间预计还剩 -4 ms
-    恭喜您订票成功，订单号为：EB52743573, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！
-    ```
-- 使用帮助：
+#### 日志列子
+    - 成功log，如果是购票失败的，请带上失败的log给我，我尽力帮你调，也可加群一起交流，程序只是加速买票的过程，并不一定能买到票
+        ```
+        正在第355次查询  乘车日期: 2018-02-12  车次G4741,G2365,G1371,G1377,G1329 查询无票  代理设置 无  总耗时429ms
+        车次: G4741 始发车站: 上海 终点站: 邵阳 二等座:有
+        正在尝试提交订票...
+        尝试提交订单...
+        出票成功
+        排队成功, 当前余票还剩余: 359 张
+        正在使用自动识别验证码功能
+        验证码通过,正在提交订单
+        提交订单成功！
+        排队等待时间预计还剩 -12 ms
+        排队等待时间预计还剩 -6 ms
+        排队等待时间预计还剩 -7 ms
+        排队等待时间预计还剩 -4 ms
+        排队等待时间预计还剩 -4 ms
+        恭喜您订票成功，订单号为：EB52743573, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！
+        ```
+#### 使用帮助(一些安装问题和使用反馈较多的问题)：
     - 测试邮箱是否可用 [邮箱配置问题看issues](https://github.com/testerSunshine/12306/issues/107)
     - 学生票issues [学生票修改](https://github.com/testerSunshine/12306/issues/47)
     - 依赖安装不对的问题（ImportError）[requirements.txt问题](https://github.com/testerSunshine/12306/issues/91)
@@ -91,14 +97,15 @@
         mac gui and windows gui 下载链接：https://pan.baidu.com/s/1SbVJWxiwP27yb8HUi1kzDQ  密码:41wp
         ```
     - 自动更换ip软件目前已支持TPLINK和小米路由器，只限家庭网络[点我跳转](https://github.com/testerSunshine/AutoRouterIP)
-- 感谢一下小伙伴对本项目提供的帮助
+#### 感谢一下小伙伴对本项目提供的帮助
     - @sun7127@126.com
     - @ 才
     - @[MonsterTan](https://github.com/MonsterTan)
     - 以及所有为此项目提供pr的同学
-- [更新日志](Update.md)
+#### 更新日志
+    - [更新日志](Update.md)
 
-- 如果觉得项目还不错，可以考虑打赏一波
+#### 如果觉得项目还不错，可以考虑打赏一波
     -
     ![image](https://github.com/testerSunshine/12306/blob/master/uml/wx.jpeg?imageMogr2/auto-orient/strip)
     ![image](https://github.com/testerSunshine/12306/blob/master/uml/zfb.jpeg?imageMogr2/auto-orient/strip)

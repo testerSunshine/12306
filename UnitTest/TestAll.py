@@ -45,7 +45,7 @@ class testAll(unittest.TestCase):
         实测pushbear是否可用
         :return:
         """
-        sendPushBear("pushbear 微信通知测试一下")
+        sendPushBear(u"pushbear 微信通知测试一下")
 
     # def testConfig(self):
     #     """

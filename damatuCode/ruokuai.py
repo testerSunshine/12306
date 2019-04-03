@@ -1,4 +1,6 @@
 # coding:utf-8
+import base64
+
 import requests
 from hashlib import md5
 
@@ -37,6 +39,23 @@ class RClient(object):
         params.update(self.base_params)
         files = {'image': ('a.jpg', im)}
         r = requests.post('http://api.ruokuai.com/create.json', data=params, files=files, headers=self.headers)
+        print(r)
+        return r.json()
+
+    def rk_create_base64(self, im, im_type, timeout=60):
+        """
+        base64验证码识别
+       im: 图片字节
+        im_type: 题目类型
+        :return:
+        """
+        params = {
+            'typeid': im_type,
+            'timeout': timeout,
+            'image': im,
+        }
+        params.update(self.base_params)
+        r = requests.post('http://api.ruokuai.com/create.json', data=params, headers=self.headers)
         print(r)
         return r.json()
 

@@ -7,9 +7,9 @@
 #### 依赖库
   - 依赖若快 若快注册地址：http://www.ruokuai.com/client/index?6726 推荐用若快，请注册个人账号
     ```
-      PS: 现在登录可以不不用验证码了，
+      PS: 现在登录有一定几率不用验证码了，
     ```
-  - 项目依赖包 requirements.txt
+  - 项目依赖包查看 requirements.txt
   - 安装方法-Windows:
   - 安装方法-Linux:
       - root用户(避免多python环境产生问题): python2 -m pip install -i https://pypi.tuna.tsinghua.e -r requirements.txt
@@ -107,5 +107,5 @@
 
 #### 如果觉得项目还不错，可以考虑打赏一波
     -
-    ![image](https://github.com/testerSunshine/12306/blob/master/uml/wx.jpeg?imageMogr2/auto-orient/strip)
     ![image](https://github.com/testerSunshine/12306/blob/master/uml/zfb.jpeg?imageMogr2/auto-orient/strip)
+    ![image](https://github.com/testerSunshine/12306/blob/master/uml/wx.jpeg?imageMogr2/auto-orient/strip)

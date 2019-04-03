@@ -23,7 +23,8 @@ def getRandCode(is_auto_code, auto_code_type, result):
             if auto_code_type == 2:
                 rc = RClient(_get_yaml()["auto_code_account"]["user"], _get_yaml()["auto_code_account"]["pwd"])
                 # im = open('./tkcode', 'rb').read()
-                Result = rc.rk_create(result, 6113)
+                # Result = rc.rk_create(result, 6113)
+                Result = rc.rk_create_base64(result, 6113)
                 if "Result" in Result:
                     return codexy(Ofset=",".join(list(Result["Result"])), is_raw_input=False)
                 else:

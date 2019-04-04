@@ -11,7 +11,6 @@ from inter.GetRandCode import getRandCode
 from inter.LoginAysnSuggest import loginAysnSuggest
 from inter.LoginConf import loginConf
 from myException.UserPasswordException import UserPasswordException
-from myException.balanceException import balanceException
 
 
 class GoLogin:
@@ -141,7 +140,9 @@ class GoLogin:
                 # result = getPassCodeNewOrderAndLogin(session=self.session, imgType="login")
                 self.auth()
 
-                devicesIdRsp = self.session.httpClint.send(self.session.urls.get("getDevicesId"))
+                devicesIdUrl = copy.deepcopy(self.session.urls["getDevicesId"])
+                devicesIdUrl["req_url"] = devicesIdUrl["req_url"].format(int(time.time() * 1000))
+                devicesIdRsp = self.session.httpClint.send(devicesIdUrl)
                 devicesId = eval(devicesIdRsp.split("(")[1].split(")")[0].replace("'", ""))["dfp"]
                 if devicesId:
                     self.session.httpClint.set_cookies(RAIL_DEVICEID=devicesId)

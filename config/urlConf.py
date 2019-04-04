@@ -78,7 +78,6 @@ urls = {
         "s_time": 0.1,
         "is_logger": True,
         "is_json": False,
-        "not_decode": True,
     },
     "codeCheck": {  # 验证码校验
         "req_url": "/passport/captcha/captcha-check",
@@ -140,7 +139,7 @@ urls = {
         "is_json": False,
     },
     "getDevicesId": {  # 获取用户信息
-        "req_url": "/otn/HttpZF/logdevice?algID=sV3XbAmeRg&hashCode=9JGmYn7tyQpz7ARsg5hs0afNuPy3NlZXSCye9VHEJII&FMQw=0&q4f3=zh-CN&VPIf=1&custID=133&VEek=unknown&dzuS=0&yD16=1&EOQP=1acda25d532249b0b1635671927a47e0&jp76=69f27b80c0ec8437d2a1f4278674e7fb&hAqN=MacIntel&platform=WEB&ks0Q=e848b8c6800147e416e6663782ca3789&TeRS=831x1440&tOHY=24xx900x1440&Fvje=i1l1o1s1&q5aJ=-8&wNLf=99115dfb07133750ba677d055874de87&0aew=Mozilla/5.0%20(Macintosh;%20Intel%20Mac%20OS%20X%2010_13_4)%20AppleWebKit/605.1.15%20(KHTML,%20like%20Gecko)%20Version/11.1%20Safari/605.1.15&E3gR=3492a53db5709ba4cade22e8fe879dc1&timestamp=1554304524960",
+        "req_url": "/otn/HttpZF/logdevice?algID=sV3XbAmeRg&hashCode=9JGmYn7tyQpz7ARsg5hs0afNuPy3NlZXSCye9VHEJII&FMQw=0&q4f3=zh-CN&VPIf=1&custID=133&VEek=unknown&dzuS=0&yD16=1&EOQP=1acda25d532249b0b1635671927a47e0&jp76=69f27b80c0ec8437d2a1f4278674e7fb&hAqN=MacIntel&platform=WEB&ks0Q=e848b8c6800147e416e6663782ca3789&TeRS=831x1440&tOHY=24xx900x1440&Fvje=i1l1o1s1&q5aJ=-8&wNLf=99115dfb07133750ba677d055874de87&0aew=Mozilla/5.0%20(Macintosh;%20Intel%20Mac%20OS%20X%2010_13_4)%20AppleWebKit/605.1.15%20(KHTML,%20like%20Gecko)%20Version/11.1%20Safari/605.1.15&E3gR=3492a53db5709ba4cade22e8fe879dc1&timestamp={0}",
         "req_type": "get",
         "Referer": "https://kyfw.12306.cn/otn/passport?redirect=/otn/",
         "Host": "kyfw.12306.cn",

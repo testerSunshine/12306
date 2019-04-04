@@ -1,4 +1,5 @@
 # coding=utf-8
+import base64
 import copy
 import random
 
@@ -64,7 +65,7 @@ def getPassCodeNewOrderAndLogin1(session, imgType):
                     img.write(result)
             except Exception:
                 with open(img_path, 'wb') as img:
-                    img.write(result)
+                    img.write(base64.b64decode(result))
             return result
     except OSError:
         print(u"验证码下载失败，可能ip被封，确认请手动请求: {0}".format(codeImgUrl))

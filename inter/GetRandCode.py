@@ -1,15 +1,15 @@
 # coding=utf-8
 from PIL import Image
-
 from config.ticketConf import _get_yaml
 from damatuCode.ruokuai import RClient
+from browser.code import Request_Web
 
 try:
     raw_input      # Python 2
 except NameError:  # Python 3
     raw_input = input
 
-
+# 此处的result是bytes类型
 def getRandCode(is_auto_code, auto_code_type, result):
     """
     识别验证码
@@ -31,6 +31,13 @@ def getRandCode(is_auto_code, auto_code_type, result):
                     if "Error" in Result and Result["Error"]:
                         print(u"打码平台错误: {0}, 请登录打码平台查看-http://www.ruokuai.com/client/index?6726".format(Result["Error"]))
                         return ""
+            if auto_code_type == 3: # 第三方接口
+                Result=Request_Web(result).getValidateCode()
+                if Result.code == 0:
+                    return codexy(Ofset=",".join(list(Result.res)), is_raw_input=False)
+                else:
+                    print(Result.errorMsg)
+                    return ""
         else:
             img = Image.open('./tkcode.png')
             img.show()

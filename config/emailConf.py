@@ -5,7 +5,10 @@ __author__ = 'MR.wen'
 from email.header import Header
 from email.mime.text import MIMEText
 from config.ticketConf import _get_yaml
+# from ticketConf import _get_yaml
 import smtplib
+from aliyunsdkcore.client import AcsClient
+from aliyunsdkcore.request import CommonRequest
 
 
 def sendEmail(msg):
@@ -47,6 +50,38 @@ def sendEmail(msg):
     else:
         pass
 
+def sendmessage(ticketmseeage:str):
+    '''
+    短信通知，调用阿里云接口
+    '''
+    message_conf = _get_yaml()
+    is_email = message_conf["message_conf"]["is_massage"]
+    if is_email:
+        accessKeyId = message_conf["message_conf"]["aliyunkeyid"]
+        aliyunsecret = message_conf["message_conf"]["aliyunsecret"]
+        phonenumbers = message_conf["message_conf"]["phone"]
+        trcket = '{"code":"'+ticketmseeage+'"}'
+        client = AcsClient(accessKeyId,aliyunsecret, 'cn-hangzhou')
+        request = CommonRequest()
+        request.set_accept_format('json')
+        request.set_domain('dysmsapi.aliyuncs.com')
+        request.set_method('POST')
+        request.set_protocol_type('https') # https | http
+        request.set_version('2017-05-25')
+        request.set_action_name('SendSms')
+        request.add_query_param('RegionId', 'cn-hangzhou')
+        request.add_query_param('PhoneNumbers', phonenumbers)
+        request.add_query_param('SignName', '抢票小助手')
+        request.add_query_param('TemplateCode', 'SMS_164266405')
+        request.add_query_param('TemplateParam', trcket)
+        response = client.do_action(request)
+        # python2:  print(response) 
+        print(str(response, encoding = 'utf-8'))
+        try:
+            pass
+        except Exception as identifier:
+            print(u"短信发送失败{}".format(identifier))
 
 if __name__ == '__main__':
-    sendEmail(1)
+    # sendEmail(1)
+    sendmessage("Z50")

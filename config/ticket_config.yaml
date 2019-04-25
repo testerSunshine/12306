@@ -102,6 +102,14 @@ email_conf:
   password: ""
   host: "smtp.qq.com"
 
+#短信接口，用的是阿里云的短信接口
+message_conf:
+  is_massage: True
+  aliyunkeyid: "aliyunkeyid"
+  aliyunsecret: "aliyunsecret"
+  phone: 'phone'
+
+
 # 是否开启 pushbear 微信提醒， 使用前需要前往 http://pushbear.ftqq.com 扫码绑定获取 send_key 并关注获得抢票结果通知的公众号
 pushbear_conf:
   is_pushbear: False

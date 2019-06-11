@@ -170,5 +170,4 @@ class HTTPClient(object):
                 pass
             except socket.error:
                 pass
-        print(error_data.get("massage"))
         return error_data

@@ -127,17 +127,12 @@ class GoLogin:
         :param passwd: 密码
         :return:
         """
-        # if self.is_auto_code and self.auto_code_type == 1:
-        #     balance = DamatuApi(_get_yaml()["auto_code_account"]["user"], _get_yaml()["auto_code_account"]["pwd"]).getBalance()
-        #     if int(balance) < 40:
-        #         raise balanceException(u'余额不足，当前余额为: {}'.format(balance))
         user, passwd = _get_yaml()["set"]["12306account"][0]["user"], _get_yaml()["set"]["12306account"][1]["pwd"]
         if not user or not passwd:
             raise UserPasswordException(u"温馨提示: 用户名或者密码为空，请仔细检查")
         login_num = 0
         while True:
             if loginConf(self.session):
-                # result = getPassCodeNewOrderAndLogin(session=self.session, imgType="login")
                 self.auth()
 
                 devicesIdUrl = copy.deepcopy(self.session.urls["getDevicesId"])
@@ -151,6 +146,7 @@ class GoLogin:
                 if not result:
                     continue
                 self.randCode = getRandCode(self.is_auto_code, self.auto_code_type, result)
+                print(self.randCode)
                 login_num += 1
                 self.auth()
                 if self.codeCheck():
@@ -162,9 +158,3 @@ class GoLogin:
                 loginAysnSuggest(self.session, username=user, password=passwd)
                 login_num += 1
                 break
-
-
-
-# if __name__ == "__main__":
-#     # main()
-#     # logout()

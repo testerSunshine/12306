@@ -5,9 +5,11 @@
   - [ ] 2.7.9
 
 #### 依赖库
-  - 依赖若快 若快注册地址：http://www.ruokuai.com/client/index?6726 推荐用若快，请注册个人账号
+  - 验证码目前可以本地识别，需要下载模型，放于项目更目录，全部代码来源于此项目 [传送门](https://github.com/zhaipro/easy12306)，表示感谢
     ```
-      PS: 现在登录有一定几率不用验证码了，
+      PS: 
+      1. 模型下载链接:https://pan.baidu.com/s/1rS155VjweWVWIJogakechA  密码:bmlm
+         群里面也可以下载
     ```
   - 项目依赖包查看 requirements.txt
   - 安装方法-Windows:
@@ -64,7 +66,7 @@
   - 能为你抢到一张回家的票，是我最大的心愿
 
 #### 日志列子
-    - 成功log，如果是购票失败的，请带上失败的log给我，我尽力帮你调，也可加群一起交流，程序只是加速买票的过程，并不一定能买到票
+   - 成功log，如果是购票失败的，请带上失败的log给我，我尽力帮你调，也可加群一起交流，程序只是加速买票的过程，并不一定能买到票
         ```
         正在第355次查询  乘车日期: 2018-02-12  车次G4741,G2365,G1371,G1377,G1329 查询无票  代理设置 无  总耗时429ms
         车次: G4741 始发车站: 上海 终点站: 邵阳 二等座:有
@@ -83,28 +85,32 @@
         恭喜您订票成功，订单号为：EB52743573, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！
         ```
 #### 使用帮助(一些安装问题和使用反馈较多的问题)：
-    - 测试邮箱是否可用 [邮箱配置问题看issues](https://github.com/testerSunshine/12306/issues/107)
-    - 学生票issues [学生票修改](https://github.com/testerSunshine/12306/issues/47)
-    - 依赖安装不对的问题（ImportError）[requirements.txt问题](https://github.com/testerSunshine/12306/issues/91)
-    - 若快豆子疑问 [点我](https://github.com/testerSunshine/12306/issues/67)
-    - IOError: 【Errno 0】 Error 问题 [点我](https://github.com/testerSunshine/12306/issues/159)
-
-    - 测试下单接口是否可用，有两个下单接口，随便用哪个都ok
-    - 如果下载验证码过期或者下载失败的问题，应该是12306封ip的策略，多重试几次，12306现在封服务器(阿里云和腾讯云)ip比较严重，尽量不要放在服务器里面
-    - 目前12306对服务器ip比较敏感，大家还是在自己家里挂着吧
-    - 如果想使用此项目的gui版本，请加群获取链接 [gui文档](GuiHelp.md) 或者，gui专用群：499098551
+   - 测试邮箱是否可用 [邮箱配置问题看issues](https://github.com/testerSunshine/12306/issues/107)
+   - 学生票issues [学生票修改](https://github.com/testerSunshine/12306/issues/47)
+   - 依赖安装不对的问题（ImportError）[requirements.txt问题](https://github.com/testerSunshine/12306/issues/91)
+   - 若快豆子疑问 [点我](https://github.com/testerSunshine/12306/issues/67)
+   - IOError: 【Errno 0】 Error 问题 [点我](https://github.com/testerSunshine/12306/issues/159)
+    
+   - 测试下单接口是否可用，有两个下单接口，随便用哪个都ok
+   - 如果下载验证码过期或者下载失败的问题，应该是12306封ip的策略，多重试几次，12306现在封服务器(阿里云和腾讯云)ip比较严重，尽量不要放在服务器里面
+   - 目前12306对服务器ip比较敏感，大家还是在自己家里挂着吧
+   - 如果想使用此项目的gui版本，请加群获取链接 [gui文档](GuiHelp.md) 或者，gui专用群：499098551
         ```
         mac gui and windows gui 下载链接：https://pan.baidu.com/s/1SbVJWxiwP27yb8HUi1kzDQ  密码:41wp
         ```
-    - 自动更换ip软件目前已支持TPLINK和小米路由器，只限家庭网络[点我跳转](https://github.com/testerSunshine/AutoRouterIP)
+   - 自动更换ip软件目前已支持TPLINK和小米路由器，只限家庭网络[点我跳转](https://github.com/testerSunshine/AutoRouterIP)
+   - 关于登录接口需要识别DEVICES_ID的情况，可以使用本地打开12306，在任意一接口里面抓取DEVICES_ID，填于login.py文件中的141行
+    ```
+       原来的 devicesId = eval(devicesIdRsp.split("(")[1].split(")")[0].replace("'", ""))["dfp"]
+       更换为 devicesId = 刚才抓取的DEVICES_ID填上即可
+    ```
+    - 浏览器截图
+    ![image](https://github.com/testerSunshine/12306/blob/master/uml/REIL_DEVICEID.png)
+    
 #### 感谢一下小伙伴对本项目提供的帮助
-    - @sun7127@126.com
-    - @ 才
-    - @[MonsterTan](https://github.com/MonsterTan)
-    - 以及所有为此项目提供pr的同学
+   - @sun7127@126.com
+   - @ 才
+   - @[MonsterTan](https://github.com/MonsterTan)
+   - 以及所有为此项目提供pr的同学
 #### 更新日志
-    - [更新日志](Update.md)
-
-#### 如果觉得项目还不错，可以考虑打赏一波
-- ![image](https://github.com/testerSunshine/12306/blob/master/uml/zfb.jpeg?imageMogr2/auto-orient/strip)
-- ![image](https://github.com/testerSunshine/12306/blob/master/uml/wx.jpeg?imageMogr2/auto-orient/strip)
+   - [更新日志](Update.md)

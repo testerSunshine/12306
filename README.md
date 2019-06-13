@@ -100,10 +100,8 @@
         ```
    - 自动更换ip软件目前已支持TPLINK和小米路由器，只限家庭网络[点我跳转](https://github.com/testerSunshine/AutoRouterIP)
    - 关于登录接口需要识别DEVICES_ID的情况，可以使用本地打开12306，在任意一接口里面抓取DEVICES_ID，填于login.py文件中的141行
-    ```
-       原来的 devicesId = eval(devicesIdRsp.split("(")[1].split(")")[0].replace("'", ""))["dfp"]
-       更换为 devicesId = 刚才抓取的DEVICES_ID填上即可
-    ```
+       - `原来的 devicesId = eval(devicesIdRsp.split("(")[1].split(")")[0].replace("'", ""))["dfp"]`
+       - `更换为 devicesId = 刚才抓取的DEVICES_ID填上即可`
     - 浏览器截图
     ![image](https://github.com/testerSunshine/12306/blob/master/uml/REIL_DEVICEID.png)
     

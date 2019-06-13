@@ -1,5 +1,7 @@
 # coding: utf-8
 import base64
+import os
+
 import cv2
 import numpy as np
 from keras import models
@@ -7,6 +9,9 @@ from keras import models
 
 from verify import pretreatment
 from verify.mlearn_for_image import preprocess_input
+PATH = lambda p: os.path.abspath(
+    os.path.join(os.path.dirname(__file__), p)
+)
 
 
 def get_text(img, offset=0):
@@ -38,7 +43,7 @@ def verify(fn):
     imgs = preprocess_input(imgs)
     text_list = []
     # 识别文字
-    model = models.load_model('model.v2.0.h5')
+    model = models.load_model(PATH('../model.v2.0.h5'))
     label = model.predict(text)
     label = label.argmax()
     text = verify_titles[label]
@@ -59,7 +64,7 @@ def verify(fn):
         text_list.append(text)
     print("题目为{}".format(text_list))
     # 加载图片分类器
-    model = models.load_model('12306.image.model.h5')
+    model = models.load_model(PATH('../12306.image.model.h5'))
     labels = model.predict(imgs)
     labels = labels.argmax(axis=1)
     results = []

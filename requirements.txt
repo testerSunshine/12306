@@ -1,6 +1,6 @@
 beautifulsoup4==4.5.3
 bs4==0.0.1
-PyYAML>5.1.1
+PyYAML==5.1.1
 six==1.10.0
 requests==2.18.4
 Pillow

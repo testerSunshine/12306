@@ -101,6 +101,14 @@ email_conf:
   username: "931128603"
   password: ""
   host: "smtp.qq.com"
+# 短信配置，如果抢票成功，将通过短信通知您
+phone_conf:
+  is_phone: True
+  # 国都线路
+  SEND_PHONE_MESSAGE_URL: "http://221.179.180.158:9007/QxtSms/QxtFirewall?OperID=%s&OperPass=%s&SendTime=&ValidTime=&AppendID=&DesMobile=%s&Content=%s&ContentType=15"
+  OperID: "网站用户名"
+  OperPass: "接口秘钥"
+  phone: "你的电话号码"
 
 # 是否开启 pushbear 微信提醒， 使用前需要前往 http://pushbear.ftqq.com 扫码绑定获取 send_key 并关注获得抢票结果通知的公众号
 pushbear_conf:

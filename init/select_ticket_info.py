@@ -94,7 +94,7 @@ class select:
         is_proxy = ticket_info_config["is_proxy"]
 
         print(u"*" * 50)
-        print(u"检查当前python版本为：{}，目前版本只支持2.7.10-2.7.15".format(sys.version.split(" ")[0]))
+        print(u"检查当前python版本为：{}，目前版本只支持3.6以上".format(sys.version.split(" ")[0]))
         print(u"12306刷票小助手，最后更新于2019.01.08，请勿作为商业用途，交流群号：286271084(已满)，"
               u" 2群：649992274(已满)\n"
               u" 3群：632501142(已满)\n"

@@ -1,12 +1,11 @@
 # -*- coding=utf-8 -*-
 import copy
-import random
 import time
 from collections import OrderedDict
 from time import sleep
 
 from config.ticketConf import _get_yaml
-from inter.GetPassCodeNewOrderAndLogin import getPassCodeNewOrderAndLogin, getPassCodeNewOrderAndLogin1
+from inter.GetPassCodeNewOrderAndLogin import getPassCodeNewOrderAndLogin1
 from inter.GetRandCode import getRandCode
 from inter.LoginAysnSuggest import loginAysnSuggest
 from inter.LoginConf import loginConf
@@ -137,7 +136,7 @@ class GoLogin:
 
                 devicesIdUrl = copy.deepcopy(self.session.urls["getDevicesId"])
                 devicesIdUrl["req_url"] = devicesIdUrl["req_url"].format(int(time.time() * 1000))
-                devicesIdRsp = self.session.httpClint.send(devicesIdUrl)
+                # devicesIdRsp = self.session.httpClint.send(devicesIdUrl)
                 # devicesId = eval(devicesIdRsp.split("(")[1].split(")")[0].replace("'", ""))["dfp"]
                 devicesId = "UysLb2cYwsVjyInSzZ0pGOmYplvokmhBjoGNjrinquaUD0id7gkifgF6FvM2TRCL7Df89GZL1lVV763tGhiPhxlNdlE7iQkk496KUGCFZyyWxE4d0XjyHYv9DlsXfKTlrd8RBUdYIYjmWBXWMN65ElDQiO_Rnrul"
 

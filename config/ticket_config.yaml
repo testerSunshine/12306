@@ -5,11 +5,11 @@ set:
   # - 2018-01-06
   # - 2018-01-07
   station_dates:
-    - "2019-01-18"
+    - "2019-09-28"
 
   # 是否根据时间范围 和 乘车类型 购票
   # 否则将需要手动填写车次
-  is_by_time: False
+  is_by_time: True
 
   # 列车类型: 高铁 G 动车 D 其它火车 O
   train_types: [G,D,O]
@@ -30,15 +30,13 @@ set:
   # - "G1353"
   # - "G1329"
   station_trains:
-    - "G6153"
-    - "G6184"
-    - "G6173"
+    - "G1690"
 
   # 出发城市，比如深圳北，就填深圳就搜得到
-  from_station: "邵阳"
+  from_station: "上饶"
 
   # 到达城市 比如深圳北，就填深圳就搜得到
-  to_station: "深圳北"
+  to_station: "上海虹桥"
 
   # 座位(list) 多个座位ex:
   # - "商务座"
@@ -64,7 +62,7 @@ set:
 
   # 12306登录账号(list)
   12306account:
-    - user: "qqxin1011"
+    - user: ""
     - pwd: ""
 
 # 加入小黑屋时间默认为5分钟，此功能为了防止僵尸票导致一直下单不成功错过正常的票，
@@ -75,11 +73,6 @@ is_auto_code: True
 
 # 打码平台， 2 为若快平台（目前只支持若快平台打码，打码兔已经关闭）, 若快注册地址：http://www.ruokuai.com/client/index?6726
 auto_code_type: 2
-
-# 打码平台账号
-auto_code_account:
-  user: "931128603"
-  pwd: ""
 
 #  邮箱配置，如果抢票成功，将通过邮件配置通知给您
 #  列举163
@@ -96,15 +89,15 @@ auto_code_account:
 #  host: "smtp.qq.com"
 email_conf:
   is_email: True
-  email: "931128603@qq.com "
-  notice_email_list: "931128603@qq.com"
-  username: "931128603"
+  email: ""
+  notice_email_list: ""
+  username: ""
   password: ""
   host: "smtp.qq.com"
 
 # 是否开启 pushbear 微信提醒， 使用前需要前往 http://pushbear.ftqq.com 扫码绑定获取 send_key 并关注获得抢票结果通知的公众号
 pushbear_conf:
-  is_pushbear: False
+  is_pushbear: True
   send_key: ""
 
 # 是否开启cdn查询，可以更快的检测票票 1为开启，2为关闭
@@ -127,5 +120,21 @@ open_time: '13:00:00'
 # 2、测试UnitTest/TestAll/testProxy 测试代理是否可以用
 # 3、开启代理ip
 is_proxy: 0
+
+# 路由器自动切换ip, 目前只支持tplink,
+# is_router: 0表示打开，1表示开启
+# router_time: 以/分钟为单位
+#router_pwd: 路由器登录的密码
+#broadband_user_name: 宽带账号
+#broadband_pwd: 宽带密码
+
+#is_router: 1
+#router_time:
+#router_pwd:
+#broadband_user_name: ""
+#broadband_pwd:
+
+# query线程
+#query_thread: 3
 
 

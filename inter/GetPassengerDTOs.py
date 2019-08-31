@@ -92,7 +92,7 @@ class getPassengerDTOs:
                 '0,' + user_info[0]['passenger_type'] + "," + user_info[0][
                     "passenger_name"] + "," +
                 user_info[0]['passenger_id_type_code'] + "," + user_info[0]['passenger_id_no'] + "," +
-                user_info[0]['mobile_no'] + ',N')
+                user_info[0]['mobile_no'] + ',N,' + user_info[0]["allEncStr"])
             oldPassengerStr.append(
                 user_info[0]['passenger_name'] + "," + user_info[0]['passenger_id_type_code'] + "," +
                 user_info[0]['passenger_id_no'] + "," + user_info[0]['passenger_type'] + '_')
@@ -101,7 +101,7 @@ class getPassengerDTOs:
                 passengerTicketStrList.append(
                     '0,' + user_info[i]['passenger_type'] + "," + user_info[i][
                         "passenger_name"] + "," + user_info[i]['passenger_id_type_code'] + "," + user_info[i][
-                        'passenger_id_no'] + "," + user_info[i]['mobile_no'] + ',N_' + set_type)
+                        'passenger_id_no'] + "," + user_info[i]['mobile_no'] + ',N,' + user_info[i]["allEncStr"] + '_' + set_type)
                 oldPassengerStr.append(
                     user_info[i]['passenger_name'] + "," + user_info[i]['passenger_id_type_code'] + "," +
                     user_info[i]['passenger_id_no'] + "," + user_info[i]['passenger_type'] + '_')

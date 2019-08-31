@@ -56,7 +56,7 @@ class GoLogin:
         fresult = self.session.httpClint.send(codeCheckUrl)
         fresult = eval(fresult.split("(")[1].split(")")[0])
         if "result_code" in fresult and fresult["result_code"] == "4":
-            print (u"验证码通过,开始登录..")
+            print(u"验证码通过,开始登录..")
             return True
         else:
             if "result_message" in fresult:
@@ -81,7 +81,7 @@ class GoLogin:
 
         tresult = self.session.httpClint.send(logurl, loginData)
         if 'result_code' in tresult and tresult["result_code"] == 0:
-            print (u"登录成功")
+            print(u"登录成功")
             tk = self.auth()
             if "newapptk" in tk and tk["newapptk"]:
                 return tk["newapptk"]
@@ -92,8 +92,8 @@ class GoLogin:
             if messages.find(u"密码输入错误") is not -1:
                 raise UserPasswordException("{0}".format(messages))
             else:
-                print (u"登录失败: {0}".format(messages))
-                print (u"尝试重新登陆")
+                print(u"登录失败: {0}".format(messages))
+                print(u"尝试重新登陆")
                 return False
         else:
             return False
@@ -138,7 +138,9 @@ class GoLogin:
                 devicesIdUrl = copy.deepcopy(self.session.urls["getDevicesId"])
                 devicesIdUrl["req_url"] = devicesIdUrl["req_url"].format(int(time.time() * 1000))
                 devicesIdRsp = self.session.httpClint.send(devicesIdUrl)
-                devicesId = eval(devicesIdRsp.split("(")[1].split(")")[0].replace("'", ""))["dfp"]
+                # devicesId = eval(devicesIdRsp.split("(")[1].split(")")[0].replace("'", ""))["dfp"]
+                devicesId = "UysLb2cYwsVjyInSzZ0pGOmYplvokmhBjoGNjrinquaUD0id7gkifgF6FvM2TRCL7Df89GZL1lVV763tGhiPhxlNdlE7iQkk496KUGCFZyyWxE4d0XjyHYv9DlsXfKTlrd8RBUdYIYjmWBXWMN65ElDQiO_Rnrul"
+
                 if devicesId:
                     self.session.httpClint.set_cookies(RAIL_DEVICEID=devicesId)
 

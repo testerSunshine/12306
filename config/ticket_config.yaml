@@ -73,7 +73,7 @@ ticket_black_list_time: 5
 # 自动打码
 is_auto_code: True
 
-# 打码平台， 2 为若快平台（目前只支持若快平台打码，打码兔已经关闭）, 若快注册地址：http://www.ruokuai.com/client/index?6726
+# 打码平台， 2 为AI识别，需将两个模型文件放到项目根目录下
 auto_code_type: 2
 
 # 打码平台账号
@@ -127,5 +127,3 @@ open_time: '13:00:00'
 # 2、测试UnitTest/TestAll/testProxy 测试代理是否可以用
 # 3、开启代理ip
 is_proxy: 0
-
-

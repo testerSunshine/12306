@@ -5,7 +5,7 @@
   - [ ] 2.7.9
 
 #### 依赖库
-  - 验证码目前可以本地识别，需要下载模型，放于项目更目录，全部代码来源于此项目 [传送门](https://github.com/zhaipro/easy12306)，表示感谢
+  - 验证码目前可以本地识别，需要下载模型，放于项目根目录，全部代码来源于此项目 [传送门](https://github.com/zhaipro/easy12306)，表示感谢
     ```
       PS: 
       1. 模型下载链接:https://pan.baidu.com/s/1rS155VjweWVWIJogakechA  密码:bmlm

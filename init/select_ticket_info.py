@@ -53,7 +53,7 @@ class select:
         self.urls = urlConf.urls
         self.login = GoLogin(self, self.is_auto_code, self.auto_code_type)
         self.cdn_list = []
-        self.queryUrl = "leftTicket/query"
+        self.queryUrl = "leftTicket/queryT"
         self.passengerTicketStrList = ""
         self.oldPassengerStr = ""
         self.set_type = ""

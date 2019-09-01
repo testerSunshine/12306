@@ -3,8 +3,7 @@ import copy
 import time
 from collections import OrderedDict
 from time import sleep
-
-from config.ticketConf import _get_yaml
+import TickerConfig
 from inter.GetPassCodeNewOrderAndLogin import getPassCodeNewOrderAndLogin1
 from inter.GetRandCode import getRandCode
 from inter.LoginAysnSuggest import loginAysnSuggest
@@ -126,7 +125,7 @@ class GoLogin:
         :param passwd: 密码
         :return:
         """
-        user, passwd = _get_yaml()["set"]["12306account"][0]["user"], _get_yaml()["set"]["12306account"][1]["pwd"]
+        user, passwd = TickerConfig.USER, TickerConfig.PWD
         if not user or not passwd:
             raise UserPasswordException(u"温馨提示: 用户名或者密码为空，请仔细检查")
         login_num = 0
@@ -138,7 +137,7 @@ class GoLogin:
                 devicesIdUrl["req_url"] = devicesIdUrl["req_url"].format(int(time.time() * 1000))
                 # devicesIdRsp = self.session.httpClint.send(devicesIdUrl)
                 # devicesId = eval(devicesIdRsp.split("(")[1].split(")")[0].replace("'", ""))["dfp"]
-                devicesId = "UysLb2cYwsVjyInSzZ0pGOmYplvokmhBjoGNjrinquaUD0id7gkifgF6FvM2TRCL7Df89GZL1lVV763tGhiPhxlNdlE7iQkk496KUGCFZyyWxE4d0XjyHYv9DlsXfKTlrd8RBUdYIYjmWBXWMN65ElDQiO_Rnrul"
+                devicesId = "K1OnaaicUR1DrGl2vRS1HrLLna8UBoXkESCnuPMBzVtrO6fG4URi2RWJHpM7urYlYx-fpp0AeM4Ca8rNN4WyYv1X493VsH5yejsLNol7XZ74gRp8yE7eEDHYU87t1urn3Oeaifrjrd5FRTmk3WCNylKeE2UQhPRH"
 
                 if devicesId:
                     self.session.httpClint.set_cookies(RAIL_DEVICEID=devicesId)

@@ -2,7 +2,6 @@
 import datetime
 import time
 
-from config.ticketConf import _get_yaml
 from inter.CheckRandCodeAnsyn import checkRandCodeAnsyn
 from inter.GetPassengerDTOs import getPassengerDTOs
 from inter.GetRandCode import getRandCode
@@ -63,7 +62,7 @@ class confirmSingleForQueue:
             if self.is_node_code:
                 print(u"正在使用自动识别验证码功能")
                 for i in range(3):
-                    randCode = getRandCode(is_auto_code=True, auto_code_type=_get_yaml()["auto_code_type"])
+                    randCode = getRandCode(is_auto_code=True, auto_code_type=2)
                     checkcode = checkRandCodeAnsyn(self.session, randCode, self.token)
                     if checkcode == 'TRUE':
                         print(u"验证码通过,正在提交订单")

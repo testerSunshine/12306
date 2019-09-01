@@ -1,3 +1,5 @@
+import TickerConfig
+
 []# coding=utf-8
 import datetime
 import sys
@@ -6,8 +8,6 @@ from collections import OrderedDict
 
 import wrapcache
 
-from config.TicketEnmu import ticket
-from config.ticketConf import _get_yaml
 from inter.ConfirmSingleForQueueAsys import confirmSingleForQueueAsys
 
 
@@ -107,11 +107,11 @@ class getQueueCountAsync:
                 else:
                     print(u"排队发现未知错误{0}，将此列车 {1}加入小黑屋".format(getQueueCountAsyncResult, self.train_no))
                     wrapcache.set(key=self.train_no, value=datetime.datetime.now(),
-                                  timeout=int(_get_yaml()["ticket_black_list_time"]) * 60)
+                                  timeout=TickerConfig.TICKET_BLACK_LIST_TIME * 60)
             elif "messages" in getQueueCountAsyncResult and getQueueCountAsyncResult["messages"]:
                 print(u"排队异常，错误信息：{0}, 将此列车 {1}加入小黑屋".format(getQueueCountAsyncResult["messages"][0], self.train_no))
                 wrapcache.set(key=self.train_no, value=datetime.datetime.now(),
-                              timeout=int(_get_yaml()["ticket_black_list_time"]) * 60)
+                              timeout=TickerConfig.TICKET_BLACK_LIST_TIME * 60)
             else:
                 if "validateMessages" in getQueueCountAsyncResult and getQueueCountAsyncResult["validateMessages"]:
                     print(str(getQueueCountAsyncResult["validateMessages"]))

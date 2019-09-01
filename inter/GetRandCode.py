@@ -1,14 +1,7 @@
 # coding=utf-8
 from PIL import Image
 
-from config.ticketConf import _get_yaml
 from verify.localVerifyCode import verify
-from verify.ruokuai import RClient
-
-try:
-    raw_input      # Python 2
-except NameError:  # Python 3
-    raw_input = input
 
 
 def getRandCode(is_auto_code, auto_code_type, result):
@@ -48,7 +41,7 @@ def codexy(Ofset=None, is_raw_input=True):
         print(u"验证码分为8个，对应上面数字，例如第一和第二张，输入1, 2  如果开启cdn查询的话，会冲掉提示，直接鼠标点击命令行获取焦点，输入即可，不要输入空格")
         print(u"如果是linux无图形界面，请使用自动打码，is_auto_code: True")
         print(u"如果没有弹出验证码，请手动双击根目录下的tkcode.png文件")
-        Ofset = raw_input(u"输入对应的验证码: ")
+        Ofset = input(u"输入对应的验证码: ")
     if isinstance(Ofset, list):
         select = Ofset
     else:

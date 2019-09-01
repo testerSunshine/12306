@@ -18,13 +18,13 @@
       - 非root用户（避免安装和运行时使用了不同环境）: `pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt`
 
 #### 项目使用说明
-  - 可以配置邮箱，可以配置可以不配置，配置邮箱的格式在[yaml](config/ticket_config.yaml)里面可以看到ex
+  - 可以配置邮箱，可以配置可以不配置，配置邮箱的格式在[配置](TickerConfig.py)里面可以看到ex
   - 可以配置server酱提醒（推荐）， [配置教程](https://www.jianshu.com/p/8d10b5b9c4e3)
-  - 配置[yaml](config/ticket_config.yaml)文件的时候，需注意空格和遵循yaml语法格式
+  - 配置[配置](TickerConfig.py)文件的时候，需注意空格和遵循yaml语法格式
 
 #### 项目开始
   - 服务器启动:
-      - 修改[config/ticket_config.yaml](config/ticket_config.yaml)文件，按照提示更改自己想要的信息
+      - 修改[配置](TickerConfig.py)文件，按照提示更改自己想要的信息
       - 运行根目录`sudo python run.py`，即可开始
         - 由于新增对时功能，请务必用**sudo，sudo，sudo** 执行，否则会报权限错误，windows打开ide或者cmd请用管理员身份执行`python run.py`，不需要加`sudo`
   - 如果你的服务器安装了docker与docker-compose, 那么就可以通过`docker-compose`进行启动,`docker.sh`脚本对此进行了封装，可以通过如下命令进行启动

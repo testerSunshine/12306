@@ -23,7 +23,7 @@ def download_image():
     url = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand'
     r = requests.get(url)
     fn = hashlib.md5(r.content).hexdigest()
-    with open(f'{PATH}/{fn}.jpg', 'wb') as fp:
+    with open('{PATH}/{fn}.jpg', 'wb') as fp:
         fp.write(r.content)
 
 

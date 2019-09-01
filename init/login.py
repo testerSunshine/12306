@@ -53,7 +53,7 @@ class GoLogin:
         codeCheckUrl = copy.deepcopy(self.session.urls["codeCheck1"])
         codeCheckUrl["req_url"] = codeCheckUrl["req_url"].format(self.randCode, int(time.time() * 1000))
         fresult = self.session.httpClint.send(codeCheckUrl)
-        if type(fresult) != type({}):
+        if not isinstance(fresult, dict):
             fresult = eval(fresult.split("(")[1].split(")")[0])
         if "result_code" in fresult and fresult["result_code"] == "4":
             print(u"验证码通过,开始登录..")

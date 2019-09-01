@@ -33,7 +33,7 @@ TO_STATION = "长沙"
 # - "无座"
 # - "动卧"
 SET_TYPE = [
-    "二等座"
+    ""
 ]
 
 # 当余票小于乘车人，如果选择优先提交，则删减联系人和余票数一致在提交
@@ -44,12 +44,12 @@ IS_MORE_TICKET = False
 # - "张三"
 # - "李四"
 TICKET_PEOPLES = [
-    "文贤平"
+    ""
 ]
 
 # 12306登录账号
-USER = "931128603@qq.com"
-PWD = "QWERTY"
+USER = ""
+PWD = ""
 
 # 加入小黑屋时间默认为5分钟，此功能为了防止僵尸票导致一直下单不成功错过正常的票
 TICKET_BLACK_LIST_TIME = 5
@@ -72,11 +72,11 @@ IS_AUTO_CODE = True
 #  host: "smtp.qq.com"
 EMAIL_CONF = {
     "IS_MAIL": True,
-    "email": "931128603@qq.com",
-    "notice_email_list": "931128603@qq.com",
-    "username": "931128603@qq.com",
-    "password": "lwvgfrcydzyvbfjf",
-    "host": "smtp.qq.com",
+    "email": "",
+    "notice_email_list": "",
+    "username": "",
+    "password": "",
+    "host": "",
 }
 
 # 是否开启 pushbear 微信提醒， 使用前需要前往 http://pushbear.ftqq.com 扫码绑定获取 send_key 并关注获得抢票结果通知的公众号

@@ -41,14 +41,15 @@ class HTTPClient(object):
         self._s.headers.update(_set_header_default())
         return self
 
-    def set_cookies(self, **kwargs):
+    def set_cookies(self, kwargs):
         """
         设置cookies
         :param kwargs:
         :return:
         """
-        for k, v in kwargs.items():
-            self._s.cookies.set(k, v)
+        for kwarg in kwargs:
+            for k, v in kwarg.items():
+                self._s.cookies.set(k, v)
 
     def get_cookies(self):
         """

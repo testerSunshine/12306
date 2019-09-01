@@ -12,6 +12,7 @@ from agency.cdn_utils import CDNProxy
 from config import urlConf, configCommon
 from config.TicketEnmu import ticket
 from config.configCommon import seat_conf_2, seat_conf
+from config.getCookie import getDrvicesID
 from init.login import GoLogin
 from inter.AutoSubmitOrderRequest import autoSubmitOrderRequest
 from inter.ChechFace import chechFace
@@ -32,7 +33,6 @@ class select:
     """
     快速提交车票通道
     """
-
     def __init__(self):
         self.get_ticket_info()
         self._station_seat = [seat_conf[x] for x in TickerConfig.SET_TYPE]
@@ -142,6 +142,7 @@ class select:
         self.cdn_certification()
         l = liftTicketInit(self)
         l.reqLiftTicketInit()
+        getDrvicesID(self)
         self.call_login()
         check_user = checkUser(self)
         t = threading.Thread(target=check_user.sendCheckUser)

@@ -18,16 +18,6 @@ class GoLogin:
         self.is_auto_code = is_auto_code
         self.auto_code_type = auto_code_type
 
-    # def auth(self):
-    #     """
-    #     认证
-    #     :return:
-    #     """
-    #     authUrl = self.session.urls["auth"]
-    #     authData = {"appid": "otn"}
-    #     tk = self.session.httpClint.send(authUrl, authData)
-    #     return tk
-
     def auth(self):
         """
         :return:
@@ -52,6 +42,9 @@ class GoLogin:
         codeCheckUrl = copy.deepcopy(self.session.urls["codeCheck1"])
         codeCheckUrl["req_url"] = codeCheckUrl["req_url"].format(self.randCode, int(time.time() * 1000))
         fresult = self.session.httpClint.send(codeCheckUrl)
+        if not isinstance(fresult, str):
+            print("登录失败")
+            return
         fresult = eval(fresult.split("(")[1].split(")")[0])
         if "result_code" in fresult and fresult["result_code"] == "4":
             print(u"验证码通过,开始登录..")
@@ -132,15 +125,6 @@ class GoLogin:
         while True:
             if loginConf(self.session):
                 self.auth()
-
-                devicesIdUrl = copy.deepcopy(self.session.urls["getDevicesId"])
-                devicesIdUrl["req_url"] = devicesIdUrl["req_url"].format(int(time.time() * 1000))
-                # devicesIdRsp = self.session.httpClint.send(devicesIdUrl)
-                # devicesId = eval(devicesIdRsp.split("(")[1].split(")")[0].replace("'", ""))["dfp"]
-                devicesId = "K1OnaaicUR1DrGl2vRS1HrLLna8UBoXkESCnuPMBzVtrO6fG4URi2RWJHpM7urYlYx-fpp0AeM4Ca8rNN4WyYv1X493VsH5yejsLNol7XZ74gRp8yE7eEDHYU87t1urn3Oeaifrjrd5FRTmk3WCNylKeE2UQhPRH"
-
-                if devicesId:
-                    self.session.httpClint.set_cookies(RAIL_DEVICEID=devicesId)
 
                 result = getPassCodeNewOrderAndLogin1(session=self.session, imgType="login")
                 if not result:

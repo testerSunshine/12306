@@ -1,5 +1,5 @@
 # 刷票模式：1=刷票 2=候补
-TICKET_TYPE = 2
+TICKET_TYPE = 1
 
 # 候补最晚兑现日期，如果是候补订单，这个值一定要填
 # 格式为日期+小时+分
@@ -8,12 +8,12 @@ J_Z_PARAM = "2019-09-10#22#59"
 
 # 出发日期(list) "2018-01-06", "2018-01-07"
 STATION_DATES = [
-    "2019-09-30"
+    "2019-09-06"
 ]
 
 # 填入需要购买的车次(list)，"G1353"
 STATION_TRAINS = [
-    "G1377"
+    "G1373"
 ]
 
 # 出发城市，比如深圳北，就填深圳就搜得到
@@ -44,12 +44,12 @@ IS_MORE_TICKET = False
 # - "张三"
 # - "李四"
 TICKET_PEOPLES = [
-    ""
+    "文贤平"
 ]
 
 # 12306登录账号
-USER = ""
-PWD = ""
+USER = "931128603@qq.com"
+PWD = "QWERTY"
 
 # 加入小黑屋时间默认为5分钟，此功能为了防止僵尸票导致一直下单不成功错过正常的票
 TICKET_BLACK_LIST_TIME = 5
@@ -72,11 +72,11 @@ IS_AUTO_CODE = True
 #  host: "smtp.qq.com"
 EMAIL_CONF = {
     "IS_MAIL": True,
-    "email": "",
-    "notice_email_list": "",
-    "username": "",
-    "password": "",
-    "host": "",
+    "email": "931128603@qq.com",
+    "notice_email_list": "931128603@qq.com",
+    "username": "931128603@qq.com",
+    "password": "lwvgfrcydzyvbfjf",
+    "host": "smtp.qq.com",
 }
 
 # 是否开启 pushbear 微信提醒， 使用前需要前往 http://pushbear.ftqq.com 扫码绑定获取 send_key 并关注获得抢票结果通知的公众号
@@ -105,6 +105,9 @@ IS_PROXY = 0
 
 # 预售放票时间, 如果是捡漏模式，可以忽略此操作
 OPEN_TIME = "13:00:00"
+
+# chromeDriver路径,下载地址http://chromedriver.storage.googleapis.com/index.html
+CHROME_PATH = ""
 
 PASSENGER_TICKER_STR = {
     '一等座': 'M',

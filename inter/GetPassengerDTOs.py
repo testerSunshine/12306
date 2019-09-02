@@ -62,7 +62,7 @@ class getPassengerDTOs:
         }
         return str(passengerTicketStr[set_type.replace(' ', '')])
 
-    def getPassengerTicketStrListAndOldPassengerStr(self):
+    def getPassengerTicketStrListAndOldPassengerStr(self, secretStr, secretList):
         """
         获取提交车次人内容格式
         passengerTicketStr	O,0,1,文贤平,1,43052419950223XXXX,15618715583,N_O,0,1,梁敏,1,43052719920118XXXX,,N
@@ -84,7 +84,7 @@ class getPassengerDTOs:
             raise PassengerUserException(ticket.DTO_NOT_IN_LIST)
         if len(user_info) < self.is_more_ticket_num:  # 如果乘车人填错了导致没有这个乘车人的话，可能乘车人数会小于自动乘车人
             self.is_more_ticket_num = len(user_info)
-        if TickerConfig.TICKET_TYPE is 1:
+        if secretStr:
             set_type = self.getPassengerTicketStr(self.set_type)
             if self.is_more_ticket_num is 1:
                 passengerTicketStrList.append(
@@ -104,7 +104,7 @@ class getPassengerDTOs:
                     oldPassengerStr.append(
                         user_info[i]['passenger_name'] + "," + user_info[i]['passenger_id_type_code'] + "," +
                         user_info[i]['passenger_id_no'] + "," + user_info[i]['passenger_type'] + '_')
-        elif TickerConfig.TICKET_TYPE is 2:
+        elif secretList:
             """
             候补订单有多少个联系人，就候补多少个联系人了，没有优先提交之说
             1#XXXX#1#***************77X#bf6ae40d3655ae7eff005ee21d95876b38ab97a8031b464bc2f74a067e3ec957;

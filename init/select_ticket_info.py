@@ -187,6 +187,7 @@ class select:
                     train_date = queryResult.get("train_date", "")
                     stationTrainCode = queryResult.get("stationTrainCode", "")
                     secretStr = queryResult.get("secretStr", "")
+                    secretList = queryResult.get("secretList", "")
                     seat = queryResult.get("seat", "")
                     leftTicket = queryResult.get("leftTicket", "")
                     query_from_station_name = queryResult.get("query_from_station_name", "")
@@ -200,7 +201,7 @@ class select:
                                              set_type="" if isinstance(seat, list) else seat_conf_2[seat],
                                              # 候补订单需要设置多个坐席
                                              is_more_ticket_num=is_more_ticket_num)
-                        getPassengerDTOsResult = s.getPassengerTicketStrListAndOldPassengerStr()
+                        getPassengerDTOsResult = s.getPassengerTicketStrListAndOldPassengerStr(secretStr, secretList)
                         if getPassengerDTOsResult.get("status", False):
                             self.passengerTicketStrList = getPassengerDTOsResult.get("passengerTicketStrList", "")
                             self.passengerTicketStrByAfterLate = getPassengerDTOsResult.get(
@@ -209,7 +210,7 @@ class select:
                             self.set_type = getPassengerDTOsResult.get("set_type", "")
                         # 提交订单
                         # 订单分为两种，一种为抢单，一种为候补订单
-                        if TickerConfig.TICKET_TYPE == 1:
+                        if secretStr:  # 正常下单
                             if TickerConfig.ORDER_TYPE == 1:  # 快速下单
                                 a = autoSubmitOrderRequest(session=self,
                                                            secretStr=secretStr,
@@ -230,8 +231,8 @@ class select:
                                                          self.passengerTicketStrList, self.oldPassengerStr, train_date,
                                                          TickerConfig.TICKET_PEOPLES)
                                 sor.sendSubmitOrderRequest()
-                        elif TickerConfig.TICKET_TYPE == 2:
-                            c = chechFace(self, secretStr)
+                        elif secretList:  # 候补订单
+                            c = chechFace(self, secretList)
                             c.sendChechFace()
                 else:
                     random_time = round(random.uniform(sleep_time_s, sleep_time_t), 2)

@@ -77,19 +77,24 @@ class query:
                 if result:
                     for i in value['result']:
                         ticket_info = i.split('|')
-                        if TickerConfig.TICKET_TYPE is 2 and self.check_is_need_train(ticket_info):
-                            # 如果最后一位为1，则是可以候补的，不知道这些正确嘛？
-                            if ticket_info[-2] == "1":
-                                print("当前订单可以候补，尝试提交候补订单")
-                                return {
-                                    "secretStr":  ticket_info[0],
-                                    "seat": TickerConfig.SET_TYPE,
-                                    "status": True,
-                                }
-                        elif TickerConfig.TICKET_TYPE is 1:
-                            if ticket_info[11] == "Y" and ticket_info[1] == "预订":  # 筛选未在开始时间内的车次
-                                for j in self._station_seat:
-                                    is_ticket_pass = ticket_info[j]
+                        # if TickerConfig.TICKET_TYPE is 2 and self.check_is_need_train(ticket_info):
+                        #     # 如果最后一位为1，则是可以候补的，不知道这些正确嘛？
+                        #     if ticket_info[-2] == "1":
+                        #         nate = list(ticket_info[-1])
+                        #         for set_type in TickerConfig.SET_TYPE:
+                        #             if TickerConfig.PASSENGER_TICKER_STR(set_type) not in nate:
+                        #                 continue
+                        #         print("当前订单可以候补，尝试提交候补订单")
+                        #         return {
+                        #             "secretStr":  ticket_info[0],
+                        #             "seat": TickerConfig.SET_TYPE,
+                        #             "status": True,
+                        #         }
+                        # elif TickerConfig.TICKET_TYPE is 1:
+                        if ticket_info[1] == "预订":  # 筛选未在开始时间内的车次
+                            for j in self._station_seat:
+                                is_ticket_pass = ticket_info[j]
+                                if ticket_info[11] == "Y":
                                     if is_ticket_pass != '' and is_ticket_pass != '无' and is_ticket_pass != '*' and self.check_is_need_train(
                                             ticket_info):  # 过滤有效目标车次
                                         secretStr = ticket_info[0]
@@ -142,6 +147,22 @@ class query:
                                                 "code": ticket.SUCCESS_CODE,
                                                 "is_more_ticket_num": is_more_ticket_num,
                                                 "cdn": self.httpClint.cdn,
+                                                "status": True,
+                                            }
+                                elif is_ticket_pass == '无' and ticket_info[-2] == "1":
+                                    """
+                                    is_ticket_pass如果有别的显示，但是可以候补，可以提issues提出来，附上query log，我将添加上
+                                    判断车次是否可以候补
+                                    目前的候补机制是只要一有候补位置，立马提交候补
+                                    """
+                                    # 如果最后一位为1，则是可以候补的，不知道这些正确嘛？
+                                    nate = list(ticket_info[-1])
+                                    for set_type in TickerConfig.SET_TYPE:
+                                        if TickerConfig.PASSENGER_TICKER_STR[set_type] not in nate:
+                                            print(f"当前订单可以候补，候补位置为: {set_type}, 尝试提交候补订单")
+                                            return {
+                                                "secretList": ticket_info[0],
+                                                "seat": [set_type],
                                                 "status": True,
                                             }
                 else:

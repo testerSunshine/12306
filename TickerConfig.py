@@ -1,26 +1,29 @@
 # 刷票模式：1=刷票 2=候补
-TICKET_TYPE = 1
+TICKET_TYPE = 2
 
 # 候补最晚兑现日期，如果是候补订单，这个值一定要填
 # 格式为日期+小时+分
 # t("#fromDate").val() + "#" + t("#dafaultTime").html().replace("时", "") + "#" + t("#dafaultMinutes").html().replace("分", ""),
-J_Z_PARAM = "2019-09-10#22#59"
+J_Z_PARAM = "2019-09-30#22#59"
 
 # 出发日期(list) "2018-01-06", "2018-01-07"
 STATION_DATES = [
-    "2019-09-06"
+    "2019-10-01"
 ]
 
 # 填入需要购买的车次(list)，"G1353"
 STATION_TRAINS = [
-    "G1373"
+    "G6142",
+    "G6174",
+    "G6172",
+    "G6152",
 ]
 
 # 出发城市，比如深圳北，就填深圳就搜得到
-FROM_STATION = "上海"
+FROM_STATION = "广州"
 
 # 到达城市 比如深圳北，就填深圳就搜得到
-TO_STATION = "长沙"
+TO_STATION = "隆回"
 
 # 座位(list) 多个座位ex:
 # - "商务座"
@@ -33,7 +36,7 @@ TO_STATION = "长沙"
 # - "无座"
 # - "动卧"
 SET_TYPE = [
-    ""
+    "二等座"
 ]
 
 # 当余票小于乘车人，如果选择优先提交，则删减联系人和余票数一致在提交
@@ -44,6 +47,7 @@ IS_MORE_TICKET = False
 # - "张三"
 # - "李四"
 TICKET_PEOPLES = [
+    "",
     ""
 ]
 
@@ -72,11 +76,11 @@ IS_AUTO_CODE = True
 #  host: "smtp.qq.com"
 EMAIL_CONF = {
     "IS_MAIL": True,
-    "email": "",
-    "notice_email_list": "",
-    "username": "",
+    "email": "931128603@qq.com",
+    "notice_email_list": "931128603@qq.com",
+    "username": "931128603@qq.com",
     "password": "",
-    "host": "",
+    "host": "smtp.qq.com",
 }
 
 # 是否开启 pushbear 微信提醒， 使用前需要前往 http://pushbear.ftqq.com 扫码绑定获取 send_key 并关注获得抢票结果通知的公众号
@@ -107,7 +111,7 @@ IS_PROXY = 0
 OPEN_TIME = "13:00:00"
 
 # chromeDriver路径,下载地址http://chromedriver.storage.googleapis.com/index.html
-CHROME_PATH = ""
+CHROME_PATH = "/Users/wenxianping/Downloads/chromedriver"
 
 PASSENGER_TICKER_STR = {
     '一等座': 'M',

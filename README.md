@@ -20,7 +20,7 @@
 #### 项目使用说明
   - 可以配置邮箱，可以配置可以不配置，配置邮箱的格式在[配置](TickerConfig.py)里面可以看到ex
   - 可以配置server酱提醒（推荐）， [配置教程](https://www.jianshu.com/p/8d10b5b9c4e3)
-  - 配置[配置](TickerConfig.py)文件的时候，需注意空格和遵循yaml语法格式
+  - 配置[配置](TickerConfig.py)文件的时候，需注意空格和遵循python语法格式
 
 #### 项目开始
   - 服务器启动:

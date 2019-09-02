@@ -12,11 +12,11 @@ def sendPushBear(msg):
     :param str: 通知内容 content
     :return:
     """
-    if TickerConfig.PUSHBEAR_CONF["is_pushbear"] and TickerConfig.PUSHBEAR_CONF["pushbear_conf"]["send_key"].strip() != "":
+    if TickerConfig.PUSHBEAR_CONF["is_pushbear"] and TickerConfig.PUSHBEAR_CONF["send_key"].strip() != "":
         try:
             sendPushBearUrls = urls.get("Pushbear")
             data = {
-                "sendkey": TickerConfig.PUSHBEAR_CONF["pushbear_conf"]["send_key"].strip(),
+                "sendkey": TickerConfig.PUSHBEAR_CONF["send_key"].strip(),
                 "text": "易行购票成功通知",
                 "desp": msg
             }

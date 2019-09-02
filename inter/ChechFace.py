@@ -3,6 +3,7 @@ from collections import OrderedDict
 from config.urlConf import urls
 import TickerConfig
 from inter.GetSuccessRate import getSuccessRate
+from myException.ticketConfigException import ticketConfigException
 
 
 class chechFace:
@@ -31,6 +32,12 @@ class chechFace:
         if not chechFaceRsp.get("status"):
             print("".join(chechFaceRsp.get("messages")) or chechFaceRsp.get("validateMessages"))
             return
+        data = chechFaceRsp["data"]
+        if not data.get("face_flag") and data.get("face_check_code") == 14:
+            """
+            未通过人脸核验
+            """
+            raise ticketConfigException("通过人证一致性核验的用户及激活的“铁路畅行”会员可以提交候补需求，请您按照操作说明在铁路12306app.上完成人证核验")
         g = getSuccessRate(self.session, self.secretList)
         g.sendSuccessRate()
 

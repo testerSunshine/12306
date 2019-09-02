@@ -28,7 +28,7 @@ def sendEmail(msg):
         msg['To'] = receiver
 
         try:
-            smtp = smtplib.SMTP_SSL()
+            smtp = smtplib.SMTP_SSL(host)
             smtp.connect(host)
         except socket.error:
             smtp = smtplib.SMTP()

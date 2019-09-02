@@ -174,7 +174,7 @@ class select:
                           from_station=from_station,
                           to_station=to_station,
                           from_station_h=TickerConfig.FROM_STATION,
-                          to_station_h=TickerConfig.FROM_STATION,
+                          to_station_h=TickerConfig.TO_STATION,
                           _station_seat=self._station_seat,
                           station_trains=TickerConfig.STATION_TRAINS,
                           station_dates=TickerConfig.STATION_DATES,

@@ -49,6 +49,18 @@ class query:
     def check_is_need_train(self, ticket_info):
         return ticket_info[3] in self.station_trains
 
+    # def sendQueryFirst(self):
+    #     """
+    #     首次请求打印接口车次信息
+    #     :return:
+    #     """
+    #     for station_date in self.station_dates:
+    #         select_url = copy.copy(self.urls["select_url"])
+    #         select_url["req_url"] = select_url["req_url"].format(station_date, self.from_station, self.to_station,
+    #                                                              self.session.queryUrl)
+    #         station_ticket = self.httpClint.send(select_url)
+    #         values = station_ticket.get("data", "")
+
     def sendQuery(self):
         """
         查询
@@ -62,10 +74,10 @@ class query:
             select_url["req_url"] = select_url["req_url"].format(station_date, self.from_station, self.to_station,
                                                                  self.session.queryUrl)
             station_ticket = self.httpClint.send(select_url)
-            if station_ticket.get("c_url", ""):
-                print(u"设置当前查询url为: {}".format(station_ticket.get("c_url", "")))
-                self.session.queryUrl = station_ticket.get("c_url", "")  # 重设查询接口
-                continue
+            # if station_ticket.get("c_url", ""):
+            #     print(u"设置当前查询url为: {}".format(station_ticket.get("c_url", "")))
+            #     self.session.queryUrl = station_ticket.get("c_url", "")  # 重设查询接口
+            #     continue
             value = station_ticket.get("data", "")
             if not value:
                 print(u'{0}-{1} 车次坐席查询为空，查询url: https://kyfw.12306.cn{2}, 可以手动查询是否有票'.format(
@@ -77,20 +89,8 @@ class query:
                 if result:
                     for i in value['result']:
                         ticket_info = i.split('|')
-                        # if TickerConfig.TICKET_TYPE is 2 and self.check_is_need_train(ticket_info):
-                        #     # 如果最后一位为1，则是可以候补的，不知道这些正确嘛？
-                        #     if ticket_info[-2] == "1":
-                        #         nate = list(ticket_info[-1])
-                        #         for set_type in TickerConfig.SET_TYPE:
-                        #             if TickerConfig.PASSENGER_TICKER_STR(set_type) not in nate:
-                        #                 continue
-                        #         print("当前订单可以候补，尝试提交候补订单")
-                        #         return {
-                        #             "secretStr":  ticket_info[0],
-                        #             "seat": TickerConfig.SET_TYPE,
-                        #             "status": True,
-                        #         }
-                        # elif TickerConfig.TICKET_TYPE is 1:
+                        if self.session.flag:
+                            print(f"车次：{ticket_info[3]} 出发站：{self.from_station_h} 到达站：{self.to_station_h} 历时：{ticket_info[10]} 商务/特等座：{ticket_info[32]} 一等座：{ticket_info[31]} 二等座：{ticket_info[30]} 动卧：{ticket_info[33]} 硬卧：{ticket_info[28]} 软座：{ticket_info[23]} 硬座：{ticket_info[29]} 无座：{ticket_info[26]} {ticket_info[1]}")
                         if ticket_info[1] == "预订" and self.check_is_need_train(ticket_info):  # 筛选未在开始时间内的车次
                             for j in self._station_seat:
                                 is_ticket_pass = ticket_info[j]
@@ -166,6 +166,7 @@ class query:
                                             }
                 else:
                     print(u"车次配置信息有误，或者返回数据异常，请检查 {}".format(station_ticket))
+        self.session.flag = False
         return {"code": ticket.FAIL_CODE, "status": False, "cdn": self.httpClint.cdn, }
 
 

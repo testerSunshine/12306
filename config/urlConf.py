@@ -139,7 +139,7 @@ urls = {
         "is_json": False,
     },
     "getDevicesId": {  # 获取用户信息
-        "req_url": "/otn/HttpZF/logdevice?algID=YD9Iw7QM4u&hashCode=d7vhohETY2f2TpCef2MPZFvngSXyZU71bSRYvkHTkbc&FMQw=0&q4f3=zh-CN&VySQ=FGFC5l5w_W3LWESYu2oI4qV2jIzzka61&VPIf=1&custID=133&VEek=unknown&dzuS=0&yD16=0&EOQP=c227b88b01f5c513710d4b9f16a5ce52&lEnu=3232235624&jp76=52d67b2a5aa5e031084733d5006cc664&hAqN=MacIntel&platform=WEB&ks0Q=d22ca0b81584fbea62237b14bd04c866&TeRS=831x1440&tOHY=24xx900x1440&Fvje=i1l1o1s1&q5aJ=-8&wNLf=99115dfb07133750ba677d055874de87&0aew=Mozilla/5.0%20(Macintosh;%20Intel%20Mac%20OS%20X%2010_13_4)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/76.0.3809.132%20Safari/537.36&E3gR=ab86d46d16b9293beca4799ff15c5db1&timestamp={0}",
+        "req_url": "/otn/HttpZF/logdevice",
         "req_type": "get",
         "Referer": "https://kyfw.12306.cn/otn/passport?redirect=/otn/",
         "Host": "kyfw.12306.cn",

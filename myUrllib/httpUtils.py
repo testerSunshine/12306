@@ -14,7 +14,7 @@ def _set_header_default():
     # header_dict["Accept"] = "application/json, text/plain, */*"
     header_dict["Accept-Encoding"] = "gzip, deflate"
     header_dict[
-        "User-Agent"] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) 12306-electron/1.0.1 Chrome/59.0.3071.115 Electron/1.8.4 Safari/537.36"
+        "User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
     header_dict["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
     header_dict["Origin"] = "https://kyfw.12306.cn"
     header_dict["Connection"] = "keep-alive"
@@ -47,9 +47,8 @@ class HTTPClient(object):
         :param kwargs:
         :return:
         """
-        for kwarg in kwargs:
-            for k, v in kwarg.items():
-                self._s.cookies.set(k, v)
+        for k, v in kwargs.items():
+            self._s.cookies.set(k, v)
 
     def get_cookies(self):
         """

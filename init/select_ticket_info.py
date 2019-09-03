@@ -46,6 +46,7 @@ class select:
         self.passengerTicketStrByAfterLate = ""
         self.oldPassengerStr = ""
         self.set_type = ""
+        self.flag = True
 
     @staticmethod
     def get_ticket_info():
@@ -144,7 +145,7 @@ class select:
         self.cdn_certification()
         l = liftTicketInit(self)
         l.reqLiftTicketInit()
-        getDrvicesID(self)
+        # getDrvicesID(self)
         self.call_login()
         check_user = checkUser(self)
         t = threading.Thread(target=check_user.sendCheckUser)
@@ -238,7 +239,7 @@ class select:
                             c.sendChechFace()
                 else:
                     random_time = round(random.uniform(sleep_time_s, sleep_time_t), 2)
-                    nateMsg = ' 候补无资格' if TickerConfig.ORDER_TYPE == 2 else ""
+                    nateMsg = ' 无候补机会' if TickerConfig.ORDER_TYPE == 2 else ""
                     print(f"正在第{num}次查询 随机停留时长：{random_time} 乘车日期: {','.join(TickerConfig.STATION_DATES)} 车次：{'.'.join(TickerConfig.STATION_TRAINS)}  下单无票{nateMsg} 耗时：{(datetime.datetime.now() - now).microseconds / 1000}ms")
                     time.sleep(random_time)
             except PassengerUserException as e:

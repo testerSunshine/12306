@@ -35,6 +35,10 @@ class confirmHB:
         if not ChechFaceRsp.get("status"):
             print("".join(ChechFaceRsp.get("messages")) or ChechFaceRsp.get("validateMessages"))
             return
+        data = ChechFaceRsp.get("data")
+        if not data.get("flag"):
+            print(f"错误信息：{data.get('msg')}")
+            return
         queue = queryQueueByAfterNate(self.session)
         queue.sendQueryQueueByAfterNate()
 

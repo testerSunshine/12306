@@ -129,7 +129,7 @@ class queryQueueByAfterNate:
                 time.sleep(1)
             else:
                 sendEmail(ticket.WAIT_ORDER_SUCCESS)
-                sendPushBear(sendEmail(ticket.WAIT_ORDER_SUCCESS))
+                sendPushBear(ticket.WAIT_ORDER_SUCCESS)
                 raise ticketIsExitsException(ticket.WAIT_AFTER_NATE_SUCCESS)
 
 

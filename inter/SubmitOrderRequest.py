@@ -102,7 +102,7 @@ class submitOrderRequestByAfterNate:
 
     def sendSubmitOrderRequest(self, ):
         submitOrderRequestRsp = self.session.httpClint.send(urls.get("SubmitOrderRequestRsp"), self.data_apr())
-        if not submitOrderRequestRsp.get("status"):
+        if not submitOrderRequestRsp.get("status") or not submitOrderRequestRsp.get("data", {}).get("flag"):
             print("".join(submitOrderRequestRsp.get("messages")) or submitOrderRequestRsp.get("validateMessages"))
             return
         confirm = confirmHB(self.secretList, self.session, self.tickerNo)

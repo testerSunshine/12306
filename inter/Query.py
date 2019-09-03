@@ -91,12 +91,11 @@ class query:
                         #             "status": True,
                         #         }
                         # elif TickerConfig.TICKET_TYPE is 1:
-                        if ticket_info[1] == "预订":  # 筛选未在开始时间内的车次
+                        if ticket_info[1] == "预订" and self.check_is_need_train(ticket_info):  # 筛选未在开始时间内的车次
                             for j in self._station_seat:
                                 is_ticket_pass = ticket_info[j]
                                 if ticket_info[11] == "Y":
-                                    if is_ticket_pass != '' and is_ticket_pass != '无' and is_ticket_pass != '*' and self.check_is_need_train(
-                                            ticket_info):  # 过滤有效目标车次
+                                    if is_ticket_pass != '' and is_ticket_pass != '无' and is_ticket_pass != '*':  # 过滤有效目标车次
                                         secretStr = ticket_info[0]
                                         train_no = ticket_info[2]
                                         query_from_station_name = ticket_info[6]
@@ -149,7 +148,7 @@ class query:
                                                 "cdn": self.httpClint.cdn,
                                                 "status": True,
                                             }
-                                elif is_ticket_pass == '无' and ticket_info[-2] == "1":
+                                elif is_ticket_pass == '无' and ticket_info[-2] == "1" and TickerConfig.TICKET_TYPE is 2:
                                     """
                                     is_ticket_pass如果有别的显示，但是可以候补，可以提issues提出来，附上query log，我将添加上
                                     判断车次是否可以候补

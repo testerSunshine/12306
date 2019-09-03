@@ -54,8 +54,10 @@ class select:
         :return:
         """
         print(u"*" * 50)
+        print(f"检查当前版本为: {TickerConfig.RE_VERSION}")
         print(u"检查当前python版本为：{}，目前版本只支持3.6以上".format(sys.version.split(" ")[0]))
-        print(u"12306刷票小助手，最后更新于2019.01.08，请勿作为商业用途，交流群号：286271084(已满)，"
+        print(u"12306刷票小助手，最后更新于2019.09.03，请勿作为商业用途，交流群号："
+              u" 1群：286271084(已满)\n"
               u" 2群：649992274(已满)\n"
               u" 3群：632501142(已满)\n"
               u" 4群: 606340519(已满)\n"
@@ -236,19 +238,8 @@ class select:
                             c.sendChechFace()
                 else:
                     random_time = round(random.uniform(sleep_time_s, sleep_time_t), 2)
-                    print(u"正在第{0}次查询 随机停留时长：{6} 乘车日期: {1} 车次：{2} 查询无票 cdn轮询IP：{4}当前cdn总数：{5} 总耗时：{3}ms".format(num,
-                                                                                                                ",".join(
-                                                                                                                    TickerConfig.STATION_DATES),
-                                                                                                                ",".join(
-                                                                                                                    TickerConfig.STATION_TRAINS),
-                                                                                                                (
-                                                                                                                        datetime.datetime.now() - now).microseconds / 1000,
-                                                                                                                queryResult.get(
-                                                                                                                    "cdn",
-                                                                                                                    None),
-                                                                                                                len(
-                                                                                                                    self.cdn_list),
-                                                                                                                random_time))
+                    nateMsg = ' 候补无资格' if TickerConfig.ORDER_TYPE == 2 else ""
+                    print(f"正在第{num}次查询 随机停留时长：{random_time} 乘车日期: {','.join(TickerConfig.STATION_DATES)} 车次：{'.'.join(TickerConfig.STATION_TRAINS)}  下单无票{nateMsg} 耗时：{(datetime.datetime.now() - now).microseconds / 1000}ms")
                     time.sleep(random_time)
             except PassengerUserException as e:
                 print(e)

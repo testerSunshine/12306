@@ -33,7 +33,7 @@ class chechFace:
             print("".join(chechFaceRsp.get("messages")) or chechFaceRsp.get("validateMessages"))
             return
         data = chechFaceRsp["data"]
-        if not data.get("face_flag") and data.get("face_check_code") == 14:
+        if not data.get("face_flag"):
             """
             未通过人脸核验
             """

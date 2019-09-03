@@ -53,6 +53,9 @@ def getPassCodeNewOrderAndLogin1(session, imgType):
     print(u"下载验证码...")
     img_path = './tkcode.png'
     codeImgUrlRsp = session.httpClint.send(codeImgUrl)
+    if not isinstance(codeImgUrlRsp, str):
+        print("验证码获取失败")
+        return
     result = eval(codeImgUrlRsp.split("(")[1].split(")")[0]).get("image")
     try:
         if isinstance(result, dict):

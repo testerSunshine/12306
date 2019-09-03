@@ -19,14 +19,14 @@ STATION_DATES = [
 
 # 填入需要购买的车次(list)，"G1353"
 STATION_TRAINS = [
-    "G6142",
+    "",
 ]
 
 # 出发城市，比如深圳北，就填深圳就搜得到
-FROM_STATION = "深圳北"
+FROM_STATION = ""
 
 # 到达城市 比如深圳北，就填深圳就搜得到
-TO_STATION = "隆回"
+TO_STATION = ""
 
 # 座位(list) 多个座位ex:
 # "商务座",
@@ -39,8 +39,7 @@ TO_STATION = "隆回"
 # "无座",
 # "动卧",
 SET_TYPE = [
-    "商务座",
-    "一等座"
+    "",
 ]
 
 # 当余票小于乘车人，如果选择优先提交，则删减联系人和余票数一致在提交
@@ -129,4 +128,4 @@ PASSENGER_TICKER_STR = {
 }
 
 # 软件版本
-RE_VERSION = "1.0.101"
+RE_VERSION = "1.1.102"

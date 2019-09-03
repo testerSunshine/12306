@@ -95,10 +95,6 @@
    - 如果下载验证码过期或者下载失败的问题，应该是12306封ip的策略，多重试几次，12306现在封服务器(阿里云和腾讯云)ip比较严重，尽量不要放在服务器里面
    - 目前12306对服务器ip比较敏感，大家还是在自己家里挂着吧
    - 自动更换ip软件目前已支持TPLINK和小米路由器，只限家庭网络[点我跳转](https://github.com/testerSunshine/AutoRouterIP)
-   - 登录302问题目前的解决办法为使用selenium打开浏览器获取devicesID之后，在登录，目前可以100%一次登录成功，但是不能登录次数过多，否则也是会302，测试官网的登录也会302（连自己的都不放过）
-     - selenium教程[戳我](https://www.jianshu.com/p/8ec70859ae03)
-     - windows的chromedriver需放置在chrome安装路径下，才可启动浏览器
-     - chromeDriver下载地址[戳我](http://chromedriver.storage.googleapis.com/index.html)
 
 #### 感谢一下小伙伴对本项目提供的帮助
    - @sun7127@126.com

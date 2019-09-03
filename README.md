@@ -10,6 +10,7 @@
       PS: 
       1. 模型下载链接:https://pan.baidu.com/s/1rS155VjweWVWIJogakechA  密码:bmlm
          群里面也可以下载
+      2. git仓库下载：https://github.com/testerSunshine/12306model.git
     ```
   - 项目依赖包查看 [requirements.txt](requirements.txt)
   - 安装方法-Windows:

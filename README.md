@@ -4,6 +4,14 @@
   - [x] 3.6 - 3.7.4
   - [ ] 2.7.9
 
+#### 已有功能
+  - [x] 自动打码
+  - [x] 自动登录
+  - [x] 准点预售和捡漏
+  - [x] 智能候补
+  - [x] 邮件通知
+  - [x] pushbear通知
+
 #### 依赖库
   - 验证码目前可以本地识别，需要下载模型，放于项目根目录，全部代码来源于此项目 [传送门](https://github.com/zhaipro/easy12306)，表示感谢
     ```
@@ -13,8 +21,7 @@
       2. git仓库下载：https://github.com/testerSunshine/12306model.git
     ```
   - 项目依赖包查看 [requirements.txt](requirements.txt)
-  - 安装方法-Windows:
-  - 安装方法-Linux:
+  - 安装方法x:
       - root用户(避免多python环境产生问题): `pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt`
       - 非root用户（避免安装和运行时使用了不同环境）: `pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt`
 
@@ -25,9 +32,8 @@
 
 #### 项目开始
   - 服务器启动:
-      - 修改[配置](TickerConfig.py)文件，按照提示更改自己想要的信息
+      - 修改[配置](TickerConfig.py)文件
       - 运行根目录`sudo python run.py`，即可开始
-        - 由于新增对时功能，请务必用**sudo，sudo，sudo** 执行，否则会报权限错误，windows打开ide或者cmd请用管理员身份执行`python run.py`，不需要加`sudo`
   - 如果你的服务器安装了docker与docker-compose, 那么就可以通过`docker-compose`进行启动,`docker.sh`脚本对此进行了封装，可以通过如下命令进行启动
       - 1、`sudo ./docker.sh run` #创建一个镜像并启动容器，如果镜像已经创建过了会直接启动容器。
       - 2、`sudo ./docker.sh restart` #修改配置文件后，通过此名命令可重新加载容器运行
@@ -38,14 +44,12 @@
             - `sudo ./docker_install_centos.sh`
       - ~~注: 若只有docker没有docker-compose. 可通过`pip install docker-compose`进行下载~~
 
-
-	
-
 #### 目录对应说明
   - agency - cdn代理
   - config - 项目配置
-  - damatuCode - 自动打码
+  - verify - 自动打码
   - init - 项目主运行目录
+  - inter - 接口
   - myException - 异常
   - myUrllib  request网络请求库
 

@@ -19,15 +19,14 @@ STATION_DATES = [
 
 # 填入需要购买的车次(list)，"G1353"
 STATION_TRAINS = [
-    "G6142",
-    "G6174",
+    "",
 ]
 
 # 出发城市，比如深圳北，就填深圳就搜得到
-FROM_STATION = "深圳北"
+FROM_STATION = ""
 
 # 到达城市 比如深圳北，就填深圳就搜得到
-TO_STATION = "隆回"
+TO_STATION = ""
 
 # 座位(list) 多个座位ex:
 # "商务座",
@@ -51,13 +50,12 @@ IS_MORE_TICKET = True
 # - "张三"
 # - "李四"
 TICKET_PEOPLES = [
-    "文贤平",
-    "李梦云",
+    "",
 ]
 
 # 12306登录账号
-USER = "931128603@qq.com"
-PWD = "QWERTY"
+USER = ""
+PWD = ""
 
 # 加入小黑屋时间默认为5分钟，此功能为了防止僵尸票导致一直下单不成功错过正常的票
 TICKET_BLACK_LIST_TIME = 5
@@ -80,10 +78,10 @@ IS_AUTO_CODE = True
 #  host: "smtp.qq.com"
 EMAIL_CONF = {
     "IS_MAIL": True,
-    "email": "931128603@qq.com",
-    "notice_email_list": "931128603@qq.com",
-    "username": "931128603@qq.com",
-    "password": "lwvgfrcydzyvbfjf",
+    "email": "",
+    "notice_email_list": "",
+    "username": "",
+    "password": "",
     "host": "smtp.qq.com",
 }
 

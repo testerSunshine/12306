@@ -14,20 +14,20 @@ J_Z_PARAM = "2019-09-28#22#59"
 
 # 出发日期(list) "2018-01-06", "2018-01-07"
 STATION_DATES = [
-    ""
+    "2019-10-01"
 ]
 
 # 填入需要购买的车次(list)，"G1353"
 STATION_TRAINS = [
-    "",
-    "",
+    "G6142",
+    "G6174",
 ]
 
 # 出发城市，比如深圳北，就填深圳就搜得到
-FROM_STATION = ""
+FROM_STATION = "深圳北"
 
 # 到达城市 比如深圳北，就填深圳就搜得到
-TO_STATION = ""
+TO_STATION = "隆回"
 
 # 座位(list) 多个座位ex:
 # "商务座",
@@ -40,7 +40,7 @@ TO_STATION = ""
 # "无座",
 # "动卧",
 SET_TYPE = [
-    "",
+    "二等座",
 ]
 
 # 当余票小于乘车人，如果选择优先提交，则删减联系人和余票数一致在提交
@@ -83,7 +83,7 @@ EMAIL_CONF = {
     "notice_email_list": "",
     "username": "",
     "password": "",
-    "host": "smtp.qq.com",
+    "host": "",
 }
 
 # 是否开启 pushbear 微信提醒， 使用前需要前往 http://pushbear.ftqq.com 扫码绑定获取 send_key 并关注获得抢票结果通知的公众号
@@ -129,4 +129,4 @@ PASSENGER_TICKER_STR = {
 }
 
 # 软件版本
-RE_VERSION = "1.1.103"
+RE_VERSION = "1.1.104"

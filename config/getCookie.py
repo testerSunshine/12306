@@ -9,7 +9,9 @@ def getDrvicesID(session):
     print("cookie获取中")
     from selenium import webdriver
     cookies = []
-    driver = webdriver.Chrome(TickerConfig.CHROME_PATH)
+    options = webdriver.ChromeOptions()
+    options.add_argument('headless')
+    driver = webdriver.Chrome(chrome_options=options, executable_path=TickerConfig.CHROME_PATH)
     driver.get("https://www.12306.cn/index/index.html")
     time.sleep(10)
     for c in driver.get_cookies():

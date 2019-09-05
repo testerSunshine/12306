@@ -39,7 +39,7 @@ TO_STATION = ""
 # "无座",
 # "动卧",
 SET_TYPE = [
-    "二等座",
+    "",
 ]
 
 # 当余票小于乘车人，如果选择优先提交，则删减联系人和余票数一致在提交
@@ -82,7 +82,7 @@ EMAIL_CONF = {
     "notice_email_list": "",
     "username": "",
     "password": "",
-    "host": "smtp.qq.com",
+    "host": "",
 }
 
 # 是否开启 pushbear 微信提醒， 使用前需要前往 http://pushbear.ftqq.com 扫码绑定获取 send_key 并关注获得抢票结果通知的公众号
@@ -128,4 +128,4 @@ PASSENGER_TICKER_STR = {
 }
 
 # 软件版本
-RE_VERSION = "1.1.104"
+RE_VERSION = "1.1.105"

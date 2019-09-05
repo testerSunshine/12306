@@ -145,7 +145,7 @@ class select:
         self.cdn_certification()
         l = liftTicketInit(self)
         l.reqLiftTicketInit()
-        # getDrvicesID(self)
+        getDrvicesID(self)
         self.call_login()
         check_user = checkUser(self)
         t = threading.Thread(target=check_user.sendCheckUser)

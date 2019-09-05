@@ -13,3 +13,4 @@ tensorflow
 matplotlib>=3.0.2
 numpy>=1.14.6
 scipy>=1.1.0
+selenium==3.11.0

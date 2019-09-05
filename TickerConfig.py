@@ -115,7 +115,7 @@ OPEN_TIME = "13:00:00"
 # 1=使用selenium获取devicesID
 # 2=使用网页端/otn/HttpZF/logdevice获取devicesId，这个接口的算法目前可能有点问题，如果登录一直302的请改为配置1
 COOKIE_TYPE = 1
-# 如果COOKIE_TYPE=2，则需配置chromeDriver路径,下载地址http://chromedriver.storage.googleapis.com/index.html
+# 如果COOKIE_TYPE=1，则需配置chromeDriver路径,下载地址http://chromedriver.storage.googleapis.com/index.html
 # chromedriver配置版本只要和chrome的大版本匹配就行
 CHROME_PATH = "/Users/wenxianping/Downloads/chromedriver"
 

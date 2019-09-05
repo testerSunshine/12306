@@ -5,3 +5,6 @@
 .idea/
 *.h5
 tkcode.png
+TickerConfig-back.py
+12306.image.model.h5
+model.v2.0.h5

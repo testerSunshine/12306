@@ -47,8 +47,9 @@ class HTTPClient(object):
         :param kwargs:
         :return:
         """
-        for k, v in kwargs.items():
-            self._s.cookies.set(k, v)
+        for kwarg in kwargs:
+            for k, v in kwarg.items():
+                self._s.cookies.set(k, v)
 
     def get_cookies(self):
         """

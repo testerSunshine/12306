@@ -23,10 +23,10 @@ STATION_TRAINS = [
 ]
 
 # 出发城市，比如深圳北，就填深圳就搜得到
-FROM_STATION = ""
+FROM_STATION = "深圳北"
 
 # 到达城市 比如深圳北，就填深圳就搜得到
-TO_STATION = ""
+TO_STATION = "隆回"
 
 # 座位(list) 多个座位ex:
 # "商务座",
@@ -39,7 +39,7 @@ TO_STATION = ""
 # "无座",
 # "动卧",
 SET_TYPE = [
-    "",
+    "二等座",
 ]
 
 # 当余票小于乘车人，如果选择优先提交，则删减联系人和余票数一致在提交
@@ -112,8 +112,12 @@ IS_PROXY = 0
 # 预售放票时间, 如果是捡漏模式，可以忽略此操作
 OPEN_TIME = "13:00:00"
 
-# chromeDriver路径,下载地址http://chromedriver.storage.googleapis.com/index.html
-# CHROME_PATH = "/Users/wenxianping/Downloads/chromedriver"
+# 1=使用selenium获取devicesID
+# 2=使用网页端/otn/HttpZF/logdevice获取devicesId，这个接口的算法目前可能有点问题，如果登录一直302的请改为配置1
+COOKIE_TYPE = 1
+# 如果COOKIE_TYPE=2，则需配置chromeDriver路径,下载地址http://chromedriver.storage.googleapis.com/index.html
+# chromedriver配置版本只要和chrome的大版本匹配就行
+CHROME_PATH = "/Users/wenxianping/Downloads/chromedriver"
 
 PASSENGER_TICKER_STR = {
     '一等座': 'M',

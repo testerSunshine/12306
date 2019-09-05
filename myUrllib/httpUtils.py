@@ -161,6 +161,7 @@ class HTTPClient(object):
                         else:
                             return response.content.decode("utf8", "ignore") if isinstance(response.content, bytes) else response.content
                     else:
+                        print(f"url: {urls['req_url']}返回参数为空, 接口状态码: {response.status_code}")
                         logger.log(
                             u"url: {} 返回参数为空".format(urls["req_url"]))
                         continue

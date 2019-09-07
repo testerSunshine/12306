@@ -57,7 +57,7 @@ class select:
         print(u"*" * 50)
         print(f"检查当前版本为: {TickerConfig.RE_VERSION}")
         print(u"检查当前python版本为：{}，目前版本只支持3.6以上".format(sys.version.split(" ")[0]))
-        print(u"12306刷票小助手，最后更新于2019.09.03，请勿作为商业用途，交流群号："
+        print(u"12306刷票小助手，最后更新于2019.09.07，请勿作为商业用途，交流群号："
               u" 1群：286271084(已满)\n"
               u" 2群：649992274(已满)\n"
               u" 3群：632501142(已满)\n"
@@ -235,7 +235,7 @@ class select:
                                                          TickerConfig.TICKET_PEOPLES)
                                 sor.sendSubmitOrderRequest()
                         elif secretList:  # 候补订单
-                            c = chechFace(self, secretList)
+                            c = chechFace(self, secretList, train_no)
                             c.sendChechFace()
                 else:
                     random_time = round(random.uniform(sleep_time_s, sleep_time_t), 2)

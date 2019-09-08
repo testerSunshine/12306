@@ -7,6 +7,7 @@ import requests
 from agency.agency_tools import proxy
 from config.emailConf import sendEmail
 from config.pushbearConf import sendPushBear
+from config.serverchanConf import sendServerChan
 
 
 def _set_header_default():
@@ -58,8 +59,6 @@ class testAll(unittest.TestCase):
         实测server酱是否可用
         :return:
         """
-        from config.serverchanConf import sendServerChan
-
         sendServerChan(u"server酱 微信通知测试一下")
 
 

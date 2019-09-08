@@ -53,5 +53,15 @@ class testAll(unittest.TestCase):
     #     :return:
     #     """
 
+    def testServerChan(self):
+        """
+        实测server酱是否可用
+        :return:
+        """
+        from config.serverchanConf import sendServerChan
+
+        sendServerChan(u"server酱 微信通知测试一下")
+
+
 if __name__ == '__main__':
     unittest.main()

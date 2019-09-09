@@ -6,6 +6,7 @@ import TickerConfig
 from config.urlConf import urls
 from inter.CheckOrderInfo import checkOrderInfo
 from inter.ConfirmHB import confirmHB
+from inter.PassengerInitApi import passengerInitApi
 from myException.ticketIsExitsException import ticketIsExitsException
 
 
@@ -105,5 +106,6 @@ class submitOrderRequestByAfterNate:
         if not submitOrderRequestRsp.get("status") or not submitOrderRequestRsp.get("data", {}).get("flag"):
             print("".join(submitOrderRequestRsp.get("messages")) or submitOrderRequestRsp.get("validateMessages"))
             return
-        confirm = confirmHB(self.secretList, self.session, self.tickerNo)
-        confirm.sendChechFace()
+        pApi = passengerInitApi(self.session, self.secretList, self.tickerNo)
+        pApi.sendPassengerInitApi()
+

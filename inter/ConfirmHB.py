@@ -5,7 +5,7 @@ from inter.GetQueueCount import queryQueueByAfterNate
 
 
 class confirmHB:
-    def __init__(self, secretList, session, tickerNo):
+    def __init__(self, secretList, session, tickerNo, jzdhDate):
         """
         人脸识别
         """
@@ -13,6 +13,7 @@ class confirmHB:
         self.session = session
         self.passengerTicketStrByAfterLate = session.passengerTicketStrByAfterLate
         self.tickerNo = tickerNo
+        self.jzdhDate = jzdhDate
 
     def data_apr(self):
         """
@@ -25,7 +26,7 @@ class confirmHB:
         ticker = TickerConfig.PASSENGER_TICKER_STR.get(TickerConfig.SET_TYPE[0])
         data = OrderedDict()
         data["passengerInfo"] = self.passengerTicketStrByAfterLate
-        data["jzParam"] = TickerConfig.J_Z_PARAM
+        data["jzParam"] = self.jzdhDate
         data["hbTrain"] = f"{self.tickerNo},{ticker}#"
         data["lkParam"] = ""
         return data

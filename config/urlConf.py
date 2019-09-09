@@ -562,6 +562,17 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
+    "passengerInitApi": {  # 排队
+        "req_url": "/otn/afterNate/passengerInitApi",
+        "req_type": "post",
+        "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
+        "Host": "kyfw.12306.cn",
+        "re_try": 10,
+        "re_time": 0.01,
+        "s_time": 0.01,
+        "is_logger": True,
+        "is_json": True,
+    },
 
 
 

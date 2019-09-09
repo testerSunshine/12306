@@ -13,16 +13,14 @@ TICKET_TYPE = 2
 J_Z_PARAM = "2019-09-28#22#59"
 
 # 出发日期(list) "2018-01-06", "2018-01-07"
-# ps: 日期如果是单日，一定要前面补个0，正确做法：2019-01-01， 错误做法：2019-1-1
 STATION_DATES = [
-    "2019-09-25"
+    "2019-09-20"
 ]
 
 # 填入需要购买的车次(list)，"G1353"
 STATION_TRAINS = [
     "",
 ]
-
 # 出发城市，比如深圳北，就填深圳就搜得到
 FROM_STATION = ""
 
@@ -78,7 +76,7 @@ IS_AUTO_CODE = True
 #  password: "授权码"
 #  host: "smtp.qq.com"
 EMAIL_CONF = {
-    "IS_MAIL": False,
+    "IS_MAIL": True,
     "email": "",
     "notice_email_list": "",
     "username": "",
@@ -112,13 +110,13 @@ IS_PROXY = 0
 
 # 预售放票时间, 如果是捡漏模式，可以忽略此操作
 OPEN_TIME = "13:00:00"
+
 # 1=使用selenium获取devicesID
 # 2=使用网页端/otn/HttpZF/logdevice获取devicesId，这个接口的算法目前可能有点问题，如果登录一直302的请改为配置1
 COOKIE_TYPE = 1
-# 如果COOKIE_TYPE=1，则需配置chromeDriver路径(注意是填你机器本地chromeDriver的路径，这个地方一定要改),下载地址http://chromedriver.storage.googleapis.com/index.html
+# 如果COOKIE_TYPE=2，则需配置chromeDriver路径,下载地址http://chromedriver.storage.googleapis.com/index.html
 # chromedriver配置版本只要和chrome的大版本匹配就行
-# 如果是windows,最好在路径加上r, ex: r"/Users/wenxianping/Downloads/chromedriver"
-CHROME_PATH = ""
+CHROME_PATH = "/Users/wenxianping/Downloads/chromedriver"
 
 PASSENGER_TICKER_STR = {
     '一等座': 'M',
@@ -133,4 +131,4 @@ PASSENGER_TICKER_STR = {
 }
 
 # 软件版本
-RE_VERSION = "1.1.106"
+RE_VERSION = "1.1.107"

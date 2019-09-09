@@ -110,6 +110,8 @@ class query:
                                                                                             self.to_station_h,
                                                                                             seat_conf_2[j],
                                                                                             ticket_num))
+                                        if seat_conf_2[j] == "无座" and ticket_info[3][0] in ["G", "D"]:
+                                            seat = 30  # GD开头的无座直接强制改为二等座车次
                                         if wrapcache.get(train_no):
                                             print(ticket.QUERY_IN_BLACK_LIST.format(train_no))
                                             continue

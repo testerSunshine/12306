@@ -408,6 +408,18 @@ urls = {
         "is_logger": False,
         "is_json": True,
     },
+	"ServerChan": {  # ServerChan通知,如果你的SCKEY是abcdefg，req_url配置成/abcdefg.send,如下
+        "req_url": "/abcdefg.send",
+        "req_type": "post",
+        "Referer": "",
+        "Content-Type": 1,
+        "Host": "sc.ftqq.com",
+        "re_try": 10,
+        "re_time": 0.01,
+        "s_time": 0.1,
+        "is_logger": False,
+        "is_json": True,
+    },
     "cdn_host": {
         "req_url": "http://ping.chinaz.com/kyfw.12306.cn",
         "req_type": "post"

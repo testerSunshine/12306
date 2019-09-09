@@ -87,6 +87,13 @@ PUSHBEAR_CONF = {
     "send_key": ""
 }
 
+# 是否开启 server酱 微信提醒， 使用前需要前往 http://sc.ftqq.com/3.version 扫码绑定获取 SECRET 并关注获得抢票结果通知的公众号
+SERVER_CHAN_CONF = {
+    "is_server_chan": False,
+    "secret": ""
+}
+
+
 # 是否开启cdn查询，可以更快的检测票票 1为开启，2为关闭
 IS_CDN = 1
 

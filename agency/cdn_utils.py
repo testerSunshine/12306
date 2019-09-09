@@ -14,6 +14,7 @@ try:
 except NameError:
     pass
 
+
 class CDNProxy:
     def __init__(self, host=None):
         self.host = host
@@ -66,14 +67,22 @@ class CDNProxy:
         #             cdn.append(cdn_list[0].split(":")[0])
         #     return cdn
         path = os.path.join(os.path.dirname(__file__), '../cdn_list')
-        with open(path, "r") as f:
-            for i in f.readlines():
-                # print(i.replace("\n", ""))
-                if i and "kyfw.12306.cn:443" not in i:
-                    cdn.append(i.replace("\n", ""))
-            return cdn
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                for i in f.readlines():
+                    # print(i.replace("\n", ""))
+                    if i and "kyfw.12306.cn:443" not in i:
+                        cdn.append(i.replace("\n", ""))
+                return cdn
+        except Exception:
+            with open(path, "r") as f:
+                for i in f.readlines():
+                    # print(i.replace("\n", ""))
+                    if i and "kyfw.12306.cn:443" not in i:
+                        cdn.append(i.replace("\n", ""))
+                return cdn
 
 
 if __name__ == '__main__':
     cdn = CDNProxy()
-    cdn.open_cdn_file()
+    print(cdn.open_cdn_file())

@@ -1,12 +1,18 @@
 # -*- coding=utf-8 -*-
+import copy
+import json
+import random
+import re
+import time
+from collections import OrderedDict
 from time import sleep
-
-from config.ticketConf import _get_yaml
-from damatuCode.damatuWeb import DamatuApi
-from inter.GetPassCodeNewOrderAndLogin import getPassCodeNewOrderAndLogin
+import TickerConfig
+from config.urlConf import urls
+from inter.GetPassCodeNewOrderAndLogin import getPassCodeNewOrderAndLogin1
 from inter.GetRandCode import getRandCode
+from inter.LoginAysnSuggest import loginAysnSuggest
+from inter.LoginConf import loginConf
 from myException.UserPasswordException import UserPasswordException
-from myException.balanceException import balanceException
 
 
 class GoLogin:
@@ -17,26 +23,35 @@ class GoLogin:
         self.auto_code_type = auto_code_type
 
     def auth(self):
-        """认证"""
-        authUrl = self.session.urls["auth"]
-        authData = {"appid": "otn"}
-        tk = self.session.httpClint.send(authUrl, authData)
-        return tk
+        """
+        :return:
+        """
+        self.session.httpClint.send(self.session.urls["loginInitCdn1"])
+        uamtkStaticUrl = self.session.urls["uamtk-static"]
+        uamtkStaticData = {"appid": "otn"}
+        return self.session.httpClint.send(uamtkStaticUrl, uamtkStaticData)
 
     def codeCheck(self):
         """
         验证码校验
         :return:
         """
-        codeCheck = self.session.urls["codeCheck"]
-        codeCheckData = {
-            "answer": self.randCode,
-            "rand": "sjrand",
-            "login_site": "E"
-        }
-        fresult = self.session.httpClint.send(codeCheck, codeCheckData)
+        # codeCheck = self.session.urls["codeCheck"]
+        # codeCheckData = {
+        #     "answer": self.randCode,
+        #     "rand": "sjrand",
+        #     "login_site": "E"
+        # }
+        # fresult = self.session.httpClint.send(codeCheck, codeCheckData)
+        codeCheckUrl = copy.deepcopy(self.session.urls["codeCheck1"])
+        codeCheckUrl["req_url"] = codeCheckUrl["req_url"].format(self.randCode, int(time.time() * 1000))
+        fresult = self.session.httpClint.send(codeCheckUrl)
+        if not isinstance(fresult, str):
+            print("登录失败")
+            return
+        fresult = eval(fresult.split("(")[1].split(")")[0])
         if "result_code" in fresult and fresult["result_code"] == "4":
-            print (u"验证码通过,开始登录..")
+            print(u"验证码通过,开始登录..")
             return True
         else:
             if "result_message" in fresult:
@@ -52,14 +67,16 @@ class GoLogin:
         :return: 权限校验码
         """
         logurl = self.session.urls["login"]
-        logData = {
-            "username": user,
-            "password": passwd,
-            "appid": "otn"
-        }
-        tresult = self.session.httpClint.send(logurl, logData)
+
+        loginData = OrderedDict()
+        loginData["username"] = user,
+        loginData["password"] = passwd,
+        loginData["appid"] = "otn",
+        loginData["answer"] = self.randCode,
+
+        tresult = self.session.httpClint.send(logurl, loginData)
         if 'result_code' in tresult and tresult["result_code"] == 0:
-            print (u"登录成功")
+            print(u"登录成功")
             tk = self.auth()
             if "newapptk" in tk and tk["newapptk"]:
                 return tk["newapptk"]
@@ -70,8 +87,8 @@ class GoLogin:
             if messages.find(u"密码输入错误") is not -1:
                 raise UserPasswordException("{0}".format(messages))
             else:
-                print (u"登录失败: {0}".format(messages))
-                print (u"尝试重新登陆")
+                print(u"登录失败: {0}".format(messages))
+                print(u"尝试重新登陆")
                 return False
         else:
             return False
@@ -105,27 +122,27 @@ class GoLogin:
         :param passwd: 密码
         :return:
         """
-        if self.is_auto_code and self.auto_code_type == 1:
-            balance = DamatuApi(_get_yaml()["auto_code_account"]["user"], _get_yaml()["auto_code_account"]["pwd"]).getBalance()
-            if int(balance) < 40:
-                raise balanceException(u'余额不足，当前余额为: {}'.format(balance))
-        user, passwd = _get_yaml()["set"]["12306account"][0]["user"], _get_yaml()["set"]["12306account"][1]["pwd"]
+        user, passwd = TickerConfig.USER, TickerConfig.PWD
         if not user or not passwd:
             raise UserPasswordException(u"温馨提示: 用户名或者密码为空，请仔细检查")
         login_num = 0
         while True:
-            result = getPassCodeNewOrderAndLogin(session=self.session, imgType="login")
-            if not result:
-                continue
-            self.randCode = getRandCode(self.is_auto_code, self.auto_code_type, result)
-            login_num += 1
-            self.auth()
-            if self.codeCheck():
-                uamtk = self.baseLogin(user, passwd)
-                if uamtk:
-                    self.getUserName(uamtk)
-                    break
+            if loginConf(self.session):
+                self.auth()
 
-# if __name__ == "__main__":
-#     # main()
-#     # logout()
+                result = getPassCodeNewOrderAndLogin1(session=self.session, imgType="login")
+                if not result:
+                    continue
+                self.randCode = getRandCode(self.is_auto_code, self.auto_code_type, result)
+                print(self.randCode)
+                login_num += 1
+                self.auth()
+                if self.codeCheck():
+                    uamtk = self.baseLogin(user, passwd)
+                    if uamtk:
+                        self.getUserName(uamtk)
+                        break
+            else:
+                loginAysnSuggest(self.session, username=user, password=passwd)
+                login_num += 1
+                break

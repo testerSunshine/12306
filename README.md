@@ -10,7 +10,7 @@
   - [x] 准点预售和捡漏
   - [x] 智能候补
   - [x] 邮件通知
-  - [x] pushbear通知
+  - [x] server酱通知
 
 #### 依赖库
   - 验证码目前可以本地识别，需要下载模型，放于项目根目录，全部代码来源于此项目 [传送门](https://github.com/zhaipro/easy12306)，表示感谢
@@ -26,13 +26,12 @@
       - 非root用户（避免安装和运行时使用了不同环境）: `pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt`
 
 #### 项目使用说明
-  - 可以配置邮箱,配置邮箱的格式在[配置](TickerConfig.py)里面可以看到ex
-  - 可以配置server酱提醒（推荐）[配置教程](https://www.jianshu.com/p/8d10b5b9c4e3)
-  - 配置[配置](TickerConfig.py)文件的时候，需注意空格和遵循python语法格式
 
-#### 项目开始
   - 服务器启动:
       - 修改[配置](TickerConfig.py)文件
+        - 可以配置邮箱,配置邮箱的格式在[配置](TickerConfig.py)里面可以看到ex
+        - 可以配置server酱提醒（推荐）[配置教程](https://www.jianshu.com/p/8d10b5b9c4e3)
+        - 配置[配置](TickerConfig.py)文件的时候，需注意空格和遵循python语法格式
       - 运行根目录`sudo python run.py`，即可开始
   - 如果你的服务器安装了docker与docker-compose, 那么就可以通过`docker-compose`进行启动,`docker.sh`脚本对此进行了封装，可以通过如下命令进行启动
       - 1、`sudo ./docker.sh run` #创建一个镜像并启动容器，如果镜像已经创建过了会直接启动容器。
@@ -99,6 +98,7 @@
    - 如果下载验证码过期或者下载失败的问题，应该是12306封ip的策略，多重试几次，12306现在封服务器(阿里云和腾讯云)ip比较严重，尽量不要放在服务器里面
    - 目前12306对服务器ip比较敏感，大家还是在自己家里挂着吧
    - 自动更换ip软件目前已支持TPLINK和小米路由器，只限家庭网络[点我跳转](https://github.com/testerSunshine/AutoRouterIP)
+
 
 #### 感谢一下小伙伴对本项目提供的帮助
    - @sun7127@126.com

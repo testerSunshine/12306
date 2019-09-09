@@ -1,6 +1,5 @@
 # -*- coding=utf-8 -*-
 from config.emailConf import sendEmail
-from config.pushbearConf import sendPushBear
 from config.serverchanConf import sendServerChan
 from init import select_ticket_info
 
@@ -11,10 +10,6 @@ def run():
 
 def Email():
     sendEmail(u"订票小助手测试一下")
-
-
-def PushbearConf():
-    sendPushBear("订票小助手测试一下")
 
 
 def PushServerChan():

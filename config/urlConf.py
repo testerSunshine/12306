@@ -23,7 +23,7 @@ urls = {
         "Host": "kyfw.12306.cn",
         "Content-Type": 1,
         "re_try": 10,
-        "re_time": 1,
+        "re_time": 3,
         "s_time": 0.1,
         "is_logger": True,
         "is_json": True,

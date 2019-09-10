@@ -14,17 +14,17 @@ def getDrvicesID(session):
     if TickerConfig.COOKIE_TYPE is 1:
         from selenium import webdriver
         cookies = []
-        options = webdriver.ChromeOptions()
-        options.add_argument('headless')
-        driver = webdriver.Chrome(chrome_options=options, executable_path=TickerConfig.CHROME_PATH)
+        driver = webdriver.Chrome(executable_path=TickerConfig.CHROME_PATH)
         driver.get("https://www.12306.cn/index/index.html")
         time.sleep(10)
 
         for c in driver.get_cookies():
             cookie = dict()
+            print()
             if c.get("name") == "RAIL_DEVICEID" or c.get("name") == "RAIL_EXPIRATION":
                 cookie[c.get("name")] = c.get("value")
                 cookies.append(cookie)
+        print(f"获取cookie: {cookies}")
         if cookies:
             session.httpClint.set_cookies(cookies)
         print("cookie获取完成")

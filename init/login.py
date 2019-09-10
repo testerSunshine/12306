@@ -128,7 +128,7 @@ class GoLogin:
         login_num = 0
         while True:
             if loginConf(self.session):
-                self.auth()
+                # self.auth()
 
                 result = getPassCodeNewOrderAndLogin1(session=self.session, imgType="login")
                 if not result:

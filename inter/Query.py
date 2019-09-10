@@ -18,6 +18,7 @@ class query:
                  ticke_peoples_num, station_dates=None, ):
         self.session = session
         self.httpClint = HTTPClient(TickerConfig.IS_PROXY)
+        self.httpClint.set_cookies(self.session.cookies)
         self.urls = urlConf.urls
         self.from_station = from_station
         self.to_station = to_station

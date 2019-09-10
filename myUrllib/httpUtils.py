@@ -1,5 +1,6 @@
 # -*- coding: utf8 -*-
 import json
+import random
 import socket
 from collections import OrderedDict
 from time import sleep
@@ -14,7 +15,9 @@ def _set_header_default():
     # header_dict["Accept"] = "application/json, text/plain, */*"
     header_dict["Accept-Encoding"] = "gzip, deflate"
     header_dict[
-        "User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+        "User-Agent"] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0." + str(
+            random.randint(
+                5000, 7000)) + ".0 Safari/537.36"
     header_dict["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
     header_dict["Origin"] = "https://kyfw.12306.cn"
     header_dict["Connection"] = "keep-alive"

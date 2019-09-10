@@ -34,7 +34,7 @@ urls = {
         "Referer": "https://kyfw.12306.cn/otn/resources/login.html",
         "Host": "kyfw.12306.cn",
         "Content-Type": 1,
-        "re_try": 2,
+        "re_try": 10,
         "re_time": 1,
         "s_time": 0.5,
         "is_logger": True,

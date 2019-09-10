@@ -100,7 +100,7 @@
    - 自动更换ip软件目前已支持TPLINK和小米路由器，只限家庭网络[点我跳转](https://github.com/testerSunshine/AutoRouterIP)
 
 
-#### 感谢一下小伙伴对本项目提供的帮助
+#### 感谢以下小伙伴对本项目提供的帮助
    - @sun7127@126.com
    - @ 才
    - @[MonsterTan](https://github.com/MonsterTan)

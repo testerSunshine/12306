@@ -1,18 +1,21 @@
+import datetime
 import urllib
 from collections import OrderedDict
 from config.urlConf import urls
 import TickerConfig
 from inter.GetSuccessRate import getSuccessRate
 from myException.ticketConfigException import ticketConfigException
+import wrapcache
 
 
 class chechFace:
-    def __init__(self, session, secretList):
+    def __init__(self, session, secretList, train_no):
         """
         人脸识别
         """
         self.secretList = secretList
         self.session = session
+        self.train_no = train_no
 
     def data_apr(self):
         """
@@ -31,6 +34,8 @@ class chechFace:
         chechFaceRsp = self.session.httpClint.send(urls.get("chechFace"), self.data_apr())
         if not chechFaceRsp.get("status"):
             print("".join(chechFaceRsp.get("messages")) or chechFaceRsp.get("validateMessages"))
+            wrapcache.set(key=f"hb{self.train_no}", value=datetime.datetime.now(),
+                          timeout=TickerConfig.TICKET_BLACK_LIST_TIME * 60)
             return
         data = chechFaceRsp["data"]
         if not data.get("face_flag"):

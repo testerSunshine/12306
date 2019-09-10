@@ -63,8 +63,8 @@ class select:
               u" 3群：632501142(已满)\n"
               u" 4群: 606340519(已满)\n"
               u" 5群: 948526733(已满)\n"
-              u" 6群: 444101020(未满)\n"
-              u" 7群: 660689659(未满)\n"
+              u" 6群: 608792930(未满)\n"
+              u" 7群: 660689659(已满)\n"
               )
         print(
             f"当前配置：\n出发站：{TickerConfig.FROM_STATION}\n到达站：{TickerConfig.TO_STATION}\n乘车日期：{','.join(TickerConfig.STATION_DATES)}\n坐席：{','.join(TickerConfig.SET_TYPE)}\n是否有票优先提交：{TickerConfig.IS_MORE_TICKET}\n乘车人：{TickerConfig.TICKET_PEOPLES}\n" \

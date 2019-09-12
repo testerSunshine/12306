@@ -1,11 +1,11 @@
 # -*- coding: utf8 -*-
 import json
-import random
 import socket
 from collections import OrderedDict
 from time import sleep
 import requests
-
+from fake_useragent import UserAgent
+import TickerConfig
 from agency.agency_tools import proxy
 from config import logger
 
@@ -15,13 +15,16 @@ def _set_header_default():
     # header_dict["Accept"] = "application/json, text/plain, */*"
     header_dict["Accept-Encoding"] = "gzip, deflate"
     header_dict[
-        "User-Agent"] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0." + str(
-            random.randint(
-                5000, 7000)) + ".0 Safari/537.36"
+        "User-Agent"] = _set_user_agent()
     header_dict["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
     header_dict["Origin"] = "https://kyfw.12306.cn"
     header_dict["Connection"] = "keep-alive"
     return header_dict
+
+
+def _set_user_agent():
+    user_agent = UserAgent(verify_ssl=False).random
+    return user_agent
 
 
 class HTTPClient(object):
@@ -90,6 +93,12 @@ class HTTPClient(object):
         self._s.headers.update({"Host": host})
         return self
 
+    def setHeadersUserAgent(self):
+        self._s.headers.update({"User-Agent": _set_user_agent()})
+
+    def getHeadersUserAgent(self):
+        return self._s.headers["User-Agent"]
+
     def getHeadersReferer(self):
         return self._s.headers["Referer"]
 
@@ -121,7 +130,9 @@ class HTTPClient(object):
         else:
             method = "get"
             self.resetHeaders()
-        self.setHeadersReferer(urls["Referer"])
+        if TickerConfig.RANDOM_AGENT is 1:
+            self.setHeadersReferer(urls["Referer"])
+        self.setHeadersUserAgent()
         if is_logger:
             logger.log(
                 u"url: {0}\n入参: {1}\n请求方式: {2}\n".format(req_url, data, method, ))

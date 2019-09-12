@@ -53,6 +53,16 @@ class testAll(unittest.TestCase):
         """
         sendServerChan(u"server酱 微信通知测试一下")
 
+    def testUserAgent(self):
+        """
+        测试UserAgent
+        :return:
+        """
+        from fake_useragent import UserAgent
+        for i in range(10000):
+            ua = UserAgent(verify_ssl=False)
+            print(ua.random)
+
 
 if __name__ == '__main__':
     unittest.main()

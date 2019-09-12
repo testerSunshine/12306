@@ -114,6 +114,9 @@ COOKIE_TYPE = 1
 # chromedriver配置版本只要和chrome的大版本匹配就行
 CHROME_PATH = "/Users/wenxianping/Downloads/chromedriver"
 
+# 1=>为一直随机ua,2->只启动的时候随机一次ua
+RANDOM_AGENT = 2
+
 PASSENGER_TICKER_STR = {
     '一等座': 'M',
     '特等座': 'P',
@@ -127,4 +130,4 @@ PASSENGER_TICKER_STR = {
 }
 
 # 软件版本
-RE_VERSION = "1.1.111"
+RE_VERSION = "1.1.112"

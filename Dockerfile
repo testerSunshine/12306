@@ -1,4 +1,4 @@
-FROM python:2.7.15
+FROM python:3.7.4
 WORKDIR /usr/src/app
 ADD . /usr/src/app
 

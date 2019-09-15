@@ -17,7 +17,6 @@ def getDrvicesID(session):
         driver = webdriver.Chrome(executable_path=TickerConfig.CHROME_PATH)
         driver.get("https://www.12306.cn/index/index.html")
         time.sleep(10)
-
         for c in driver.get_cookies():
             cookie = dict()
             print()

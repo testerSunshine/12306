@@ -131,8 +131,8 @@ class HTTPClient(object):
             method = "get"
             self.resetHeaders()
         if TickerConfig.RANDOM_AGENT is 1:
-            self.setHeadersReferer(urls["Referer"])
-        self.setHeadersUserAgent()
+            self.setHeadersUserAgent()
+        self.setHeadersReferer(urls["Referer"])
         if is_logger:
             logger.log(
                 u"url: {0}\n入参: {1}\n请求方式: {2}\n".format(req_url, data, method, ))

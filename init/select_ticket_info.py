@@ -58,7 +58,7 @@ class select:
         print(u"*" * 50)
         print(f"检查当前版本为: {TickerConfig.RE_VERSION}")
         print(u"检查当前python版本为：{}，目前版本只支持3.6以上".format(sys.version.split(" ")[0]))
-        print(u"12306刷票小助手，最后更新于2019.09.09，请勿作为商业用途，交流群号："
+        print(u"12306刷票小助手，最后更新于2019.09.15，请勿作为商业用途，交流群号："
               u" 1群：286271084(已满)\n"
               u" 2群：649992274(已满)\n"
               u" 3群：632501142(已满)\n"
@@ -66,6 +66,7 @@ class select:
               u" 5群: 948526733(已满)\n"
               u" 6群: 608792930(未满)\n"
               u" 7群: 660689659(已满)\n"
+              u" 8群: 620629239(未满)\n"
               )
         print(
             f"当前配置：\n出发站：{TickerConfig.FROM_STATION}\n到达站：{TickerConfig.TO_STATION}\n乘车日期：{','.join(TickerConfig.STATION_DATES)}\n坐席：{','.join(TickerConfig.SET_TYPE)}\n是否有票优先提交：{TickerConfig.IS_MORE_TICKET}\n乘车人：{TickerConfig.TICKET_PEOPLES}\n" \
@@ -116,6 +117,7 @@ class select:
             urls = self.urls["loginInitCdn"]
             http._cdn = cdn[i].replace("\n", "")
             start_time = datetime.datetime.now()
+            time.sleep(3)
             rep = http.send(urls)
             if rep and "message" not in rep and (datetime.datetime.now() - start_time).microseconds / 1000 < 500:
                 if cdn[i].replace("\n", "") not in self.cdn_list:  # 如果有重复的cdn，则放弃加入
@@ -173,8 +175,8 @@ class select:
                             break
                         time.sleep(0.0001)
                 else:
-                    sleep_time_s = 0.5
-                    sleep_time_t = 3
+                    sleep_time_s = TickerConfig.MIN_TIME
+                    sleep_time_t = TickerConfig.MAX_TIME
                 q = query(session=self,
                           from_station=from_station,
                           to_station=to_station,

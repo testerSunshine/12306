@@ -18,6 +18,7 @@ class query:
                  ticke_peoples_num, station_dates=None, ):
         self.session = session
         self.httpClint = HTTPClient(TickerConfig.IS_PROXY)
+        self.httpClint.set_cookies(self.session.cookies)
         self.urls = urlConf.urls
         self.from_station = from_station
         self.to_station = to_station
@@ -47,7 +48,15 @@ class query:
         return seat[index]
 
     def check_is_need_train(self, ticket_info):
-        return ticket_info[3] in self.station_trains
+        """
+        判断车次是否为想要的车次，如果ticket_info为空，那么就不校验车次，直接返回True
+        :param ticket_info:
+        :return:
+        """
+        if self.station_dates:
+            return ticket_info[3] in self.station_trains
+        else:
+            return True
 
     def sendQuery(self):
         """

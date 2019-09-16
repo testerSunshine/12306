@@ -1,12 +1,13 @@
-# coding=utf-8
+import TickerConfig
+
+[]# coding=utf-8
 import datetime
+import sys
 import time
 from collections import OrderedDict
 
 import wrapcache
 
-from config.TicketEnmu import ticket
-from config.ticketConf import _get_yaml
 from inter.ConfirmSingleForQueueAsys import confirmSingleForQueueAsys
 
 
@@ -56,7 +57,10 @@ class getQueueCountAsync:
             - _json_att 没啥卵用，还是带上吧
         :return:
         """
-        new_train_date = filter(None, str(time.asctime(time.strptime(self.station_dates, "%Y-%m-%d"))).split(" "))
+        if sys.version_info.major is 2:
+            new_train_date = filter(None, str(time.asctime(time.strptime(self.station_dates, "%Y-%m-%d"))).split(" "))
+        else:
+            new_train_date = list(filter(None, str(time.asctime(time.strptime(self.station_dates, "%Y-%m-%d"))).split(" ")))
         data = OrderedDict()
         data['train_date'] = "{0} {1} {2} {3} 00:00:00 GMT+0800 (中国标准时间)".format(
             new_train_date[0],
@@ -103,11 +107,11 @@ class getQueueCountAsync:
                 else:
                     print(u"排队发现未知错误{0}，将此列车 {1}加入小黑屋".format(getQueueCountAsyncResult, self.train_no))
                     wrapcache.set(key=self.train_no, value=datetime.datetime.now(),
-                                  timeout=int(_get_yaml()["ticket_black_list_time"]) * 60)
+                                  timeout=TickerConfig.TICKET_BLACK_LIST_TIME * 60)
             elif "messages" in getQueueCountAsyncResult and getQueueCountAsyncResult["messages"]:
                 print(u"排队异常，错误信息：{0}, 将此列车 {1}加入小黑屋".format(getQueueCountAsyncResult["messages"][0], self.train_no))
                 wrapcache.set(key=self.train_no, value=datetime.datetime.now(),
-                              timeout=int(_get_yaml()["ticket_black_list_time"]) * 60)
+                              timeout=TickerConfig.TICKET_BLACK_LIST_TIME * 60)
             else:
                 if "validateMessages" in getQueueCountAsyncResult and getQueueCountAsyncResult["validateMessages"]:
                     print(str(getQueueCountAsyncResult["validateMessages"]))

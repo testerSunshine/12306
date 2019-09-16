@@ -25,14 +25,14 @@ class checkOrderInfo:
         :return:
         """
         data = OrderedDict()
+        data['bed_level_order_num'] = "000000000000000000000000000000"
         data['passengerTicketStr'] = self.passengerTicketStrList.rstrip("_{0}".format(self.set_type))
         data['oldPassengerStr'] = self.oldPassengerStr
-        data['REPEAT_SUBMIT_TOKEN'] = self.token
+        data['tour_flag'] = 'dc'
         data['randCode'] = ""
         data['cancel_flag'] = 2
-        data['bed_level_order_num'] = "000000000000000000000000000000"
-        data['tour_flag'] = 'dc'
         data['_json_att'] = ""
+        data['REPEAT_SUBMIT_TOKEN'] = self.token
         return data
 
     def sendCheckOrderInfo(self):

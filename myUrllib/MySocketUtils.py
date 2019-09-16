@@ -22,7 +22,7 @@ import re
 #            "Content-Length: 9\r\n"\
 #            "Cookie: _passport_session=a459aba69761497eb31de76c27795e999613; _passport_ct=9116b2cb0bf443e1a01d22ac8c1ae449t5007; route=9036359bb8a8a461c164a04f8f50b252; BIGipServerpool_passport=200081930.50215.0000; BIGipServerotn=484704778.64545.0000\r\n\n"\
 #            "appid=otn\r\n"
-# # s.sendall(get_str.format("https://kyfw.12306.cn/otn/login/init"))
+# # s.sendall(get_str.format("https://kyfw.12306.cn/otn/resources/login.html"))
 # s.sendall(post_str.format("https://kyfw.12306.cn/passport/web/auth/uamtk"))
 from config.urlConf import urls
 

@@ -48,7 +48,15 @@ class query:
         return seat[index]
 
     def check_is_need_train(self, ticket_info):
-        return ticket_info[3] in self.station_trains
+        """
+        判断车次是否为想要的车次，如果ticket_info为空，那么就不校验车次，直接返回True
+        :param ticket_info:
+        :return:
+        """
+        if self.station_dates:
+            return ticket_info[3] in self.station_trains
+        else:
+            return True
 
     def sendQuery(self):
         """
@@ -118,7 +126,7 @@ class query:
                                             continue
                                         else:
                                             if ticket_num != "有" and self.ticke_peoples_num > ticket_num:
-                                                if self.session.is_more_ticket:
+                                                if TickerConfig.IS_MORE_TICKET:
                                                     print(
                                                         u"余票数小于乘车人数，当前余票数: {}, 删减人车人数到: {}".format(ticket_num, ticket_num))
                                                     is_more_ticket_num = ticket_num

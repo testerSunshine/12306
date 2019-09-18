@@ -164,12 +164,20 @@ class query:
                                         continue
                                     for set_type in TickerConfig.SET_TYPE:
                                         if TickerConfig.PASSENGER_TICKER_STR[set_type] not in nate:
-                                            return {
-                                                "secretList": ticket_info[0],
-                                                "seat": [set_type],
-                                                "train_no": ticket_info[2],
-                                                "status": True,
-                                            }
+                                            if ticket_info[3][0] in ["G", "D", "C"] and set_type in ["一等座", "特等座", "二等座", "商务座", "无座"]:
+                                                return {
+                                                    "secretList": ticket_info[0],
+                                                    "seat": [set_type],
+                                                    "train_no": ticket_info[2],
+                                                    "status": True,
+                                                }
+                                            elif ticket_info[3][0] in ["T", "Z", "K"] and set_type in ["硬座", "无座", "软座", "软卧", "硬卧"]:
+                                                return {
+                                                    "secretList": ticket_info[0],
+                                                    "seat": [set_type],
+                                                    "train_no": ticket_info[2],
+                                                    "status": True,
+                                                }
                 else:
                     print(u"车次配置信息有误，或者返回数据异常，请检查 {}".format(station_ticket))
         self.session.flag = False

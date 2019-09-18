@@ -171,7 +171,7 @@ class query:
                                                     "train_no": ticket_info[2],
                                                     "status": True,
                                                 }
-                                            elif ticket_info[3][0] in ["T", "Z", "K"] and set_type in ["硬座", "无座", "软座", "软卧", "硬卧"]:
+                                            elif ticket_info[3][0] in ["T", "Z", "K"] and set_type in ["硬卧", "硬座", "无座", "软座", "软卧"]:
                                                 return {
                                                     "secretList": ticket_info[0],
                                                     "seat": [set_type],

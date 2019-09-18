@@ -1,14 +1,14 @@
 # coding: utf-8
-import base64
-import os
+import TickerConfig
+if TickerConfig.AUTO_CODE_TYPE == 2:
+    import base64
+    import os
+    import cv2
+    import numpy as np
+    from keras import models, backend
+    from verify import pretreatment
+    from verify.mlearn_for_image import preprocess_input
 
-import cv2
-import numpy as np
-from keras import models, backend
-
-
-from verify import pretreatment
-from verify.mlearn_for_image import preprocess_input
 PATH = lambda p: os.path.abspath(
     os.path.join(os.path.dirname(__file__), p)
 )

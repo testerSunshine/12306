@@ -135,7 +135,7 @@ class HTTPClient(object):
         self.setHeadersReferer(urls["Referer"])
         if is_logger:
             logger.log(
-                u"url: {0}\n入参: {1}\n请求方式: {2}\n".format(req_url, data, method, ))
+                u"url: {0}\n入参: {1}\n请求方式: {2}\n".format(req_url, data, method))
         self.setHeadersHost(urls["Host"])
         if is_test_cdn:
             url_host = self._cdn
@@ -157,7 +157,7 @@ class HTTPClient(object):
                 except:
                     pass
                 response = self._s.request(method=method,
-                                           timeout=2,
+                                           timeout=5,
                                            proxies=self._proxies,
                                            url=http + "://" + url_host + req_url,
                                            data=data,

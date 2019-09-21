@@ -4,6 +4,7 @@ import json
 import random
 import re
 import time
+import getpass
 from collections import OrderedDict
 from time import sleep
 import TickerConfig
@@ -122,7 +123,9 @@ class GoLogin:
         :param passwd: 密码
         :return:
         """
-        user, passwd = TickerConfig.USER, TickerConfig.PWD
+        #user, passwd = TickerConfig.USER, TickerConfig.PWD
+        user = input("请输入您的12306账号:")
+        passwd = getpass.getpass("请输入密码:")
         if not user or not passwd:
             raise UserPasswordException(u"温馨提示: 用户名或者密码为空，请仔细检查")
         login_num = 0

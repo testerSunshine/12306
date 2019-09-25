@@ -1,4 +1,6 @@
 # coding=utf-8
+import base64
+import threading
 import unittest
 from collections import OrderedDict
 
@@ -62,6 +64,19 @@ class testAll(unittest.TestCase):
         for i in range(10000):
             ua = UserAgent(verify_ssl=False)
             print(ua.random)
+
+    def testVerfyImage(self):
+        """
+        测试模型加载识别
+        :return:
+        """
+        from verify.localVerifyCode import Verify
+        v = Verify()
+        with open('../tkcode.png', 'rb') as f:
+            base64Image = base64.b64encode(f.read())
+            for i in range(5):
+                t = threading.Thread(target=v.verify, args=(base64Image,))
+                t.start()
 
 
 if __name__ == '__main__':

@@ -4,8 +4,11 @@ from PIL import Image
 from config.urlConf import urls
 from myUrllib.httpUtils import HTTPClient
 from verify.localVerifyCode import Verify
+import TickerConfig
 
-v = Verify()
+
+if TickerConfig.AUTO_CODE_TYPE == 2:
+    v = Verify()
 
 
 def getRandCode(is_auto_code, auto_code_type, result):

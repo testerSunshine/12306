@@ -42,8 +42,6 @@ def base64_to_image(base64_code):
     return img
 
 
-
-
 class Verify:
     def __init__(self):
         self.textModel = ""
@@ -54,6 +52,8 @@ class Verify:
     def loadTextModel(self):
         if not self.textModel:
             self.textModel = models.load_model(PATH('../model.v2.0.h5'))
+        else:
+            print("无需加载模型model.v2.0.h5")
 
     def loadImgModel(self):
         if not self.imgModel:

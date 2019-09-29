@@ -8,7 +8,7 @@ wrapcache==1.0.8
 ntplib==0.3.3
 sklearn
 opencv-python
-keras>=2.2.4
+keras==2.2.4
 tensorflow
 matplotlib>=3.0.2
 numpy>=1.14.6

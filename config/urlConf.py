@@ -587,6 +587,16 @@ urls = {
         "is_json": True,
     },
 
-
-
+    "autoVerifyImage": {  # 云打码接口
+        "req_url": "/verify/base64/",
+        "req_type": "post",
+        "Referer": "",
+        "Host": "34.97.127.118:8000",
+        "re_try": 2,
+        "re_time": 2,
+        "s_time": 2,
+        "is_logger": True,
+        "is_json": True,
+        "httpType": "http"
+    },
 }

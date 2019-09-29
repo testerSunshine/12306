@@ -36,7 +36,7 @@ class select:
     def __init__(self):
         self.get_ticket_info()
         self._station_seat = [seat_conf[x] for x in TickerConfig.SET_TYPE]
-        self.auto_code_type = 2
+        self.auto_code_type = TickerConfig.AUTO_CODE_TYPE
         self.httpClint = HTTPClient(TickerConfig.IS_PROXY)
         self.urls = urlConf.urls
         self.login = GoLogin(self, TickerConfig.IS_AUTO_CODE, self.auto_code_type)
@@ -55,10 +55,14 @@ class select:
         获取配置信息
         :return:
         """
+
         print(u"*" * 50)
         print(f"检查当前版本为: {TickerConfig.RE_VERSION}")
-        print(u"检查当前python版本为：{}，目前版本只支持3.6以上".format(sys.version.split(" ")[0]))
-        print(u"12306刷票小助手，最后更新于2019.09.15，请勿作为商业用途，交流群号："
+        version = sys.version.split(" ")[0]
+        print(u"检查当前python版本为：{}，目前版本只支持3.6以上".format(version))
+        if version < "3.6.0":
+            raise Exception
+        print(u"12306刷票小助手，最后更新于2019.09.18，请勿作为商业用途，交流群号："
               u" 1群：286271084(已满)\n"
               u" 2群：649992274(已满)\n"
               u" 3群：632501142(已满)\n"
@@ -69,7 +73,7 @@ class select:
               u" 8群: 620629239(未满)\n"
               )
         print(
-            f"当前配置：\n出发站：{TickerConfig.FROM_STATION}\n到达站：{TickerConfig.TO_STATION}\n乘车日期：{','.join(TickerConfig.STATION_DATES)}\n坐席：{','.join(TickerConfig.SET_TYPE)}\n是否有票优先提交：{TickerConfig.IS_MORE_TICKET}\n乘车人：{TickerConfig.TICKET_PEOPLES}\n" \
+            f"当前配置：\n出发站：{TickerConfig.FROM_STATION}\n到达站：{TickerConfig.TO_STATION}\n车次: {','.join(TickerConfig.STATION_TRAINS) or '所有车次'}\n乘车日期：{','.join(TickerConfig.STATION_DATES)}\n坐席：{','.join(TickerConfig.SET_TYPE)}\n是否有票优先提交：{TickerConfig.IS_MORE_TICKET}\n乘车人：{TickerConfig.TICKET_PEOPLES}\n" \
             f"刷新间隔: 随机(1-3S)\n僵尸票关小黑屋时长: {TickerConfig.TICKET_BLACK_LIST_TIME}\n下单接口: {TickerConfig.ORDER_TYPE}\n下单模式: {TickerConfig.ORDER_MODEL}\n预售踩点时间:{TickerConfig.OPEN_TIME}")
         print(u"*" * 50)
 
@@ -244,7 +248,7 @@ class select:
                 else:
                     random_time = round(random.uniform(sleep_time_s, sleep_time_t), 2)
                     nateMsg = ' 无候补机会' if TickerConfig.ORDER_TYPE == 2 else ""
-                    print(f"正在第{num}次查询 随机停留时长：{random_time} 乘车日期: {','.join(TickerConfig.STATION_DATES)} 车次：{'.'.join(TickerConfig.STATION_TRAINS)}  下单无票{nateMsg} 耗时：{(datetime.datetime.now() - now).microseconds / 1000}ms")
+                    print(f"正在第{num}次查询 随机停留时长：{random_time} 乘车日期: {','.join(TickerConfig.STATION_DATES)} 车次：{','.join(TickerConfig.STATION_TRAINS) or '所有车次'} 下单无票{nateMsg} 耗时：{(datetime.datetime.now() - now).microseconds / 1000}ms")
                     time.sleep(random_time)
             except PassengerUserException as e:
                 print(e)

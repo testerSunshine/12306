@@ -56,6 +56,8 @@ AUTO_CODE_TYPE = 2
 
 #  邮箱配置，如果抢票成功，将通过邮件配置通知给您
 #  列举163
+#  是否开启SSL
+#  is_ssl: True 
 #  email: "xxx@163.com"
 #  notice_email_list: "123@qq.com"
 #  username: "xxxxx"
@@ -67,13 +69,17 @@ AUTO_CODE_TYPE = 2
 #  username: "xxxxx"
 #  password: "授权码"
 #  host: "smtp.qq.com"
+#  端口号，SMTP 服务器端口号，通常可以在各个邮件中心的帮助页面找到
+#  port: 465 
 EMAIL_CONF = {
     "IS_MAIL": True,
+    "is_ssl": False,
     "email": "",
     "notice_email_list": "",
     "username": "",
     "password": "",
     "host": "",
+    "port": 25
 }
 
 # 是否开启 server酱 微信提醒， 使用前需要前往 http://sc.ftqq.com/3.version 扫码绑定获取 SECRET 并关注获得抢票结果通知的公众号

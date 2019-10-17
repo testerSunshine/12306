@@ -66,5 +66,3 @@ class chechFace:
                               timeout=TickerConfig.TICKET_BLACK_LIST_TIME * 60)
         g = getSuccessRate(self.session, self.secretList)
         g.sendSuccessRate()
-
-

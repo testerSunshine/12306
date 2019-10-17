@@ -17,10 +17,10 @@ STATION_DATES = [
 STATION_TRAINS = []
 
 # 出发城市，比如深圳北，就填深圳就搜得到
-FROM_STATION = "深圳北"
+FROM_STATION = ""
 
 # 到达城市 比如深圳北，就填深圳就搜得到
-TO_STATION = "广州南"
+TO_STATION = ""
 
 # 座位(list) 多个座位ex:
 # "商务座",
@@ -32,7 +32,7 @@ TO_STATION = "广州南"
 # "硬座",
 # "无座",
 # "动卧",
-SET_TYPE = ["二等座"]
+SET_TYPE = []
 
 # 当余票小于乘车人，如果选择优先提交，则删减联系人和余票数一致在提交
 # bool
@@ -54,17 +54,16 @@ TICKET_BLACK_LIST_TIME = 5
 IS_AUTO_CODE = True
 
 # 设置2本地自动打码，需要配置tensorflow和keras库，3为云打码，由于云打码服务器资源有限(为2h4C的cpu服务器)，请不要恶意请求，不然只能关闭服务器
-# ps: 请不要一直依赖云服务器资源，在此向提供服务器的"do it"同学表示感谢
+# ps: 请不要一直依赖云服务器资源，在此向所有提供服务器同学表示感谢
 AUTO_CODE_TYPE = 3
 
-HOST="34.97.127.118:8000"
-REQ_URL="/verify/base64/"
-HTTP_TYPE="http"
+# 此处设置云打码服务器地址，如果有自建的服务器，可以自行更改
+HOST = "161.117.202.218:8000"
+REQ_URL = "/verify/base64/"
+HTTP_TYPE = "http"
 # HOST="12306.yinaoxiong.cn" #备用服务器稳定性较差
 # REQ_URL="/verify/base64/"
 # HTTP_TYPE="https"
-
-
 
 #  邮箱配置，如果抢票成功，将通过邮件配置通知给您
 #  列举163
@@ -149,4 +148,4 @@ MAX_TIME = 5
 MIN_TIME = 3
 
 # 软件版本
-RE_VERSION = "1.1.116"
+RE_VERSION = "1.1.117"

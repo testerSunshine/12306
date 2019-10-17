@@ -1,5 +1,6 @@
 # -*- coding: utf8 -*-
 import json
+import random
 import socket
 from collections import OrderedDict
 from time import sleep
@@ -23,8 +24,13 @@ def _set_header_default():
 
 
 def _set_user_agent():
-    user_agent = UserAgent(verify_ssl=False).random
-    return user_agent
+    try:
+        user_agent = UserAgent(verify_ssl=False).random
+        return user_agent
+    except:
+        print("请求头设置失败，使用默认请求头")
+        return 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.' + str(
+            random.randint(5000, 7000)) + '.0 Safari/537.36'
 
 
 class HTTPClient(object):
@@ -172,9 +178,11 @@ class HTTPClient(object):
                             logger.log(
                                 u"出参：{0}".format(response.content.decode()))
                         if urls["is_json"]:
-                            return json.loads(response.content.decode() if isinstance(response.content, bytes) else response.content)
+                            return json.loads(
+                                response.content.decode() if isinstance(response.content, bytes) else response.content)
                         else:
-                            return response.content.decode("utf8", "ignore") if isinstance(response.content, bytes) else response.content
+                            return response.content.decode("utf8", "ignore") if isinstance(response.content,
+                                                                                           bytes) else response.content
                     else:
                         print(f"url: {urls['req_url']}返回参数为空, 接口状态码: {response.status_code}")
                         logger.log(

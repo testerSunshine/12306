@@ -57,6 +57,15 @@ IS_AUTO_CODE = True
 # ps: 请不要一直依赖云服务器资源，在此向提供服务器的"do it"同学表示感谢
 AUTO_CODE_TYPE = 3
 
+HOST="34.97.127.118:8000"
+REQ_URL="/verify/base64/"
+HTTP_TYPE="http"
+# HOST="12306.yinaoxiong.cn" #备用服务器稳定性较差
+# REQ_URL="/verify/base64/"
+# HTTP_TYPE="https"
+
+
+
 #  邮箱配置，如果抢票成功，将通过邮件配置通知给您
 #  列举163
 #  email: "xxx@163.com"

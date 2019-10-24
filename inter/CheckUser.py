@@ -16,9 +16,9 @@ class checkUser:
         检查用户登录, 检查间隔为2分钟
         :return:
         """
-        CHENK_TIME = 0.3
+        CHENK_TIME = 1
         while 1:
-            time.sleep(0.1)  # 防止cpu占用过高
+            time.sleep(3)  # 防止cpu占用过高
             configCommon.checkSleepTime(self.session)  # 修复晚上查询线程休眠时，检查登录线程为休眠，造成快豆迅速消耗
             if wrapcache.get("user_time") is None:
                 check_user_url = self.session.urls["check_user_url"]

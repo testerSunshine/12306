@@ -20,6 +20,8 @@
          群里面也可以下载
       2. git仓库下载：https://github.com/testerSunshine/12306model.git
     ```
+  - 自托管云打码服务器搭建：[12306_code_server](https://github.com/YinAoXiong/12306_code_server)
+    - 如果大家有空闲的服务器，可搭建之后再这个 [issues](https://github.com/testerSunshine/12306/issues/446) 里面填入自己的服务器(请注意服务器安全！)
   - 项目依赖包查看 [requirements.txt](requirements.txt)
   - 安装方法x:
       - root用户(避免多python环境产生问题): `pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt`
@@ -62,9 +64,10 @@
     - 3群：632501142(已满)
     - 4群: 606340519(已满)
     - 5群: 948526733(已满)
-    - 6群: 608792930(已满)
-    - 7群: 660689659(未满)
-    - 8群: 660689659(未满)
+    - 7群: 660689659(已满)
+    - 8群: 620629239(已满)
+    - 6群: 608792930(未满)
+    - 9群: 693035807(未满)
   - 请不要重复加群，一个群就可以了，把机会留给更多人
   - **进群先看公告！！！进群先看公告！！！进群先看公告！！！ 重要的事情说三遍**
   - 能为你抢到一张回家的票，是我最大的心愿

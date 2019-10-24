@@ -1,14 +1,16 @@
 # coding: utf-8
-import sys
+import TickerConfig
+if TickerConfig.AUTO_CODE_TYPE == 2:
+    import sys
 
-import cv2
-import numpy as np
-from keras import models
-from keras import layers
-from keras import optimizers
-from keras.applications import VGG16
-from keras.callbacks import ReduceLROnPlateau
-from keras.preprocessing.image import ImageDataGenerator
+    import cv2
+    import numpy as np
+    from keras import models
+    from keras import layers
+    from keras import optimizers
+    from keras.applications import VGG16
+    from keras.callbacks import ReduceLROnPlateau
+    from keras.preprocessing.image import ImageDataGenerator
 
 
 def preprocess_input(x):

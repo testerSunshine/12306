@@ -78,6 +78,7 @@ HTTP_TYPE = "http"
 #  username: "xxxxx"
 #  password: "授权码"
 #  host: "smtp.qq.com"
+#  port: 25
 EMAIL_CONF = {
     "IS_MAIL": True,
     "email": "",
@@ -85,6 +86,7 @@ EMAIL_CONF = {
     "username": "",
     "password": "",
     "host": "smtp.qq.com",
+    "port": 25
 }
 
 # 是否开启 server酱 微信提醒， 使用前需要前往 http://sc.ftqq.com/3.version 扫码绑定获取 SECRET 并关注获得抢票结果通知的公众号

@@ -5,8 +5,13 @@ import time
 from collections import OrderedDict
 import wrapcache
 
-from config.ticketConf import _get_yaml
+import TickerConfig
+from config.TicketEnmu import ticket
+from config.emailConf import sendEmail
+from config.serverchanConf import sendServerChan
+from config.urlConf import urls
 from inter.ConfirmSingleForQueue import confirmSingleForQueue
+from myException.ticketIsExitsException import ticketIsExitsException
 
 
 def conversion_int(str):
@@ -94,15 +99,37 @@ class getQueueCount:
             else:
                 print(u"排队发现未知错误{0}，将此列车 {1}加入小黑屋".format(getQueueCountResult, self.train_no))
                 wrapcache.set(key=self.train_no, value=datetime.datetime.now(),
-                              timeout=int(_get_yaml()["ticket_black_list_time"]) * 60)
+                              timeout=TickerConfig.TICKET_BLACK_LIST_TIME * 60)
         elif "messages" in getQueueCountResult and getQueueCountResult["messages"]:
             print(u"排队异常，错误信息：{0}, 将此列车 {1}加入小黑屋".format(getQueueCountResult["messages"][0], self.train_no))
             wrapcache.set(key=self.train_no, value=datetime.datetime.now(),
-                          timeout=int(_get_yaml()["ticket_black_list_time"]) * 60)
+                          timeout=TickerConfig.TICKET_BLACK_LIST_TIME * 60)
         else:
             if "validateMessages" in getQueueCountResult and getQueueCountResult["validateMessages"]:
                 print(str(getQueueCountResult["validateMessages"]))
                 wrapcache.set(key=self.train_no, value=datetime.datetime.now(),
-                              timeout=int(_get_yaml()["ticket_black_list_time"]) * 60)
+                              timeout=TickerConfig.TICKET_BLACK_LIST_TIME * 60)
             else:
                 print(u"未知错误 {0}".format("".join(getQueueCountResult)))
+
+
+class queryQueueByAfterNate:
+    def __init__(self, session):
+        """
+        候补排队
+        :param session:
+        """
+        self.session = session
+
+    def sendQueryQueueByAfterNate(self):
+        for i in range(10):
+            queryQueueByAfterNateRsp = self.session.httpClint.send(urls.get("queryQueue"))
+            if not queryQueueByAfterNateRsp.get("status"):
+                print("".join(queryQueueByAfterNateRsp.get("messages")) or queryQueueByAfterNateRsp.get("validateMessages"))
+                time.sleep(1)
+            else:
+                sendEmail(ticket.WAIT_ORDER_SUCCESS)
+                sendServerChan(ticket.WAIT_ORDER_SUCCESS)
+                raise ticketIsExitsException(ticket.WAIT_AFTER_NATE_SUCCESS)
+
+

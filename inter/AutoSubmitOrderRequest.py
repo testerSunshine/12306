@@ -3,10 +3,10 @@ import urllib
 from collections import OrderedDict
 
 from config.TicketEnmu import ticket
-from config.ticketConf import _get_yaml
 from inter.CheckRandCodeAnsyn import checkRandCodeAnsyn
 from inter.GetQueueCountAsync import getQueueCountAsync
 from inter.GetRandCode import getRandCode
+import TickerConfig
 
 
 class autoSubmitOrderRequest:
@@ -61,8 +61,8 @@ class autoSubmitOrderRequest:
         data["train_date"] = self.train_date
         data["tour_flag"] = "dc"
         data["purpose_codes"] = "ADULT"
-        data["query_from_station_name"] = self.session.from_station
-        data["query_to_station_name"] = self.session.to_station
+        data["query_from_station_name"] = TickerConfig.FROM_STATION
+        data["query_to_station_name"] = TickerConfig.TO_STATION
         data["cancel_flag"] = 2
         data["bed_level_order_num"] = "000000000000000000000000000000"
         data["passengerTicketStr"] = self.passengerTicketStr
@@ -93,7 +93,7 @@ class autoSubmitOrderRequest:
                                        toStationTelecode=self.query_to_station_name,
                                        leftTicket=self.leftTicket,
                                        set_type=self.set_type,
-                                       users=len(self.session.ticke_peoples),
+                                       users=len(TickerConfig.TICKET_PEOPLES),
                                        station_dates=self.train_date,
                                        passengerTicketStr=self.passengerTicketStr,
                                        oldPassengerStr=self.oldPassengerStr,
@@ -104,7 +104,7 @@ class autoSubmitOrderRequest:
                     print(u"需要验证码")
                     print(u"正在使用自动识别验证码功能")
                     for i in range(3):
-                        randCode = getRandCode(is_auto_code=True, auto_code_type=_get_yaml()["auto_code_type"])
+                        randCode = getRandCode(is_auto_code=True, auto_code_type=2)
                         checkcode = checkRandCodeAnsyn(self.session, randCode, "")
                         if checkcode == 'TRUE':
                             print(u"验证码通过,正在提交订单")

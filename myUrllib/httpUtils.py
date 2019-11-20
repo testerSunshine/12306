@@ -1,10 +1,12 @@
 # -*- coding: utf8 -*-
 import json
+import random
 import socket
 from collections import OrderedDict
 from time import sleep
 import requests
-
+from fake_useragent import UserAgent
+import TickerConfig
 from agency.agency_tools import proxy
 from config import logger
 
@@ -14,9 +16,21 @@ def _set_header_default():
     # header_dict["Accept"] = "application/json, text/plain, */*"
     header_dict["Accept-Encoding"] = "gzip, deflate"
     header_dict[
-        "User-Agent"] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) 12306-electron/1.0.1 Chrome/59.0.3071.115 Electron/1.8.4 Safari/537.36"
+        "User-Agent"] = _set_user_agent()
     header_dict["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
+    header_dict["Origin"] = "https://kyfw.12306.cn"
+    header_dict["Connection"] = "keep-alive"
     return header_dict
+
+
+def _set_user_agent():
+    try:
+        user_agent = UserAgent(verify_ssl=False).random
+        return user_agent
+    except:
+        print("请求头设置失败，使用默认请求头")
+        return 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.' + str(
+            random.randint(5000, 7000)) + '.0 Safari/537.36'
 
 
 class HTTPClient(object):
@@ -39,14 +53,15 @@ class HTTPClient(object):
         self._s.headers.update(_set_header_default())
         return self
 
-    def set_cookies(self, **kwargs):
+    def set_cookies(self, kwargs):
         """
         设置cookies
         :param kwargs:
         :return:
         """
-        for k, v in kwargs.items():
-            self._s.cookies.set(k, v)
+        for kwarg in kwargs:
+            for k, v in kwarg.items():
+                self._s.cookies.set(k, v)
 
     def get_cookies(self):
         """
@@ -84,6 +99,12 @@ class HTTPClient(object):
         self._s.headers.update({"Host": host})
         return self
 
+    def setHeadersUserAgent(self):
+        self._s.headers.update({"User-Agent": _set_user_agent()})
+
+    def getHeadersUserAgent(self):
+        return self._s.headers["User-Agent"]
+
     def getHeadersReferer(self):
         return self._s.headers["Referer"]
 
@@ -115,10 +136,12 @@ class HTTPClient(object):
         else:
             method = "get"
             self.resetHeaders()
+        if TickerConfig.RANDOM_AGENT is 1:
+            self.setHeadersUserAgent()
         self.setHeadersReferer(urls["Referer"])
         if is_logger:
             logger.log(
-                u"url: {0}\n入参: {1}\n请求方式: {2}\n".format(req_url, data, method, ))
+                u"url: {0}\n入参: {1}\n请求方式: {2}\n".format(req_url, data, method))
         self.setHeadersHost(urls["Host"])
         if is_test_cdn:
             url_host = self._cdn
@@ -140,7 +163,7 @@ class HTTPClient(object):
                 except:
                     pass
                 response = self._s.request(method=method,
-                                           timeout=2,
+                                           timeout=5,
                                            proxies=self._proxies,
                                            url=http + "://" + url_host + req_url,
                                            data=data,
@@ -153,12 +176,15 @@ class HTTPClient(object):
                     if response.content:
                         if is_logger:
                             logger.log(
-                                u"出参：{0}".format(response.content))
+                                u"出参：{0}".format(response.content.decode()))
                         if urls["is_json"]:
-                            return json.loads(response.content.decode() if isinstance(response.content, bytes) else response.content)
+                            return json.loads(
+                                response.content.decode() if isinstance(response.content, bytes) else response.content)
                         else:
-                            return response.content.decode("utf8", "ignore") if isinstance(response.content, bytes) else response.content
+                            return response.content.decode("utf8", "ignore") if isinstance(response.content,
+                                                                                           bytes) else response.content
                     else:
+                        print(f"url: {urls['req_url']}返回参数为空, 接口状态码: {response.status_code}")
                         logger.log(
                             u"url: {} 返回参数为空".format(urls["req_url"]))
                         continue

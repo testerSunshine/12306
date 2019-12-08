@@ -1,6 +1,6 @@
 # coding=utf-8
 import random
-
+import TickerConfig
 import time
 
 urls = {
@@ -23,7 +23,7 @@ urls = {
         "Host": "kyfw.12306.cn",
         "Content-Type": 1,
         "re_try": 10,
-        "re_time": 1,
+        "re_time": 3,
         "s_time": 0.1,
         "is_logger": True,
         "is_json": True,
@@ -36,7 +36,7 @@ urls = {
         "Content-Type": 1,
         "re_try": 10,
         "re_time": 1,
-        "s_time": 0.1,
+        "s_time": 0.5,
         "is_logger": True,
         "is_json": True,
 
@@ -232,7 +232,7 @@ urls = {
         "req_type": "get",
         "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
         "Host": "kyfw.12306.cn",
-        "re_try": 10,
+        "re_try": 1,
         "re_time": 0.01,
         "s_time": 0.01,
         "is_logger": False,
@@ -244,9 +244,9 @@ urls = {
         "req_type": "post",
         "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
         "Host": "kyfw.12306.cn",
-        "re_try": 10,
-        "re_time": 0.3,
-        "s_time": 0.1,
+        "re_try": 1,
+        "re_time": 1,
+        "s_time": 1,
         "is_logger": True,
         "is_json": True,
     },
@@ -408,6 +408,19 @@ urls = {
         "is_logger": False,
         "is_json": True,
     },
+    "ServerChan": {  # Server酱 push通知
+        "req_url": "/",
+        "req_type": "get",
+        "Referer": "",
+        "Content-Type": 1,
+        "Host": "sc.ftqq.com",
+        "re_try": 10,
+        "re_time": 0.01,
+        "s_time": 0.1,
+        "is_logger": True,
+        "is_json": True,
+    },
+
     "cdn_host": {
         "req_url": "http://ping.chinaz.com/kyfw.12306.cn",
         "req_type": "post"
@@ -562,7 +575,28 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
+    "passengerInitApi": {  # 排队
+        "req_url": "/otn/afterNate/passengerInitApi",
+        "req_type": "post",
+        "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
+        "Host": "kyfw.12306.cn",
+        "re_try": 10,
+        "re_time": 0.01,
+        "s_time": 0.01,
+        "is_logger": True,
+        "is_json": True,
+    },
 
-
-
+    "autoVerifyImage": {  # 云打码接口
+        "req_url": TickerConfig.REQ_URL,
+        "req_type": "post",
+        "Referer": "",
+        "Host": TickerConfig.HOST,
+        "re_try": 6,
+        "re_time": 10,
+        "s_time": 0.001,
+        "is_logger": True,
+        "is_json": True,
+        "httpType": TickerConfig.HTTP_TYPE
+    },
 }

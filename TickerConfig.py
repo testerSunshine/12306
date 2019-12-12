@@ -119,10 +119,10 @@ OPEN_TIME = "13:00:00"
 COOKIE_TYPE = 1
 # 如果COOKIE_TYPE=1，则需配置chromeDriver路径,下载地址http://chromedriver.storage.googleapis.com/index.html
 # chromedriver配置版本只要和chrome的大版本匹配就行
-CHROME_PATH = "/Users/wenxianping/Downloads/chromedriver"
+CHROME_PATH = "/usr/src/app/chromedriver"
 
 #为了docker37 准备的环境变量，windows环境可以不用管这个参数
-CHROME_CHROME_PATH = "/usr/src/app/google-chrome";
+CHROME_CHROME_PATH = "/opt/google/chrome/google-chrome";
 
 # 如果COOKIE_TYPE=3, 则需配置RAIL_EXPIRATION、RAIL_DEVICEID的值
 RAIL_EXPIRATION = ""

@@ -22,12 +22,6 @@ RUN wget -c  https://npm.taobao.org/mirrors/chromedriver/$CDV/chromedriver_linux
 apt-get install -y unzip && \
 unzip chromedriver_linux64.zip
 
-RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pyspider --no-cache-dir -r requirements.txt
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-
-
-
 
 
 

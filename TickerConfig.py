@@ -121,6 +121,9 @@ COOKIE_TYPE = 1
 # chromedriver配置版本只要和chrome的大版本匹配就行
 CHROME_PATH = "/Users/wenxianping/Downloads/chromedriver"
 
+#为了docker37 准备的环境变量，windows环境可以不用管这个参数
+CHROME_CHROME_PATH = "/usr/src/app/google-chrome";
+
 # 如果COOKIE_TYPE=3, 则需配置RAIL_EXPIRATION、RAIL_DEVICEID的值
 RAIL_EXPIRATION = ""
 RAIL_DEVICEID = ""

@@ -2,6 +2,7 @@ import json
 import random
 import re
 import time
+import os
 import TickerConfig
 from config.urlConf import urls
 
@@ -14,7 +15,14 @@ def getDrvicesID(session):
     if TickerConfig.COOKIE_TYPE is 1:
         from selenium import webdriver
         cookies = []
-        driver = webdriver.Chrome(executable_path=TickerConfig.CHROME_PATH)
+        # 解决放镜像里 DevToolsActivePort file doesn't exist的问题
+        options = webdriver.ChromeOptions()
+        if os.name != 'nt' and TickerConfig.CHROME_CHROME_PATH:
+            options = webdriver.ChromeOptions()
+            options.binary_location = TickerConfig.CHROME_CHROME_PATH
+            options.add_argument("--no-sandbox")
+            options.add_argument("--headless")
+        driver = webdriver.Chrome(executable_path=TickerConfig.CHROME_PATH,chrome_options=options)
         driver.get("https://www.12306.cn/index/index.html")
         time.sleep(10)
         for c in driver.get_cookies():

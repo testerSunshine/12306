@@ -14,7 +14,8 @@ def getDrvicesID(session):
     if TickerConfig.COOKIE_TYPE is 1:
         from selenium import webdriver
         cookies = []
-        driver = webdriver.Chrome(executable_path=TickerConfig.CHROME_PATH)
+       # driver = webdriver.Chrome(executable_path=TickerConfig.CHROME_PATH)
+        driver = webdriver.Chrome()
         driver.get("https://www.12306.cn/index/index.html")
         time.sleep(10)
         for c in driver.get_cookies():

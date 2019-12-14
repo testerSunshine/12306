@@ -78,7 +78,6 @@ class confirmSingleForQueue:
             if "status" in checkQueueOrderResult and checkQueueOrderResult["status"]:
                 c_data = checkQueueOrderResult["data"] if "data" in checkQueueOrderResult else {}
                 if 'submitStatus' in c_data and c_data['submitStatus'] is True:
-                    # print(u"提交订单成功！")
                     qow = queryOrderWaitTime(self.session)
                     qow.sendQueryOrderWaitTime()
                 else:

@@ -57,10 +57,10 @@ class getQueueCount:
         else:
             new_train_date = list(filter(None, str(time.asctime(time.strptime(self.station_dates, "%Y-%m-%d"))).split(" ")))
         data = OrderedDict()
-        data['train_date'] = "{0} {1} 0{2} {3} 00:00:00 GMT+0800 (中国标准时间)".format(
+        data['train_date'] = "{0} {1} {2} {3} 00:00:00 GMT+0800 (中国标准时间)".format(
             new_train_date[0],
             new_train_date[1],
-            new_train_date[2],
+            new_train_date[2] if len(new_train_date[2]) is 2 else f"0{new_train_date[2]}",
             new_train_date[4],
         ),
         data['train_no'] = self.ticketInfoForPassengerForm['queryLeftTicketRequestDTO']['train_no'],
@@ -88,7 +88,11 @@ class getQueueCount:
                 ticket = getQueueCountResult["data"]["ticket"]
                 ticket_split = sum(map(conversion_int, ticket.split(","))) if ticket.find(",") != -1 else ticket
                 countT = getQueueCountResult["data"]["countT"]
-                # if int(countT) is 0:
+                if int(ticket_split) is 0:
+                    wrapcache.set(key=self.train_no, value=datetime.datetime.now(),
+                                  timeout=TickerConfig.TICKET_BLACK_LIST_TIME * 60)
+                    print(f"排队失败，当前余票数还剩: {ticket_split} 张")
+                    return
                 print(u"排队成功, 你排在: {1}位, 当前余票还剩余: {0} 张".format(ticket_split, countT))
                 csf = confirmSingleForQueue(self.session, self.ifShowPassCodeTime, self.is_need_code, self.token,
                                             self.set_type, self.ticket_peoples, self.ticketInfoForPassengerForm,
@@ -133,3 +137,13 @@ class queryQueueByAfterNate:
                 raise ticketIsExitsException(ticket.WAIT_AFTER_NATE_SUCCESS)
 
 
+if __name__ == '__main__':
+    new_train_date = list(filter(None, str(time.asctime(time.strptime("2019-10-07", "%Y-%m-%d"))).split(" ")))
+    print(new_train_date)
+    train_date = "{0} {1} {2} {3} 00:00:00 GMT+0800 (中国标准时间)".format(
+        new_train_date[0],
+        new_train_date[1],
+        new_train_date[2] if len(new_train_date[2]) is 2 else f"0{new_train_date[2]}",
+        new_train_date[4],
+    )
+    print(train_date)

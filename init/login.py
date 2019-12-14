@@ -1,13 +1,9 @@
 # -*- coding=utf-8 -*-
 import copy
-import json
-import random
-import re
 import time
 from collections import OrderedDict
 from time import sleep
 import TickerConfig
-from config.urlConf import urls
 from inter.GetPassCodeNewOrderAndLogin import getPassCodeNewOrderAndLogin1
 from inter.GetRandCode import getRandCode
 from inter.LoginAysnSuggest import loginAysnSuggest

@@ -42,7 +42,9 @@ class select:
         self.login = GoLogin(self, TickerConfig.IS_AUTO_CODE, self.auto_code_type)
         self.cdn_list = []
         self.cookies = ""
-        self.queryUrl = "leftTicket/query"
+        # 此接口有变化，上官网点余票查询，按F12确定接口名称
+        # 19.12.14 目前使用接口为queryO
+        self.queryUrl = "leftTicket/queryO"
         self.passengerTicketStrList = ""
         self.passengerTicketStrByAfterLate = ""
         self.oldPassengerStr = ""

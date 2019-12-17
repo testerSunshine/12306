@@ -15,6 +15,7 @@ urls = {
         "s_time": 0.1,
         "is_logger": True,
         "is_json": True,
+        "is_cdn": True,
     },
     "uamtk-static": {  # 登录接口
         "req_url": "/passport/web/auth/uamtk-static",
@@ -27,6 +28,7 @@ urls = {
         "s_time": 0.1,
         "is_logger": True,
         "is_json": True,
+        "is_cdn": True,
     },
     "login": {   # 登录接口
         "req_url": "/passport/web/login",
@@ -38,6 +40,7 @@ urls = {
         "re_time": 1,
         "s_time": 0.5,
         "is_logger": True,
+        "is_cdn": True,
         "is_json": True,
 
     },
@@ -51,6 +54,7 @@ urls = {
         "re_time": 1,
         "s_time": 0.1,
         "is_logger": False,
+        "is_cdn": True,
         "is_json": False,
 
     },
@@ -65,6 +69,7 @@ urls = {
         "s_time": 0.1,
         "is_logger": False,
         "is_json": False,
+        "is_cdn": True,
         "not_decode": True,
     },
     "getCodeImg1": {  # 登录验证码
@@ -77,6 +82,7 @@ urls = {
         "re_time": 1,
         "s_time": 0.1,
         "is_logger": True,
+        "is_cdn": True,
         "is_json": False,
     },
     "codeCheck": {  # 验证码校验
@@ -89,6 +95,7 @@ urls = {
         "re_time": 1,
         "s_time": 0.1,
         "is_logger": True,
+        "is_cdn": True,
         "is_json": False,
     },
     "codeCheck1": {  # 验证码校验
@@ -100,6 +107,7 @@ urls = {
         "re_try": 10,
         "re_time": 1,
         "s_time": 0.1,
+        "is_cdn": True,
         "is_logger": True,
         "is_json": False,
     },
@@ -112,6 +120,7 @@ urls = {
         "re_time": 1,
         "s_time": 0.1,
         "is_logger": False,
+        "is_cdn": True,
         "is_json": False,
     },
     "loginInitCdn": {  # 登录页面
@@ -124,6 +133,7 @@ urls = {
         "s_time": 0.1,
         "is_logger": False,
         "is_test_cdn": True,
+        "is_cdn": True,
         "is_json": False,
     },
     "loginInitCdn1": {  # 登录页面
@@ -136,6 +146,7 @@ urls = {
         "s_time": 0.1,
         "is_logger": False,
         "is_test_cdn": False,
+        "is_cdn": True,
         "is_json": False,
     },
     "getDevicesId": {  # 获取用户信息
@@ -146,6 +157,7 @@ urls = {
         "re_try": 10,
         "re_time": 1,
         "s_time": 0.01,
+        "is_cdn": True,
         "is_logger": True,
         "is_json": False,
     },
@@ -157,6 +169,7 @@ urls = {
         "re_try": 10,
         "re_time": 1,
         "s_time": 0.01,
+        "is_cdn": True,
         "is_logger": False,
         "is_json": False,
     },
@@ -169,6 +182,7 @@ urls = {
         "re_time": 1,
         "s_time": 0.1,
         "is_logger": True,
+        "is_cdn": True,
         "is_json": True,
     },
     "uamauthclient": {  # 登录
@@ -180,6 +194,7 @@ urls = {
         "re_try": 10,
         "re_time": 1,
         "s_time": 0.1,
+        "is_cdn": True,
         "is_logger": True,
         "is_json": True,
     },
@@ -192,6 +207,7 @@ urls = {
         "re_time": 0.1,
         "s_time": 1,
         "is_logger": False,
+        "is_cdn": True,
         "is_json": False,
     },
     "GetJS": {   # 订单页面js
@@ -203,6 +219,7 @@ urls = {
         "re_time": 0.1,
         "s_time": 0.1,
         "is_logger": False,
+        "is_cdn": True,
         "is_json": False,
     },
     "odxmfwg": {  # 订单页面js
@@ -214,6 +231,7 @@ urls = {
         "re_time": 0.1,
         "s_time": 0.1,
         "is_logger": False,
+        "is_cdn": True,
         "is_json": False,
     },
     "get_passengerDTOs": {  # 获取乘车人
@@ -224,6 +242,7 @@ urls = {
         "re_try": 10,
         "re_time": 0.1,
         "s_time": 0.1,
+        "is_cdn": True,
         "is_logger": True,
         "is_json": True,
     },
@@ -247,6 +266,7 @@ urls = {
         "re_try": 1,
         "re_time": 1,
         "s_time": 1,
+        "is_cdn": True,
         "is_logger": True,
         "is_json": True,
     },
@@ -258,6 +278,7 @@ urls = {
         "re_try": 10,
         "re_time": 0.01,
         "s_time": 0.1,
+        "is_cdn": True,
         "is_logger": True,
         "is_json": True,
     },
@@ -270,6 +291,7 @@ urls = {
         "re_time": 0.01,
         "s_time": 0.1,
         "is_logger": True,
+        "is_cdn": True,
         "is_json": True,
     },
     "getQueueCountUrl": {  # 剩余余票数
@@ -281,6 +303,7 @@ urls = {
         "re_time": 0.01,
         "s_time": 0.1,
         "is_logger": True,
+        "is_cdn": True,
         "is_json": True,
     },
     "checkQueueOrderUrl": {  # 订单队列排队
@@ -292,6 +315,7 @@ urls = {
         "re_time": 0.01,
         "s_time": 0.1,
         "is_logger": True,
+        "is_cdn": True,
         "is_json": True,
     },
     "checkRandCodeAnsyn": {  # 暂时没用到
@@ -302,6 +326,7 @@ urls = {
         "re_try": 10,
         "re_time": 0.01,
         "s_time": 0.1,
+        "is_cdn": True,
         "is_logger": True,
         "is_json": True,
     },
@@ -314,6 +339,7 @@ urls = {
         "re_time": 0.01,
         "s_time": 0.1,
         "is_logger": False,
+        "is_cdn": True,
         "is_json": False,
     },
     "queryOrderWaitTimeUrl": {  # 订单等待页面
@@ -325,6 +351,7 @@ urls = {
         "re_time": 0.01,
         "s_time": 0.1,
         "is_logger": True,
+        "is_cdn": True,
         "is_json": True,
     },
     "queryMyOrderNoCompleteUrl": {  # 订单查询页面
@@ -336,6 +363,7 @@ urls = {
         "re_time": 0.01,
         "s_time": 0.1,
         "is_logger": True,
+        "is_cdn": True,
         "is_json": True,
     },
     "initNoCompleteUrl": {  # 获取订单列表
@@ -347,6 +375,7 @@ urls = {
         "re_time": 0.01,
         "s_time": 0.1,
         "is_logger": False,
+        "is_cdn": True,
         "is_json": False,
     },
     "cancelNoCompleteMyOrder": {  # 取消订单
@@ -357,6 +386,7 @@ urls = {
         "re_try": 10,
         "re_time": 0.01,
         "s_time": 0.1,
+        "is_cdn": True,
         "is_logger": True,
         "is_json": True,
     },
@@ -370,6 +400,7 @@ urls = {
         "re_time": 0.01,
         "s_time": 0.1,
         "is_logger": True,
+        "is_cdn": True,
         "is_json": True,
     },
     "getQueueCountAsync": {  # 快速获取订单数据
@@ -382,6 +413,7 @@ urls = {
         "re_time": 0.01,
         "s_time": 0.1,
         "is_logger": True,
+        "is_cdn": True,
         "is_json": True,
     },
     "confirmSingleForQueueAsys": {  # 快速订单排队
@@ -394,6 +426,7 @@ urls = {
         "re_time": 0.01,
         "s_time": 0.1,
         "is_logger": True,
+        "is_cdn": True,
         "is_json": True,
     },
     "Pushbear": {  # push通知
@@ -420,68 +453,6 @@ urls = {
         "is_logger": True,
         "is_json": True,
     },
-
-    "cdn_host": {
-        "req_url": "http://ping.chinaz.com/kyfw.12306.cn",
-        "req_type": "post"
-    },
-    "cdn_list": {
-        "req_url": "http://ping.chinaz.com/iframe.ashx?t=ping&callback=jQuery111304824429956769827_{}".format(int(round(time.time() * 1000))),
-        "req_type": "post"
-    },
-
-    "TPLINK": {  # TPLINK请求地址
-        "req_url": "/",
-        "req_type": "post",
-        "Referer": "",
-        "Content-Type": 1,
-        "Host": "192.168.0.1",
-        "re_try": 10,
-        "re_time": 0.01,
-        "s_time": 0.1,
-        "is_logger": False,
-        "is_json": True,
-        "httpType": "http"
-    },
-    "TPds": {  # TPLINK路由器内部切换地址
-        "req_url": "/stok={}/ds",
-        "req_type": "post",
-        "Referer": "",
-        "Content-Type": 1,
-        "Host": "192.168.0.1",
-        "re_try": 10,
-        "re_time": 0.01,
-        "s_time": 0.1,
-        "is_logger": False,
-        "is_json": True,
-        "httpType": "http"
-    },
-    "xiaomiHome": {  # 小米路由器登录
-        "req_url": "/cgi-bin/luci/web",
-        "req_type": "get",
-        "Referer": "",
-        "Content-Type": 1,
-        "Host": "192.168.31.1",
-        "re_try": 10,
-        "re_time": 0.01,
-        "s_time": 0.1,
-        "is_logger": False,
-        "is_json": False,
-        "httpType": "http"
-    },
-    "xiaomi": {  # 小米路由器登录
-        "req_url": "/cgi-bin/luci/api/xqsystem/login",
-        "req_type": "post",
-        "Referer": "",
-        "Content-Type": 1,
-        "Host": "192.168.31.1",
-        "re_try": 10,
-        "re_time": 0.01,
-        "s_time": 0.1,
-        "is_logger": False,
-        "is_json": True,
-        "httpType": "http"
-    },
     "loginHtml": {  # 登录接口2
         "req_url": "/otn/resources/login.html",
         "req_type": "get",
@@ -490,6 +461,7 @@ urls = {
         "re_try": 10,
         "re_time": 0.3,
         "s_time": 0.1,
+        "is_cdn": True,
         "is_logger": True,
         "is_json": True,
     },
@@ -501,6 +473,7 @@ urls = {
         "re_try": 10,
         "re_time": 0.3,
         "s_time": 0.1,
+        "is_cdn": True,
         "is_logger": True,
         "is_json": True,
     },
@@ -511,6 +484,7 @@ urls = {
         "Host": "kyfw.12306.cn",
         "re_try": 10,
         "re_time": 0.3,
+        "is_cdn": True,
         "s_time": 0.1,
         "is_logger": True,
         "is_json": True,
@@ -528,6 +502,7 @@ urls = {
         "re_try": 10,
         "re_time": 0.01,
         "s_time": 0.01,
+        "is_cdn": True,
         "is_logger": True,
         "is_json": True,
     },
@@ -539,6 +514,7 @@ urls = {
         "re_try": 10,
         "re_time": 0.01,
         "s_time": 0.01,
+        "is_cdn": True,
         "is_logger": True,
         "is_json": True,
     },
@@ -550,6 +526,7 @@ urls = {
         "re_try": 10,
         "re_time": 0.01,
         "s_time": 0.01,
+        "is_cdn": True,
         "is_logger": True,
         "is_json": True,
     },
@@ -561,6 +538,7 @@ urls = {
         "re_try": 10,
         "re_time": 0.01,
         "s_time": 0.01,
+        "is_cdn": True,
         "is_logger": True,
         "is_json": True,
     },
@@ -572,6 +550,7 @@ urls = {
         "re_try": 10,
         "re_time": 0.01,
         "s_time": 0.01,
+        "is_cdn": True,
         "is_logger": True,
         "is_json": True,
     },
@@ -583,6 +562,7 @@ urls = {
         "re_try": 10,
         "re_time": 0.01,
         "s_time": 0.01,
+        "is_cdn": True,
         "is_logger": True,
         "is_json": True,
     },

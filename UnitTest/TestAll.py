@@ -7,8 +7,10 @@ from collections import OrderedDict
 import requests
 
 from agency.agency_tools import proxy
+from agency.cdn_utils import CDNProxy
 from config.emailConf import sendEmail
 from config.serverchanConf import sendServerChan
+from init.select_ticket_info import select
 
 
 def _set_header_default():
@@ -97,6 +99,20 @@ class testAll(unittest.TestCase):
                 print(f"响应时间{time.time()-starttime}m")
             except:
                 pass
+
+    def testCdn(self):
+        """
+        测试cdn筛选
+        :return:
+        """
+        CDN = CDNProxy()
+        all_cdn = CDN.open_cdn_file()
+        s = select()
+        all_cdn = self.open_cdn_file()
+        cdns = [all_cdn[i:i + 50] for i in range(0, len(all_cdn), 50)]
+        for i in cdns:
+            t = threading.Thread(target=s.cdn_req, args=(i,))
+            t.start()
 
 
 if __name__ == '__main__':

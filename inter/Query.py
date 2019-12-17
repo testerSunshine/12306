@@ -63,9 +63,8 @@ class query:
         查询
         :return:
         """
-        if TickerConfig.IS_CDN == 1:
-            if self.session.cdn_list:
-                self.httpClint.cdn = self.session.cdn_list[random.randint(0, len(self.session.cdn_list) - 1)]
+        if TickerConfig.IS_CDN == 1 and self.session.cdn_list:
+            self.httpClint.cdn = self.session.cdn_list[random.randint(0, len(self.session.cdn_list) - 1)]
         for station_date in self.station_dates:
             select_url = copy.copy(self.urls["select_url"])
             select_url["req_url"] = select_url["req_url"].format(station_date, self.from_station, self.to_station,

@@ -1,13 +1,9 @@
 # -*- coding=utf-8 -*-
 import copy
-import json
-import random
-import re
 import time
 from collections import OrderedDict
 from time import sleep
 import TickerConfig
-from config.urlConf import urls
 from inter.GetPassCodeNewOrderAndLogin import getPassCodeNewOrderAndLogin1
 from inter.GetRandCode import getRandCode
 from inter.LoginAysnSuggest import loginAysnSuggest
@@ -36,13 +32,6 @@ class GoLogin:
         验证码校验
         :return:
         """
-        # codeCheck = self.session.urls["codeCheck"]
-        # codeCheckData = {
-        #     "answer": self.randCode,
-        #     "rand": "sjrand",
-        #     "login_site": "E"
-        # }
-        # fresult = self.session.httpClint.send(codeCheck, codeCheckData)
         codeCheckUrl = copy.deepcopy(self.session.urls["codeCheck1"])
         codeCheckUrl["req_url"] = codeCheckUrl["req_url"].format(self.randCode, int(time.time() * 1000))
         fresult = self.session.httpClint.send(codeCheckUrl)
@@ -128,7 +117,6 @@ class GoLogin:
         login_num = 0
         while True:
             if loginConf(self.session):
-                # self.auth()
 
                 result = getPassCodeNewOrderAndLogin1(session=self.session, imgType="login")
                 if not result:

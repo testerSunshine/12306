@@ -8,7 +8,7 @@ import threading
 import time
 import TickerConfig
 import wrapcache
-from agency.cdn_utils import CDNProxy
+from agency.cdn_utils import CDNProxy, open_cdn_file
 from config import urlConf, configCommon
 from config.TicketEnmu import ticket
 from config.configCommon import seat_conf_2, seat_conf
@@ -34,15 +34,16 @@ class select:
     快速提交车票通道
     """
     def __init__(self):
+        self.cdn_list = open_cdn_file("filter_cdn_list")
         self.get_ticket_info()
         self._station_seat = [seat_conf[x] for x in TickerConfig.SET_TYPE]
         self.auto_code_type = TickerConfig.AUTO_CODE_TYPE
         self.httpClint = HTTPClient(TickerConfig.IS_PROXY)
+        self.httpClint.cdn = self.cdn_list[random.randint(0, len(self.cdn_list) - 1)]
         self.urls = urlConf.urls
         self.login = GoLogin(self, TickerConfig.IS_AUTO_CODE, self.auto_code_type)
-        self.cdn_list = []
         self.cookies = ""
-        self.queryUrl = "leftTicket/query"
+        self.queryUrl = "leftTicket/queryO"
         self.passengerTicketStrList = ""
         self.passengerTicketStrByAfterLate = ""
         self.oldPassengerStr = ""
@@ -115,47 +116,11 @@ class select:
             configCommon.checkSleepTime(self)  # 防止网上启动晚上到点休眠
             self.login.go_login()
 
-    def cdn_req(self, cdn):
-        for i in range(len(cdn) - 1):
-            http = HTTPClient(0)
-            http.set_cookies(self.cookies)
-            urls = self.urls["loginInitCdn"]
-            http._cdn = cdn[i].replace("\n", "")
-            start_time = datetime.datetime.now()
-            time.sleep(3)
-            rep = http.send(urls)
-            if rep and "message" not in rep and (datetime.datetime.now() - start_time).microseconds / 1000 < 500:
-                if cdn[i].replace("\n", "") not in self.cdn_list:  # 如果有重复的cdn，则放弃加入
-                    # print(u"加入cdn {0}".format(cdn[i].replace("\n", "")))
-                    self.cdn_list.append(cdn[i].replace("\n", ""))
-        print(u"所有cdn解析完成...")
-
-    def cdn_certification(self):
-        """
-        cdn 认证
-        :return:
-        """
-        if TickerConfig.IS_CDN == 1:
-            CDN = CDNProxy()
-            all_cdn = CDN.open_cdn_file()
-            if all_cdn:
-                # print(u"由于12306网站策略调整，cdn功能暂时关闭。")
-                print(u"开启cdn查询")
-                print(u"本次待筛选cdn总数为{}, 筛选时间大约为5-10min".format(len(all_cdn)))
-                t = threading.Thread(target=self.cdn_req, args=(all_cdn,))
-                t.setDaemon(True)
-                # t2 = threading.Thread(target=self.set_cdn, args=())
-                t.start()
-                # t2.start()
-            else:
-                raise ticketConfigException(u"cdn列表为空，请先加载cdn")
-
     def main(self):
         l = liftTicketInit(self)
         l.reqLiftTicketInit()
         getDrvicesID(self)
         self.call_login()
-        self.cdn_certification()
         check_user = checkUser(self)
         t = threading.Thread(target=check_user.sendCheckUser)
         t.setDaemon(True)

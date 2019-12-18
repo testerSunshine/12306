@@ -9,12 +9,12 @@ import wrapcache
 
 
 class chechFace:
-    def __init__(self, session, secretList, train_no):
+    def __init__(self, selectObj, secretList, train_no):
         """
         人脸识别
         """
         self.secretList = secretList
-        self.session = session
+        self.session = selectObj
         self.train_no = train_no
 
     def data_apr(self):

@@ -12,7 +12,7 @@ class getPassengerDTOs:
     获取乘客信息
     :return:
     """
-    def __init__(self, session, ticket_peoples=None, set_type=None, is_more_ticket_num=None):
+    def __init__(self, selectObj, ticket_peoples=None, set_type=None, is_more_ticket_num=None):
         """
         :param session: 登录实例
         :param ticket_peoples: 乘客
@@ -20,7 +20,7 @@ class getPassengerDTOs:
         """
         if ticket_peoples is None:
             ticket_peoples = []
-        self.session = session
+        self.session = selectObj
         self.ticket_peoples = ticket_peoples
         self.is_more_ticket_num = is_more_ticket_num
         self.set_type = set_type

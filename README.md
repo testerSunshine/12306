@@ -42,7 +42,6 @@
             # 可以配置server酱提醒（推荐）[配置教程](https://www.jianshu.com/p/8d10b5b9c4e3)
             # 用python3 还是python 完全取决于安装的时候配置的环境变量是否为python3,以下启动默认环境变量为python3
             python3 run.py t
-
             ```
         - 配置[配置](TickerConfig.py)文件的时候，需注意空格和遵循python语法格式
       - 启动前请先筛选cdn，这点很`重要`
@@ -62,8 +61,6 @@
 
         positional arguments:
           operate     r: 运行抢票程序, c: 过滤cdn, t: 测试邮箱和server酱，server酱
-
-
         ```
   - 如果你的服务器安装了docker与docker-compose, 那么就可以通过`docker-compose`进行启动,`docker.sh`脚本对此进行了封装，可以通过如下命令进行启动
       - 1、`sudo ./docker.sh run` #创建一个镜像并启动容器，如果镜像已经创建过了会直接启动容器。

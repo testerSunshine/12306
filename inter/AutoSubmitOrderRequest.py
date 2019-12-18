@@ -13,7 +13,7 @@ class autoSubmitOrderRequest:
     """
     快读提交订单通道
     """
-    def __init__(self, session,
+    def __init__(self, selectObj,
                  secretStr,
                  train_date,
                  query_from_station_name,
@@ -34,7 +34,7 @@ class autoSubmitOrderRequest:
         self.query_to_station_name = query_to_station_name
         self.passengerTicketStr = passengerTicketStr.rstrip("_{0}".format(self.set_type))
         self.oldPassengerStr = oldPassengerStr
-        self.session = session
+        self.session = selectObj
         self.train_no = train_no
         self.stationTrainCode = stationTrainCode
         self.leftTicket = leftTicket

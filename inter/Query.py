@@ -14,9 +14,9 @@ class query:
     查询接口
     """
 
-    def __init__(self, session, from_station, to_station, from_station_h, to_station_h, _station_seat, station_trains,
+    def __init__(self, selectObj, from_station, to_station, from_station_h, to_station_h, _station_seat, station_trains,
                  ticke_peoples_num, station_dates=None, ):
-        self.session = session
+        self.session = selectObj
         self.httpClint = HTTPClient(TickerConfig.IS_PROXY)
         self.httpClint.set_cookies(self.session.cookies)
         self.urls = urlConf.urls

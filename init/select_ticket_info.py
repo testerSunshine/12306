@@ -127,7 +127,7 @@ class select:
         t.start()
         from_station, to_station = self.station_table(TickerConfig.FROM_STATION, TickerConfig.TO_STATION)
         num = 0
-        s = getPassengerDTOs(session=self, ticket_peoples=TickerConfig.TICKET_PEOPLES)
+        s = getPassengerDTOs(selectObj=self, ticket_peoples=TickerConfig.TICKET_PEOPLES)
         passenger = s.sendGetPassengerDTOs()
         wrapcache.set("user_info", passenger, timeout=9999999)
         while 1:
@@ -147,7 +147,7 @@ class select:
                 else:
                     sleep_time_s = TickerConfig.MIN_TIME
                     sleep_time_t = TickerConfig.MAX_TIME
-                q = query(session=self,
+                q = query(selectObj=self,
                           from_station=from_station,
                           to_station=to_station,
                           from_station_h=TickerConfig.FROM_STATION,
@@ -174,7 +174,7 @@ class select:
                         print(ticket.QUEUE_WARNING_MSG.format(train_no))
                     else:
                         # 获取联系人
-                        s = getPassengerDTOs(session=self, ticket_peoples=TickerConfig.TICKET_PEOPLES,
+                        s = getPassengerDTOs(selectObj=self, ticket_peoples=TickerConfig.TICKET_PEOPLES,
                                              set_type="" if isinstance(seat, list) else seat_conf_2[seat],
                                              # 候补订单需要设置多个坐席
                                              is_more_ticket_num=is_more_ticket_num)
@@ -189,7 +189,7 @@ class select:
                         # 订单分为两种，一种为抢单，一种为候补订单
                         if secretStr:  # 正常下单
                             if TickerConfig.ORDER_TYPE == 1:  # 快速下单
-                                a = autoSubmitOrderRequest(session=self,
+                                a = autoSubmitOrderRequest(selectObj=self,
                                                            secretStr=secretStr,
                                                            train_date=train_date,
                                                            passengerTicketStr=self.passengerTicketStrList,

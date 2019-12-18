@@ -71,7 +71,11 @@ def filterCdn():
 
     print(f"当前有效cdn个数为: {len(cdn_list)}")
     if cdn_list:
-        f = open(r"../filter_cdn_list", "a+")
+        path = os.path.join(os.path.dirname(__file__), f'../filter_cdn_list')
+        f = open(path, "a+")
+        f.seek(0)
+        f.truncate()
+        f.writelines("")
         for c in cdn_list:
             f.writelines(f"{c}\n")
         f.close()

@@ -126,8 +126,8 @@ CHROME_PATH = "/usr/src/app/chromedriver"
 CHROME_CHROME_PATH = "/opt/google/chrome/google-chrome"
 
 # 如果COOKIE_TYPE=3, 则需配置RAIL_EXPIRATION、RAIL_DEVICEID的值
-RAIL_EXPIRATION = "1576654754825"
-RAIL_DEVICEID = "iIT4N7T5eI7O26P1vMt3oCLWvjlt4O9_ONCjqrKQPkChXEhGnMWKzD7wRJdc-C_1RYHw66659vxUwVxLeyh1MBgR3nf-2sW44mLg7ZMdE2CskpVx0LBsaIjVkQBsjyNH-Gi1lb45BiGGokq_zJUkFubcmj9pSAUu"
+RAIL_EXPIRATION = ""
+RAIL_DEVICEID = ""
 
 
 # 1=>为一直随机ua,2->只启动的时候随机一次ua
@@ -152,4 +152,4 @@ MAX_TIME = 5
 MIN_TIME = 3
 
 # 软件版本
-RE_VERSION = "1.2.001"
+RE_VERSION = "1.2.002"

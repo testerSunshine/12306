@@ -150,7 +150,7 @@ if __name__ == "__main__":
 
 def test():
     a = proxy()
-    if(a.test_proxy() == False):
+    if(a.test_proxy() is False):
         print(a.new_proxy())
     else:
         print(a.current)

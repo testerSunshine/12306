@@ -52,7 +52,7 @@ class HTTPClient(object):
         if is_proxy is 2:
             self.proxy = proxy()
             self._proxies = self.proxy.current
-           print(u"当前代理ip为 {}".format(self._proxies['http']))
+            print(u"当前代理ip为 {}".format(self._proxies['http']))
 
     def changeProxy(self):
         self._proxies = self.proxy.new_proxy()

@@ -27,7 +27,7 @@ class CDNProxy(threading.Thread):
             http._cdn = cdn.replace("\n", "")
             start_time = datetime.datetime.now()
             rep = http.send(url)
-            if rep and "message" not in rep and (datetime.datetime.now() - start_time).microseconds / 1000 < 1000:
+            if rep and "message" not in rep and (datetime.datetime.now() - start_time).microseconds / 1000 < 3000:
                 if cdn.replace("\n", "") not in cdn_list:  # 如果有重复的cdn，则放弃加入
                     print(f"加入cdn: {cdn}")
                     cdn_list.append(cdn.replace("\n", ""))

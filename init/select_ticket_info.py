@@ -214,7 +214,7 @@ class select:
                 else:
                     random_time = round(random.uniform(sleep_time_s, sleep_time_t), 2)
                     nateMsg = ' 无候补机会' if TickerConfig.ORDER_TYPE == 2 else ""
-                    print(f"正在第{num}次查询 随机停留时长：{random_time} 乘车日期: {','.join(TickerConfig.STATION_DATES)} 车次：{','.join(TickerConfig.STATION_TRAINS) or '所有车次'} 下单无票{nateMsg} 耗时：{(datetime.datetime.now() - now).microseconds / 1000}ms")
+                    print(f"正在第{num}次查询 停留时间：{random_time} 乘车日期: {','.join(TickerConfig.STATION_DATES)} 车次：{','.join(TickerConfig.STATION_TRAINS) or '所有车次'} 下单无票{nateMsg} 耗时：{(datetime.datetime.now() - now).microseconds / 1000} {queryResult.get('cdn')}")
                     time.sleep(random_time)
             except PassengerUserException as e:
                 print(e)

@@ -147,9 +147,9 @@ PASSENGER_TICKER_STR = {
 
 # 保护12306官网请求频率，设置随机请求时间，原则为5分钟不大于80次
 # 最大间隔请求时间
-MAX_TIME = 5
+MAX_TIME = 3
 # 最小间隔请求时间
-MIN_TIME = 3
+MIN_TIME = 1
 
 # 软件版本
 RE_VERSION = "1.2.002"

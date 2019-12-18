@@ -206,6 +206,5 @@ class HTTPClient(object):
         # return error_data
         if self.is_proxy is 0:
             return error_data
-        
         self.changeProxy()
         return self.send(urls, data)

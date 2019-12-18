@@ -54,7 +54,6 @@ class proxy:
             # print ("代理链接超时，去除此IP：{0}".format(self.current['http']))
             self.delete_proxy()
             return False
-    
     def get_proxy(self):
         """
         获取未加工代理列表

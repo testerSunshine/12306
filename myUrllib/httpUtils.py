@@ -43,10 +43,19 @@ class HTTPClient(object):
         self.initS()
         self._cdn = None
         self._proxies = None
+        self.is_proxy = is_proxy
         if is_proxy is 1:
             self.proxy = proxy()
             self._proxies = self.proxy.setProxy()
             # print(u"设置当前代理ip为 {}, 请注意代理ip是否可用！！！！！请注意代理ip是否可用！！！！！请注意代理ip是否可用！！！！！".format(self._proxies))
+
+        if is_proxy is 2:
+            self.proxy = proxy()
+            self._proxies = self.proxy.current
+           print(u"当前代理ip为 {}".format(self._proxies['http']))
+
+    def changeProxy(self):
+        self._proxies = self.proxy.new_proxy()
 
     def initS(self):
         self._s = requests.Session()
@@ -194,4 +203,9 @@ class HTTPClient(object):
                 pass
             except socket.error:
                 pass
-        return error_data
+        # return error_data
+        if self.is_proxy is 0:
+            return error_data
+        
+        self.changeProxy()
+        return self.send(urls, data)

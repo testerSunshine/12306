@@ -18,6 +18,10 @@ def parser_arguments(argv):
 if __name__ == '__main__':
     args = parser_arguments(sys.argv[1:])
     if args.operate == "r":
+        import TickerConfig
+        if TickerConfig.IS_PROXY is 2:
+            from agency.agency_tools import test
+            test()
         from init import select_ticket_info
         select_ticket_info.select().main()
     elif args.operate == "t":

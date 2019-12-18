@@ -104,13 +104,15 @@ ORDER_TYPE = 2
 #         2 是捡漏，捡漏的刷新间隔时间为0.5-3秒，时间间隔长，不容易封ip
 ORDER_MODEL = 2
 
-# 是否开启代理, 0代表关闭， 1表示开始
+# 是否开启代理, 0代表关闭， 1表示开始 ， 2 表示使用云服务器 https://github.com/jhao104/proxy_pool
 # 开启此功能的时候请确保代理ip是否可用，在测试放里面经过充分的测试，再开启此功能，不然可能会耽误你购票的宝贵时间
 # 使用方法：
 # 1、在agency/proxy_list列表下填入代理ip
 # 2、测试UnitTest/TestAll/testProxy 测试代理是否可以用
 # 3、开启代理ip
-IS_PROXY = 0
+IS_PROXY = 2
+
+PROXY_HOST = 'http://118.24.52.95'
 
 # 预售放票时间, 如果是捡漏模式，可以忽略此操作
 OPEN_TIME = "13:00:00"

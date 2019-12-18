@@ -3,6 +3,7 @@ import os
 import random
 import socket
 import time
+import TickerConfig
 
 import requests
 from bs4 import BeautifulSoup
@@ -12,7 +13,48 @@ class proxy:
     def __init__(self):
         self.proxy_list = []
         self.proxy_filter_list = []
+        ip = self.get_filter_proxy()
+        self.current = {
+            'http': 'http://{}'.format(ip[0]),
+            'https': 'http://{}'.format(ip[0]),
+        }
 
+    def get_proxyFromCloud(self):
+        resp = requests.get("{}/get/".format(TickerConfig.PROXY_HOST)).json()['proxy']
+        self.current =  {
+            'http': 'http://{}'.format(resp),
+            'https': 'http://{}'.format(resp),
+        }
+        if(self.test_proxy()):
+            path = os.path.join(os.path.dirname(__file__), './proxy_list')
+            f = open(path, "w")
+            f.write(resp)
+            return self.current
+        else:
+            return self.get_proxyFromCloud()
+
+    def delete_proxy(self):
+        if(self.current != {}):
+            print('删除' + self.current['http'])
+            requests.get("{}/delete/?proxy={}".format(TickerConfig.PROXY_HOST, self.current['http'].replace('http://','')))
+            self.current = {}
+
+    def new_proxy(self):
+        self.delete_proxy()
+        return self.get_proxyFromCloud()
+
+    def test_proxy(self):
+        head = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36',
+            'Connection': 'keep-alive'}
+        try:
+            requests.get("http://icanhazip.com", proxies=self.current, timeout=1, headers=head)
+            return True
+        except (requests.exceptions.Timeout, requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
+            # print ("代理链接超时，去除此IP：{0}".format(self.current['http']))
+            self.delete_proxy()
+            return False
+    
     def get_proxy(self):
         """
         获取未加工代理列表
@@ -105,3 +147,10 @@ class proxy:
 if __name__ == "__main__":
     a = proxy()
     print(a.get_filter_proxy())
+
+def test():
+    a = proxy()
+    if(a.test_proxy() == False):
+        print(a.new_proxy())
+    else:
+        print(a.current)

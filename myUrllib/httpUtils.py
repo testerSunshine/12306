@@ -204,7 +204,7 @@ class HTTPClient(object):
             except socket.error:
                 pass
         # return error_data
-        if self.is_proxy is 0:
+        if self.is_proxy is not 2:
             return error_data
         self.changeProxy()
         return self.send(urls, data)

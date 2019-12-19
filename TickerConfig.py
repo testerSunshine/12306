@@ -5,23 +5,23 @@
 # 如果这个时候捡漏捡到的话，也是可以付款成功的，也就是说，捡漏+候补，可以最大程度提升抢票成功率
 
 # 刷票模式：1=刷票 2=候补+刷票
-TICKET_TYPE = 2
+TICKET_TYPE = 1
 
 # 出发日期(list) "2018-01-06", "2018-01-07"
 STATION_DATES = [
-    "2020-01-05"
+    "2020-01-17"
 ]
 
 # 填入需要购买的车次(list)，"G1353"
 # 修改车次填入规则，注：(以前设置的车次逻辑不变)，如果车次填入为空，那么就是当日乘车所有车次都纳入筛选返回
 # 不填车次是整个list为空才算，如果不是为空，依然会判断车次的，这种是错误的写法 [""], 正确的写法 []
-STATION_TRAINS = ["G1002"]
+STATION_TRAINS = ["G1120"]
 
 # 出发城市，比如深圳北，就填深圳就搜得到
-FROM_STATION = "深圳北"
+FROM_STATION = "广州"
 
 # 到达城市 比如深圳北，就填深圳就搜得到
-TO_STATION = "长沙南"
+TO_STATION = "武汉"
 
 # 座位(list) 多个座位ex:
 # "商务座",
@@ -33,7 +33,7 @@ TO_STATION = "长沙南"
 # "硬座",
 # "无座",
 # "动卧",
-SET_TYPE = ["硬座"]
+SET_TYPE = ["二等座"]
 
 # 当余票小于乘车人，如果选择优先提交，则删减联系人和余票数一致在提交
 # bool
@@ -42,7 +42,7 @@ IS_MORE_TICKET = True
 # 乘车人(list) 多个乘车人ex:
 # "张三",
 # "李四"
-TICKET_PEOPLES = []
+TICKET_PEOPLES = [""]
 
 # 12306登录账号
 USER = ""
@@ -56,7 +56,7 @@ IS_AUTO_CODE = True
 
 # 设置2本地自动打码，需要配置tensorflow和keras库，3为云打码，由于云打码服务器资源有限(为2h4C的cpu服务器)，请不要恶意请求，不然只能关闭服务器
 # ps: 请不要一直依赖云服务器资源，在此向所有提供服务器同学表示感谢
-AUTO_CODE_TYPE = 2
+AUTO_CODE_TYPE = 3
 
 # 此处设置云打码服务器地址，如果有自建的服务器，可以自行更改
 HOST = "120.77.154.140:8000"
@@ -102,7 +102,7 @@ ORDER_TYPE = 2
 
 # 下单模式 1 为预售，整点刷新，刷新间隔0.1-0.5S, 然后会校验时间，比如12点的预售，那脚本就会在12.00整检票，刷新订单
 #         2 是捡漏，捡漏的刷新间隔时间为0.5-3秒，时间间隔长，不容易封ip
-ORDER_MODEL = 2
+ORDER_MODEL = 1
 
 # 是否开启代理, 0代表关闭， 1表示开始 ， 2 表示使用云服务器 https://github.com/jhao104/proxy_pool
 # 开启此功能的时候请确保代理ip是否可用，在测试放里面经过充分的测试，再开启此功能，不然可能会耽误你购票的宝贵时间
@@ -115,7 +115,7 @@ IS_PROXY = 2
 PROXY_HOST = 'http://118.24.52.95'
 
 # 预售放票时间, 如果是捡漏模式，可以忽略此操作
-OPEN_TIME = "13:00:00"
+OPEN_TIME = "12:59:50"
 # 1=使用selenium获取devicesID
 # 2=使用网页端/otn/HttpZF/logdevice获取devicesId，这个接口的算法目前可能有点问题，如果登录一直302的请改为配置1
 # 3=自己打开浏览器在headers-Cookies中抓取RAIL_DEVICEID和RAIL_EXPIRATION，这个就不用配置selenium
@@ -128,8 +128,8 @@ CHROME_PATH = "/usr/src/app/chromedriver"
 CHROME_CHROME_PATH = "/opt/google/chrome/google-chrome"
 
 # 如果COOKIE_TYPE=3, 则需配置RAIL_EXPIRATION、RAIL_DEVICEID的值
-RAIL_EXPIRATION = ""
-RAIL_DEVICEID = ""
+RAIL_EXPIRATION = "1577033439142"
+RAIL_DEVICEID = "PuV16sVaV-CTGsFZUuL8JLAk4OhuT1wgUYC_W3L2JZfWx8Ygx8LOPkko3PSOrK5_xSKhXjgyTMS8dBmj1RZHL2CKBTmVs6UG_yptlB4NJbGHldltrLMTUEgoDpSkpX2vzpGXgMQsTRzgOXfuQkAWwS4GjCxSmV3C; BIGipServerpassport=820510986.50215.0000; route=9036359bb8a8a461c164a04f8f50b252"
 
 
 # 1=>为一直随机ua,2->只启动的时候随机一次ua
@@ -154,4 +154,4 @@ MAX_TIME = 3
 MIN_TIME = 1
 
 # 软件版本
-RE_VERSION = "1.2.002"
+RE_VERSION = "1.2.003"

@@ -151,14 +151,14 @@ class query:
                                                 "cdn": self.httpClint.cdn,
                                                 "status": True,
                                             }
-                                elif is_ticket_pass == '无' and ticket_info[-2] == "1" and TickerConfig.TICKET_TYPE is 2:
+                                elif is_ticket_pass == '无' and ticket_info[37] == "1" and TickerConfig.TICKET_TYPE is 2:
                                     """
                                     is_ticket_pass如果有别的显示，但是可以候补，可以提issues提出来，附上query log，我将添加上
                                     判断车次是否可以候补
                                     目前的候补机制是只要一有候补位置，立马提交候补
                                     """
                                     # 如果最后一位为1，则是可以候补的，不知道这些正确嘛？
-                                    nate = list(ticket_info[-1])
+                                    nate = list(ticket_info[38])
                                     if wrapcache.get(f"hb{ticket_info[2]}"):
                                         continue
                                     for set_type in TickerConfig.SET_TYPE:

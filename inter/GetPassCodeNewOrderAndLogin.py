@@ -71,7 +71,7 @@ def getPassCodeNewOrderAndLogin1(session, imgType):
                     img.write(base64.b64decode(result))
             return result
     except OSError:
-        print(u"验证码下载失败，可能ip被封，确认请手动请求: {0}".format(codeImgUrl))
+        print(u"验证码下载失败，可能ip被封或者文件写入没权限")
 
 
 if __name__ == '__main__':

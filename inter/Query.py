@@ -64,7 +64,7 @@ class query:
         :return:
         """
         if TickerConfig.IS_CDN == 1 and self.session.cdn_list:
-            self.httpClint.cdn = self.session.cdn_list[random.randint(0, len(self.session.cdn_list) - 1)]
+            self.httpClint.cdn = self.session.cdn_list[random.randint(4, len(self.session.cdn_list) - 1)]
         for station_date in self.station_dates:
             select_url = copy.copy(self.urls["select_url"])
             select_url["req_url"] = select_url["req_url"].format(station_date, self.from_station, self.to_station,
@@ -169,6 +169,7 @@ class query:
                                                     "seat": [set_type],
                                                     "train_no": ticket_info[2],
                                                     "status": True,
+                                                    "cdn": self.httpClint.cdn,
                                                 }
                                             elif ticket_info[3][0] in ["T", "Z", "K"] and set_type in ["硬卧", "硬座", "无座", "软座", "软卧"]:
                                                 return {
@@ -176,6 +177,7 @@ class query:
                                                     "seat": [set_type],
                                                     "train_no": ticket_info[2],
                                                     "status": True,
+                                                    "cdn": self.httpClint.cdn,
                                                 }
                 else:
                     print(u"车次配置信息有误，或者返回数据异常，请检查 {}".format(station_ticket))

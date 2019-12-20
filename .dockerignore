@@ -5,5 +5,10 @@
 **/*~
 **/.DS_Store
 **/Thumbs.db
+*.png
 .idea/
 .git/
+.github/
+*.md
+UnitTest/
+uml/

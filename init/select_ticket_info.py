@@ -38,7 +38,7 @@ class select:
         self.get_ticket_info()
         self._station_seat = [seat_conf[x] for x in TickerConfig.SET_TYPE]
         self.auto_code_type = TickerConfig.AUTO_CODE_TYPE
-        self.httpClint = HTTPClient(TickerConfig.IS_PROXY)
+        self.httpClint = HTTPClient(TickerConfig.IS_PROXY, self.cdn_list)
         self.httpClint.cdn = self.cdn_list[random.randint(0, 4)]
         self.urls = urlConf.urls
         self.login = GoLogin(self, TickerConfig.IS_AUTO_CODE, self.auto_code_type)

@@ -1,14 +1,28 @@
 version: "3"
 
 services:
+    #抢票服务
     ticket:
-        image: 12306_ticket 
-        build: .
-        # ports:
-        volumes:
-            - ./:/usr/src/app
-              # - /etc/localtime:/etc/localtime:ro
-        container_name: 12306ticket
-        privileged: true
-
+        build:
+            context: .
+            dockerfile: ./Dockerfile37
+        image: ticket:v1.2.004
+        container_name: ticket
+        depends_on:
+            - captcha
+        networks:
+            - 12306network
+        restart: on-failure
+    #打码服务器
+    captcha:
+        image: yinaoxiong/12306_code_server:amd64 #请根据需要修改image
+        environment:
+            - WORKERS=1 #gunicorn works 默认为1可以根据服务器配置自行调整
+        container_name: captcha
+        networks:
+            - 12306network
+        restart: unless-stopped
+networks:
+    12306network:
+        driver: bridge
 

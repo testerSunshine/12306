@@ -24,24 +24,27 @@ def _set_header_default():
 
 
 def _set_user_agent():
-    try:
-        user_agent = UserAgent(verify_ssl=False).random
-        return user_agent
-    except:
-        print("请求头设置失败，使用默认请求头")
-        return 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.' + str(
-            random.randint(5000, 7000)) + '.0 Safari/537.36'
+    # try:
+    #     user_agent = UserAgent(verify_ssl=False).random
+    #     return user_agent
+    # except:
+    #     print("请求头设置失败，使用默认请求头")
+    #     return 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.' + str(
+    #         random.randint(5000, 7000)) + '.0 Safari/537.36'
+    return "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
 
 
 class HTTPClient(object):
 
-    def __init__(self, is_proxy):
+    def __init__(self, is_proxy, cdnList=None):
         """
+        cdnList试试切换不包括查询的cdn，防止查询cdn污染登陆和下单cdn
         :param method:
         :param headers: Must be a dict. Such as headers={'Content_Type':'text/html'}
         """
         self.initS()
         self._cdn = None
+        self.cdnList = cdnList
         self._proxies = None
         if is_proxy is 1:
             self.proxy = proxy()
@@ -185,8 +188,12 @@ class HTTPClient(object):
                                                                                            bytes) else response.content
                     else:
                         print(f"url: {urls['req_url']}返回参数为空, 接口状态码: {response.status_code}")
+
                         logger.log(
                             u"url: {} 返回参数为空".format(urls["req_url"]))
+                        if self.cdnList:
+                            # 如果下单或者登陆出现cdn 302的情况，立马切换cdn
+                            url_host = self.cdnList.pop(random.randint(0, 4))
                         continue
                 else:
                     sleep(urls["re_time"])

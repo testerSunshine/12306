@@ -9,7 +9,6 @@ echo 'deb http://mirrors.163.com/debian-security/ jessie/updates main non-free c
 
 RUN apt-get -y update
 
-ADD . /usr/src/app
 WORKDIR /usr/src/app
 
 RUN wget -c https://dl.lancdn.com/landian/soft/chrome/m/77.0.3865.120_amd64.deb  && \
@@ -28,10 +27,13 @@ unzip chromedriver_linux64.zip
 ENV DEBIAN_FRONTEND noninteractive
 ENV TZ Asia/Shanghai
 
+COPY requirements.txt /usr/src/app/
 
 ## install python requirements
 RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pyspider --no-cache-dir -r requirements.txt
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+COPY . /usr/src/app
 
 ## install ntpdate, not accept but saving code
 #RUN echo 'deb http://mirrors.163.com/debian/ jessie main non-free contrib \
@@ -43,5 +45,5 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 #EXPOSE 5010
 
-CMD [ "python", "run.py" ]
+CMD [ "python", "run.py", "r" ]
 #ENTRYPOINT [ "python", "run.py" ]

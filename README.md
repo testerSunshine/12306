@@ -62,15 +62,16 @@
         positional arguments:
           operate     r: 运行抢票程序, c: 过滤cdn, t: 测试邮箱和server酱，server酱
         ```
-  - 如果你的服务器安装了docker与docker-compose, 那么就可以通过`docker-compose`进行启动,`docker.sh`脚本对此进行了封装，可以通过如下命令进行启动
-      - 1、`sudo ./docker.sh run` #创建一个镜像并启动容器，如果镜像已经创建过了会直接启动容器。
-      - 2、`sudo ./docker.sh restart` #修改配置文件后，通过此名命令可重新加载容器运行
-      - 3、`sudo ./docker.sh rm` #删除容器
-      - 4、`sudo ./docker.sh drun` #后台运行容器
-      - 5、`sudo ./docker.sh logs` #在后台运行时，通过此命令查看运行的内容
-      - 注: 针对没有docker环境的同学提供了docker安装脚本(**<font color="red">centos7</font>**)
-            - `sudo ./docker_install_centos.sh`
-      - ~~注: 若只有docker没有docker-compose. 可通过`pip install docker-compose`进行下载~~
+  - 如果你的服务器安装了docker与docker-compose, 那么你可以忽略上面的所有步骤，直接按以下步骤操作，即可开始抢票：
+      - 前提条件:
+          - 请确认你安装的docker版本为18.09及以上: `docker -v`
+          - 请确认你安装的docker-compose版本为1.23.2及以上: `docker-compose -v`
+          - 请根据自己需要修改好配置文件:`TickerConfig.py`
+          - 请修改配置文件`TickerConfig.py`中的变量`AUTO_CODE_TYPE`和`HOST`，`AUTO_CODE_TYPE`改为`3`, HOST改为`"captcha:80"`（这里很重要，这是本地打码服务器的配置）
+      - 运行命令:
+          - 开始抢票：`docker-compose up --build -d`
+          - 停止抢票：`docker-compose down`
+          - 查看抢票log: `docker logs --follow ticket`
 
 #### 目录对应说明
   - agency - cdn代理

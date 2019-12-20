@@ -7,6 +7,8 @@ services:
             context: .
             dockerfile: ./Dockerfile37
         image: ticket:v1.2.004
+        environment:
+            - PYTHONUNBUFFERED=1
         container_name: ticket
         depends_on:
             - captcha

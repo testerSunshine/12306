@@ -44,6 +44,7 @@ class HTTPClient(object):
         self._cdn = None
         self._proxies = None
         self.is_proxy = is_proxy
+        self.count = 0
         if is_proxy is 1:
             self.proxy = proxy()
             self._proxies = self.proxy.setProxy()
@@ -183,6 +184,7 @@ class HTTPClient(object):
                     if urls.get("not_decode", False):
                         return response.content
                     if response.content:
+                        self.count = 0
                         if is_logger:
                             logger.log(
                                 u"出参：{0}".format(response.content.decode()))
@@ -196,15 +198,21 @@ class HTTPClient(object):
                         print(f"url: {urls['req_url']}返回参数为空, 接口状态码: {response.status_code}")
                         logger.log(
                             u"url: {} 返回参数为空".format(urls["req_url"]))
+                        self.count = self.count + 1
                         continue
                 else:
+                    self.count = self.count + 1
                     sleep(urls["re_time"])
             except (requests.exceptions.Timeout, requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
+                self.count = self.count + 1
                 pass
             except socket.error:
+                self.count = self.count + 1
                 pass
         # return error_data
         if self.is_proxy is not 2:
             return error_data
-        self.changeProxy()
+        if self.count >= 20:
+            self.count = 0
+            self.changeProxy()
         return self.send(urls, data)

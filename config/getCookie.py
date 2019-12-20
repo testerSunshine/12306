@@ -22,7 +22,6 @@ def getDrvicesID(session):
             options.binary_location = TickerConfig.CHROME_CHROME_PATH
             options.add_argument("--no-sandbox")
             options.add_argument("--headless")
-        options.add_argument("–-incognito")
         driver = webdriver.Chrome(executable_path=TickerConfig.CHROME_PATH,chrome_options=options)
         driver.get("https://www.12306.cn/index/index.html")
         time.sleep(10)

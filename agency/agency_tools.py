@@ -45,10 +45,11 @@ class proxy:
 
     def test_proxy(self):
         head = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36',
-            'Connection': 'keep-alive'}
+            'Connection': 'keep-alive',
+            "Referer": "https://kyfw.12306.cn/otn/resources/login.html",
+            "Host": "kyfw.12306.cn",}
         try:
-            requests.get("http://icanhazip.com", proxies=self.current, timeout=1, headers=head)
+            requests.get("https://kyfw.12306.cn/otn/leftTicket/init", proxies=self.current, timeout=2, headers=head)
             return True
         except (requests.exceptions.Timeout, requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
             # print ("代理链接超时，去除此IP：{0}".format(self.current['http']))

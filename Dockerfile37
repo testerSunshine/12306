@@ -45,5 +45,5 @@ COPY . /usr/src/app
 
 #EXPOSE 5010
 
-CMD [ "python", "run.py", "r" ]
+CMD [ "sh", "-c", "python run.py c && python run.py r" ]
 #ENTRYPOINT [ "python", "run.py" ]

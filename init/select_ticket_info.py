@@ -137,7 +137,7 @@ class select:
             sleep_time_s = 0.1
             sleep_time_t = 0.3
             # 测试了一下有微妙级的误差，应该不影响，测试结果：2019-01-02 22:30:00.004555，预售还是会受到前一次刷新的时间影响，暂时没想到好的解决方案
-            while now.strftime("%H:%M:%S") < TickerConfig.OPEN_TIME:
+            while now.strftime("%d:%H:%M:%S") < TickerConfig.OPEN_TIME:
                 now = datetime.datetime.now()
                 time.sleep(0.0001)
             print(f"预售开始，开启时间为: {now.strftime('%H:%M:%S')}")

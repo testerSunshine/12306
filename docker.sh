@@ -17,7 +17,7 @@ if [ $# -eq 1 ];then
 
 	case $1 in 
 		"run")
-			docker-compose up;;
+			docker-compose up --build;;
 
 		"restart")
 			docker-compose up --no-recreate;;

@@ -2,6 +2,7 @@
 import copy
 import random
 import wrapcache
+import datetime
 from config import urlConf
 from config.TicketEnmu import ticket
 from myUrllib.httpUtils import HTTPClient
@@ -15,7 +16,7 @@ class query:
     """
 
     def __init__(self, selectObj, from_station, to_station, from_station_h, to_station_h, _station_seat, station_trains,
-                 ticke_peoples_num, station_dates=None, ):
+                 ticke_peoples_num, start_time, end_time, station_dates=None):
         self.session = selectObj
         self.httpClint = HTTPClient(TickerConfig.IS_PROXY)
         self.httpClint.set_cookies(self.session.cookies)
@@ -29,6 +30,8 @@ class query:
         self.station_dates = station_dates if isinstance(station_dates, list) else list(station_dates)
         self.ticket_black_list = dict()
         self.ticke_peoples_num = ticke_peoples_num
+        self.start_time = datetime.datetime.strptime(start_time, '%H:%M')
+        self.end_time = datetime.datetime.strptime(end_time, '%H:%M')
 
     def station_seat(self, index):
         """
@@ -49,14 +52,15 @@ class query:
 
     def check_is_need_train(self, ticket_info):
         """
-        判断车次是否为想要的车次，如果ticket_info为空，那么就不校验车次，直接返回True
+        判断车次是否为想要的车次，如果,如果station_trains为空，那么就验证开始结束时间
         :param ticket_info:
         :return:
         """
+        ticket_time = datetime.datetime.strptime(ticket_info[8], '%H:%M')
         if self.station_dates and self.station_trains:
             return ticket_info[3] in self.station_trains
         else:
-            return True
+            return self.start_time <= ticket_time and ticket_time <= self.end_time
 
     def sendQuery(self):
         """

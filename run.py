@@ -1,6 +1,7 @@
 # -*- coding=utf-8 -*-
 import argparse
 import sys
+import asyncio
 
 
 def parser_arguments(argv):
@@ -27,5 +28,5 @@ if __name__ == '__main__':
         sendServerChan("订票小助手测试一下")
     elif args.operate == "c":
         from agency.cdn_utils import filterCdn
-        filterCdn()
+        asyncio.run(filterCdn())
 

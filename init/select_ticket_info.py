@@ -8,7 +8,7 @@ import threading
 import time
 import TickerConfig
 import wrapcache
-from agency.cdn_utils import CDNProxy, open_cdn_file
+from agency.cdn_utils import open_cdn_file
 from config import urlConf, configCommon
 from config.TicketEnmu import ticket
 from config.configCommon import seat_conf_2, seat_conf

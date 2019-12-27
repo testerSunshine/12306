@@ -68,10 +68,13 @@
           - 请确认你安装的docker-compose版本为1.23.2及以上: `docker-compose -v`
           - 请根据自己需要修改好配置文件:`TickerConfig.py`
           - 请修改配置文件`TickerConfig.py`中的变量`AUTO_CODE_TYPE`和`HOST`，`AUTO_CODE_TYPE`改为`3`, HOST改为`"captcha:80"`（这里很重要，这是本地打码服务器的配置）
+      - 阿里云镜像加速构建:（可选）
+          - 请修改`docker-compose.yml`第8行`Dockerfile37`为`Dockerfile_topspeed`此文件中镜像加速地址有北京、上海、深圳，自选
       - 运行命令:
           - 开始抢票：`docker-compose up --build -d`
           - 停止抢票：`docker-compose down`
           - 查看抢票log: `docker logs --follow ticket`
+      
 
 #### 目录对应说明
   - agency - cdn代理

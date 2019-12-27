@@ -48,4 +48,4 @@ RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --no-cache-dir -r re
 
 COPY . .
 
-CMD [ "sh", "-c", "python run.py c && python run.py r" ]
+

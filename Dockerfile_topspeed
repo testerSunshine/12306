@@ -1,0 +1,6 @@
+#北京
+FROM registry.cn-beijing.aliyuncs.com/zhangerling/12306_docker_accelerate:last
+#上海
+#FROM registry.cn-shanghai.aliyuncs.com/zhangerling/12306_docker_accelerate:last
+#深圳
+#FROM registry.cn-shenzhen.aliyuncs.com/zhangerling/12306_docker_accelerate:last

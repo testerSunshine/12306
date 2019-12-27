@@ -9,6 +9,7 @@ services:
         image: ticket:v1.2.004
         environment:
             - PYTHONUNBUFFERED=1
+            - CAPTCHALOCAL=1
         container_name: ticket
         depends_on:
             - captcha
@@ -20,6 +21,7 @@ services:
         image: yinaoxiong/12306_code_server:amd64 #请根据需要修改image
         environment:
             - WORKERS=1 #gunicorn works 默认为1可以根据服务器配置自行调整
+            - PYTHONUNBUFFERED=1
         container_name: captcha
         networks:
             - 12306network

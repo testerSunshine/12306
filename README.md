@@ -62,7 +62,7 @@
         positional arguments:
           operate     r: 运行抢票程序, c: 过滤cdn, t: 测试邮箱和server酱，server酱
         ```
-  - 如果你的服务器安装了docker与docker-compose, 那么你可以忽略上面的所有步骤，直接按以下步骤操作，即可开始抢票：
+  - 如果你的服务器安装了docker与docker-compose, 那么你可以忽略上面的**所有**步骤，直接按以下步骤操作，即可开始抢票：
       - 前提条件:
           - 请确认你安装的docker版本为18.09及以上: `docker -v`
           - 请确认你安装的docker-compose版本为1.23.2及以上: `docker-compose -v`

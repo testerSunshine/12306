@@ -12,3 +12,4 @@
 *.md
 UnitTest/
 uml/
+*.h5

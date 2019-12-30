@@ -29,7 +29,7 @@ def calculate_rtt_blocking(cdn):
 
 
 async def calculate_all_rtt_async(cdns, loop, executor):
-    done, pending = await asyncio.wait(fs=[loop.run_in_executor(executor, calculate_rtt_blocking, cdn) for cdn in cdns],
+    done, _ = await asyncio.wait(fs=[loop.run_in_executor(executor, calculate_rtt_blocking, cdn) for cdn in cdns],
                                        return_when=asyncio.ALL_COMPLETED)
     cdn_list = [task.result() for task in done if task.exception() is None and task.result() is not None]
     return cdn_list

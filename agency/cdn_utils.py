@@ -1,22 +1,13 @@
 # encoding=utf8
-import datetime
 import operator
 import os
 import asyncio
-import functools
+from concurrent.futures import ThreadPoolExecutor
 from config.urlConf import urls
 
 from myUrllib.httpUtils import HTTPClient
 
 finish_count = 0
-
-def run_in_executor(f):
-    @functools.wraps(f)
-    def inner(*args, **kwargs):
-        loop = asyncio.get_running_loop()
-        return loop.run_in_executor(None, lambda: f(*args, **kwargs))
-
-    return inner
 
 
 def calculate_rtt_blocking(cdn):
@@ -24,18 +15,24 @@ def calculate_rtt_blocking(cdn):
     http = HTTPClient(0)
     url = urls["loginInitCdn"]
     http._cdn = cdn
-    print(f"测试cdn: {cdn}")
-    start_time = datetime.datetime.now()
-    rep = http.send(url)
-    rtt = (datetime.datetime.now() - start_time).microseconds / 1000
+    rtt_dict = {"rtt": 9999}
+    http.send(url, elapsed=rtt_dict)
+    rtt = rtt_dict["rtt"]
     finish_count += 1
-    print(f"测试完成个数: {finish_count}")
-    return {"ip": cdn, "time": rtt} if rep else None
+    # 过滤逻辑为当前cdn响应值小于1000毫秒
+    if rtt < 2000:
+        print(f"ip:{cdn}，延迟:{rtt}，已测试个数: {finish_count}")
+        return {"ip": cdn, "time": rtt}
+    else:
+        print(f"ip:{cdn}，延迟:N/A，已测试个数: {finish_count}")
+        return None
 
 
-@run_in_executor
-def calculate_rtt_async(cdn):
-    return calculate_rtt_blocking(cdn)
+async def calculate_all_rtt_async(cdns, loop, executor):
+    done, pending = await asyncio.wait(fs=[loop.run_in_executor(executor, calculate_rtt_blocking, cdn) for cdn in cdns],
+                                       return_when=asyncio.ALL_COMPLETED)
+    cdn_list = [task.result() for task in done if task.exception() is None and task.result() is not None]
+    return cdn_list
 
 
 def open_cdn_file(cdnFile):
@@ -68,7 +65,7 @@ def sortCdn(cdn_list):
     return ips
 
 
-async def filterCdn():
+def filterCdn():
     """
     过滤cdn, 过滤逻辑为当前cdn响应值小于1000毫秒
     过滤日志:
@@ -76,10 +73,8 @@ async def filterCdn():
     :return:
     """
     cdns = open_cdn_file("cdn_list")
-    cdn_tasks = [calculate_rtt_async(cdn) for cdn in cdns]
-    done, pending = await asyncio.wait(fs=cdn_tasks, return_when=asyncio.ALL_COMPLETED)
-    cdn_list = [task.result() for task in done if task.exception() is None and task.result() is not None]
-
+    loop = asyncio.get_event_loop()
+    cdn_list = loop.run_until_complete(calculate_all_rtt_async(cdns, loop, ThreadPoolExecutor()))
     print(f"当前有效cdn个数为: {len(cdn_list)}")
     if cdn_list:
         ips = sortCdn(cdn_list)

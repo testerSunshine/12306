@@ -9,6 +9,7 @@ from fake_useragent import UserAgent
 import TickerConfig
 from agency.agency_tools import proxy
 from config import logger
+from config.StatusCode import StatusCode
 
 
 def _set_header_default():
@@ -132,7 +133,8 @@ class HTTPClient(object):
         s_time = urls.get("s_time", 0)
         is_cdn = urls.get("is_cdn", False)
         is_test_cdn = urls.get("is_test_cdn", False)
-        error_data = {"code": 99999, "message": u"重试次数达到上限"}
+        retry_error = StatusCode.RetryTimeHasReachedMaxValue
+        error_data = {"code": retry_error.value, "message": retry_error.description}
         if data:
             method = "post"
             self.setHeaders({"Content-Length": "{0}".format(len(data))})
@@ -195,7 +197,12 @@ class HTTPClient(object):
                             u"url: {} 返回参数为空".format(urls["req_url"]))
                         if self.cdnList:
                             # 如果下单或者登陆出现cdn 302的情况，立马切换cdn
-                            url_host = self.cdnList.pop(random.randint(0, 4))
+                            if len(self.cdnList) >= 5:
+                                url_host = self.cdnList.pop(random.randint(0, 4))
+                            else:
+                                cdn_empty_error = StatusCode.CdnListEmpty
+                                print(f"出错:{cdn_empty_error.description}")
+                                return {"code": cdn_empty_error.value, "message": cdn_empty_error.description}
                         continue
                 else:
                     sleep(urls["re_time"])

@@ -13,6 +13,7 @@ from config import urlConf, configCommon
 from config.TicketEnmu import ticket
 from config.configCommon import seat_conf_2, seat_conf
 from config.getCookie import getDrvicesID
+from config.StatusCode import StatusCode
 from init.login import GoLogin
 from inter.AutoSubmitOrderRequest import autoSubmitOrderRequest
 from inter.ChechFace import chechFace
@@ -116,6 +117,9 @@ class select:
             configCommon.checkSleepTime(self)  # 防止网上启动晚上到点休眠
             self.login.go_login()
 
+    def read_cdn_list(self):
+        self.cdn_list = open_cdn_file("filter_cdn_list")
+
     def main(self):
         l = liftTicketInit(self)
         l.reqLiftTicketInit()
@@ -161,6 +165,17 @@ class select:
                           ticke_peoples_num=len(TickerConfig.TICKET_PEOPLES),
                           )
                 queryResult = q.sendQuery()
+
+                # 检查结果状态
+                status_value = queryResult.get("code", StatusCode.OK.value)
+                if status_value != StatusCode.OK.value:
+                    # 状态出错
+                    if status_value == StatusCode.CdnListEmpty.value:
+                        from agency.cdn_utils import filterCdn
+                        filterCdn()
+                        self.read_cdn_list()
+                    continue
+
                 # 查询接口
                 if queryResult.get("status"):
                     train_no = queryResult.get("train_no", "")

@@ -6,8 +6,6 @@ class ticket(object):
     QUERY_C = u"查询到有余票，尝试提交订单"
     QUERY_IN_BLACK_LIST = u"该车次{} 正在被关小黑屋，跳过此车次"
 
-    SUCCESS_CODE = 000000
-    FAIL_CODE = 999999
     AUTO_SUBMIT_ORDER_REQUEST_C = u"提交订单成功"
     AUTO_SUBMIT_ORDER_REQUEST_F = u"提交订单失败，重新刷票中"
     AUTO_SUBMIT_NEED_CODE = u"需要验证码"

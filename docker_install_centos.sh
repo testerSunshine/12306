@@ -14,6 +14,17 @@ function checkSudo (){
 
 checkSudo
 
+# rm old or flawed  installation first
+yum remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine
+
+
 ## something required system utils
 yum install -y yum-utils device-mapper-persistent-data lvm2
 

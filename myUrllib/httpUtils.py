@@ -181,8 +181,12 @@ class HTTPClient(object):
                             logger.log(
                                 u"出参：{0}".format(response.content.decode()))
                         if urls["is_json"]:
-                            return json.loads(
-                                response.content.decode() if isinstance(response.content, bytes) else response.content)
+                            try:
+                                result = json.loads(
+                                    response.content.decode() if isinstance(response.content, bytes) else response.content)
+                            except:
+                                continue
+                            return result
                         else:
                             return response.content.decode("utf8", "ignore") if isinstance(response.content,
                                                                                            bytes) else response.content

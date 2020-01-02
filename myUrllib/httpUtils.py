@@ -185,7 +185,7 @@ class HTTPClient(object):
                                 result = json.loads(
                                     response.content.decode() if isinstance(response.content, bytes) else response.content)
                             except:
-                                continue
+                                result = response.content.decode("utf8", "ignore") if isinstance(response.content,bytes) else response.content
                             return result
                         else:
                             return response.content.decode("utf8", "ignore") if isinstance(response.content,

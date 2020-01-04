@@ -6,7 +6,7 @@ import os
 import numpy as np
 def newfeaure():
     print("new feature")
-    return 0
+    return 1
 def parser_arguments(argv):
     """
     不应该在这里定义，先放在这里

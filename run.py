@@ -3,7 +3,7 @@ import argparse
 import sys
 import os
 
-import numpy as npp
+import numpy as np
 
 def parser_arguments(argv):
     """

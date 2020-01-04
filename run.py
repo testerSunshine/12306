@@ -6,7 +6,7 @@ import os
 import numpy as np
 def newfeaure():
     print("new feature")
-    return 2
+    return 3
 
 def parser_arguments(argv):
     """

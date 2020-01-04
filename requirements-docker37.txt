@@ -1,0 +1,7 @@
+bs4==0.0.1
+requests==2.18.4
+Pillow
+wrapcache==1.0.8
+ntplib==0.3.3
+selenium==3.11.0
+fake-useragent==0.1.11

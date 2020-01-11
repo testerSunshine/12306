@@ -21,6 +21,7 @@ from inter.GetPassengerDTOs import getPassengerDTOs
 from inter.LiftTicketInit import liftTicketInit
 from inter.Query import query
 from inter.SubmitOrderRequest import submitOrderRequest
+from inter.SimulateOrderRequest import SimulateOrderRequest
 from myException.PassengerUserException import PassengerUserException
 from myException.UserPasswordException import UserPasswordException
 from myException.ticketConfigException import ticketConfigException
@@ -211,6 +212,26 @@ class select:
                                                          self.passengerTicketStrList, self.oldPassengerStr, train_date,
                                                          TickerConfig.TICKET_PEOPLES)
                                 sor.sendSubmitOrderRequest()
+                            elif TickerConfig.ORDER_TYPE == 3: # selenium模拟下单
+                                sele = SimulateOrderRequest(selectObj=self,
+                                from_station=from_station,
+                                to_station=to_station,
+                                from_station_h=TickerConfig.FROM_STATION,
+                                to_station_h=TickerConfig.TO_STATION,
+                                _station_seat=self._station_seat,
+                                station_trains=TickerConfig.STATION_TRAINS,
+                                station_dates=TickerConfig.STATION_DATES,
+                                ticke_peoples_num=len(TickerConfig.TICKET_PEOPLES),
+                                train_no = train_no,
+                                secretStr = secretStr,
+                                set_type = self.set_type,
+                                train_date=train_date,
+                                passengerTicketStr=self.passengerTicketStrList,
+                                oldPassengerStr=self.oldPassengerStr,
+                                start_time = queryResult.get("start_time"),
+                                )
+                                sele.Do_simulate()
+
                         elif secretList:  # 候补订单
                             c = chechFace(self, secretList, train_no)
                             c.sendChechFace()

@@ -150,6 +150,7 @@ class query:
                                                 "is_more_ticket_num": is_more_ticket_num,
                                                 "cdn": self.httpClint.cdn,
                                                 "status": True,
+                                                "start_time":start_time
                                             }
                                 elif is_ticket_pass == '无' and ticket_info[37] == "1" and TickerConfig.TICKET_TYPE is 2:
                                     """

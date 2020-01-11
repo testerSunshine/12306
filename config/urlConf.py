@@ -429,6 +429,19 @@ urls = {
         "is_cdn": True,
         "is_json": True,
     },
+    "leftTicketPage":{   #车票查询页面
+        "req_url": "otn/leftTicket/init?linktypeid=dc&fs={0}&ts={1}&date={2}&flag=N,N,Y",
+        "req_type":"get",
+        "Referer":"",
+        "Content-Type": 1,
+        "Host": "kyfw.12306.cn",
+        "re_try": 10,
+        "re_time": 0.01,
+        "s_time": 0.1,
+        "is_logger": False,
+        "is_cdn": True,
+        "is_json": False
+    },
     "Pushbear": {  # push通知
         "req_url": "/sub",
         "req_type": "post",

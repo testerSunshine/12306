@@ -1,0 +1,2 @@
+class ReLoginException(Exception):
+    pass

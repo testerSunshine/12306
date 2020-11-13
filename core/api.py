@@ -2,7 +2,8 @@
 # @Author: Admin
 # @Date:   2020-09-12 15:49:35
 # @Last Modified by:   Jingyuexing
-# @Last Modified time: 2020-11-14 02:05:48
+# @Last Modified time: 2020-11-14 03:04:23
+import json
 
 HEAD = {
     "Accept": "*/*",
@@ -18,14 +19,91 @@ HEAD = {
     "X-Requested-With": "XMLHttpRequest"
 }
 
+API = None
+
+
+with open("data/API.json", "r") as file:
+    API = json.load(file)
+    file.close()
+
 
 def request(url="", method="get", param={}, head=HEAD):
     import urllib3
-    import json
     http = urllib3.PoolManager()
     req = http.request(method=method, url=url, fields=param, headers=head)
     if (req.status == 200):
         return json.loads(req.data.decode("utf-8"), encoding='utf-8')
+
+
+def getPrice(config):
+    """查询列车的车票价格
+    ```py
+    getPrice(
+    {
+        "id": "",  //列车的ID
+        "startID":"", //起始站ID
+        "endID":"", //到达站ID
+        "date":"", //日期
+        "type":"" //座位的类别 是软卧还是硬座
+    }
+    )
+    ```
+    Arguments:
+        config {dict} -- 需要的参数
+
+    Returns:
+        {JSON} -- 从服务器响应的数据
+    """
+    url = API[1]['url']
+    trainID = config['id']
+    start = config['startID']
+    end = config['endID']
+    date = config['date']
+    seat = config['type']
+    return request(url=url, param={
+        "train_no": trainID,
+        "from_station_no": start,
+        "to_station_no": end,
+        "seat_types": seat,
+        "train_date": date
+    })
+
+
+def getSchedules(config):
+    """查询列车过站信息
+
+    [description]
+
+    Arguments:
+        config {[type]} -- [description]
+
+    Returns:
+        [type] -- [description]
+    """
+    url = API[2]['url']
+    start = config['start']  # 起始站
+    end = config['end']  # 到达站
+    date = config['date']   # 出行日期
+    trainID = config['id']  # 列车id 例如  58000G16090B
+    return request(url=url, param={
+        "train_no": trainID,
+        "from_station_telecode": start,
+        "to_station_telecode": end,
+        "depart_date": date
+    })
+
+
+def getTrain(config, type="ADULT"):
+    url = API[0]['url']
+    start = config['start']  # 出发站
+    end = config['end']  # 到达站
+    date = config['date']  # 出发日期
+    return request(url=url, param={
+        "leftTicketDTO.train_date": date,
+        "leftTicketDTO.from_station": start,
+        "leftTicketDTO.to_station": end,
+        "purpose_codes": type  # 默认为成人
+    })
 
 
 def parserResult(data):

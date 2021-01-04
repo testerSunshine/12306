@@ -1,6 +1,6 @@
 beautifulsoup4==4.5.3
 bs4==0.0.1
-requests==2.18.4
+requests==2.20.0
 Pillow
 wrapcache==1.0.8
 ntplib==0.3.3

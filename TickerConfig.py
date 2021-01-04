@@ -9,7 +9,7 @@ TICKET_TYPE = 1
 
 # 出发日期(list) "2018-01-06", "2018-01-07"
 STATION_DATES = [
-    "2020-01-18"
+    "2020-02-09"
 ]
 
 # 填入需要购买的车次(list)，"G1353"
@@ -18,10 +18,10 @@ STATION_DATES = [
 STATION_TRAINS = []
 
 # 出发城市，比如深圳北，就填深圳就搜得到
-FROM_STATION = "广州南"
+FROM_STATION = "海口"
 
 # 到达城市 比如深圳北，就填深圳就搜得到
-TO_STATION = "隆回"
+TO_STATION = "三亚"
 
 # 座位(list) 多个座位ex:
 # "商务座",
@@ -33,7 +33,7 @@ TO_STATION = "隆回"
 # "硬座",
 # "无座",
 # "动卧",
-SET_TYPE = ["二等座"]
+SET_TYPE = ["二等座","软卧","硬卧"]
 
 # 当余票小于乘车人，如果选择优先提交，则删减联系人和余票数一致在提交
 # bool
@@ -56,7 +56,7 @@ IS_AUTO_CODE = True
 
 # 设置2本地自动打码，需要配置tensorflow和keras库，3为云打码，由于云打码服务器资源有限(为2h4C的cpu服务器)，请不要恶意请求，不然只能关闭服务器
 # ps: 请不要一直依赖云服务器资源，在此向所有提供服务器同学表示感谢
-AUTO_CODE_TYPE = 3
+AUTO_CODE_TYPE = 2
 
 # 此处设置云打码服务器地址，如果有自建的服务器，可以自行更改
 HOST = "120.77.154.140:8000"
@@ -80,12 +80,12 @@ HTTP_TYPE = "http"
 #  password: "授权码"
 #  host: "smtp.qq.com"
 EMAIL_CONF = {
-    "IS_MAIL": True,
+    "IS_MAIL": False,
     "email": "",
     "notice_email_list": "",
     "username": "",
     "password": "",
-    "host": "smtp.qq.com",
+    "host": "",
 }
 
 # 是否开启 server酱 微信提醒， 使用前需要前往 http://sc.ftqq.com/3.version 扫码绑定获取 SECRET 并关注获得抢票结果通知的公众号
@@ -97,12 +97,17 @@ SERVER_CHAN_CONF = {
 # 是否开启cdn查询，可以更快的检测票票 1为开启，2为关闭
 IS_CDN = 1
 
-# 下单接口分为两种，1 模拟网页自动捡漏下单（不稳定），2 模拟车次后面的购票按钮下单（稳如老狗）
-ORDER_TYPE = 2
+# 下单接口分为两种，1 模拟网页自动捡漏下单（不稳定），2 模拟车次后面的购票按钮下单（稳如老狗）,3 pyppeteer模拟下单(可以模拟鼠标拖动滑块，但速度较慢,且不稳定)
+ORDER_TYPE = 3
+
+# 如果采用pyppeteer下单，可以选择浏览器在前台显示(Flase) 或后台运行(True)，前台运行的话，如果有啥BUG可以手动操作，后台显示尚未测试
+IS_HEADLESS = False
+
+
 
 # 下单模式 1 为预售，整点刷新，刷新间隔0.1-0.5S, 然后会校验时间，比如12点的预售，那脚本就会在12.00整检票，刷新订单
 #         2 是捡漏，捡漏的刷新间隔时间为0.5-3秒，时间间隔长，不容易封ip
-ORDER_MODEL = 1
+ORDER_MODEL = 2
 
 # 是否开启代理, 0代表关闭， 1表示开始
 # 开启此功能的时候请确保代理ip是否可用，在测试放里面经过充分的测试，再开启此功能，不然可能会耽误你购票的宝贵时间
@@ -117,19 +122,17 @@ OPEN_TIME = "12:59:57"
 # 1=使用selenium获取devicesID
 # 2=使用网页端/otn/HttpZF/logdevice获取devicesId，这个接口的算法目前可能有点问题，如果登录一直302的请改为配置1
 # 3=自己打开浏览器在headers-Cookies中抓取RAIL_DEVICEID和RAIL_EXPIRATION，这个就不用配置selenium
-COOKIE_TYPE = 3
+COOKIE_TYPE = 1
 # 如果COOKIE_TYPE=1，则需配置chromeDriver路径,下载地址http://chromedriver.storage.googleapis.com/index.html
 # chromedriver配置版本只要和chrome的大版本匹配就行
-CHROME_PATH = "/usr/src/app/chromedriver"
+CHROME_PATH = "/home/homura/12306/12306dev/12306/chromedriver"
 
 # 为了docker37 准备的环境变量，windows环境可以不用管这个参数
 CHROME_CHROME_PATH = "/opt/google/chrome/google-chrome"
 
 # 如果COOKIE_TYPE=3, 则需配置RAIL_EXPIRATION、RAIL_DEVICEID的值
-RAIL_EXPIRATION = ""
-RAIL_DEVICEID = ""
-# RAIL_EXPIRATION = "1577034103293"
-# RAIL_DEVICEID = "CDno29Erc_Pf3FSXb4dzq-Op64EhWrsi5yUZKVIKR1MAfYo2qFlCeXD8VkexY7_1qg-ClV-fE8j9jgVlPZxRh3wVc2iqLe_5A8sdr62qZx4B22JPF8lFCjpgTKZ5ODW90HJd5tiQsJ1KR9nOqHRxHj1FT5LEIwfw"
+RAIL_EXPIRATION = "1577034103293"
+RAIL_DEVICEID = "CDno29Erc_Pf3FSXb4dzq-Op64EhWrsi5yUZKVIKR1MAfYo2qFlCeXD8VkexY7_1qg-ClV-fE8j9jgVlPZxRh3wVc2iqLe_5A8sdr62qZx4B22JPF8lFCjpgTKZ5ODW90HJd5tiQsJ1KR9nOqHRxHj1FT5LEIwfw"
 
 
 # 1=>为一直随机ua,2->只启动的时候随机一次ua
@@ -154,4 +157,4 @@ MAX_TIME = 3
 MIN_TIME = 1
 
 # 软件版本
-RE_VERSION = "1.2.004"
+RE_VERSION = "1.2.005"

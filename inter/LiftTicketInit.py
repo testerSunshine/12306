@@ -15,6 +15,7 @@ class liftTicketInit:
         # 获取初始化的结果
         result = self.session.httpClint.send(urls)
         # 用正则表达式查出CLeftTicketUrl的值
+        #print(result)
         matchObj = re.search('var CLeftTicketUrl = \'(.*)\'', result, re.M|re.I);
         if matchObj:
             # 如果有值，替换queryUrl

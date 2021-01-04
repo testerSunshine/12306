@@ -72,6 +72,11 @@
           - 开始抢票：`docker-compose up --build -d`
           - 停止抢票：`docker-compose down`
           - 查看抢票log: `docker logs --follow ticket`
+  - 关于滑块验证
+    - 下单模式3采用pyppeteer模拟鼠标操作下单，可以过放票时的滑块验证。但目前还不稳定，可能出现进入订单页面时仍需要登陆的情况，原因未知。
+    - 建议将headless设置为False，如果出现问题可以手动操作，特别是在进入订单页面显示需要登陆时，可以手动登陆。
+    - 该功能还在完善中，目前肯定有BUG，请不要过于依赖此功能
+    - **注意：pyppeteer 需要安装hromium (~100MB).脚本会在第一次运行时自动安装，你也可以在跑脚本之前执行pyppeteer-install进行安装**
 
 #### 目录对应说明
   - agency - cdn代理

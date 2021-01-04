@@ -73,6 +73,9 @@ class HTTPClient(object):
         """
         return self._s.cookies.values()
 
+    def get_cookie_all_items(self):
+        return self._s.cookies.items()
+
     def del_cookies(self):
         """
         删除所有的key

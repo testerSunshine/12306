@@ -9,7 +9,6 @@ from inter.ConfirmHB import confirmHB
 from inter.PassengerInitApi import passengerInitApi
 from myException.ticketIsExitsException import ticketIsExitsException
 
-
 def time():
     """
     获取日期
@@ -74,7 +73,7 @@ class submitOrderRequest:
                 print (u'出票失败')
         elif 'messages' in submitResult and submitResult['messages']:
             raise ticketIsExitsException(submitResult['messages'][0])
-
+        
 
 class submitOrderRequestByAfterNate:
     def __init__(self, session, secretList, tickerNo):

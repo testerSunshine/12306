@@ -1,0 +1,17 @@
+[
+    {
+        "link":"https://kyfw.12306.cn/otn/leftTicket/query",
+        "method":"GET",
+        "comment":"查询火车票"
+    },
+    {
+        "link":"https://kyfw.12306.cn/otn/leftTicket/queryTicketPrice",
+        "method":"GET",
+        "comment":"查询车票价格"
+    },
+    {
+        "link":"https://kyfw.12306.cn/otn/czxx/queryByTrainNo",
+        "method":"GET",
+        "comment":"查看列车经过站以及过站时间"
+    }
+]

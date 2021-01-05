@@ -2,6 +2,7 @@
 import json
 
 from config.TicketEnmu import ticket
+from config.StatusCode import StatusCode
 from myException.PassengerUserException import PassengerUserException
 import wrapcache
 import TickerConfig
@@ -116,7 +117,7 @@ class getPassengerDTOs:
             "passengerTicketStrList": set_type + "," + ",".join(passengerTicketStrList),
             "passengerTicketStrByAfterLate": "".join(tickers),
             "oldPassengerStr": "".join(oldPassengerStr),
-            "code": ticket.SUCCESS_CODE,
+            "code": StatusCode.OK.value,
             "set_type": set_type,
             "status": True,
             "user_info": user_info,

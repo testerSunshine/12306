@@ -8,11 +8,12 @@ import threading
 import time
 import TickerConfig
 import wrapcache
-from agency.cdn_utils import CDNProxy, open_cdn_file
+from agency.cdn_utils import open_cdn_file
 from config import urlConf, configCommon
 from config.TicketEnmu import ticket
 from config.configCommon import seat_conf_2, seat_conf
 from config.getCookie import getDrvicesID
+from config.StatusCode import StatusCode
 from init.login import GoLogin
 from inter.AutoSubmitOrderRequest import autoSubmitOrderRequest
 from inter.ChechFace import chechFace
@@ -60,8 +61,8 @@ class select:
         print(u"*" * 50)
         print(f"检查当前版本为: {TickerConfig.RE_VERSION}")
         version = sys.version.split(" ")[0]
-        print(u"检查当前python版本为：{}，目前版本只支持3.6以上".format(version))
-        if version < "3.6.0":
+        print(u"检查当前python版本为：{}，目前版本只支持3.7以上".format(version))
+        if version < "3.7.0":
             raise Exception
         print(u"12306刷票小助手，最后更新于2019.09.18，请勿作为商业用途，交流群号："
               u" 1群：286271084(已满)\n"
@@ -116,6 +117,9 @@ class select:
             configCommon.checkSleepTime(self)  # 防止网上启动晚上到点休眠
             self.login.go_login()
 
+    def read_cdn_list(self):
+        self.cdn_list = open_cdn_file("filter_cdn_list")
+
     def main(self):
         l = liftTicketInit(self)
         l.reqLiftTicketInit()
@@ -161,6 +165,17 @@ class select:
                           ticke_peoples_num=len(TickerConfig.TICKET_PEOPLES),
                           )
                 queryResult = q.sendQuery()
+
+                # 检查结果状态
+                status_value = queryResult.get("code", StatusCode.OK.value)
+                if status_value != StatusCode.OK.value:
+                    # 状态出错
+                    if status_value == StatusCode.CdnListEmpty.value:
+                        from agency.cdn_utils import filterCdn
+                        filterCdn()
+                        self.read_cdn_list()
+                    continue
+
                 # 查询接口
                 if queryResult.get("status"):
                     train_no = queryResult.get("train_no", "")

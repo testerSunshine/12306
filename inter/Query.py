@@ -6,6 +6,7 @@ from config import urlConf
 from config.TicketEnmu import ticket
 from myUrllib.httpUtils import HTTPClient
 from config.configCommon import seat_conf_2
+from config.StatusCode import StatusCode
 import TickerConfig
 
 
@@ -70,6 +71,10 @@ class query:
             select_url["req_url"] = select_url["req_url"].format(station_date, self.from_station, self.to_station,
                                                                  self.session.queryUrl)
             station_ticket = self.httpClint.send(select_url)
+            status_code = station_ticket.get("code", StatusCode.OK.value)
+            if status_code != StatusCode.OK.value:
+                return station_ticket
+
             value = station_ticket.get("data", "")
             if not value:
                 print(u'{0}-{1} 车次坐席查询为空，查询url: https://kyfw.12306.cn{2}, 可以手动查询是否有票'.format(
@@ -146,7 +151,7 @@ class query:
                                                 "seat": seat,
                                                 "leftTicket": leftTicket,
                                                 "train_location": train_location,
-                                                "code": ticket.SUCCESS_CODE,
+                                                "code": StatusCode.OK.value,
                                                 "is_more_ticket_num": is_more_ticket_num,
                                                 "cdn": self.httpClint.cdn,
                                                 "status": True,
@@ -182,7 +187,7 @@ class query:
                 else:
                     print(u"车次配置信息有误，或者返回数据异常，请检查 {}".format(station_ticket))
         self.session.flag = False
-        return {"code": ticket.FAIL_CODE, "status": False, "cdn": self.httpClint.cdn, }
+        return {"code": StatusCode.UnknownError.value, "status": False, "cdn": self.httpClint.cdn, }
 
 
 if __name__ == "__main__":

@@ -1,38 +1,38 @@
 # encoding=utf8
-import datetime
 import operator
 import os
-import requests
-from config import urlConf
-import threading
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 from config.urlConf import urls
 
 from myUrllib.httpUtils import HTTPClient
 
-cdn_list = []
+finish_count = 0
 
 
-class CDNProxy(threading.Thread):
-    def __init__(self, cdns):
-        super().__init__()
-        self.cdns = cdns
-        self.urlConf = urlConf.urls
-        self.httpClint = requests
-        self.city_list = []
-        self.timeout = 5
+def calculate_rtt_blocking(cdn):
+    global finish_count
+    http = HTTPClient(0)
+    url = urls["loginInitCdn"]
+    http._cdn = cdn
+    rtt_dict = {"rtt": 9999}
+    http.send(url, elapsed=rtt_dict)
+    rtt = rtt_dict["rtt"]
+    finish_count += 1
+    # 过滤逻辑为当前cdn响应值小于1000毫秒
+    if rtt < 2000:
+        print(f"ip:{cdn}，延迟:{rtt}，已测试个数: {finish_count}")
+        return {"ip": cdn, "time": rtt}
+    else:
+        print(f"ip:{cdn}，延迟:N/A，已测试个数: {finish_count}")
+        return None
 
-    def run(self):
-        for cdn in self.cdns:
-            http = HTTPClient(0)
-            url = urls["loginInitCdn"]
-            http._cdn = cdn.replace("\n", "")
-            start_time = datetime.datetime.now()
-            rep = http.send(url)
-            retTime = (datetime.datetime.now() - start_time).microseconds / 1000
-            if rep and "message" not in rep and retTime < 3000:
-                if cdn.replace("\n", "") not in cdn_list:  # 如果有重复的cdn，则放弃加入
-                    print(f"加入cdn: {cdn}")
-                    cdn_list.append({"ip": cdn.replace("\n", ""), "time": retTime})
+
+async def calculate_all_rtt_async(cdns, loop, executor):
+    done, _ = await asyncio.wait(fs=[loop.run_in_executor(executor, calculate_rtt_blocking, cdn) for cdn in cdns],
+                                       return_when=asyncio.ALL_COMPLETED)
+    cdn_list = [task.result() for task in done if task.exception() is None and task.result() is not None]
+    return cdn_list
 
 
 def open_cdn_file(cdnFile):
@@ -52,7 +52,7 @@ def open_cdn_file(cdnFile):
             return cdn
 
 
-def sortCdn():
+def sortCdn(cdn_list):
     """
     对cdn进行排序
     :return:
@@ -73,20 +73,11 @@ def filterCdn():
     :return:
     """
     cdns = open_cdn_file("cdn_list")
-    cdnss = [cdns[i:i + 50] for i in range(0, len(cdns), 50)]
-    cdnThread = []
-    for cdn in cdnss:
-        t = CDNProxy(cdn)
-        cdnThread.append(t)
-    for cdn_t in cdnThread:
-        cdn_t.start()
-
-    for cdn_j in cdnThread:
-        cdn_j.join()
-
+    loop = asyncio.get_event_loop()
+    cdn_list = loop.run_until_complete(calculate_all_rtt_async(cdns, loop, ThreadPoolExecutor()))
     print(f"当前有效cdn个数为: {len(cdn_list)}")
     if cdn_list:
-        ips = sortCdn()
+        ips = sortCdn(cdn_list)
         path = os.path.join(os.path.dirname(__file__), f'../filter_cdn_list')
         f = open(path, "a+")
         f.seek(0)

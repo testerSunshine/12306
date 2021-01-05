@@ -22,7 +22,7 @@ def download_image():
     # 抓取验证码
     # 存放到指定path下
     # 文件名为图像的MD5
-    url = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand'
+    url = 'https://kyfw.12306.cn/passport/captcha/captcha-image?login_site=E&module=login&rand=sjrand'
     r = requests.get(url)
     fn = hashlib.md5(r.content).hexdigest()
     with open(f'{PATH}/{fn}.jpg', 'wb') as fp:

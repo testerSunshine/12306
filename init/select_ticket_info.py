@@ -133,14 +133,19 @@ class select:
 
         now = datetime.datetime.now()
         if TickerConfig.ORDER_MODEL is 1:
-            print(f"预售还未开始，阻塞中，预售时间为{TickerConfig.OPEN_TIME}, 当前时间为: {now.strftime('%H:%M:%S')}")
             sleep_time_s = 0.1
             sleep_time_t = 0.3
             # 测试了一下有微妙级的误差，应该不影响，测试结果：2019-01-02 22:30:00.004555，预售还是会受到前一次刷新的时间影响，暂时没想到好的解决方案
-            while now.strftime("%H:%M:%S") < TickerConfig.OPEN_TIME:
+            earliest_departure_date_str = min(TickerConfig.STATION_DATES)
+            earliest_pre_sale_date = datetime.datetime.strptime(earliest_departure_date_str, "%Y-%m-%d") - \
+                                     datetime.timedelta(days=29)
+            earliest_pre_sale_date_str = earliest_pre_sale_date.strftime("%Y-%m-%d")
+            earliest_pre_sale_datetime_str = earliest_pre_sale_date_str + " " + TickerConfig.OPEN_TIME
+            print(f"预售还未开始，阻塞中，最早预售时间为{earliest_pre_sale_datetime_str}, 当前时间为: {now.strftime('%Y-%m-%d %H:%M:%S')}")
+            while now.strftime("%Y-%m-%d %H:%M:%S") < earliest_pre_sale_datetime_str:
                 now = datetime.datetime.now()
                 time.sleep(0.0001)
-            print(f"预售开始，开启时间为: {now.strftime('%H:%M:%S')}")
+            print(f"预售开始，开启时间为: {earliest_pre_sale_datetime_str}")
         else:
             sleep_time_s = TickerConfig.MIN_TIME
             sleep_time_t = TickerConfig.MAX_TIME

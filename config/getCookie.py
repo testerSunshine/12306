@@ -4,6 +4,7 @@ import re
 import time
 import os
 import TickerConfig
+import platform
 from config.urlConf import urls
 
 
@@ -24,7 +25,12 @@ def getDrvicesID(session):
                 '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36')
             options.add_argument("--no-sandbox")
             options.add_argument("--headless")
-        driver = webdriver.Chrome(executable_path=TickerConfig.CHROME_PATH,chrome_options=options)
+        # 解决MAC系统下因上面一段代码报错导致无法运行的问题
+        sys_str = platform.system()
+        if sys_str == "Darwin":
+            driver = webdriver.Chrome(executable_path=TickerConfig.CHROME_PATH)
+        else:
+            driver = webdriver.Chrome(executable_path=TickerConfig.CHROME_PATH,chrome_options=options)
         driver.get("https://www.12306.cn/index/index.html")
         time.sleep(10)
         for c in driver.get_cookies():

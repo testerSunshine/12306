@@ -3,7 +3,7 @@ bs4==0.0.1
 requests==2.18.4
 Pillow
 wrapcache==1.0.8
-ntplib==0.3.3
+ntplib==0.3.4
 sklearn
 opencv-python
 keras==2.2.4

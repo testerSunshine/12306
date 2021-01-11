@@ -132,15 +132,16 @@ class select:
         wrapcache.set("user_info", passenger, timeout=9999999)
 
         now = datetime.datetime.now()
+        time_format = '%Y-%m-%d %H:%M:%S'
         if TickerConfig.ORDER_MODEL is 1:
-            print(f"预售还未开始，阻塞中，预售时间为{TickerConfig.OPEN_TIME}, 当前时间为: {now.strftime('%H:%M:%S')}")
+            print(f"预售还未开始，阻塞中，预售时间为{TickerConfig.OPEN_TIME}, 当前时间为: {now.strftime(time_format)}")
             sleep_time_s = 0.1
             sleep_time_t = 0.3
             # 测试了一下有微妙级的误差，应该不影响，测试结果：2019-01-02 22:30:00.004555，预售还是会受到前一次刷新的时间影响，暂时没想到好的解决方案
-            while now.strftime("%H:%M:%S") < TickerConfig.OPEN_TIME:
+            while now.strftime(time_format) < TickerConfig.OPEN_TIME:
                 now = datetime.datetime.now()
                 time.sleep(0.0001)
-            print(f"预售开始，开启时间为: {now.strftime('%H:%M:%S')}")
+            print(f"预售开始，开启时间为: {now.strftime(time_format)}")
         else:
             sleep_time_s = TickerConfig.MIN_TIME
             sleep_time_t = TickerConfig.MAX_TIME

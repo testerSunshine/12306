@@ -8,14 +8,17 @@ if TickerConfig.AUTO_CODE_TYPE == 2:
     import hashlib
     import os
     import pathlib
+    import ssl
 
     import cv2
     import numpy as np
     import requests
     import scipy.fftpack
+    import time
 
 
 PATH = 'imgs'
+headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36'}
 
 
 def download_image():
@@ -23,7 +26,7 @@ def download_image():
     # 存放到指定path下
     # 文件名为图像的MD5
     url = 'https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand'
-    r = requests.get(url)
+    r = requests.get(url, headers = headers)
     fn = hashlib.md5(r.content).hexdigest()
     with open(f'{PATH}/{fn}.jpg', 'wb') as fp:
         fp.write(r.content)
@@ -31,8 +34,10 @@ def download_image():
 
 def download_images():
     pathlib.Path(PATH).mkdir(exist_ok=True)
+    ssl._create_default_https_context = ssl._create_unverified_context # 目的是为了通过未认证的12306证书
     for idx in range(40000):
         download_image()
+        time.sleep(1)
         print(idx)
 
 

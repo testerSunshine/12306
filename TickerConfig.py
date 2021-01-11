@@ -154,4 +154,4 @@ MAX_TIME = 3
 MIN_TIME = 1
 
 # 软件版本
-RE_VERSION = "1.2.004"
+RE_VERSION = "1.2.005"

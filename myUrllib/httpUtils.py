@@ -123,7 +123,7 @@ class HTTPClient(object):
     def cdn(self, cdn):
         self._cdn = cdn
 
-    def send(self, urls, data=None, **kwargs):
+    def send(self, urls, data=None, elapsed=None, **kwargs):
         """send request to url.If response 200,return response, else return None."""
         allow_redirects = False
         is_logger = urls.get("is_logger", False)
@@ -173,6 +173,8 @@ class HTTPClient(object):
                                            allow_redirects=allow_redirects,
                                            verify=False,
                                            **kwargs)
+                if is_test_cdn:
+                    elapsed["rtt"] = round(response.elapsed.total_seconds() * 1000, 3)
                 if response.status_code == 200 or response.status_code == 302:
                     if urls.get("not_decode", False):
                         return response.content

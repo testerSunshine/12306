@@ -8,7 +8,7 @@ import threading
 import time
 import TickerConfig
 import wrapcache
-from agency.cdn_utils import CDNProxy, open_cdn_file
+from agency.cdn_utils import open_cdn_file
 from config import urlConf, configCommon
 from config.TicketEnmu import ticket
 from config.configCommon import seat_conf_2, seat_conf
@@ -60,8 +60,8 @@ class select:
         print(u"*" * 50)
         print(f"检查当前版本为: {TickerConfig.RE_VERSION}")
         version = sys.version.split(" ")[0]
-        print(u"检查当前python版本为：{}，目前版本只支持3.6以上".format(version))
-        if version < "3.6.0":
+        print(u"检查当前python版本为：{}，目前版本只支持3.7以上".format(version))
+        if version < "3.7.0":
             raise Exception
         print(u"12306刷票小助手，最后更新于2019.09.18，请勿作为商业用途，交流群号："
               u" 1群：286271084(已满)\n"

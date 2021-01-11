@@ -6,7 +6,7 @@ services:
         build:
             context: .
             dockerfile: ./Dockerfile37
-        image: ticket:v1.2.004
+        image: ticket:v1.2.005
         environment:
             - PYTHONUNBUFFERED=1
             - CAPTCHALOCAL=1

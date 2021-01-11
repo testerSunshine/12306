@@ -22,7 +22,7 @@
   - 自托管云打码服务器搭建：[12306_code_server](https://github.com/YinAoXiong/12306_code_server)
     - 如果大家有空闲的服务器，可搭建之后在这个 [issues](https://github.com/testerSunshine/12306/issues/446) 里面填入自己的服务器(请注意服务器安全！)
   - 项目依赖 [requirements.txt](requirements.txt)
-  - 安装方法x:
+  - 安装方法:
       - root用户(避免多python环境产生问题): `pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt`
       - 非root用户（避免安装和运行时使用了不同环境）: `pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt`
       - 许多windows的用户装不了tensorflow的话，可以适当降低版本或者升高版本都是可以的

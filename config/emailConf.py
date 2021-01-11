@@ -21,6 +21,7 @@ def sendEmail(msg):
             username = TickerConfig.EMAIL_CONF["username"]
             password = TickerConfig.EMAIL_CONF["password"]
             host = TickerConfig.EMAIL_CONF["host"]
+            port = TickerConfig.EMAIL_CONF["port"]
             s = "{0}".format(msg)
 
             msg = MIMEText(s, 'plain', 'utf-8')  # 中文需参数‘utf-8’，单字节字符不需要
@@ -29,12 +30,12 @@ def sendEmail(msg):
             msg['To'] = receiver
 
             try:
-                smtp = smtplib.SMTP_SSL(host)
-                smtp.connect(host)
+                smtp = smtplib.SMTP_SSL(host, port)
+                smtp.connect(host, port)
             except socket.error:
                 smtp = smtplib.SMTP()
-                smtp.connect(host)
-            smtp.connect(host)
+                smtp.connect(host, port)
+            smtp.connect(host, port)
             smtp.login(username, password)
             smtp.sendmail(sender, receiver.split(","), msg.as_string())
             smtp.quit()

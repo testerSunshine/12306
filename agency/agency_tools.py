@@ -18,10 +18,15 @@ class proxy:
         获取未加工代理列表
         :return: 
         """
+        try:
+            self.get_proxy_from_xicidaili()
+        except Exception:
+            self.get_proxy_from_kuaidaili()
+
+    def get_proxy_from_xicidaili(self):
         User_Agent = 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0'
         header = dict()
         header['User-Agent'] = User_Agent
-
         for i in range(1, 5):
             time.sleep(1)
             url = 'http://www.xicidaili.com/nn/' + str(i)
@@ -34,6 +39,25 @@ class proxy:
                 ip = ips[x]
                 tds = ip.findAll("td")
                 ip_temp = tds[1].contents[0] + ":" + tds[2].contents[0]
+                print(ip_temp)
+                self.proxy_list.append(ip_temp)
+
+    def get_proxy_from_kuaidaili(self):
+        User_Agent = 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0'
+        header = dict()
+        header['User-Agent'] = User_Agent
+        for i in range(1, 5):
+            time.sleep(1)
+            url = 'https://www.kuaidaili.com/free/inha/' + str(i)
+            res = requests.get(url=url, headers=header).content
+
+            soup = BeautifulSoup(res, "html.parser")
+            ips = soup.findAll('tr')
+
+            for x in range(1, len(ips)):
+                ip = ips[x]
+                tds = ip.findAll("td")
+                ip_temp = tds[0].contents[0] + ":" + tds[1].contents[0]
                 print(ip_temp)
                 self.proxy_list.append(ip_temp)
 
@@ -104,4 +128,5 @@ class proxy:
 
 if __name__ == "__main__":
     a = proxy()
+    a.get_proxy()
     print(a.get_filter_proxy())

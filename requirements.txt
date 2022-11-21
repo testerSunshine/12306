@@ -7,7 +7,7 @@ ntplib==0.3.3
 sklearn
 opencv-python
 keras==2.2.4
-tensorflow==1.14.0
+tensorflow==2.9.3
 matplotlib>=3.0.2
 numpy>=1.14.6
 scipy>=1.1.0
